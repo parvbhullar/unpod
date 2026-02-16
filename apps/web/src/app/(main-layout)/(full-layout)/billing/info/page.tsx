@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const BillingInfo = dynamic<Record<string, unknown>>(
+const BillingInfo = dynamic<any>(
   () => import('@unpod/modules/AppSubscription/BillingInfo'),
 );
 

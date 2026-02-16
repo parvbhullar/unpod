@@ -10,7 +10,8 @@ type AppVoiceAgentProps = {
   source?: string;
   metadata?: Record<string, unknown>;
   config?: Record<string, unknown>;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppVoiceAgent: React.FC<AppVoiceAgentProps> = (props) => {
   return (

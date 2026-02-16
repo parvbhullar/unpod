@@ -1,3 +1,4 @@
+import type { FocusEvent } from 'react';
 import { Fragment, useState } from 'react';
 import { Button, Flex, Form, message, Space, Tooltip } from 'antd';
 import {
@@ -20,16 +21,31 @@ import {
   StyledTabRoot,
 } from '../index.styled';
 import { useIntl } from 'react-intl';
-import type { VoiceProfile } from '@unpod/constants/types';
+import { ConfigItem, Pilot, VoiceProfile } from '@unpod/constants/types';
 import VoiceCollapseSection from './VoiceCollapseSection';
 import { SaveOutlined } from '@ant-design/icons';
+import type { FormInstance } from 'antd/es/form';
 
 const { Item, List, useForm } = Form;
 
 type VoiceFormProps = {
-  agentData?: any;
+  agentData: Pilot;
   updateAgentData?: (data: FormData) => void;
-  headerForm?: any;
+  headerForm?: FormInstance;
+};
+
+type AgentFormValues = Partial<VoiceProfile> & {
+  transcriber_provider?: string;
+  transcriber_language?: string;
+  transcriber_model?: string;
+  voice_provider?: string;
+  voice_model?: string;
+  quality?: string;
+  config_items?: ConfigItem[];
+  temperature?: number;
+  max_tokens?: number;
+  model?: string;
+  provider?: string;
 };
 
 const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
@@ -38,6 +54,8 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
   const { formatMessage } = useIntl();
   const [messageApi, contextHolder] = message.useMessage();
   const [openVoiceProfile, setOpenVoiceProfile] = useState(false);
+
+
 
   const [
     { apiData: voiceProfile, loading: selectedVoiceLoading },
@@ -49,8 +67,9 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
     !!agentData?.telephony_config?.voice_profile_id,
   );
 
-  const onFinish = (values: any) => {
-    const formData = new FormData();
+  console.log('agent data trancriber',agentData)
+  const onFinish = (values: AgentFormValues) => {
+    const formData: FormData = new FormData();
 
     const telephonyConfig = {
       transcriber: {
@@ -94,7 +113,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
     updateAgentData?.(formData);
   };
 
-  const onProfileSelect = (profile: any) => {
+  const onProfileSelect = (profile: VoiceProfile | null) => {
     setData({ data: profile });
     setOpenVoiceProfile(false);
 
@@ -224,7 +243,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                           placeholder={formatMessage({
                             id: 'identityStudio.configKey',
                           })}
-                          onBlur={(event: any) => {
+                          onBlur={(event: FocusEvent<HTMLInputElement>) => {
                             const configKey = event.target.value;
 
                             if (configKey) {

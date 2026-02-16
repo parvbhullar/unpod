@@ -40,7 +40,7 @@ export type UseGetDataResult<T> = [
 export type UsePaginatedDataState<T> = {
   loading: boolean;
   apiData: T;
-  extraData: Record<string, unknown>;
+  extraData: { count?: number; [key: string]: unknown };
   page: number;
   queryParams: QueryParams;
   isLoadingMore: boolean;

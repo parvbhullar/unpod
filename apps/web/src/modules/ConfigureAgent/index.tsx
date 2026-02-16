@@ -7,7 +7,7 @@ import AppModuleContextProvider from '@unpod/providers/AppModuleContextProvider'
 
 type ConfigureAgentProps = Record<string, unknown>;
 
-const AppAgentModule = dynamic<ConfigureAgentProps>(
+const AppAgentModule = dynamic<any>(
   () => import('@unpod/modules/AppAgentModule'),
   { ssr: false },
 );

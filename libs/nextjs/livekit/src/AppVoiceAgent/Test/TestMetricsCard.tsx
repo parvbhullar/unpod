@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Avatar, Badge, Card, Flex, Typography } from 'antd';
 import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
-import { FlexContainer } from './TestView.styled';
+import { FlexContainer, StyledButton } from './TestView.styled';
 import { ResponseType } from './TestAgent';
 
 const { Title, Text } = Typography;
@@ -11,6 +11,7 @@ type TestMetricsCardProps = {
   agentName: string;
   state?: string | null;
   response?: ResponseType;
+  onEndTest: () => void;
 };
 
 export const TestMetricsCard = ({
@@ -18,6 +19,7 @@ export const TestMetricsCard = ({
   agentName,
   state,
   response,
+  onEndTest,
 }: TestMetricsCardProps) => {
   const statusColors: Record<
     string,
@@ -90,6 +92,19 @@ export const TestMetricsCard = ({
         >
           {response?.label}
         </Text>
+        <Text
+          strong
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          Please wait 7 minutes and see result
+        </Text>
+
+        <StyledButton danger onClick={onEndTest}>
+          End Test
+        </StyledButton>
       </Card>
     </FlexContainer>
   );

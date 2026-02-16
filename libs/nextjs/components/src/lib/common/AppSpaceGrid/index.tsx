@@ -16,7 +16,8 @@ import type { Spaces } from '@unpod/constants/types';
 
 type AppSpaceGridProps = {
   type?: 'space' | 'kb';
-  domainHandle?: string;};
+  domainHandle?: string;
+};
 
 const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
     },
     false,
   );
-  const visibleTypes = SPACE_VISIBLE_CONTENT_TYPES as unknown as string[];
+
 
   useEffect(() => {
     if (isAuthenticated && activeOrg) {
@@ -56,7 +57,7 @@ const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
   const spaces = useMemo(() => {
     if (type === 'space') {
       const data = apiData.filter((space: Spaces) =>
-        visibleTypes.includes(space.content_type ?? ''),
+        SPACE_VISIBLE_CONTENT_TYPES.includes(space.content_type ?? ''),
       );
       if (
         data.length > 0 &&
@@ -65,14 +66,14 @@ const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
       ) {
         updateAuthUser({
           ...user,
-          active_space: data[0] as unknown as typeof user.active_space,
+          active_space: data[0],
         });
       }
       return data;
     } else {
       return apiData;
     }
-  }, [apiData, type, user, updateAuthUser, visibleTypes]);
+  }, [apiData, type, user, updateAuthUser]);
 
   return (
     <StyledRoot>
@@ -98,6 +99,7 @@ const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
             data={item}
             onCardClick={onCardClick}
             type={type}
+            reCallAPI={reCallAPI}
           />
         )}
       />

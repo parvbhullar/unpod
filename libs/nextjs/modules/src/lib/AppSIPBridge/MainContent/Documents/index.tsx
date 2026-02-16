@@ -103,7 +103,7 @@ const Documents = ({ sipBridge }: DocumentsProps) => {
     }
     // File type check
     const extension = file?.name?.split('.')?.pop()?.toLowerCase();
-    if (extension&& !ACCEPT_TYPES.includes(extension)) {
+    if (extension && !ACCEPT_TYPES.includes(extension)) {
       return;
     }
     const formData = new FormData();

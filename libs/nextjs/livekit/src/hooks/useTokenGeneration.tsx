@@ -18,7 +18,8 @@ type TokenGenerationOptions = {
   method?: 'GET' | 'POST';
   cacheToken?: boolean;
   onSuccess?: (token: string, response: any) => void;
-  onError?: (error: any) => void;};
+  onError?: (error: any) => void;
+};
 
 type TokenPayload = {
   token?: string;

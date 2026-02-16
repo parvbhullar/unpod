@@ -15,7 +15,8 @@ type AgentConnectionContextValue = {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   updateRoomToken: (roomToken: string | null) => void;
-  setConnectionMode: (mode: Exclude<AgentConnectionMode, null>) => void;};
+  setConnectionMode: (mode: Exclude<AgentConnectionMode, null>) => void;
+};
 
 const AgentConnectionContext =
   createContext<AgentConnectionContextValue | null>(null);
@@ -31,12 +32,17 @@ export const AgentConnectionProvider = ({
     shouldConnect: boolean;
     connectionMode: AgentConnectionMode;
   }>({
-    wsUrl: process.env.NEXT_PUBLIC_LIVEKIT_URL,
+    wsUrl: process.env.livekitUrl,
     roomToken: null,
     shouldConnect: false,
     connectionMode: 'chat', // 'chat' or 'voice'
   });
-
+  console.log('AgentConnectionProvider initialized with details:', {
+    wsUrl: process.env.livekitUrl,
+    roomToken: null,
+    shouldConnect: false,
+    connectionMode: 'chat', // 'chat' or 'voice'
+  });
   const updateRoomToken = (roomToken: string | null) => {
     // console.log("updateRoomToken roomToken",roomToken);
     setAgentConnectionDetails((prev) => ({ ...prev, roomToken: roomToken }));
@@ -58,7 +64,7 @@ export const AgentConnectionProvider = ({
   );
 
   const connect = useCallback(async () => {
-    const url = process.env.NEXT_PUBLIC_LIVEKIT_URL;
+    const url = process.env.livekitUrl;
 
     console.log(
       `🔌 Connecting to LiveKit (mode: ${connectionDetails.connectionMode})...`,

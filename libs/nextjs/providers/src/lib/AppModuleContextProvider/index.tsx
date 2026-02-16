@@ -15,44 +15,45 @@ import { usePathname, useRouter } from 'next/navigation';
 import { APIData } from './data';
 import type { Organization } from '@unpod/constants/types';
 
-export type ModuleRecord = {
-  [key: string]: unknown;};
-
-export type AppModuleContextType = {
-  record: ModuleRecord | null;
+export type AppModuleContextType<T> = {
+  record: T | null;
   listData: unknown;
   isNewRecord: boolean;};
 
-export type AppModuleActionsContextType = {
-  setRecord: Dispatch<SetStateAction<ModuleRecord | null>>;
+export type AppModuleActionsContextType<T> = {
+  setRecord: Dispatch<SetStateAction<T | null>>;
   listActions: unknown;
   setIsNewRecord: Dispatch<SetStateAction<boolean>>;
   deleteRecord: (slug: string) => void;
-  updateRecord: (record: ModuleRecord) => void;
+  updateRecord: (record: T) => void;
   refreshRecords: () => void;
-  addNewRecord: (record: ModuleRecord) => void;};
+  addNewRecord: (record: T) => void;};
 
-const ContextState: AppModuleContextType = {
+const ContextState: AppModuleContextType<Record<string, unknown>> = {
   record: null,
   listData: null,
   isNewRecord: false,
 };
 
-const AppModuleContext = createContext<AppModuleContextType>(ContextState);
+const AppModuleContext = createContext<AppModuleContextType<Record<string, unknown>>>(ContextState);
 const AppModuleActionsContext = createContext<
-  AppModuleActionsContextType | undefined
+  AppModuleActionsContextType<Record<string, unknown>> | undefined
 >(undefined);
 
-export const useAppModuleContext = (): AppModuleContextType =>
-  useContext(AppModuleContext);
-export const useAppModuleActionsContext = (): AppModuleActionsContextType => {
+export const useAppModuleContext = <
+  T,
+>(): AppModuleContextType<T> =>
+  useContext(AppModuleContext) as AppModuleContextType<T>;
+export const useAppModuleActionsContext = <
+  T,
+>(): AppModuleActionsContextType<T> => {
   const context = useContext(AppModuleActionsContext);
   if (!context) {
     throw new Error(
       'useAppModuleActionsContext must be used within AppModuleContextProvider',
     );
   }
-  return context;
+  return context as AppModuleActionsContextType<T>;
 };
 
 export type AppModuleContextProviderProps = {
@@ -62,21 +63,21 @@ export type AppModuleContextProviderProps = {
 export const AppModuleContextProvider: React.FC<
   AppModuleContextProviderProps
 > = ({ children, type = 'bridge' }) => {
-  const [record, setRecord] = useState<ModuleRecord | null>(null);
+  const [record, setRecord] = useState<Record<string, unknown> | null>(null);
   const { activeOrg } = useAuthContext();
   const activeOrgRef = useRef<Organization | null>(activeOrg);
   const [isNewRecord, setIsNewRecord] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  const [listData, listActions] = usePaginatedDataApi<ModuleRecord[]>(
+  const [listData, listActions] = usePaginatedDataApi<Record<string, unknown>[]>(
     APIData[type].list.url,
     [],
     APIData[type].list.getParams(activeOrg),
     false,
     false,
     false,
-    (data: ModuleRecord[]) => {
+    (data: Record<string, unknown>[]) => {
       if (APIData[type].list?.callBack) {
         if (activeOrgRef.current !== activeOrg) {
           activeOrgRef.current = activeOrg;
@@ -84,7 +85,7 @@ export const AppModuleContextProvider: React.FC<
             router.replace(`${APIData[type].path}/new/`);
           } else {
             router.replace(
-              `${APIData[type].path}/${(data[0] as Record<string, unknown>)[APIData[type].uniqueKey]}/`,
+              `${APIData[type].path}/${data[0][APIData[type].uniqueKey]}/`,
             );
           }
         } else {
@@ -109,12 +110,12 @@ export const AppModuleContextProvider: React.FC<
     ).setQueryParams({ page: 1 });
   };
 
-  const updateRecord = (updatedRecord: ModuleRecord): void => {
+  const updateRecord = (updatedRecord: Record<string, unknown>): void => {
     (
       listActions as {
-        setData: (fn: (prev: ModuleRecord[]) => ModuleRecord[]) => void;
+        setData: (fn: (prev: Record<string, unknown>[]) => Record<string, unknown>[]) => void;
       }
-    ).setData((prevData: ModuleRecord[]) =>
+    ).setData((prevData: Record<string, unknown>[]) =>
       prevData.map((item) =>
         item[APIData[type].uniqueKey] === updatedRecord[APIData[type].uniqueKey]
           ? { ...item, ...updatedRecord }
@@ -123,21 +124,21 @@ export const AppModuleContextProvider: React.FC<
     );
   };
 
-  const addNewRecord = (newRecord: ModuleRecord): void => {
+  const addNewRecord = (newRecord: Record<string, unknown>): void => {
     (
       listActions as {
-        setData: (fn: (prev: ModuleRecord[]) => ModuleRecord[]) => void;
+        setData: (fn: (prev: Record<string, unknown>[]) => Record<string, unknown>[]) => void;
       }
-    ).setData((prevData: ModuleRecord[]) => [newRecord, ...prevData]);
+    ).setData((prevData: Record<string, unknown>[]) => [newRecord, ...prevData]);
     setIsNewRecord(false);
   };
 
   const deleteRecord = (slug: string): void => {
     (
       listActions as {
-        setData: (fn: (prev: ModuleRecord[]) => ModuleRecord[]) => void;
+        setData: (fn: (prev: Record<string, unknown>[]) => Record<string, unknown>[]) => void;
       }
-    ).setData((prevData: ModuleRecord[]) =>
+    ).setData((prevData: Record<string, unknown>[]) =>
       prevData.filter((item) => item[APIData[type].uniqueKey] !== slug),
     );
     setRecord(null);

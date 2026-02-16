@@ -1,2 +1,12 @@
+declare module '@unpod/providers';
+declare module '@unpod/helpers/*';
+declare module '@unpod/services';
+declare module '@unpod/icons';
+declare module '@unpod/external-libs/*';
+declare module '@unpod/react-data-grid';
+declare module '@unpod/localization';
+declare module '@unpod/localization/*';
+declare module '@unpod/livekit/*';
+declare module '@unpod/components/*';
 declare module 'react-syntax-highlighter';
 declare module 'react-syntax-highlighter/dist/cjs/styles/prism';

@@ -1,5 +1,6 @@
 export type FormatMessageFn = {
-  (descriptor: { id: string; defaultMessage?: string }): string;};
+  (descriptor: { id: string; defaultMessage?: string }): string;
+};
 
 export const getRoleLabel = (
   role: string,
@@ -16,11 +17,13 @@ export type LocalizableOption = {
   label?: string;
   description?: string;
   desc?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export type LocalizedOption = LocalizableOption & {
   label: string;
-  description: string;};
+  description: string;
+};
 
 // for array localization formatting
 export const getLocalizedOptions = (
@@ -45,10 +48,12 @@ export const getLocalizedOptions = (
 
 export type StatusConfigValue = {
   name: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export type StatusOption = StatusConfigValue & {
-  key: string;};
+  key: string;
+};
 
 // for obj localization formatting
 export const getStatusOptionsFromConfig = (
@@ -64,7 +69,8 @@ export const getStatusOptionsFromConfig = (
 
 export type CallStatusConfigValue = {
   label: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 // for configuration obj localization formatting
 export const localizeCallStatusLabels = (

@@ -28,6 +28,7 @@ import { IoMdClose } from 'react-icons/io';
 import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
 import { useMediaQuery } from 'react-responsive';
 import { TabWidthQuery } from '@unpod/constants';
+import { PeopleOverviewSkeleton } from '@unpod/skeleton/PeopleOverviewSkeleton';
 
 const { Text } = Typography;
 
@@ -214,6 +215,11 @@ const Summary = () => {
     extra: null,
   }));
 
+  if (!activeCall?.output) {
+    return <PeopleOverviewSkeleton />;
+  }
+
+
   return (
     <StyledRoot>
       <StyledContainer>
@@ -231,7 +237,7 @@ const Summary = () => {
             )
           }
         />
-        <StyledSummaryCard bordered={false}>
+        <StyledSummaryCard variant="borderless">
           <AppMarkdownViewer
             markdown={
               overview?.summary ||
@@ -292,9 +298,9 @@ const Summary = () => {
               icon={<IoCalendarOutline size={20} />}
               name={formatMessage({ id: 'callSummary.followUp' })}
             />
-            <StyledSummaryCard bordered={false}>
+            <StyledSummaryCard variant="borderless">
               <Space
-                direction="vertical"
+                orientation="vertical"
                 size="middle"
                 style={{ width: '100%' }}
               >
@@ -392,7 +398,7 @@ const Summary = () => {
         onClose={() => setShowOutputDrawer(false)}
         destroyOnClose={true}
         styles={{ body: { padding: 0, position: 'relative' } }}
-        width={isTablet ? '100%' : 'calc(100% - 405px)'}
+        size={isTablet ? '100%' : 'calc(100% - 405px)'}
       >
         {activeCall?.output && (
           <AppJsonViewer

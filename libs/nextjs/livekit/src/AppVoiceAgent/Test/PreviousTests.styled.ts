@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { GlobalTheme } from '@unpod/constants';
 import { Flex } from 'antd';
 
-interface StyledFlexProps {
+type StyledFlexProps = {
   $mb?: number;
-}
+};
 
 export const TestsWrapper = styled.div`
   display: flex;

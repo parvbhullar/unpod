@@ -76,7 +76,6 @@ const MainContent = () => {
                   tasksRef.current?.refreshData?.();
                 }}
                 onRefreshTasks={tasksRef.current?.refreshData}
-
                 drawerChildren={<People />}
               />
             ) : (

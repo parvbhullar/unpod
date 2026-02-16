@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const AppKnowledgeBaseRoot = dynamic<Record<string, unknown>>(
+const AppKnowledgeBaseRoot = dynamic<any>(
   () => import('@unpod/modules/AppKnowledgeBase'),
 );
 

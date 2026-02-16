@@ -4,20 +4,24 @@ import { Button } from 'antd';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
+import type { Spaces } from '@unpod/constants/types';
 
 type GenerateEvalButtonProps = {
-  type: 'pilot' | 'Knowledgebase';
+  type?: 'pilot' | 'knowledgebase';
   token?: string;
   buttonType?: ButtonProps['type'];
   padding?: boolean;
   size?: ButtonProps['size'];
-  onClick?: (response: { response: any }) => void;
+  onClick?: (response: { response: Spaces }) => void;
+  text: string;
+  force: boolean;
+  reCallAPI?: () => void;
   [key: string]: unknown;
 };
 
-interface StyledButtonProps extends ButtonProps {
+type StyledButtonProps = {
   $padding?: boolean;
-}
+};
 
 export const StyledButton = styled(Button)<StyledButtonProps>`
   display: flex;
@@ -36,12 +40,15 @@ export const StyledButton = styled(Button)<StyledButtonProps>`
 `;
 
 const GenerateEvalButton: React.FC<GenerateEvalButtonProps> = ({
-  type,
+  type = 'knowledgebase',
   token,
   buttonType = 'text',
   size = 'small',
   padding = false,
   onClick: userOnClick,
+  force = false,
+  text = 'common.generateEvals',
+  reCallAPI,
   ...rest
 }) => {
   const { formatMessage } = useIntl();
@@ -49,47 +56,28 @@ const GenerateEvalButton: React.FC<GenerateEvalButtonProps> = ({
 
   const payload = {
     type,
-    kn_token: type === 'Knowledgebase' ? token : '',
+    kn_token: type === 'knowledgebase' ? token : '',
     pilot_handle: type === 'pilot' ? token : '',
+    force: force,
   };
 
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-
-  /* postDataApi(
-      'core/knowledgebase-evals/fetch-evals/',
-      infoViewActionsContext,
-      payload,
-    )
-      .then((fetchResponse) => {
-        infoViewActionsContext.showMessage(
-          fetchResponse.message || 'Eval fetched successfully',
-        );
-        if (userOnClick) userOnClick({ response: fetchResponse });
-      })
-      .catch((fetchError) => {
-        infoViewActionsContext.showError(
-          fetchError.message || 'Failed to fetch eval',
-        );
-      });*/
-
-    postDataApi(
+    postDataApi<Spaces[]>(
       'core/knowledgebase-evals/generate/',
       infoViewActionsContext,
       payload,
     )
-      .then((response) => {
-        const res = response as { message?: string };
-
+      .then((res) => {
+        if (userOnClick) userOnClick({ response: res?.data[0] });
+        reCallAPI?.();
         infoViewActionsContext.showMessage(
           res.message || 'Eval generated successfully',
         );
       })
-      .catch((response) => {
-        const res = response as { message?: string };
-
+      .catch((error) => {
         infoViewActionsContext.showError(
-          res.message || 'Failed to generate eval',
+          error.message || 'Failed to generate eval',
         );
       });
   };
@@ -103,7 +91,7 @@ const GenerateEvalButton: React.FC<GenerateEvalButtonProps> = ({
       {...rest}
       $padding={padding}
     >
-      {formatMessage({ id: 'common.generateEvals' })}
+      {formatMessage({ id: text })}
     </StyledButton>
   );
 };

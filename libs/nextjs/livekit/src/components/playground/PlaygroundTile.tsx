@@ -41,7 +41,8 @@ export type PlaygroundTileProps = {
   className?: string;
   childrenClassName?: string;
   padding?: boolean;
-  backgroundColor?: string;};
+  backgroundColor?: string;
+};
 
 export const PlaygroundTile: React.FC<PlaygroundTileProps> = ({
   children,

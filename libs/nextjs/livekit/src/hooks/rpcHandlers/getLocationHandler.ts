@@ -9,7 +9,8 @@ type AnyMessage = {
 type LocationRequestResolver = {
   resolve: (value: { accepted: boolean }) => void;
   reject: (error: Error) => void;
-  timeout?: ReturnType<typeof setTimeout>;};
+  timeout?: ReturnType<typeof setTimeout>;
+};
 
 type RegisterGetLocationHandlerOptions = {
   localParticipant: any;
@@ -19,7 +20,8 @@ type RegisterGetLocationHandlerOptions = {
   >;
   room: any;
   isConnected: boolean;
-  topic?: string | string[];};
+  topic?: string | string[];
+};
 
 /**
  * RPC handler for getLocation method

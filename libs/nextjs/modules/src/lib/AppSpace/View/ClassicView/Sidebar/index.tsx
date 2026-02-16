@@ -21,7 +21,9 @@ const Sidebar = () => {
     <StyledRoot>
       <SidebarHeader />
       <StyledItemsWrapper>
-        {activeTab === 'chat' && <ConversationsComponent ref={conversationsRef} />}
+        {activeTab === 'chat' && (
+          <ConversationsComponent ref={conversationsRef} />
+        )}
         {activeTab === 'note' && <NotesComponent ref={notesRef} />}
         {activeTab === 'doc' && <People />}
         {activeTab === 'call' && <Call />}

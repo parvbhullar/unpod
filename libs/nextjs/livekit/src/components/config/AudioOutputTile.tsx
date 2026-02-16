@@ -34,7 +34,8 @@ const StateOverlay = styled.div<{ $spaceView?: boolean }>`
 type AudioOutputTileProps = {
   trackRef?: TrackReferenceOrPlaceholder;
   state?: string;
-  spaceView?: boolean;};
+  spaceView?: boolean;
+};
 
 const AudioOutputTile: React.FC<AudioOutputTileProps> = ({
   trackRef,

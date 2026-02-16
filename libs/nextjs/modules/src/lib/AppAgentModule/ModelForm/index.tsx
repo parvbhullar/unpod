@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Button, Flex, Form, Space } from 'antd';
+import React, { ReactNode, useState } from 'react';
+import { Button, Flex, Form, Space, Switch, Typography } from 'antd';
 import {
   DatabaseOutlined,
   MessageOutlined,
@@ -25,69 +25,84 @@ import {
   StyledTabRoot,
 } from '../index.styled';
 import { useIntl } from 'react-intl';
+import AppTable from '@unpod/components/third-party/AppTable';
+import { StyledRowItem } from '../AdvancedForm/index.styled';
+import { StyledContent } from '../../AppWallet/index.styled';
+import { KnowledgeBase, Pilot } from '@unpod/constants/types';
+import type { FormInstance } from 'antd/es/form';
+import { getEvalColumns } from './getEvalColumns';
 
-const { useForm, Item } = Form;
-// const { Title, Text } = Typography;
+const { useForm, Item, useWatch } = Form;
+const { Title, Text } = Typography;
 
 type ModelFormProps = {
-  agentData?: any;
+  agentData: Pilot;
   updateAgentData?: (data: FormData) => void;
-  headerForm?: any;
+  headerForm?: FormInstance;
+};
+
+export type EvalRow = {
+  key: string;
+  type: 'agent' | 'kb';
+  name: string;
+  evalName?: string;
+  evalSlug?: string;
+  token: string;
+  hasEval: boolean;
+  status?: string | undefined;
+};
+
+export type AgentConfigFormValues = {
+  greeting_message?: string;
+  system_prompt?: string;
+  conversation_tone: string;
+  realtime_evals?: boolean;
+  knowledgeBase?: string[];
 };
 
 const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
-  // const [selectedEvalKeys, setSelectedEvalKeys] = useState<React.Key[]>(
-  //   () => [
-  //     ...(agentData?.realtime_evals && agentData?.eval_agent
-  //       ? [`agent-${agentData.handle}`]
-  //       : []),
-  //     ...(agentData?.eval_kn_bases || []).map((slug: string) => `kb-${slug}`),
-  //   ],
-  // );
+  const [selectedEvalKeys, setSelectedEvalKeys] = useState<React.Key[]>(() => [
+    ...((agentData?.eval_kn_bases || []) as string[]),
+  ]);
+  const [evalsData, setEvalsData] = useState<Record<string, KnowledgeBase>>({});
 
   const [form] = useForm();
   // const [questionsFields, setQuestionsFields] = useState([]);
   const { formatMessage } = useIntl();
-  // const realtime_evals = useWatch('realtime_evals', form);
-  // const selectedKB = useWatch('knowledgeBase', form);
+  const realtime_evals = useWatch('realtime_evals', form);
+  const selectedKB = useWatch('knowledgeBase', form);
 
   const { activeOrg } = useAuthContext();
   const infoViewContext = useInfoViewContext();
 
-  const [{ apiData: kbData }] = useGetDataApi(
-    'spaces/?space_type=knowledge_base&case=all',
+  const [{ apiData: kbData }, { reCallAPI }] = useGetDataApi<KnowledgeBase[]>(
+    'spaces/?space_type=knowledge_base&case=pilot',
     { data: [] },
-  ) as [{ apiData: { data?: any[] } }, any];
+  );
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: AgentConfigFormValues) => {
     const formData = new FormData();
     formData.append('greeting_message', values.greeting_message || '');
     formData.append('system_prompt', values.system_prompt || '');
     formData.append(`conversation_tone`, values.conversation_tone);
-    // formData.append('realtime_evals', values.realtime_evals);
+    formData.append('realtime_evals', String(values.realtime_evals ?? false));
 
-    // if (values.realtime_evals && selectedEvalKeys.length) {
-    //   const selectedAgent = selectedEvalKeys.find((key: any) =>
-    //     key.startsWith('agent-'),
-    //   );
-    //
-    //   const selectedKBs = selectedEvalKeys
-    //     .filter((key: any) => key.startsWith('kb-'))
-    //     .map((key: any) => key.replace('kb-', ''));
-    //
-    //   if (selectedAgent) {
-    //     formData.append('eval_agent', selectedAgent.replace('agent-', ''));
-    //   }
-    //
-    //   selectedKBs.forEach((kbSlug: any) => {
-    //     formData.append('eval_kn_bases', kbSlug);
-    //   });
-    // }
+    if (values.realtime_evals) {
+      const tableMap = new Map(tableData.map((row) => [row.key, row]));
 
-    if (values.template) {
-      formData.append(`template`, values.template.name);
+      selectedEvalKeys.forEach((key) => {
+        const row = tableMap.get(String(key));
+        if (!row || !row.evalSlug) return;
+
+        // if (row.type === 'agent') {
+        //   formData.append('eval_agent', row.evalSlug);
+        // }
+
+        if (row.type === 'kb') {
+          formData.append('eval_kn_bases', row.evalSlug);
+        }
+      });
     }
-    formData.append('name', agentData?.name || '');
 
     (values.knowledgeBase || []).forEach((kb: string) =>
       formData.append(`knowledge_bases`, kb),
@@ -95,15 +110,22 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
     updateAgentData?.(formData);
   };
 
-  // const handleEvalResponse = ({ response }: { response: any }) => {
-  //   if (response?.data) {
-  //     console.log('Second API response any:', response.data);
-  //   }
-  // };
+  const handleEvalResponse = (
+    { response }: { response: KnowledgeBase },
+    rowKey: string,
+  ) => {
+    if (response) {
+      setEvalsData((prev) => ({
+        ...prev,
+        [rowKey]: response,
+      }));
+      reCallAPI();
+    }
+  };
 
   const kbList = Array.isArray(kbData?.data) ? kbData.data : [];
 
-  const options = kbList.map((kb: any) => ({
+  const options = kbList.map((kb: KnowledgeBase) => ({
     value: kb.slug,
     label: (
       <Space align="start">
@@ -119,53 +141,46 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
     labelText: kb.name,
   }));
 
-  // const tableData = [
-  //   {
-  //     key: `agent-${agentData?.handle}`,
-  //     name: agentData?.name || 'Agent',
-  //     actions: (
-  //       <Flex justify={'center'}>
-  //         <GenerateEvalButton
-  //           type="pilot"
-  //           token={agentData?.handle}
-  //           buttonType="default"
-  //           size="small"
-  //           onClick={handleEvalResponse}
-  //         />
-  //       </Flex>
-  //     ),
-  //   },
-  //   ...kbList
-  //     .filter((kb: any) => (selectedKB || []).includes(kb.slug))
-  //     .map((kb: any) => ({
-  //       key: `kb-${kb.slug}`,
-  //       name: kb.name,
-  //       actions: (
-  //         <Flex justify="center">
-  //           <GenerateEvalButton
-  //             type="Knowledgebase"
-  //             token={kb.token}
-  //             buttonType="default"
-  //             size="small"
-  //             onClick={handleEvalResponse}
-  //           />
-  //         </Flex>
-  //       ),
-  //     })),
-  // ];
+  const tableData: EvalRow[] = [
+    {
+      key: agentData?.handle as string,
+      type: 'agent',
+      name: `${agentData?.name} (Agent)`,
+      evalName: evalsData[agentData?.handle as string]?.name as string,
+      evalSlug: evalsData[agentData?.handle as string]?.slug,
+      token: agentData?.handle as string,
+      hasEval: (agentData?.has_evals as boolean) || false,
+      status: 'pending',
+    },
+    ...(kbList
+      .filter((kb) => (selectedKB || []).includes(kb.slug))
+      .map((kb: KnowledgeBase) => ({
+        key: kb.slug,
+        type: 'kb',
+        name: kb.name,
+        evalName: evalsData[kb.slug as string]?.name
+          ? evalsData[kb.slug as string]?.name
+          : kb?.evals_info?.eval_name,
+        evalSlug: evalsData[kb.slug as string]?.slug,
+        token: kb.token,
+        hasEval: kb.has_evals,
+        status: kb.has_evals && kb?.evals_info?.gen_status,
+      })) as EvalRow[]),
+  ];
+
+  // useEffect(() => {
+  //   if (!agentData) return;
   //
-  // const columns = [
-  //   {
-  //     title: 'Name',
-  //     dataIndex: 'name',
-  //     key: 'name',
-  //   },
-  //   {
-  //     title: formatMessage({ id: 'apiKey.actions' }),
-  //     dataIndex: 'actions',
-  //     key: 'actions',
-  //   },
-  // ];
+  //   const kbKeys = kbList
+  //     .filter((kb) =>
+  //       (agentData?.eval_kn_bases || []).includes(kb.evals_info?.eval_slug),
+  //     )
+  //     .map((kb) => kb.slug);
+  //
+  //   const initialSelectedKeys = [...kbKeys];
+  //
+  //   setSelectedEvalKeys(initialSelectedKeys);
+  // }, [agentData]);
 
   return (
     <Form
@@ -177,8 +192,8 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
         system_prompt: agentData?.system_prompt,
         knowledgeBase: agentData?.knowledge_bases,
         conversation_tone: agentData?.conversation_tone,
-        // realtime_evals: agentData?.realtime_evals || false,
-        // eval_kn_bases: agentData?.eval_kn_bases,
+        realtime_evals: agentData?.realtime_evals || false,
+        eval_kn_bases: agentData?.eval_kn_bases,
       }}
       onFinish={onFinish}
     >
@@ -243,35 +258,35 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
                 options={options}
               />
             </Item>
-            {/*<StyledRowItem className="borderless">*/}
-            {/*  <StyledContent>*/}
-            {/*    <Title level={5}>Real Time Evals</Title>*/}
-            {/*    <Text type="secondary">*/}
-            {/*      {formatMessage({ id: 'advanced.enableDesc' })}*/}
-            {/*    </Text>*/}
-            {/*  </StyledContent>*/}
-            {/*  <Item name="realtime_evals" noStyle>*/}
-            {/*    <Switch />*/}
-            {/*  </Item>*/}
-            {/*</StyledRowItem>*/}
+            <StyledRowItem className="borderless">
+              <StyledContent>
+                <Title level={5}>Real Time Evals</Title>
+                <Text type="secondary">
+                  {formatMessage({ id: 'advanced.enableDesc' })}
+                </Text>
+              </StyledContent>
+              <Item name="realtime_evals" noStyle>
+                <Switch />
+              </Item>
+            </StyledRowItem>
 
-            {/*{realtime_evals && (*/}
-            {/*  <AppTable*/}
-            {/*    columns={columns}*/}
-            {/*    dataSource={tableData}*/}
-            {/*    rowKey="key"*/}
-            {/*    rowSelection={{*/}
-            {/*      type: 'checkbox',*/}
-            {/*      selectedRowKeys: selectedEvalKeys as React.Key[],*/}
-            {/*      onChange: (selectedRowKeys: React.Key[]) => {*/}
-            {/*        setSelectedEvalKeys(selectedRowKeys);*/}
-            {/*      },*/}
-            {/*    }}*/}
-            {/*    pagination={false}*/}
-            {/*    size="middle"*/}
-            {/*    fullHeight={true}*/}
-            {/*  />*/}
-            {/*)}*/}
+            {realtime_evals && (
+              <AppTable<EvalRow>
+                columns={getEvalColumns(handleEvalResponse, formatMessage)}
+                dataSource={tableData}
+                rowKey="key"
+                rowSelection={{
+                  type: 'checkbox',
+                  selectedRowKeys: selectedEvalKeys,
+                  onChange: (selectedRowKeys: React.Key[]) => {
+                    setSelectedEvalKeys(selectedRowKeys);
+                  },
+                }}
+                pagination={false}
+                size="middle"
+                fullHeight={true}
+              />
+            )}
           </CardWrapper>
         </StyledMainContainer>
       </StyledTabRoot>

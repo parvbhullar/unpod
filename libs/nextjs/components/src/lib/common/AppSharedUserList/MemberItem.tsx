@@ -1,21 +1,18 @@
+import React from 'react';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Row, Space, Typography } from 'antd';
 import { RiArrowDownSFill } from 'react-icons/ri';
 import UserAvatar from '../UserAvatar';
 import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
 import { maskEmail } from '@unpod/helpers/StringHelper';
+import type { InviteMember } from '@unpod/constants/types';
 
-type Member = {
-  email: string;
-  role_code?: string;
-  full_name?: string;
-  joined?: boolean;
-  role?: string;};
 
 type MemberItemProps = {
-  member: Member;
+  member: InviteMember;
   onRemoveInvitedMember: (email: string) => void;
-  onUpdateInvitedMember: (member: Member) => void;};
+  onUpdateInvitedMember: (member: InviteMember) => void;
+};
 
 const MemberItem: React.FC<MemberItemProps> = ({
   member,
@@ -24,7 +21,7 @@ const MemberItem: React.FC<MemberItemProps> = ({
 }) => {
   const onRoleChange: MenuProps['onClick'] = (item) => {
     if (item.key === 'remove-access') {
-      onRemoveInvitedMember(member?.email);
+      onRemoveInvitedMember(member?.email as string);
     } else if (item.key !== 'divider') {
       onUpdateInvitedMember({ ...member, role_code: item.key });
     }
@@ -48,7 +45,7 @@ const MemberItem: React.FC<MemberItemProps> = ({
             </Typography.Text>
           )}
           <Typography.Text type={member?.joined ? undefined : 'secondary'}>
-            {maskEmail(member.email)}
+            {maskEmail(member.email as string)}
           </Typography.Text>
         </Space>
       </Space>

@@ -1,8 +1,8 @@
 import type {
-  ReactNode,
   Dispatch,
-  SetStateAction,
   MutableRefObject,
+  ReactNode,
+  SetStateAction,
 } from 'react';
 import type {
   UsePaginatedConnectorDataActions,
@@ -10,11 +10,11 @@ import type {
   UsePaginatedDataActions,
   UsePaginatedDataState,
 } from '../api-hooks';
-import type { Call } from '../calls';
+import type { Call, CallItem } from '../calls';
 import type { Conversation } from '../conversation';
 import type { Document } from '../document';
 import type { ConversationsHandle, NotesHandle } from '../handles';
-import type { SpaceSchema, Spaces } from '../space';
+import type { Spaces, SpaceSchema } from '../space';
 
 export type PathData = {
   tab?: string;
@@ -26,7 +26,7 @@ export type AppSpaceContextType = {
   conversationsRef: MutableRefObject<ConversationsHandle | null>;
   token?: string;
   notesData: UsePaginatedDataState<Conversation[]>;
-  callsData: UsePaginatedDataState<Call[]>;
+  callsData: UsePaginatedDataState<CallItem[]>;
   activeCall: Call | null;
   connectorData: UsePaginatedConnectorDataState<Document[]>;
   conversationData: UsePaginatedDataState<Conversation[]>;
@@ -45,7 +45,7 @@ export type AppSpaceContextType = {
 export type AppSpaceActionsContextType = {
   notesActions: UsePaginatedDataActions<Conversation[]>;
   connectorActions: UsePaginatedConnectorDataActions<Document[]>;
-  callsActions: UsePaginatedDataActions<Call[]>;
+  callsActions: UsePaginatedDataActions<CallItem[]>;
   setActiveCall: Dispatch<SetStateAction<Call | null>>;
   conversationActions: UsePaginatedDataActions<Conversation[]>;
   setActiveTab: Dispatch<SetStateAction<string>>;

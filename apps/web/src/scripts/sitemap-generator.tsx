@@ -18,7 +18,7 @@ Sitemap: ${WEBSITE_URL}/sitemaps/sitemap-hub.xml
 Sitemap: ${WEBSITE_URL}/sitemaps/sitemap-space.xml`;
 
   try {
-    fs.writeFileSync('apps/web/public/robots.txt', content);
+    fs.writeFileSync('apps/unpod-social/public/robots.txt', content);
   } catch (err) {
     console.log('File robots.txt created Error: ', err);
   }
@@ -90,7 +90,7 @@ function addPage(route: string) {
 
 async function generateSitemap() {
   try {
-    const appDir = 'apps/web/app/';
+    const appDir = 'apps/unpod-social/app/';
     const staticRoutes = getAllRoutes(appDir);
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -98,7 +98,7 @@ async function generateSitemap() {
 ${staticRoutes.map(addPage).join('\n')}
 </urlset>`;
 
-    fs.writeFileSync('apps/web/public/sitemap.xml', sitemap);
+    fs.writeFileSync('apps/unpod-social/public/sitemap.xml', sitemap);
 
     generateRobotsTxt();
   } catch (err) {

@@ -15,6 +15,7 @@ import AppImage from '@unpod/components/next/AppImage';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { useIntl } from 'react-intl';
 import { useInfoViewActionsContext } from '@unpod/providers';
+import type { Pilot, InviteMember } from '@unpod/constants/types';
 
 const { Paragraph } = Typography;
 
@@ -24,10 +25,10 @@ const { Item } = Form;
 
 type IdentityFormProps = {
   setLogoFile: (file: File) => void;
-  agentData?: any;
+  agentData: Pilot;
   privacyType?: string;
-  setUserList?: (users: any[]) => void;
-  userList?: any[];
+  setUserList?: (users: InviteMember[]) => void;
+  userList?: InviteMember[];
   hideNameField?: boolean;
 };
 

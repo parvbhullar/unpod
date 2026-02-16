@@ -1,6 +1,7 @@
 import Overview from './MainContent/Overview';
 import Telephony from './MainContent/Telephony';
 import Documents from './MainContent/Documents';
+import { ReactNode } from 'react';
 
 export const TAB_KEYS = ['telephony', 'documents', 'overview'];
 
@@ -17,7 +18,7 @@ export const getTabItems = (props: GetTabItemsProps) => {
     key: string;
     label: any;
     disabled?: boolean;
-    children: JSX.Element;
+    children: ReactNode;
   }> = [
     {
       key: 'telephony',

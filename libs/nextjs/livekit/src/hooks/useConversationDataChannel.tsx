@@ -80,7 +80,8 @@ type UseConversationDataChannelOptions = {
   conversationId?: string;
   params?: Record<string, unknown>;
   enabled?: boolean;
-  topic?: string | string[];};
+  topic?: string | string[];
+};
 
 export const useConversationDataChannel = ({
   conversationId,

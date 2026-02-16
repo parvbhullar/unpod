@@ -8,7 +8,8 @@ import { useIntl } from 'react-intl';
 type ChatWidgetProps = {
   startCallText?: string;
   actionText?: string;
-  onClick?: () => void;};
+  onClick?: () => void;
+};
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
   startCallText = 'common.call',

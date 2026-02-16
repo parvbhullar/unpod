@@ -17,11 +17,7 @@ import { StyledText } from './index.styled';
 import { useIntl } from 'react-intl';
 import type { User } from '@unpod/constants/types';
 
-type VoiceAgentProps = {
-  agentData?: AgentSummary | null;
-};
-
-const VoiceAgent = dynamic<VoiceAgentProps>(
+const VoiceAgent = dynamic<any>(
   () => import('@unpod/modules/AppAgentModule/VoiceAgent'),
   { ssr: false },
 );
@@ -100,6 +96,8 @@ const FinalSummary = ({ agent }: FinalSummaryProps) => {
         open={isWidgetOpen}
         onClose={() => setIsWidgetOpen(false)}
         size={400}
+        overflowY="hidden"
+        padding='0'
         title={
           <StyledText>{formatMessage({ id: 'common.talkToAgent' })}</StyledText>
         }

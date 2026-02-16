@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import AppTable from '@unpod/components/third-party/AppTable';
-import type { Spaces } from '@unpod/constants/types';
+import type { Spaces, TaskItem } from '@unpod/constants/types';
 import {
   getDataApi,
   useInfoViewActionsContext,
@@ -10,7 +10,6 @@ import AppLoadingMore from '@unpod/components/common/AppLoadingMore';
 import AppColumnZoomView from '@unpod/components/common/AppColumnZoomView';
 import { AppDrawer } from '@unpod/components/antd';
 import { getColumns } from './columns';
-import type { TaskItem } from '@unpod/constants/types';
 import { StyledContainer, StyledRoot } from './index.styled';
 import { downloadFile } from '@unpod/helpers/FileHelper';
 import { getTableFilterData } from '@unpod/helpers/TableHelper';

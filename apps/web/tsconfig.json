@@ -51,7 +51,7 @@
       "@unpod/icons/*": ["../../libs/nextjs/icons/src/lib/*"],
       "@unpod/external-libs": ["../../libs/nextjs/external-libs/src/index.ts"],
       "@unpod/external-libs/*": ["../../libs/nextjs/external-libs/src/lib/*"],
-      "@unpod/localization": ["../../libs/nextjs/localization/src/index.js"],
+      "@unpod/localization": ["../../libs/nextjs/localization/src/index.ts"],
       "@unpod/localization/*": ["../../libs/nextjs/localization/src/*"],
       "@unpod/shared-types": ["../../libs/shared/types/src/lib/index.ts"],
       "@unpod/shared-types/*": ["../../libs/shared/types/src/lib/*"],

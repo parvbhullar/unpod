@@ -1,6 +1,10 @@
+import { config as dotenvConfig } from 'dotenv';
 import { withNx } from '@nx/next/plugins/with-nx';
 import type { WithNxOptions } from '@nx/next/plugins/with-nx';
 import path from 'path';
+
+// Load root-level .env (override any local .env.local values)
+dotenvConfig({ path: path.join(__dirname, '../../.env'), override: true });
 
 const nextConfig: WithNxOptions = {
   turbopack: {
@@ -128,23 +132,18 @@ const nextConfig: WithNxOptions = {
         : false,
   },
   env: {
-    appType: process.env.appType,
-    noIndex: process.env.noIndex,
-    noFollow: process.env.noFollow,
-    agoraAppId: process.env.agoraAppId,
-    apiUrl: process.env.apiUrl,
-    serverApiUrl: process.env.serverApiUrl,
-    chatApiUrl: process.env.chatApiUrl,
-    siteUrl: process.env.siteUrl,
-    productId: process.env.productId,
-    muxEnvKey: process.env.NEXT_PUBLIC_MUX_ENV_KEY,
-    isDevMode: process.env.isDevMode,
-    currency: process.env.currency,
-    paymentGatewayKey: process.env.paymentGatewayKey,
-    ClarityProjectId: process.env.ClarityProjectId,
-    GATagId: process.env.GATagId,
-    ENABLE_CHECKSUM: process.env.ENABLE_CHECKSUM || 'false',
-    CHECKSUM_SECRET: process.env.CHECKSUM_SECRET || '',
+    apiUrl: process.env.API_URL,
+    productId: process.env.PRODUCT_ID,
+    isDevMode: process.env.IS_DEV_MODE,
+    currency: process.env.CURRENCY,
+    paymentGatewayKey: process.env.PAYMENT_GATEWAY_KEY,
+    clarityProjectId: process.env.CLARITY_PROJECT_ID,
+    GATagId: process.env.GA_TAG_ID,
+    enableChecksum: process.env.ENABLE_CHECKSUM || 'false',
+    checksumSecret: process.env.CHECKSUM_SECRET || '',
+    centrifugoUrl: process.env.CENTRIFUGO_URL,
+    muxEnvKey: process.env.MUX_ENV_KEY,
+    livekitUrl: process.env.LIVEKIT_URL,
   },
   async headers() {
     const corsHeaders = [

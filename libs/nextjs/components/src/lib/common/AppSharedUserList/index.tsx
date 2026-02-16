@@ -4,23 +4,19 @@ import { allowedDefaultRoles } from './constants';
 import MemberItem from './MemberItem';
 import AppList from '../AppList';
 import { useIntl } from 'react-intl';
+import { InviteMember } from '@unpod/constants';
 
 type RoleOption = {
   key: string;
-  label: string;};
-
-type SharedUser = {
-  email: string;
-  role_code?: string;
-  full_name?: string;
-  joined?: boolean;
-  role?: string;};
+  label: string;
+};
 
 type AppSharedUserListProps = {
-  users?: SharedUser[];
-  onChangeUsers?: (users: SharedUser[]) => void;
+  users?: InviteMember[];
+  onChangeUsers?: (users: InviteMember[]) => void;
   allowedRoles?: RoleOption[];
-  emptyText?: string;};
+  emptyText?: string;
+};
 
 const AppSharedUserList: React.FC<AppSharedUserListProps> = ({
   users,
@@ -41,14 +37,14 @@ const AppSharedUserList: React.FC<AppSharedUserListProps> = ({
     const newMembers = selectedUsers.filter((item) => item.email !== email);
     setSelectUsers(newMembers);
   };
-  const onUpdateInvitedMember = (member: SharedUser) => {
+  const onUpdateInvitedMember = (member: InviteMember) => {
     const newMembers = selectedUsers.map((item) =>
       item.email === member.email ? member : item,
     );
     setSelectUsers(newMembers);
   };
 
-  const onAddUsers = (user: SharedUser[]) => {
+  const onAddUsers = (user: InviteMember[]) => {
     const newMembers = [...selectedUsers];
     user.forEach((u) => {
       const exists = newMembers.find((item) => item.email === u.email);

@@ -122,7 +122,9 @@ const CreatingIdentity = () => {
       })
       .catch((error: { message?: string }) => {
         console.error('Error creating business agent:', error.message);
-        router.push('/business-identity/');
+        infoViewActionsContext.showError(
+          error.message || 'Failed to create agent',
+        );
       });
   };
 
@@ -167,7 +169,9 @@ const CreatingIdentity = () => {
       })
       .catch((error: { message?: string }) => {
         console.error('Error creating business identity:', error.message);
-        router.push('/business-identity/');
+        infoViewActionsContext.showError(
+          error.message || 'Failed to create identity',
+        );
       });
   };
 
@@ -179,15 +183,13 @@ const CreatingIdentity = () => {
         setTargetProgress(30);
         if (response.data) {
           createBusinessIdentity(domain, response.data);
-        } else {
-          // No data returned — skip to manual setup
-          router.push('/business-identity/');
         }
       })
       .catch((error: { message?: string }) => {
         console.error('Error fetching business identity:', error.message);
-        // Redirect to manual business identity setup on failure
-        router.push('/business-identity/');
+        infoViewActionsContext.showError(
+          error.message || 'Failed to fetch identity',
+        );
       });
   };
 

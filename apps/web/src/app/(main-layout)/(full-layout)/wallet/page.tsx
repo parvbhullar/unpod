@@ -1,12 +1,6 @@
 import dynamic from 'next/dynamic';
 
-type AppWalletModuleProps = {
-  pageTitle: string;
-};
-
-const AppWalletModule = dynamic<AppWalletModuleProps>(
-  () => import('@unpod/modules/AppWallet'),
-);
+const AppWalletModule = dynamic<any>(() => import('@unpod/modules/AppWallet'));
 
 export const metadata = {
   title: 'Wallet',

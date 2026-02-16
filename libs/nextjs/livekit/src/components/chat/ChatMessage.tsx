@@ -27,7 +27,8 @@ type ChatMessageProps = {
   name: string;
   message: string;
   isSelf: boolean;
-  hideName: boolean;};
+  hideName: boolean;
+};
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({
   name,

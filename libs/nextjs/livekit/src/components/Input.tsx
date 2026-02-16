@@ -48,7 +48,8 @@ const statusStyles: Partial<Record<InputStatus, RuleSet<object>>> = {
 type StyledInputProps = {
   size?: InputSize;
   status?: InputStatus;
-  fullWidth?: boolean;};
+  fullWidth?: boolean;
+};
 
 const Input = styled.input.withConfig({
   shouldForwardProp: (prop) =>

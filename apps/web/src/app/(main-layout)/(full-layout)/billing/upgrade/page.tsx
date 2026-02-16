@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const AppUpgradeModule = dynamic<Record<string, unknown>>(
+const AppUpgradeModule = dynamic<any>(
   () => import('@unpod/modules/AppSubscription/Upgrade'),
 );
 

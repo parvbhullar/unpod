@@ -33,8 +33,7 @@ export async function serverFetcher<T = unknown>(
     ...(options.headers ?? {}),
   };
 
-  const baseUrl = process.env.serverApiUrl || process.env.apiUrl;
-  const res = await fetch(`${baseUrl}${endpoint}`, {
+  const res = await fetch(`${process.env.apiUrl}${endpoint}`, {
     ...options,
     headers: mergedHeaders,
     cache,

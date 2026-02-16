@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import { getKnowledgebase } from './actions';
 import type { PageProps } from '@/types/common';
 
-const AppKnowledgeBaseModule = dynamic<Record<string, unknown>>(
+const AppKnowledgeBaseModule = dynamic<any>(
   () => import('@unpod/modules/AppKnowledgeBase/View'),
 );
 

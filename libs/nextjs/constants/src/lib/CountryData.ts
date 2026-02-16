@@ -2,7 +2,8 @@ export type CountryCode = {
   code: string;
   short: string;
   flag: string;
-  name: string;};
+  name: string;
+};
 
 export const countryCodes: CountryCode[] = [
   { code: '+93', short: 'AF', flag: '🇦🇫', name: 'Afghanistan' },
@@ -214,7 +215,8 @@ export const countryCodes: CountryCode[] = [
 
 export type RegionOption = {
   label: string;
-  value: string;};
+  value: string;
+};
 
 export const regionOptions: RegionOption[] = [
   { label: 'India', value: 'IN' },

@@ -25,10 +25,12 @@ type AppSettings = {
   token: string;
   room_name: string;
   participant_name: string;
-  theme_color?: string | null;};
+  theme_color?: string | null;
+};
 
 type AppConfig = {
-  settings: AppSettings;};
+  settings: AppSettings;
+};
 
 const defaultConfig: AppConfig = {
   settings: {
@@ -82,7 +84,8 @@ const useAppConfig = (): AppConfig => {
 
 type ConfigContextValue = {
   config: AppConfig;
-  setUserSettings: (settings: AppSettings) => void;};
+  setUserSettings: (settings: AppSettings) => void;
+};
 
 const ConfigContext = createContext<ConfigContextValue | null>(null);
 

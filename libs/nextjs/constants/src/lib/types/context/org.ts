@@ -6,16 +6,20 @@ import type { Spaces } from '../space';
 export type OrgContextType = {
   activeSpace: Spaces;
   orgUsers: OrgUser[];
-  notificationData: NotificationData;};
+  notificationData: NotificationData;
+};
 
 export type OrgActionsContextType = {
   setActiveSpace: Dispatch<SetStateAction<Spaces>>;
-  setNotificationData: Dispatch<SetStateAction<NotificationData>>;};
+  setNotificationData: Dispatch<SetStateAction<NotificationData>>;
+};
 
 export type OrgUser = {
   user_email: string;
   full_name?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export type AppOrgContextProviderProps = {
-  children: ReactNode;};
+  children: ReactNode;
+};

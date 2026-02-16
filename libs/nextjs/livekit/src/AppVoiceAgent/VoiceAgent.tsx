@@ -25,7 +25,8 @@ type VoiceAgentProps = {
   onConnect: (shouldConnect: boolean) => void;
   config?: Record<string, unknown>;
   agentName?: string;
-  setStartCall: (value: boolean) => void;};
+  setStartCall: (value: boolean) => void;
+};
 
 const VoiceAgent: React.FC<VoiceAgentProps> = ({
   onConnect,

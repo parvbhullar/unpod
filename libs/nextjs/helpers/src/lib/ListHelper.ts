@@ -7,7 +7,8 @@ export type PaginationConfig = {
   showLessItems: boolean;
   count: number;
   current: number;
-  showTotal: (total: number, range: [number, number]) => string;};
+  showTotal: (total: number, range: [number, number]) => string;
+};
 
 export const getPagination = (
   pageSize = tablePageSize,

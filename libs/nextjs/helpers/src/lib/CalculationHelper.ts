@@ -1,7 +1,8 @@
 export type ItemWithCost = {
   cost?: number;
   quantity?: number;
-  tax_percentage?: number;};
+  tax_percentage?: number;
+};
 
 export const getItemAmount = (item: ItemWithCost): number => {
   return +((item.cost || 0) * (item.quantity || 0)).toFixed(8);

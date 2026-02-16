@@ -19,12 +19,14 @@ type RegisterTopicHandlersOptions = {
   ) => void;
   shouldAcceptMessage?: (...args: any[]) => boolean;
   messageMetadata?: Map<string, any>;
-  MESSAGE_SOURCE?: string;};
+  MESSAGE_SOURCE?: string;
+};
 
 type UnregisterTopicHandlersOptions = {
   unregisterFunctions: Array<(() => void) | null>;
   topics: string[];
-  registeredTopics: MutableRefObject<Set<string>>;};
+  registeredTopics: MutableRefObject<Set<string>>;
+};
 
 /**
  * Registers text stream handlers for specified LiveKit topics

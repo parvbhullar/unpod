@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, Divider, Flex, Form, Select } from 'antd';
+import type { FormInstance } from 'antd';
+import { Button, Divider, Flex, Form } from 'antd';
 import { SaveOutlined, TagsOutlined } from '@ant-design/icons';
 import {
   useAuthContext,
@@ -19,12 +20,25 @@ import { AppSelect } from '@unpod/components/antd';
 import PurposeList from './PurposeList';
 import { useIntl } from 'react-intl';
 import { PURPOSE_CATEGORIES } from '@unpod/constants/CommonConsts';
+import type { InviteMember, Pilot } from '@unpod/constants/types';
 
 type IdentityProps = {
-  agentData?: any;
+  agentData: Pilot;
   updateAgentData?: (data: FormData) => void;
-  headerForm?: any;
+  headerForm: FormInstance;
   hideNameField?: boolean;
+};
+
+type Tags = {
+  name: string;
+};
+
+
+export type HeaderFormValues = {
+  privacy_type: string;
+  description?: string;
+  purpose?: string;
+  tags?: string[];
 };
 
 const Identity = ({
@@ -37,20 +51,18 @@ const Identity = ({
   const { loading } = useInfoViewContext();
   const [form] = Form.useForm();
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [userList, setUserList] = useState<any[]>([]);
+  const [userList, setUserList] = useState<InviteMember[]>([]);
   const privacyType = Form.useWatch('privacy_type', form);
   const { isAuthenticated } = useAuthContext();
   const { formatMessage } = useIntl();
 
-  const [{ apiData }, { reCallAPI }] = useGetDataApi(
+
+  const [{ apiData }, { reCallAPI }] = useGetDataApi<Tags[]>(
     'core/tags/',
     { data: [] },
     {},
     false,
-  ) as [
-    { apiData: { data?: Array<{ name: string }> } },
-    { reCallAPI: () => void },
-  ];
+  );
 
   useEffect(() => {
     if (isAuthenticated) reCallAPI();
@@ -69,7 +81,7 @@ const Identity = ({
     }
   }, [agentData?.users]);
 
-  const onFormSave = (value: any) => {
+  const onFormSave = (value: HeaderFormValues) => {
     if (privacyType === 'shared' && userList.length === 0) {
       infoViewActionsContext.showError(
         formatMessage({ id: 'validation.addAtLeastOneUser' }),
@@ -81,7 +93,8 @@ const Identity = ({
     const filteredUsers =
       privacyType === 'shared'
         ? userList.filter(
-            (user: any) => user && user.role_code !== ACCESS_ROLE.OWNER,
+            (user: InviteMember) =>
+              user && user.role_code !== ACCESS_ROLE.OWNER,
           )
         : [];
 
@@ -93,7 +106,7 @@ const Identity = ({
     formData.append('type', 'Voice');
 
     if (agentData?.space_slug) {
-      formData.append('space_slug', agentData?.space_slug);
+      formData.append('space_slug', agentData?.space_slug as string);
     }
 
     (value.tags || []).forEach((tag: string) => formData.append(`tags`, tag));
@@ -123,7 +136,7 @@ const Identity = ({
             setLogoFile={(file: File) => setLogoFile(file)}
             agentData={agentData}
             privacyType={privacyType}
-            setUserList={(users: any[]) => setUserList(users)}
+            setUserList={(users: InviteMember[]) => setUserList(users)}
             userList={userList}
             hideNameField={hideNameField}
           />
@@ -151,13 +164,12 @@ const Identity = ({
                   id: 'aiStudio.identityclassificationplaceholder',
                 })}
                 mode="tags"
-              >
-                {apiData?.data?.map((item) => (
-                  <Select.Option key={item.name} value={item.name}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-              </AppSelect>
+                options={apiData?.data?.map((item: Tags) => ({
+                  key: item.name,
+                  label: item.name,
+                  value: item.name,
+                }))}
+              />
             </Form.Item>
             <Form.Item
               name="purpose"

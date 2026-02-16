@@ -25,7 +25,8 @@ export type PrivacyType = {
   key: string;
   value: string;
   label: string;
-  icon: ReactNode;};
+  icon: ReactNode;
+};
 
 export const PRIVACY_TYPES: PrivacyType[] = [
   {
@@ -54,7 +55,8 @@ export type PermissionType = {
   key: string;
   label: string;
   icon: ReactNode;
-  iconOnly: ReactNode;};
+  iconOnly: ReactNode;
+};
 
 export const PERMISSION_TYPES: PermissionType[] = [
   {
@@ -92,7 +94,8 @@ export const PERMISSION_TYPES: PermissionType[] = [
 export type ContentItem = {
   label?: string;
   key: string;
-  type?: string;};
+  type?: string;
+};
 
 export const CRETE_CONTENT_ITEMS: ContentItem[] = [
   {
@@ -133,7 +136,8 @@ export type InputTypeConfig = {
   type: string;
   placeholder?: string;
   required?: boolean;
-  mode?: string;};
+  mode?: string;
+};
 
 export const INPUT_TYPES: InputTypeConfig[] = [
   {

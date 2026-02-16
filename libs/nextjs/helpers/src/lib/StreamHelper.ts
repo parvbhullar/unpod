@@ -1,5 +1,6 @@
 export type PostWithOperations = {
-  allowed_operations?: string[];};
+  allowed_operations?: string[];
+};
 
 export const isHostUser = (
   post: PostWithOperations | null | undefined,

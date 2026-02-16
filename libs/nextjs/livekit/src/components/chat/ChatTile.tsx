@@ -29,11 +29,13 @@ const MessagesWrapper = styled.div`
 type ChatMessage = {
   name: string;
   message: string;
-  isSelf: boolean;};
+  isSelf: boolean;
+};
 
 type ChatTileProps = {
   messages: ChatMessage[];
-  onSend?: (message: string) => void;};
+  onSend?: (message: string) => void;
+};
 
 export const ChatTile: React.FC<ChatTileProps> = ({ messages, onSend }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);

@@ -11,13 +11,12 @@ import AppSpaceHeaderMenus from '@unpod/components/common/AppSpaceHeaderMenus';
 const RequestView = () => {
   const { currentSpace } = useAppSpaceContext();
   const { setCurrentSpace } = useAppSpaceActionsContext();
-  const AppSpaceHeaderMenusAny = AppSpaceHeaderMenus as any;
 
   return (
     <Fragment>
       <PageHeader
         pageTitle={
-          <AppSpaceHeaderMenusAny setAddNew={() => null} isContentHeader />
+          <AppSpaceHeaderMenus setAddNew={() => null} isContentHeader />
         }
       />
       <AppPageContainer

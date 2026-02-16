@@ -52,3 +52,18 @@ export type CollectionDataResponse = {
   next?: string | null;
   previous?: string | null;
 };
+
+export type KnowledgeBase = Spaces & {
+  total_post?: number;
+  is_owner?: boolean;
+  private_main_post_slug?: string | null;
+  public_main_post_slug?: string | null;
+  last_main_post_slug?: string | null;
+  has_evals?: boolean;
+  evals_info?: {
+    eval_name?: string;
+    linked_handle?: string;
+    gen_status?: string | undefined;
+    eval_token?: string;
+  };
+};

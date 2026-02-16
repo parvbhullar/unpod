@@ -57,7 +57,8 @@ type ConfigurationPanelItemProps = {
   roomState: ConnectionState;
   children?: ReactNode;
   onConnectClicked: () => void;
-  spaceView?: boolean;};
+  spaceView?: boolean;
+};
 
 export const ConfigurationPanelItem: React.FC<ConfigurationPanelItemProps> = ({
   roomState,

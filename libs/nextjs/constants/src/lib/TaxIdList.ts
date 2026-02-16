@@ -3,7 +3,8 @@ export type TaxIdData = {
   countryCode: string;
   flag: string;
   taxIdName: string;
-  regex: string;};
+  regex: string;
+};
 
 export const taxIdData: TaxIdData[] = [
   {

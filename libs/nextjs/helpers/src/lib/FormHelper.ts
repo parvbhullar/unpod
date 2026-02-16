@@ -16,7 +16,8 @@ export const parseRegex = (
 export type FieldDependency = {
   depends_on: string;
   value: unknown;
-  condition?: string;};
+  condition?: string;
+};
 
 export const fieldDependencyResolved = (
   dependencies: FieldDependency[] | null | undefined,
@@ -74,14 +75,16 @@ export type FormField = {
   required?: boolean;
   type?: string;
   regex?: string;
-  regexMessage?: string;};
+  regexMessage?: string;
+};
 
 export type ValidationRule = {
   required?: boolean;
   message?: string;
   type?: string;
   pattern?: RegExp;
-  validator?: (rule: unknown, value: unknown) => Promise<void>;};
+  validator?: (rule: unknown, value: unknown) => Promise<void>;
+};
 
 export const getFieldValidationRules = (field: FormField): ValidationRule[] => {
   const label = capitalizedString(field?.title?.toLowerCase());

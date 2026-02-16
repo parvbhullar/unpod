@@ -16,19 +16,23 @@ import { FormatMessageFn } from './LocalizationFormatHelper';
 
 export type FilterSortValue = {
   sortedInfo: SortedInfo;
-  filteredInfo: FilteredInfo;};
+  filteredInfo: FilteredInfo;
+};
 
 export type SortedInfo = {
   field?: string;
-  order?: string;};
+  order?: string;
+};
 
 export type FilteredInfo = {
-  [key: string]: unknown[] | null;};
+  [key: string]: unknown[] | null;
+};
 
 export type ExtraInfo = {
   function: (value: unknown, ...args: unknown[]) => unknown;
   filterKey: string;
-  otherArgs: unknown[];};
+  otherArgs: unknown[];
+};
 
 export type UseTablePaginationProps = {
   initialFilterData?: Record<string, unknown>;
@@ -40,13 +44,15 @@ export type UseTablePaginationProps = {
   dependentCallback?: (
     filterData: Record<string, unknown>,
     filterSortValue: FilterSortValue,
-  ) => Record<string, unknown>;};
+  ) => Record<string, unknown>;
+};
 
 export type TablePaginationState = {
   currentPage: number;
   pageSize: number;
   filterData: Record<string, unknown>;
-  filterInfo: Record<string, unknown>;};
+  filterInfo: Record<string, unknown>;
+};
 
 export type TablePaginationActions = {
   setCurrentPage: Dispatch<SetStateAction<number>>;
@@ -57,7 +63,8 @@ export type TablePaginationActions = {
     pagination: unknown,
     filters: FilteredInfo,
     sorter: SortedInfo,
-  ) => void;};
+  ) => void;
+};
 
 export const useTablePagination = ({
   initialFilterData = {},
@@ -255,7 +262,8 @@ export type TablePaginationConfig = {
   showSizeChanger: boolean;
   position: string[];
   showTotal: (total: number) => string;
-  pageSizeOptions: string[];};
+  pageSizeOptions: string[];
+};
 
 export const getTablePagination = (
   pageSize = tablePageSize,
@@ -304,12 +312,14 @@ export type FilterDropdownProps = {
   setSelectedKeys: (keys: unknown[]) => void;
   selectedKeys: unknown[];
   confirm: () => void;
-  clearFilters?: () => void;};
+  clearFilters?: () => void;
+};
 
 export type ColumnSearchProps = {
   filterDropdown: (props: FilterDropdownProps) => ReactNode;
   filterIcon: (filtered: boolean) => ReactNode;
-  render: (text: string) => string;};
+  render: (text: string) => string;
+};
 
 export const getColumnSearchProps = (
   title: string,
@@ -360,7 +370,8 @@ export const getColumnSearchProps = (
 
 export type SelectOption = {
   id: string;
-  name: string;};
+  name: string;
+};
 
 export const getColumnSelectBoxProps = (
   title: string,
@@ -582,7 +593,8 @@ const handleSearch = (selectedKeys: unknown[], confirm: () => void): void => {
 
 export type ColumnConfig = {
   align: string;
-  fixed?: string;};
+  fixed?: string;
+};
 
 export const getActionColumn = (): ColumnConfig => {
   return { align: 'center', fixed: 'right' };

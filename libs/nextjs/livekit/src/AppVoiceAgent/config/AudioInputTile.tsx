@@ -25,11 +25,13 @@ const StyledDiv = styled.div`
 
 type AudioInputTileConfig = {
   circular?: boolean;
-  local?: Record<string, unknown>;};
+  local?: Record<string, unknown>;
+};
 
 type AudioInputTileProps = {
   trackRef?: TrackReferenceOrPlaceholder;
-  config?: AudioInputTileConfig;};
+  config?: AudioInputTileConfig;
+};
 
 export const AudioInputTile: React.FC<AudioInputTileProps> = ({
   trackRef,

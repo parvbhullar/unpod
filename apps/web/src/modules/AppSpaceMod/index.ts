@@ -1,13 +1,8 @@
 import dynamic from 'next/dynamic';
 
-type AppSpaceModuleProps = {
-  tab: unknown;
-  id: unknown;
-};
-
-export const AppSpaceRoot = dynamic<Record<string, unknown>>(
+export const AppSpaceRoot = dynamic<any>(
   () => import('@unpod/modules/AppSpace'),
 );
-export const AppSpaceModule = dynamic<AppSpaceModuleProps>(
+export const AppSpaceModule = dynamic<any>(
   () => import('@unpod/modules/AppSpace/View'),
 );

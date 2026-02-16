@@ -35,7 +35,7 @@ import { getKbInputsStructure } from '@unpod/helpers/AppKbHelper';
 import { useIntl } from 'react-intl';
 
 const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
-const { currentSpace, spaceSchema } = useAppSpaceContext();
+  const { currentSpace, spaceSchema } = useAppSpaceContext();
   const { setCurrentSpace, setSpaceSchema } = useAppSpaceActionsContext();
   const isTabletOrMobile = useMediaQuery(TabWidthQuery);
   const infoViewActionsContext = useInfoViewActionsContext();

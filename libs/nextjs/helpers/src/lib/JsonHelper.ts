@@ -1,6 +1,7 @@
 export type KeyValuePair = {
   key: string;
-  value: unknown;};
+  value: unknown;
+};
 
 /**
  * Converts a list of objects with 'key' and 'value' properties into a dictionary.

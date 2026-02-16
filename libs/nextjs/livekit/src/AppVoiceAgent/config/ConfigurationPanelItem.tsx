@@ -30,7 +30,8 @@ const StyledTrackToggle = styled(TrackToggle)`
 type ConfigurationPanelItemProps = {
   roomState: ConnectionState;
   children?: ReactNode;
-  onConnectClicked: () => void;};
+  onConnectClicked: () => void;
+};
 
 export const ConfigurationPanelItem = ({
   roomState,

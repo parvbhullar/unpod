@@ -14,6 +14,7 @@ import AppConversation from '../AppConversation';
 import { useIntl } from 'react-intl';
 import useCentrifugoDataChannel from '@unpod/livekit/hooks/useCentrifugoDataChannel';
 import { Conversation } from '@unpod/constants';
+import { CENTRIFUGO_URL } from '@unpod/constants/ConfigConsts';
 
 /**
  * AppPostContent - Inner content component for post detail view
@@ -26,7 +27,7 @@ import { Conversation } from '@unpod/constants';
  * @param {Function} onEditPost - Callback for post editing
  * @param {Function} onDeletedPost - Callback for post deletion
  * @param {Function} onStartVoice - Callback to initialize voice connection
- * @returns {JSX.Element}
+ * @returns {ReactNode} JSX Element for post content and conversation interface
  */
 type AppPostContentProps = {
   token?: string;
@@ -59,16 +60,11 @@ const AppPostContent = ({
   const [, setDataLoading] = useState(true);
   let params: Record<string, any> = {
     token,
-    app_type: process.env.appType,
   };
 
   if (!isAuthenticated) {
-    params = { session_user: visitorId, app_type: process.env.appType };
+    params = { session_user: visitorId };
   }
-
-  /*useEffect(() => {
-    setCurrentPost(post);
-  }, [post]);*/
 
   // Use hybrid messaging: LiveKit data channel (voice mode) or WebSocket (text-only mode)
   const {
@@ -82,7 +78,7 @@ const AppPostContent = ({
     params,
     enabled: true, // Always enabled - uses WebSocket for text-only, LiveKit for voice
     centrifugoConfig: {
-      url: 'wss://centrifugo.unpod.tv/connection/websocket',
+      url: CENTRIFUGO_URL!,
       token: centrifugoConfig?.token,
       channel_name: centrifugoConfig?.channel_name,
       agent_name: centrifugoConfig?.agent_name,
@@ -177,7 +173,7 @@ const AppPostContent = ({
 // Wrapper component with LiveKitRoom
 type AppPostProps = {
   token?: string;
-currentPost: Conversation;
+  currentPost: Conversation;
   onEditPost?: () => void;
   onDeletedPost?: () => void;
   shouldAutoStartVoice?: boolean;
@@ -216,26 +212,7 @@ const AppPost = ({
       console.log('✅ Voice token received and cached');
       updateRoomToken(token);
     },
-  }) as any;
-  console.log('AppPost centrifugoConfig', centrifugoConfig);
-  // Log endpoint for debugging
-  useEffect(() => {
-    console.log(
-      '🔗 Voice token endpoint:',
-      `core/voice/${currentPost.parent_post_slug}/generate_room_token/`,
-    );
-    console.log('📄 Current post:', {
-      slug: currentPost.slug,
-      parent_post_slug: currentPost.parent_post_slug,
-      content_type: currentPost.content_type,
-      post_type: currentPost.post_type,
-    });
-  }, [
-    currentPost.slug,
-    currentPost.parent_post_slug,
-    currentPost.content_type,
-    currentPost.post_type,
-  ]);
+  });
 
   const onStartVoice = useCallback(
     async (options = {}) => {

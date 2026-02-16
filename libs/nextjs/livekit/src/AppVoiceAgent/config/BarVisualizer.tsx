@@ -58,14 +58,16 @@ const cloneSingleChild = (
 
 type BarVisualizerOptions = {
   minHeight?: number;
-  maxHeight?: number;};
+  maxHeight?: number;
+};
 
 type BarVisualizerProps = React.HTMLAttributes<HTMLDivElement> & {
   state?: string;
   options?: BarVisualizerOptions;
   barCount?: number;
   trackRef?: TrackReferenceOrPlaceholder;
-  children?: ReactNode;};
+  children?: ReactNode;
+};
 
 export const BarVisualizer = forwardRef<HTMLDivElement, BarVisualizerProps>(
   ({ state, options, barCount = 15, trackRef, children, ...props }, ref) => {

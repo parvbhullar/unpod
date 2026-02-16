@@ -6,11 +6,13 @@ export type InputSchemaProperty = {
   type?: string;
   description?: string;
   enum?: string[];
-  defaultValue?: unknown;};
+  defaultValue?: unknown;
+};
 
 export type InputSchema = {
   properties?: Record<string, InputSchemaProperty>;
-  required?: string[];};
+  required?: string[];
+};
 
 export type KbInput = {
   id: number;
@@ -21,7 +23,8 @@ export type KbInput = {
   required: boolean;
   choices: string[];
   isEnum: boolean;
-  defaultValue: unknown;};
+  defaultValue: unknown;
+};
 
 export const getKbInputsStructure = (
   inputSchema: InputSchema | null | undefined,
@@ -53,12 +56,14 @@ export type GeneratedSchemaProperty = {
   title: string | undefined;
   description: string;
   defaultValue: string;
-  enum?: string[];};
+  enum?: string[];
+};
 
 export type GeneratedSchema = {
   type: 'object';
   properties: Record<string, GeneratedSchemaProperty>;
-  required: string[];};
+  required: string[];
+};
 
 export type KbInputForSchema = {
   name?: string;
@@ -68,7 +73,8 @@ export type KbInputForSchema = {
   defaultValue?: string;
   isEnum?: boolean;
   choices?: string[];
-  required?: boolean;};
+  required?: boolean;
+};
 
 export const generateKbSchema = (
   inputs: KbInputForSchema[],

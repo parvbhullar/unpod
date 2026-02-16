@@ -38,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps) {
         />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         {process.env.NODE_ENV !== 'development' &&
-          process.env.noIndex !== 'yes' && (
+          process.env.isDevMode !== 'yes' && (
             <>
               <link rel="preconnect" href="https://www.googletagmanager.com" />
               <link rel="dns-prefetch" href="https://www.clarity.ms" />
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps) {
 
         {/* Load analytics scripts after page becomes interactive - reduces TBT */}
         {process.env.NODE_ENV !== 'development' &&
-          process.env.noIndex !== 'yes' && (
+          process.env.isDevMode !== 'yes' && (
             <>
               <Script id="microsoft-clarity" strategy="lazyOnload">
                 {`
@@ -66,7 +66,7 @@ export default function RootLayout({ children }: LayoutProps) {
                   c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                   t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                })(window, document, "clarity", "script", "${process.env.ClarityProjectId}");
+                })(window, document, "clarity", "script", "${process.env.clarityProjectId}");
               `}
               </Script>
 

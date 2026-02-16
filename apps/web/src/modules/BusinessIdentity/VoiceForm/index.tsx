@@ -86,7 +86,7 @@ const VoiceForm = ({ agent, setAgent, updateAgentData }: VoiceFormProps) => {
       ...(prev || {}),
       telephonyConfig,
       profile,
-    }));
+    } as Pilot));
   };
 
   const onProfileSelect = (nextProfile: VoiceProfile | null) => {
