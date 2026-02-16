@@ -1,0 +1,120 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Testing
+coverage/
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+**/playwright/.auth/
+
+# Build outputs
+.next/
+out/
+.nuxt/
+.output/
+.turbo/
+*.tsbuildinfo
+.nx/
+next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.livekit
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tauri
+apps/unpod-tauri/src-tauri/target/
+
+# Django
+*.sqlite3
+db.sqlite3
+staticfiles/
+mediafiles/
+media/
+static/
+
+# Secrets
+*.pem
+*.key
+secrets/
+credentials/
+.credential_blocklist
+*.p12
+*.pfx
+*.jks
+**/service-account*.json
+
+# Docker
+docker-compose.override.yml
+
+# Claude Code
+.claude/
+
+# Misc
+*.bak
+*.tmp
+*.temp
+.cache/
+tmp/
+uv.lock
+local.*
+/CLAUDE.md

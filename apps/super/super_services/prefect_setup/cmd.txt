@@ -1,0 +1,48 @@
+# Local
+
+docker compose -f super_services/prefect_setup/local/docker-compose-local-base.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/local/docker-compose-local-base.yaml up -d
+
+docker compose -f super_services/prefect_setup/local/docker-call-worker-compose.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/local/docker-call-worker-compose.yaml up -d
+
+docker build -t bom.ocir.io/bmttln9csnzu/call-task:3.4.21.v2 -f super_services/orchestration/task/deployments/Dockerfile .
+
+Create deployments
+python3 super_services/orchestration/task/deployments/task_deployments.py
+
+
+
+# QA
+cd /var/apps/super-qa-prefect
+
+workon Super12PrefectEnv
+
+docker compose -f super_services/prefect_setup/qa/docker-compose-qa.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/qa/docker-compose-qa.yaml up -d
+
+docker compose -f super_services/prefect_setup/qa/docker-call-worker-compose.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/qa/docker-call-worker-compose.yaml up -d
+
+docker build -t bom.ocir.io/bmttln9csnzu/call-task:3.4.21.v2 -f super_services/orchestration/task/deployments/Dockerfile .
+
+Create deployments
+python3 super_services/orchestration/task/deployments/task_deployments.py
+
+
+
+# Prod
+cd /var/apps/super-prefect-prod
+
+workon Prefect12ProdEnv
+
+docker compose -f super_services/prefect_setup/prod/docker-prefect-sever-compose.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/prod/docker-prefect-sever-compose.yaml up -d
+
+docker compose -f super_services/prefect_setup/prod/docker-call-worker-compose.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/prod/docker-call-worker-compose.yaml up -d
+
+docker build -t bom.ocir.io/bmttln9csnzu/call-task:3.4.21.v2 -f super_services/orchestration/task/deployments/Dockerfile .
+
+Create deployments
+python3 super_services/orchestration/task/deployments/task_deployments.py

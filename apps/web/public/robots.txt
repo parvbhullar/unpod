@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://unpod.ai
+
+# Sitemaps
+Sitemap: https://unpod.ai/sitemap.xml
+Sitemap: https://unpod.ai/sitemaps/sitemap-post.xml
+Sitemap: https://unpod.ai/sitemaps/sitemap-hub.xml
+Sitemap: https://unpod.ai/sitemaps/sitemap-space.xml

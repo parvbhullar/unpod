@@ -1,0 +1,45 @@
+{% extends "../base.html" %}
+
+{% block title %}New Invoice - {{APP_NAME}}{% endblock %}
+
+{% block content %}
+<p>Hello Administrator,</p>
+
+<p>A new invoice has been generated for:</p>
+<p><strong>Organization:</strong> {{ invoice.organization.name }}</p>
+<p><strong>Invoice Number:</strong> {{ invoice.invoice_number }}</p>
+<p><strong>Date:</strong> {{ invoice.invoice_date|date:"d M Y" }}</p>
+
+<table>
+  <thead>
+  <tr>
+    <th>Description</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Total</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for feature, item in invoice.total_usage.items %}
+  <tr>
+    <td>{{ feature }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>₹{{ item.cost|default:0|floatformat:2 }}</td>
+    <td>₹{{ item.total_amount|default:0|floatformat:2 }}</td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="4" style="text-align:center;">No line items found.</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<p><strong>Subtotal:</strong> ₹{{ sub_total }}</p>
+<p><strong>Tax:</strong> ₹{{ invoice.tax_amount }}</p>
+<p><strong>Total:</strong> ₹{{ invoice.amount }}</p>
+
+<p>You can review the invoice by clicking the
+  <a href="{{ invoice_url }}" target="_blank">here</a>
+</p>
+{% endblock %}

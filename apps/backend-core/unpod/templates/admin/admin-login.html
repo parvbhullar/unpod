@@ -1,0 +1,74 @@
+{% extends "admin/base-site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />
+{{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+
+
+{% block content %}
+
+{% if error %}
+<p class="errornote">
+    {{ error }}
+</p>
+{% endif %}
+
+<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+  <div class="form-row">
+    {{ form.username.errors }}
+    {{ form.username.label_tag }} {{ form.username }}
+  </div>
+  <div class="form-row">
+    {{ form.password.errors }}
+    {{ form.password.label_tag }} 
+    <input type="password" name="password" id="id_password" value="{{form.data.password}}" required="">
+    <input type="hidden" name="next" value="">
+  </div>
+    
+  {% if form.otp %}
+  <div class="form-row">
+    <label for="id_otp">OTP:</label> <input type="text" name="otp" required="" id="id_otp">
+  </div>
+  {% endif %}
+  {% if form.otp %}
+  <div id="login_btn" class="submit-row">
+    <label>&nbsp;</label><input type="submit" value="{% trans 'Log in' %}" />
+  </div>
+  {% else %}
+
+  <div id="otp_btn" class="submit-row">
+    <label>&nbsp;</label><input type="submit" value="{{button_value}}" />
+  </div>
+
+
+  {% endif %}
+</form>
+
+</div>
+
+{% endblock %}
+
+
+{% block script %} 
+
+<script type="text/javascript">
+
+  function sendOTP() {
+    var e = document.querySelector('#_otp')
+  }
+  
+</script>
+
+{% endblock %}

@@ -1,0 +1,339 @@
+version: '3.9'
+
+services:
+  # =============================================================================
+  # DATABASES - Separate PostgreSQL for each service
+  # =============================================================================
+
+  postgres-auth:
+    image: postgres:16-alpine
+    container_name: unpod-postgres-auth
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+      - ./infrastructure/docker/services/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  postgres-orders:
+    image: postgres:16-alpine
+    container_name: unpod-postgres-orders
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: orders_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_orders_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  postgres-notifications:
+    image: postgres:16-alpine
+    container_name: unpod-postgres-notifications
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: notifications_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_notifications_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  postgres-analytics:
+    image: postgres:16-alpine
+    container_name: unpod-postgres-analytics
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: analytics_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_analytics_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  postgres-store:
+    image: postgres:16-alpine
+    container_name: unpod-postgres-store
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: store_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_store_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  # Legacy - Main database (for existing backend-core)
+  postgres-main:
+    image: postgres:16-alpine
+    container_name: unpod-postgres-main
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: unpod_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_main_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  # =============================================================================
+  # MONGODB
+  # =============================================================================
+
+  mongodb:
+    image: mongo:7
+    container_name: unpod-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-admin}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./infrastructure/docker/services/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  # =============================================================================
+  # REDIS
+  # =============================================================================
+
+  redis:
+    image: redis:7-alpine
+    container_name: unpod-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./infrastructure/docker/services/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - backend
+
+  # =============================================================================
+  # KAFKA & ZOOKEEPER
+  # =============================================================================
+
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: unpod-kafka
+    restart: unless-stopped
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: '/var/lib/kafka/data'
+      # KRaft requires a cluster ID.
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    # No custom command needed, the image handles formatting when CLUSTER_ID is present
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: unpod-kafka-ui
+    restart: unless-stopped
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: unpod-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      # KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181 # Removed for KRaft
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+  # =============================================================================
+  # DJANGO SERVICES (Development mode - uncomment to use)
+  # =============================================================================
+
+  # backend-auth:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infrastructure/docker/django/Dockerfile
+  #     args:
+  #       APP_PATH: apps/backend-auth
+  #   container_name: unpod-backend-auth
+  #   command: python manage.py runserver 0.0.0.0:8001
+  #   volumes:
+  #     - ./apps/backend-auth:/app
+  #     - ./libs/python:/libs
+  #   ports:
+  #     - "8001:8001"
+  #   environment:
+  #     - DJANGO_SETTINGS_MODULE=config.settings.development
+  #     - DATABASE_URL=postgresql://postgres:postgres@postgres-auth:5432/auth_db
+  #     - REDIS_URL=redis://redis:6379/0
+  #     - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+  #   depends_on:
+  #     postgres-auth:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - backend
+  #     - frontend
+
+  # backend-orders:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infrastructure/docker/django/Dockerfile
+  #     args:
+  #       APP_PATH: apps/backend-orders
+  #   container_name: unpod-backend-orders
+  #   command: python manage.py runserver 0.0.0.0:8002
+  #   volumes:
+  #     - ./apps/backend-orders:/app
+  #     - ./libs/python:/libs
+  #   ports:
+  #     - "8002:8002"
+  #   environment:
+  #     - DJANGO_SETTINGS_MODULE=config.settings.development
+  #     - DATABASE_URL=postgresql://postgres:postgres@postgres-orders:5432/orders_db
+  #     - MONGODB_URL=mongodb://admin:admin@mongodb:27017/orders_mongo?authSource=admin
+  #     - REDIS_URL=redis://redis:6379/1
+  #     - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+  #   depends_on:
+  #     postgres-orders:
+  #       condition: service_healthy
+  #     mongodb:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - backend
+  #     - frontend
+
+  # =============================================================================
+  # EXISTING BACKEND-CORE (Main Django service)
+  # =============================================================================
+
+  # backend-core:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infrastructure/docker/django/Dockerfile
+  #     args:
+  #       APP_PATH: apps/backend-core
+  #   container_name: unpod-backend-core
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - ./apps/backend-core:/app
+  #     - ./libs/python:/libs
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - DJANGO_SETTINGS_MODULE=config.settings.local
+  #     - DATABASE_URL=postgresql://postgres:postgres@postgres-main:5432/unpod_db
+  #     - REDIS_URL=redis://redis:6379/0
+  #     - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+  #   depends_on:
+  #     postgres-main:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - backend
+  #     - frontend
+
+networks:
+  frontend:
+    driver: bridge
+    name: unpod-frontend
+  backend:
+    driver: bridge
+    name: unpod-backend
+
+volumes:
+  postgres_auth_data:
+  postgres_orders_data:
+  postgres_notifications_data:
+  postgres_analytics_data:
+  postgres_store_data:
+  postgres_main_data:
+  mongodb_data:
+  redis_data:
+  kafka_data:

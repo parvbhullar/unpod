@@ -1,0 +1,370 @@
+{
+  "roles": [
+    {
+      "name": "Individual",
+      "description": "People who wants to explore the world of building things can choose this account type",
+      "icon": "user"
+    },
+    {
+      "name": "Entrepreneur",
+      "description": "Startups, teams, groups, organisation which are building a product, service or business can choose this account type",
+      "icon": "building"
+    },
+    {
+      "name": "Investor",
+      "description": "Angels, Funds, VCs who invest in the entrepreneurs can choose this account type for better visibility of startups and enterprenuers",
+      "icon": "briefcase"
+    },
+    {
+      "name": "Mentor",
+      "description": "People who are subject matter experts, consultants, advisors, teachers can choose this account type",
+      "icon": "graduation-hat"
+    },
+    {
+      "name": "Influencer",
+      "description": "Influencers, creators who creates content to help people to be successful can choose this account type",
+      "icon": "influencer"
+    }
+  ],
+  "industries": [
+    {
+      "name": "Agriculture",
+      "description": "The cultivation and production of crops and livestock for food, fuel, and other products.",
+      "icon": "agriculture"
+    },
+    {
+      "name": "Automotive",
+      "description": "The design, development, manufacturing, and marketing of motor vehicles and their components.",
+      "icon": "automotive"
+    },
+    {
+      "name": "Banking",
+      "description": "The business of accepting deposits, making loans, and providing financial services to individuals and businesses.",
+      "icon": "banking"
+    },
+    {
+      "name": "Construction",
+      "description": "The planning, design, and construction of buildings, infrastructure, and other physical structures.",
+      "icon": "construction"
+    },
+    {
+      "name": "D2C",
+      "description": "People who are building a company, product, business can choose this account",
+      "icon": "d2c"
+    },
+    {
+      "name": "Education",
+      "description": "The provision of instruction and learning opportunities, typically in formal settings such as schools and universities.",
+      "icon": "education"
+    },
+    {
+      "name": "Energy",
+      "description": "The production, distribution, and consumption of various forms of energy, including fossil fuels, renewable energy sources, and electricity.",
+      "icon": "energy"
+    },
+    {
+      "name": "Finance",
+      "description": "Businesses involved in the provision and coordination of medical and related goods and services",
+      "icon": "finance"
+    },
+    {
+      "name": "Healthcare",
+      "description": "The provision of medical services, including diagnosis, treatment, and prevention of illness and disease.",
+      "icon": "healthcare"
+    },
+    {
+      "name": "Hospitality",
+      "description": "The business of providing services and accommodations to travelers and tourists, including lodging, food and beverage, and other amenities.",
+      "icon": "hospitality"
+    },
+    {
+      "name": "Information Technology",
+      "description": "The use of computers, software, and telecommunications to process, store, and transmit information.",
+      "icon": "information-technology"
+    },
+    {
+      "name": "Marketplace",
+      "description": "People who wants to explore the world of building things can choose this account type",
+      "icon": "marketplace"
+    },
+    {
+      "name": "Manufacturing",
+      "description": "The production of goods through the use of machinery, tools, and labor, often in large-scale factories or other facilities.",
+      "icon": "manufacturing"
+    },
+    {
+      "name": "Retail",
+      "description": "The sale of goods and services directly to consumers through physical stores or online channels.",
+      "icon": "retail"
+    },
+    {
+      "name": "SAAS",
+      "description": "People who wants to explore the world of building things can choose this account type",
+      "icon": "saas"
+    },
+    {
+      "name": "Transportation",
+      "description": "The movement of people, goods, and materials from one location to another, including by land, air, and sea.",
+      "icon": "transportation"
+    }
+  ],
+  "requirement": [
+    {
+      "name": "Funding",
+      "description": "For teams, startups looking to fund their product, research or company",
+      "icon": "funding"
+    },
+    {
+      "name": "Mentorship",
+      "description": "For teams, startups looking for mentorship for their product, research or company",
+      "icon": "mentorship"
+    },
+    {
+      "name": "Feedback",
+      "description": "For teams, startups looking for feedback for their product, research or company",
+      "icon": "feedback"
+    },
+    {
+      "name": "Business Leads",
+      "description": "For teams, startups wants to market their products, services or company",
+      "icon": "company"
+    },
+    {
+      "name": "Talent",
+      "description": "For teams, startups looking for talent to join them",
+      "icon": "talent"
+    }
+  ],
+  "seeking": [
+    {
+      "name": "Funding",
+      "description": "For teams, startups looking to fund their product, research or company",
+      "icon": "funding"
+    },
+    {
+      "name": "Mentorship",
+      "description": "For teams, startups looking for mentorship for their product, research or company",
+      "icon": "mentorship"
+    },
+    {
+      "name": "Feedback",
+      "description": "For teams, startups looking for feedback for their product, research or company",
+      "icon": "feedback"
+    },
+    {
+      "name": "Business Leads",
+      "description": "For teams, startups wants to market their products, services or company",
+      "icon": "company"
+    },
+    {
+      "name": "Talent",
+      "description": "For teams, startups looking for talent to join them",
+      "icon": "talent"
+    }
+  ],
+  "payments": [
+    {
+      "name": "Credit Card",
+      "description": "A payment method that allows the buyer to pay for goods or services using a credit card.",
+      "icon": "credit-card"
+    },
+    {
+      "name": "Debit Card",
+      "description": "A payment method that allows the buyer to pay for goods or services using funds from their checking account.",
+      "icon": "debit-card"
+    },
+    {
+      "name": "Bank Transfer",
+      "description": "A payment method that allows the buyer to transfer funds directly from their bank account to the seller's bank account.",
+      "icon": "bank-transfer"
+    }
+  ],
+  "engineering": [
+    {
+      "name": "Software Engineer",
+      "description": "A software engineer is responsible for designing, developing, and maintaining software applications. They typically have experience with one or more programming languages and are comfortable working in a team environment.",
+      "icon": "fa-laptop-code"
+    },
+    {
+      "name": "Data Scientist",
+      "description": "A data scientist is responsible for analyzing and interpreting complex data sets to identify patterns, trends, and insights. They typically have a strong background in mathematics, statistics, and computer science.",
+      "icon": "fa-chart-line"
+    },
+    {
+      "name": "UI/UX Designer",
+      "description": "A UI/UX designer is responsible for designing the user interface and user experience for software applications. They typically have experience with design tools such as Sketch or Adobe XD and are comfortable working in a team environment.",
+      "icon": "fa-paint-brush"
+    },
+    {
+      "name": "Project Manager",
+      "description": "A project manager is responsible for leading a team to complete a project within the specified timeline and budget. They typically have experience in project management methodologies such as Agile or Waterfall and are comfortable communicating with stakeholders.",
+      "icon": "fa-tasks"
+    },
+    {
+      "name": "Business Analyst",
+      "description": "A business analyst is responsible for identifying opportunities for improving business operations and processes. They typically have experience in data analysis and are comfortable working with stakeholders to gather requirements.",
+      "icon": "fa-chart-bar"
+    },
+    {
+      "name": "Quality Assurance Engineer",
+      "description": "A quality assurance engineer is responsible for testing software applications to ensure they meet the specified requirements and quality standards. They typically have experience with testing methodologies and tools and are comfortable working in a team environment.",
+      "icon": "fa-bug"
+    },
+    {
+      "name": "DevOps Engineer",
+      "description": "A DevOps engineer is responsible for managing the infrastructure and deployment pipelines for software applications. They typically have experience in software development and operations and are comfortable working with tools such as Docker and Kubernetes.",
+      "icon": "fa-cogs"
+    },
+    {
+      "name": "Technical Writer",
+      "description": "A technical writer is responsible for creating documentation for software applications and other technical products. They typically have experience in writing technical documentation and are comfortable working in a team environment.",
+      "icon": "fa-book"
+    }
+  ],
+  "database": [
+    {
+      "name": "MySQL",
+      "description": "An open-source relational database management system that is widely used for web applications.",
+      "icon": "mysql"
+    },
+    {
+      "name": "PostgreSQL",
+      "description": "A powerful open-source object-relational database system that is highly scalable and has strong data integrity features.",
+      "icon": "postgresql"
+    },
+    {
+      "name": "MongoDB",
+      "description": "A popular open-source NoSQL document-oriented database that is highly scalable and flexible.",
+      "icon": "mongodb"
+    },
+    {
+      "name": "Oracle",
+      "description": "A powerful and widely used relational database management system that offers a broad range of functionality.",
+      "icon": "oracle"
+    },
+    {
+      "name": "SQLite",
+      "description": "A lightweight, file-based relational database management system that is often used for mobile applications.",
+      "icon": "sqlite"
+    },
+    {
+      "name": "Microsoft SQL Server",
+      "description": "A popular relational database management system that is widely used in enterprise applications.",
+      "icon": "microsoft_sql"
+    }
+  ],
+  "languages": [
+    {
+      "name": "Python",
+      "description": "A high-level, interpreted programming language that is easy to learn and widely used for scripting, web development, data analysis, and more.",
+      "icon": "fa-python"
+    },
+    {
+      "name": "Java",
+      "description": "A general-purpose, class-based, object-oriented programming language that is designed to be portable and highly maintainable.",
+      "icon": "fa-java"
+    },
+    {
+      "name": "JavaScript",
+      "description": "A high-level, dynamic, interpreted programming language that is widely used for web development and client-side scripting.",
+      "icon": "fa-js-square"
+    },
+    {
+      "name": "C++",
+      "description": "A powerful, high-performance programming language that is widely used for developing operating systems, game engines, and other performance-critical applications.",
+      "icon": "fa-cuttlefish"
+    },
+    {
+      "name": "PHP",
+      "description": "A popular server-side scripting language that is widely used for web development and can be embedded into HTML.",
+      "icon": "fa-php"
+    },
+    {
+      "name": "Ruby",
+      "description": "A dynamic, open-source programming language that is designed for simplicity and productivity.",
+      "icon": "fa-gem"
+    },
+    {
+      "name": "C#",
+      "description": "A modern, object-oriented programming language that is designed for building Windows desktop applications, games, and web services.",
+      "icon": "fa-windows"
+    },
+    {
+      "name": "Go",
+      "description": "An open-source programming language that is designed for building highly concurrent and scalable systems.",
+      "icon": "fa-google"
+    },
+    {
+      "name": "Swift",
+      "description": "A powerful, open-source programming language that is designed for building apps for iOS, macOS, watchOS, and tvOS.",
+      "icon": "fa-apple"
+    },
+    {
+      "name": "Kotlin",
+      "description": "A modern, statically typed programming language that is designed to interoperate with Java and is widely used for building Android apps.",
+      "icon": "fa-kickstarter-k"
+    },
+    {
+      "name": "Rust",
+      "description": "An open-source programming language that is designed for building safe and efficient systems, particularly for low-level systems programming.",
+      "icon": "fa-rust"
+    },
+    {
+      "name": "TypeScript",
+      "description": "A superset of JavaScript that adds optional static typing and other features that make it easier to build large-scale applications.",
+      "icon": "fa-node-js"
+    }
+  ],
+  "frameworks": [
+    {
+      "name": "React",
+      "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+      "icon": "fa-react"
+    },
+    {
+      "name": "Angular",
+      "description": "A comprehensive JavaScript framework for building dynamic web applications.",
+      "icon": "fa-angular"
+    },
+    {
+      "name": "Vue.js",
+      "description": "A progressive JavaScript framework for building user interfaces.",
+      "icon": "fa-vuejs"
+    },
+    {
+      "name": "Node.js",
+      "description": "An open-source, cross-platform JavaScript runtime environment for building server-side applications.",
+      "icon": "fa-node-js"
+    },
+    {
+      "name": "Django",
+      "description": "A high-level Python web framework that encourages rapid development and clean, pragmatic design.",
+      "icon": "fa-python"
+    },
+    {
+      "name": "Ruby on Rails",
+      "description": "An open-source web framework that uses the Ruby programming language and follows the Model-View-Controller (MVC) architectural pattern.",
+      "icon": "fa-gem"
+    },
+    {
+      "name": "Spring",
+      "description": "A popular Java framework for building web and enterprise applications.",
+      "icon": "fa-java"
+    },
+    {
+      "name": "Express.js",
+      "description": "A fast, minimalist web framework for Node.js that is widely used for building APIs and web applications.",
+      "icon": "fa-code"
+    },
+    {
+      "name": "Laravel",
+      "description": "A free, open-source PHP web framework that is designed for building web applications with elegant syntax and expressive code.",
+      "icon": "fa-laravel"
+    },
+    {
+      "name": "Flask",
+      "description": "A lightweight Python web framework that is easy to learn and use.",
+      "icon": "fa-flask"
+    }
+  ]
+}

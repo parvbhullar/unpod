@@ -1,0 +1,215 @@
+version: '3.8'
+
+# ===================================
+# VOICE EXECUTORS - UNIFIED DOCKER COMPOSE
+# All voice executor services using single image
+# ===================================
+
+services:
+  # ===================================
+  # SuperKik Executor V1 (QA)
+  # ===================================
+  superkik-executor-v1:
+    build:
+      context: ../../..
+      dockerfile: deployment/docker/voice_executors/Dockerfile
+      target: production
+    image: voice-executor:${IMAGE_TAG:-latest}
+    container_name: qa-superkik-executor-v1
+    restart: always
+    env_file:
+      - .env
+    command: ["python", "-u", "super_services/orchestration/executors/superkik_executor_v1.py", "dev"]
+    environment:
+      - SETTINGS_FILE=super_services.settings.qa
+      - AGENT_PROVIDER=superkik
+      - NUM_IDLE_PROCESSES=0
+      - PREWARM_KB_EMBEDDINGS=true
+      # SuperKik Configuration
+      - SUPERKIK_ENABLE_CALLS=${SUPERKIK_ENABLE_CALLS:-true}
+      - SUPERKIK_ENABLE_BOOKING=${SUPERKIK_ENABLE_BOOKING:-true}
+      - SUPERKIK_ENABLE_PREFERENCES=${SUPERKIK_ENABLE_PREFERENCES:-true}
+      - SUPERKIK_MAX_RESULTS=${SUPERKIK_MAX_RESULTS:-5}
+      - SUPERKIK_SEARCH_RADIUS=${SUPERKIK_SEARCH_RADIUS:-5.0}
+      - SUPERKIK_COMPACT_PROMPT=${SUPERKIK_COMPACT_PROMPT:-false}
+      # STT Configuration
+      - STT_PROVIDER=${STT_PROVIDER:-deepgram}
+      - STT_MODEL=${STT_MODEL:-nova-3}
+      - STT_LANGUAGE=${STT_LANGUAGE:-multi}
+      # TTS Configuration
+      - TTS_PROVIDER=${TTS_PROVIDER:-cartesia}
+      - TTS_MODEL=${TTS_MODEL:-sonic-3}
+      - TTS_VOICE=${TTS_VOICE:-95d51f79-c397-46f9-b49a-23763d3eaa2d}
+      # External Services
+      - GOOGLE_PLACES_API_KEY=${GOOGLE_PLACES_API_KEY:-}
+      - SIP_DOMAIN=${SIP_DOMAIN:-}
+      - SIP_USERNAME=${SIP_USERNAME:-}
+      - SIP_PASSWORD=${SIP_PASSWORD:-}
+      # LiveKit
+      - LIVEKIT_URL=${LIVEKIT_URL}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      # AI Services
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - CARTESIA_API_KEY=${CARTESIA_API_KEY}
+      # Database
+      - MONGO_DSN=${MONGO_DSN}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT:-3306}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - REDIS_URI=${REDIS_URI}
+    volumes:
+      - superkik_logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "superkik_executor_v1.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+  # ===================================
+  # Voice LK Executor V3 (QA)
+  # ===================================
+  voice-lk-executor-v3-qa:
+    image: voice-executor:${IMAGE_TAG:-latest}
+    container_name: qa-voice-lk-executor-v3
+    restart: always
+    env_file:
+      - .env
+    command: ["python", "-u", "super_services/orchestration/executors/voice_executor_v3.py", "dev"]
+    environment:
+      - SETTINGS_FILE=super_services.settings.qa
+      - NUM_IDLE_PROCESSES=0
+      - PREWARM_KB_EMBEDDINGS=true
+      # STT Configuration
+      - STT_PROVIDER=${STT_PROVIDER:-deepgram}
+      - STT_MODEL=${STT_MODEL:-nova-3}
+      - STT_LANGUAGE=${STT_LANGUAGE:-multi}
+      # TTS Configuration
+      - TTS_PROVIDER=${TTS_PROVIDER:-cartesia}
+      - TTS_MODEL=${TTS_MODEL:-sonic-3}
+      - TTS_VOICE=${TTS_VOICE:-95d51f79-c397-46f9-b49a-23763d3eaa2d}
+      # LiveKit
+      - LIVEKIT_URL=${LIVEKIT_URL}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      # AI Services
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - CARTESIA_API_KEY=${CARTESIA_API_KEY}
+      # Database
+      - MONGO_DSN=${MONGO_DSN}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT:-3306}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - REDIS_URI=${REDIS_URI}
+    volumes:
+      - voice_lk_qa_logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "voice_executor_v3.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+  # ===================================
+  # Voice LK Executor V3 (Prod)
+  # ===================================
+  voice-lk-executor-v3-prod:
+    image: voice-executor:${IMAGE_TAG:-latest}
+    container_name: voice-lk-executor-v3-prod
+    restart: always
+    env_file:
+      - .env
+    command: ["python", "-u", "super_services/orchestration/executors/voice_executor_v3.py", "dev"]
+    environment:
+      - SETTINGS_FILE=super_services.settings.prod
+      - NUM_IDLE_PROCESSES=0
+      - PREWARM_KB_EMBEDDINGS=true
+      # STT Configuration
+      - STT_PROVIDER=${STT_PROVIDER:-deepgram}
+      - STT_MODEL=${STT_MODEL:-nova-3}
+      - STT_LANGUAGE=${STT_LANGUAGE:-multi}
+      # TTS Configuration
+      - TTS_PROVIDER=${TTS_PROVIDER:-cartesia}
+      - TTS_MODEL=${TTS_MODEL:-sonic-3}
+      - TTS_VOICE=${TTS_VOICE:-95d51f79-c397-46f9-b49a-23763d3eaa2d}
+      # LiveKit
+      - LIVEKIT_URL=${LIVEKIT_URL}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      # AI Services
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - CARTESIA_API_KEY=${CARTESIA_API_KEY}
+      # Database
+      - MONGO_DSN=${MONGO_DSN}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT:-3306}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - REDIS_URI=${REDIS_URI}
+    volumes:
+      - voice_lk_prod_logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "voice_executor_v3.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  superkik_logs:
+    driver: local
+  voice_lk_qa_logs:
+    driver: local
+  voice_lk_prod_logs:
+    driver: local

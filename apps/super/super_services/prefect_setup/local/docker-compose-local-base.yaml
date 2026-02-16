@@ -1,0 +1,55 @@
+networks:
+    prefect-network:   # Must match your Docker Compose network
+      name: '${PREFECT_NETWORK:-prefect-network}'
+services:
+  prefect-server:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    container_name: prefect-server
+    environment:
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_LOGGING_LEVEL=INFO
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://prefect:prefect@192.168.29.228:5432/prefect
+    ports:
+      - "${PREFECT_SERVER_API_PORT:-4200}:4200"
+    volumes:
+      - ~/apps/prefect_data:/root/.prefect
+    restart: unless-stopped
+    command: >
+      bash -c "
+        echo 'Installing prefect-docker packages...' &&
+        pip install prefect-docker==0.6.6 &&
+        prefect server start --host 0.0.0.0
+      "
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4200/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - prefect-network
+  prefect-workpool-init:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    container_name: prefect-workpool-init
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+    environment:
+      - PREFECT_API_URL=http://prefect-server:${PREFECT_SERVER_API_PORT:-4200}/api
+      - MOUNTPATH=${MOUNTPATH}
+      - DOCKER_REGISTRY_USER=${DOCKER_REGISTRY_USER}
+      - DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}
+      - DOCKER_REGISTRY_URL=${DOCKER_REGISTRY_URL}
+      - PREFECT_NETWORK=${PREFECT_NETWORK:-prefect-network}
+      - ENVIRONMENT=${ENVIRONMENT:-local}
+    volumes:
+      - ../workpool_config:/opt/scripts/
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      bash -c "
+        pip install tabulate==0.9.0 && pip install prefect-docker==0.6.6 &&
+        echo 'Setting up work pools using Python script...' &&
+        python /opt/scripts/create_workpools.py
+      "
+    networks:
+      - prefect-network

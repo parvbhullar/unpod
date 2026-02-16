@@ -1,0 +1,33 @@
+# QA
+Branch -- > qa-master-deployment
+cd /var/apps/super-qa-prefect
+
+Update the code in Above Branch & Just take the pull
+
+workon Super12PrefectEnv
+postactivate --> /home/ubuntu/.virtualenvs/Super12PrefectEnv/bin/postactivate
+
+update env in postactivate file
+
+
+
+# Prod
+Branch -- > qa-master-stable
+cd /var/apps/super-prefect-prod
+
+Update the code in Above Branch & Just take the pull
+
+workon Prefect12ProdEnv
+postactivate --> /home/ubuntu/.virtualenvs/Prefect12ProdEnv/bin/postactivate
+
+update env in postactivate file
+
+
+
+
+# How to change the env Variable for prefect
+First add the Variable in super_services/orchestration/task/deployments/env_config.py
+Then, add the env Variable in postactivate file.
+Re-activate the workon
+
+run the task_deployments cmd again, so that the new Variable added to deployment configuration

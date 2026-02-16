@@ -1,0 +1,32 @@
+{% extends "../base.html" %}
+
+{% block title %}New Invoice Generated - {{APP_NAME}}{% endblock %}
+
+{% block content %}
+<h2>Invoice #{{ invoice.invoice_number }}</h2>
+<p>Dear {{ invoice.organization.name }},</p>
+<p>Thank you for your business. Please find your invoice details below:</p>
+
+<ul>
+  <li><b>Amount:</b> ₹{{ invoice.amount }}</li>
+  <li><b>Invoice Date:</b> {{ invoice.invoice_date }}</li>
+  {% if invoice.status == 'pending' %}
+    <li><b>Due Date:</b> {{ invoice.due_date }}</li>
+  {% endif %}
+</ul>
+
+{% if invoice.status == 'pending' %}
+  <p>Your payment is due by <strong>{{ invoice.due_date }}</strong>. Please ensure that the payment is made by this date to avoid any late fees.</p>
+{% elif invoice.status == 'paid' %}
+  <p>We have received your payment. Thank you!</p>
+{% elif invoice.status == 'overdue' %}
+  <p>Your payment is overdue. Please make the payment as soon as possible to avoid further penalties.</p>
+{% endif %}
+
+<p>
+  AddOns Invoice PDF is attached.
+</p>
+
+<p>Thanks,<br>
+The <strong>{{APP_NAME}}</strong> Team</p>
+{% endblock %}

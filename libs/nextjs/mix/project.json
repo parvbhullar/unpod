@@ -1,0 +1,15 @@
+{
+  "name": "mix",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/mix/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/mix/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

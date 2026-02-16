@@ -1,0 +1,113 @@
+{
+  "name": "@unpod/monorepo",
+  "version": "1.0.0",
+  "description": "Unpod - AI-powered voice and communication platform",
+  "license": "MIT",
+  "homepage": "https://unpod.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parvbhullar/unpod-github"
+  },
+  "author": {
+    "name": "Yogendra Singh",
+    "email": "yogendra@unpod.ai"
+  },
+  "scripts": {
+    "dev": "nx run-many --target=serve --projects=web,backend-core --parallel=2",
+    "dev:frontend": "nx dev web",
+    "dev:backend": "nx run-many --target=serve --projects=backend-auth,backend-orders,backend-notifications,backend-analytics,service-store --parallel=5",
+    "dev:all": "nx run-many --target=serve --all --parallel=6",
+    "dev:web": "nx dev web",
+    "dev:admin": "nx dev admin",
+
+    "build": "nx build web",
+    "build:all": "nx run-many --target=build --all",
+    "build:affected": "nx affected:build",
+
+    "test": "nx test",
+    "test:frontend": "nx run-many --target=test --projects=tag:scope:frontend",
+    "test:backend": "nx run-many --target=test --projects=tag:tech:django,tag:tech:fastapi",
+    "test:all": "nx run-many --target=test --all",
+    "test:affected": "nx affected:test",
+
+    "e2e": "nx e2e web",
+    "e2e:ui": "nx e2e web --ui",
+    "e2e:all": "nx run-many --target=e2e --all",
+
+    "lint": "nx workspace-lint && nx lint",
+    "lint:all": "nx run-many --target=lint --all",
+    "lint:fix": "nx run-many --target=lint --all -- --fix",
+
+    "format": "nx format:write",
+    "format:check": "nx format:check",
+
+    "migrate": "nx run-many --target=migrate --projects=backend-auth,backend-orders,backend-notifications,backend-analytics,backend-core --parallel=false",
+    "migrate:auth": "nx migrate backend-auth",
+    "migrate:orders": "nx migrate backend-orders",
+    "migrate:notifications": "nx migrate backend-notifications",
+    "migrate:analytics": "nx migrate backend-analytics",
+    "migrate:store": "nx migrate service-store",
+    "migrate:core": "nx migrate backend-core",
+
+    "graph": "nx graph",
+    "affected:graph": "nx affected:graph",
+
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:clean": "docker-compose down -v",
+    "docker:rebuild": "docker-compose down && docker-compose build --no-cache && docker-compose up -d",
+
+    "db:create": "./scripts/database/create-databases.sh",
+    "db:seed": "./scripts/database/seed-data.sh",
+    "db:reset": "./scripts/database/reset-databases.sh",
+
+    "setup": "./scripts/setup/init-monorepo.sh",
+    "setup:python": "./scripts/setup/install-python-deps.sh",
+    "setup:node": "npm install",
+
+    "desktop:dev": "cd apps/web && npm run desktop:dev",
+    "desktop:build": "cd apps/web && npm run desktop:build"
+  },
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "dependencies": {
+    "nx": "22.1.0"
+  },
+  "devDependencies": {
+    "@nx/devkit": "22.4.5",
+    "@nx/eslint": "22.1.0",
+    "@nx/eslint-plugin": "22.1.0",
+    "@nx/jest": "22.1.0",
+    "@nx/js": "22.1.0",
+    "@nx/next": "22.1.0",
+    "@nx/playwright": "22.4.5",
+    "@nx/react": "22.1.0",
+    "@nx/workspace": "22.1.0",
+    "@swc-node/register": "~1.11.1",
+    "@swc/core": "~1.15.2",
+    "@swc/helpers": "~0.5.17",
+    "@testing-library/react": "^16.0.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.1.6",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^1.6.2",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

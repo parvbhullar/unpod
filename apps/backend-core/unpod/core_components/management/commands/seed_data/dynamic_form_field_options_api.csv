@@ -1,0 +1,2 @@
+id,title,endpoint,method,headers,params,value_key,label_key
+1,Telephony Providers,telephony/providers/,GET,,"{""type"": ""voice_infra""}",id,name

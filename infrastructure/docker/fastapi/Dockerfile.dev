@@ -1,0 +1,32 @@
+# api-services — local development Dockerfile
+# Unified FastAPI service hub (messaging, store, search, task)
+
+FROM python:3.12-slim AS builder
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY apps/api-services/requirements /tmp/requirements
+COPY apps/api-services/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --prefix=/install -r /tmp/requirements.txt
+
+# Runtime stage
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    netcat-openbsd \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /install /usr/local
+
+WORKDIR /app
+
+EXPOSE 9116

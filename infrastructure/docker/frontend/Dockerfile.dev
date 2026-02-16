@@ -1,0 +1,71 @@
+# =============================================================================
+# Unpod Web Frontend — Production Build for Docker
+# =============================================================================
+# Multi-stage build that pre-compiles Next.js for instant page loads (~3s)
+# instead of dev-mode on-demand compilation (50s+ blank screens).
+#
+# Build: docker compose -f docker-compose.simple.yml build web
+# Run:   docker compose -f docker-compose.simple.yml up -d web
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Stage 1: Install dependencies (cached layer)
+# ---------------------------------------------------------------------------
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json package-lock.json ./
+COPY apps/web/package.json apps/web/package.json
+RUN npm ci
+
+# ---------------------------------------------------------------------------
+# Stage 2: Build the Next.js standalone bundle
+# ---------------------------------------------------------------------------
+FROM node:20-alpine AS builder
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json package-lock.json nx.json tsconfig.base.json tsconfig.json ./
+COPY apps/web/ apps/web/
+COPY libs/ libs/
+
+# Placeholder env vars — replaced at runtime by entrypoint.sh
+ENV NODE_ENV=production \
+    appType=__UNPOD_APP_TYPE__ \
+    apiUrl=__UNPOD_API_URL__ \
+    serverApiUrl=__UNPOD_SERVER_API_URL__ \
+    chatApiUrl=__UNPOD_CHAT_API_URL__ \
+    siteUrl=__UNPOD_SITE_URL__ \
+    productId=__UNPOD_PRODUCT_ID__ \
+    isDevMode=__UNPOD_IS_DEV_MODE__ \
+    currency=__UNPOD_CURRENCY__ \
+    noIndex=__UNPOD_NO_INDEX__ \
+    noFollow=__UNPOD_NO_FOLLOW__ \
+    paymentGatewayKey=__UNPOD_PAYMENT_GATEWAY_KEY__ \
+    ENABLE_CHECKSUM=__UNPOD_ENABLE_CHECKSUM__
+
+RUN npx nx build web --configuration=production
+
+# ---------------------------------------------------------------------------
+# Stage 3: Minimal runtime image (~150MB instead of 2GB+)
+# ---------------------------------------------------------------------------
+FROM node:20-alpine AS runner
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/dist/apps/web/.next/standalone/ ./
+COPY --from=builder /app/dist/apps/web/.next/static/ ./apps/web/.next/static/
+COPY --from=builder /app/apps/web/public/ ./apps/web/public/
+COPY infrastructure/docker/frontend/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh && chown -R nextjs:nodejs /app
+
+USER nextjs
+EXPOSE 3000
+ENV PORT=3000 HOSTNAME="0.0.0.0"
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["node", "apps/web/server.js"]

@@ -1,0 +1,23 @@
+{% extends "./base.html" %}
+
+{% block title %}New User Registration: {{full_name}} - {{APP_NAME}}{% endblock %}
+
+{% block content %}
+<p>Hello <strong>Admin</strong>,</p>
+<p>A new user has successfully registered on <strong>{{APP_NAME}}</strong>.</p>
+
+<ul>
+    <li><strong>Name:</strong> {{full_name}}</li>
+    <li><strong>Email:</strong> {{user.email}}</li>
+    <li><strong>Phone:</strong> {{user.phone_number}}</li>
+</ul>
+<p><strong>Account created at:</strong> {{created_at}}</p>
+<p>
+    You can view and manage this user from the Admin:
+    <a href="{{user_url}}">View User</a>.
+</p>
+<p>If this registration looks suspicious, please review it immediately.</p>
+
+<p>Thanks,<br>
+The <strong>{{APP_NAME}}</strong> Team</p>
+{% endblock %}

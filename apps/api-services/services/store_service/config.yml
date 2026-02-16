@@ -1,0 +1,15 @@
+LOGGING:
+  version: 1
+  disable_existing_loggers: False
+  formatters:
+    default:
+      format: "%(asctime)-15s [%(levelname)-4s] [store_service] [%(name)-12s] %(message)s"
+  handlers:
+    default:
+      level: INFO
+      formatter: default
+      class: logging.StreamHandler
+  root:
+    level: INFO
+    propagate: True
+    handlers: [default]

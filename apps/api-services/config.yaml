@@ -1,0 +1,22 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+  default:
+    datefmt: "%Y-%m-%d %H:%M:%S"
+    format: "[%(asctime)s.%(msecs)03dZ] - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: default
+loggers:
+  uvicorn.error:
+    level: INFO
+    handlers:
+      - console
+    propagate: no
+  uvicorn.access:
+    level: INFO
+    handlers:
+      - console
+    propagate: no

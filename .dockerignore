@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+dist
+
+# Python
+__pycache__
+*.pyc
+.venv
+*.egg-info
+
+# IDE
+.vscode
+.idea
+
+# Docker
+docker-compose*.yml
+
+# Docs & plans
+*.md
+!apps/backend-core/requirements/*.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Apps not needed for builds
+apps/unpod-tauri
+apps/backend-auth
+apps/backend-orders
+apps/backend-notifications
+apps/backend-analytics
+apps/service-store

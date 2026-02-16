@@ -1,0 +1,353 @@
+/* Modern styling for driver.js tour - UnpodWeb theme */
+.driver-popover {
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  color: #3a3a3a;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 24px rgba(121, 108, 255, 0.15),
+  0px 2px 8px rgba(0, 0, 0, 0.08);
+  border: none;
+  padding: 20px;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  sans-serif;
+  backdrop-filter: blur(8px);
+  animation: popoverFadeIn 0.3s ease-out;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.driver-popover-title {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #000000;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  background: linear-gradient(135deg, #796cff 0%, #b242f4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.driver-popover-description {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #565656;
+  margin-bottom: 20px;
+  font-weight: 450;
+  letter-spacing: 0.1px;
+}
+
+.driver-popover-progress-text {
+  font-size: 12px;
+  color: #796cff;
+  font-weight: 600;
+  background: #f4f0ff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.driver-popover-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.driver-popover.driverjs-theme button {
+  flex: 1;
+  text-align: center;
+  background-color: #796cff;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  font-size: 13px;
+  font-weight: 400;
+  padding: 4px 12px;
+  border-radius: 8px;
+  height: 36px;
+  max-width: fit-content;
+  line-height: 1.5715;
+  border: 1px solid transparent;
+  /*box-shadow: 0 2px 0 rgba(5, 5, 5, 0.06);*/
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.driver-popover.driverjs-theme button:hover {
+  background-color: #9383ff;
+  color: #ffffff;
+  /*box-shadow: 0 2px 0 rgba(5, 5, 5, 0.06);*/
+}
+
+.driver-popover.driverjs-theme button:active {
+  background-color: #6b5df5;
+  /*box-shadow: 0 0 0 rgba(5, 5, 5, 0.06);*/
+}
+
+.driver-popover.driverjs-theme button:focus {
+  /*outline: 4px solid rgba(121, 108, 255, 0.1);*/
+  outline-offset: 1px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+  /*justify-content: space-between;*/
+  gap: 8px;
+}
+
+.driver-popover-btn {
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  border: 1px solid #d9d9d9;
+  outline: none;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  position: relative;
+  line-height: 1.5715;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.driver-popover-btn:focus {
+
+}
+
+/* Button content layout */
+.tour-btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.tour-btn-text {
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.tour-btn-icon {
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icon animations on hover - subtle for Ant Design style */
+.driver-popover-next-btn:hover .tour-btn-icon {
+  transform: translateX(2px);
+}
+
+.driver-popover-prev-btn:hover .tour-btn-icon {
+  transform: translateX(-2px);
+}
+
+.driver-popover-next-btn,
+.driver-popover-prev-btn {
+  background: #796cff;
+  color: #ffffff;
+  box-shadow: 0 2px 0 rgba(5, 5, 5, 0.06);
+  border: 1px solid transparent;
+}
+
+.driver-popover-next-btn:hover,
+.driver-popover-prev-btn:hover {
+  background: #9383ff;
+  box-shadow: 0 2px 0 rgba(5, 5, 5, 0.06);
+  border-color: transparent;
+}
+
+.driver-popover-next-btn:active,
+.driver-popover-prev-btn:active {
+  background: #6b5df5;
+  box-shadow: 0 0 0 rgba(5, 5, 5, 0.06);
+}
+
+
+.driver-popover-close-btn {
+  color: #333333 !important;
+  border: none;
+  padding: 6px 8px !important;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.driver-popover-close-btn svg {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.driver-popover-close-btn:hover {
+  color: #565656;
+  transform: scale(1.05);
+  background: transparent !important;
+  border: none;
+  box-shadow: none !important;
+}
+
+.driver-popover-close-btn:hover svg {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.driver-popover-close-btn:active {
+  background: transparent !important;
+  transform: scale(0.98);
+}
+
+.driver-popover-close-btn:active svg {
+  transform: rotate(90deg) scale(1);
+}
+
+.driver-popover-arrow {
+  border: 5px solid #ffffff;
+  filter: drop-shadow(0 -2px 4px rgba(121, 108, 255, 0.1));
+}
+
+.driver-active-element {
+  position: relative;
+  z-index: 10000;
+  background: transparent !important;
+  opacity: 1 !important;
+  /*box-shadow: 0 0 0 2px rgba(121, 108, 255, 0.5) !important;*/
+}
+
+/* Ensure highlighted elements and their children are fully visible */
+.driver-active-element,
+.driver-active-element * {
+  filter: brightness(1) !important;
+  opacity: 1 !important;
+}
+
+/* Overlay customization - Light overlay for clear menu visibility */
+.driver-overlay {
+  /*background: rgba(0, 0, 0, 0.15);*/
+  backdrop-filter: none;
+  animation: overlayFadeIn 0.3s ease-out;
+  pointer-events: none;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dark theme support */
+[data-theme='dark'] .driver-popover {
+  background: linear-gradient(
+    135deg,
+    rgba(31, 31, 31, 0.95) 0%,
+    rgba(25, 25, 25, 0.95) 100%
+  );
+  color: #e0e0e0;
+  border-color: rgba(121, 108, 255, 0.2);
+  box-shadow: 0px 4px 24px rgba(121, 108, 255, 0.2),
+  0px 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .driver-popover-title {
+  color: #ffffff;
+  background: linear-gradient(135deg, #9383ff 0%, #c388ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme='dark'] .driver-popover-description {
+  color: #b0b0b0;
+}
+
+[data-theme='dark'] .driver-popover-progress-text {
+  background: rgba(121, 108, 255, 0.2);
+  color: #b9afff;
+}
+
+[data-theme='dark'] .driver-popover-next-btn,
+[data-theme='dark'] .driver-popover-prev-btn {
+  background: #796cff;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+[data-theme='dark'] .driver-popover-next-btn:hover,
+[data-theme='dark'] .driver-popover-prev-btn:hover {
+  background: #9383ff;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+[data-theme='dark'] .driver-popover-next-btn:active,
+[data-theme='dark'] .driver-popover-prev-btn:active {
+  background: #6b5df5;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.045);
+}
+
+[data-theme='dark'] .driver-popover-close-btn {
+  background: transparent !important;
+  color: #a0a0a0;
+}
+
+[data-theme='dark'] .driver-popover-close-btn:hover {
+  background: transparent !important;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .driver-popover-close-btn:active {
+  background: transparent !important;
+}
+
+[data-theme='dark'] .driver-popover-close-btn:hover svg {
+  transform: rotate(90deg) scale(1.1);
+}
+
+[data-theme='dark'] .driver-popover-arrow {
+  border-color: rgba(31, 31, 31, 0.95);
+  filter: drop-shadow(0 -2px 4px rgba(121, 108, 255, 0.2));
+}
+
+[data-theme='dark'] .driver-overlay {
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .driver-popover {
+    max-width: 340px;
+    padding: 16px;
+  }
+
+  .driver-popover-title {
+    font-size: 18px;
+  }
+
+  .driver-popover-description {
+    font-size: 13px;
+  }
+
+  .driver-popover-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}

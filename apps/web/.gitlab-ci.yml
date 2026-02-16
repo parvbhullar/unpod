@@ -1,0 +1,81 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_OPTIONS: "--max-old-space-size=8192"
+  RELEASES_DIR: "/var/www/releases/unpod-main-qa"
+  CURRENT_LINK: "/var/www/unpod-main-qa/current"
+  PM2_CONFIG: "/var/www/unpod-main-qa/ecosystem.config.js"
+
+cache:
+  paths:
+    - node_modules/
+    - .nx/cache/
+
+build_unpod_social:
+  stage: build
+  tags:
+    - build_runner
+  variables:
+    NX_DAEMON: "false"
+  before_script:
+    - export NVM_DIR="$HOME/.nvm"
+    - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
+    - nvm use 20.20.0
+    - node --version
+    - npm --version
+  script:
+    - echo "Building on build runner - $(date)"
+    - npm install --legacy-peer-deps
+    - npx nx reset
+    - npx nx run web:build
+    - ls -la apps/web/.next || (echo "Build failed" && exit 1)
+    - ln -sfn $(pwd)/apps/web/.next/static apps/web/.next/standalone/apps/web/.next/static
+  artifacts:
+    name: "web-build-$CI_PIPELINE_ID"
+    expire_in: 1 day
+    paths:
+      - apps/web/.next
+      - apps/web/package.json
+      - apps/web/next.config.js
+      - node_modules
+    exclude:
+      - node_modules/.cache
+      - .nx/cache
+      - "**/*.map"
+      - "**/*.log"
+
+deploy:
+  stage: deploy
+  tags:
+    - qa-pod
+  needs:
+    - job: build_unpod_social
+      artifacts: true
+  script:
+    - echo "Deploying pre-built artifacts - $(date)"
+    - RELEASE_DIR="${RELEASES_DIR}/release_${CI_PIPELINE_ID}"
+    - mkdir -p ${RELEASE_DIR}
+    - rsync -a --exclude=.git ${CI_PROJECT_DIR}/ ${RELEASE_DIR}/
+    - chown -R gitlab-runner:gitlab-runner ${RELEASE_DIR}
+    - chmod -R 755 ${RELEASE_DIR}
+    - ln -sfn ${RELEASE_DIR} ${CURRENT_LINK}
+    - echo "Symlink switched to ${RELEASE_DIR}"
+    - sudo pm2 reload ${PM2_CONFIG} --update-env
+    - sleep 5
+    - |
+      if sudo pm2 show unpod-main-qa | grep -q "online"; then
+        echo "Service running successfully"
+        cd ${RELEASES_DIR} && ls -t | tail -n +4 | xargs -I {} sudo rm -rf {}
+        echo "Old releases cleaned up"
+      else
+        echo "Service failed - rolling back"
+        PREVIOUS=$(ls -t ${RELEASES_DIR} | sed -n '2p')
+        if [ -n "$PREVIOUS" ]; then
+          ln -sfn ${RELEASES_DIR}/${PREVIOUS} ${CURRENT_LINK}
+          sudo pm2 reload ${PM2_CONFIG} --update-env
+          echo "Rolled back to ${PREVIOUS}"
+        fi
+        exit 1
+      fi

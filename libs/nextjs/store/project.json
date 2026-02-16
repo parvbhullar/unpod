@@ -1,0 +1,15 @@
+{
+  "name": "store",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/store/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs", "domain:store"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/store/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{% extends "./base.html" %}
+
+{% block title %}New {{subscription.name}} Plan Request - {{APP_NAME}}{% endblock %}
+
+{% block content %}
+<p>Hello Team,</p>
+<p>A new {{subscription.name}} Plan inquiry has been submitted via the Unpod SIP pricing page.</p>
+
+<p>Lead Details:</p>
+
+<ul>
+  <li><strong>User ID:</strong> {{user.id}}</li>
+  <li><strong>Name:</strong> {{user.full_name}}</li>
+  <li><strong>Email:</strong> {{user.email}}</li>
+  <li><strong>Phone:</strong> {{user.phone_number}}</li>
+  <li><strong>Plan:</strong> {{subscription.name}}</li>
+</ul>
+
+<p>This is an {{subscription.name}} lead – please prioritize follow-up.</p>
+
+<p>Thanks,<br>
+The <strong>{{APP_NAME}}</strong> Team</p>
+{% endblock %}

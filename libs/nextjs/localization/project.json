@@ -1,0 +1,15 @@
+{
+  "name": "localization",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/localization/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/localization/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

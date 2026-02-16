@@ -1,0 +1,124 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@unpod/constants": ["../../libs/nextjs/constants/src/index.ts"],
+      "@unpod/constants/*": ["../../libs/nextjs/constants/src/lib/*"],
+      "@unpod/components": ["../../libs/nextjs/components/src/index.ts"],
+      "@unpod/components/*": ["../../libs/nextjs/components/src/lib/*"],
+      "@unpod/custom-hooks": ["../../libs/nextjs/custom-hooks/src/index.ts"],
+      "@unpod/custom-hooks/*": ["../../libs/nextjs/custom-hooks/src/lib/*"],
+      "@unpod/livekit": ["../../libs/nextjs/livekit/src/index.ts"],
+      "@unpod/livekit/*": ["../../libs/nextjs/livekit/src/*"],
+      "@unpod/skeleton": ["../../libs/nextjs/skeleton/src/index.tsx"],
+      "@unpod/skeleton/*": ["../../libs/nextjs/skeleton/src/lib/*"],
+      "@unpod/helpers": ["../../libs/nextjs/helpers/src/index.ts"],
+      "@unpod/helpers/*": ["../../libs/nextjs/helpers/src/lib/*"],
+      "@unpod/providers": ["../../libs/nextjs/providers/src/index.ts"],
+      "@unpod/providers/AppContextProvider": ["../../libs/nextjs/providers/src/lib/context-provider/AppContextProvider/index.tsx"],
+      "@unpod/providers/AppInfoViewProvider": ["../../libs/nextjs/providers/src/lib/context-provider/AppInfoViewProvider/index.tsx"],
+      "@unpod/providers/AppSpaceContextProvider": ["../../libs/nextjs/providers/src/lib/context-provider/AppSpaceContextProvider/index.tsx"],
+      "@unpod/providers/AppOrgContextProvider": ["../../libs/nextjs/providers/src/lib/context-provider/AppOrgContextProvider/index.tsx"],
+      "@unpod/providers/AuthProvider": ["../../libs/nextjs/providers/src/lib/context-provider/AuthProvider/index.js"],
+      "@unpod/providers/*": ["../../libs/nextjs/providers/src/lib/*"],
+      "@unpod/modules": ["../../libs/nextjs/modules/src/index.ts"],
+      "@unpod/modules/*": ["../../libs/nextjs/modules/src/lib/*"],
+      "@unpod/services": ["../../libs/nextjs/services/src/index.ts"],
+      "@unpod/services/*": ["../../libs/nextjs/services/src/lib/*"],
+      "@unpod/mix": ["../../libs/nextjs/mix/src/index.ts"],
+      "@unpod/mix/*": ["../../libs/nextjs/mix/src/lib/*"],
+      "@unpod/react-data-grid": ["../../libs/nextjs/react-data-grid/src/index.ts"],
+      "@unpod/react-data-grid/*": ["../../libs/nextjs/react-data-grid/src/*"],
+      "@unpod/icons": ["../../libs/nextjs/icons/src/index.ts"],
+      "@unpod/icons/*": ["../../libs/nextjs/icons/src/lib/*"],
+      "@unpod/external-libs": ["../../libs/nextjs/external-libs/src/index.ts"],
+      "@unpod/external-libs/*": ["../../libs/nextjs/external-libs/src/lib/*"],
+      "@unpod/localization": ["../../libs/nextjs/localization/src/index.js"],
+      "@unpod/localization/*": ["../../libs/nextjs/localization/src/*"],
+      "@unpod/shared-types": ["../../libs/shared/types/src/lib/index.ts"],
+      "@unpod/shared-types/*": ["../../libs/shared/types/src/lib/*"],
+      "@unpod/shared-utils": ["../../libs/shared/utils/src/lib/index.ts"],
+      "@unpod/shared-utils/*": ["../../libs/shared/utils/src/lib/*"]
+    },
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "../../apps/web/.next/types/**/*.ts",
+    "../../dist/apps/web/.next/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "prod/types/**/*.ts",
+    "../../types/**/*.d.ts"
+  ],
+  "exclude": [
+    "out-tsc",
+    "dist",
+    "node_modules",
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    ".next",
+    "eslint.config.js",
+    "eslint.config.cjs",
+    "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../libs/nextjs/mix"
+    },
+    {
+      "path": "../../libs/nextjs/custom-hooks"
+    },
+    {
+      "path": "../../libs/nextjs/livekit"
+    },
+    {
+      "path": "../../libs/nextjs/external-libs"
+    },
+    {
+      "path": "../../libs/nextjs/skeleton"
+    },
+    {
+      "path": "../../libs/nextjs/services"
+    },
+    {
+      "path": "../../libs/nextjs/constants"
+    },
+    {
+      "path": "../../libs/nextjs/providers"
+    },
+    {
+      "path": "../../libs/nextjs/components"
+    },
+    {
+      "path": "../../libs/nextjs/helpers"
+    },
+    {
+      "path": "../../libs/nextjs/modules"
+    },
+    {
+      "path": "./tsconfig.e2e.json"
+    }
+  ]
+}

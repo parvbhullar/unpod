@@ -1,0 +1,15 @@
+{
+  "name": "custom-hooks",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/custom-hooks/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/custom-hooks/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

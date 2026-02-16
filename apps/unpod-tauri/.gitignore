@@ -1,0 +1,16 @@
+# Tauri
+src-tauri/target/
+src-tauri/WixTools/
+src-tauri/gen/
+src-tauri/server/
+src-tauri/binaries/
+
+# Next.js static export for desktop
+dist/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

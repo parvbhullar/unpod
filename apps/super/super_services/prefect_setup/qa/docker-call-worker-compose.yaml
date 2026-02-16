@@ -1,0 +1,28 @@
+networks:
+    prefect-network-call:   # Must match your Docker Compose network
+      name: 'prefect-network-call'
+
+services:
+  call-work-pool:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    container_name: call-work-pool
+    environment:
+      - PREFECT_API_URL=${PREFECT_API_URL}
+      - PREFECT_WORKER_WEBSERVER_PORT=8060
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      bash -c "
+        echo 'Installing prefect-docker packages...' &&
+        pip install prefect-docker==0.6.6 &&
+        echo 'Starting worker for call-work-pool...' &&
+        prefect worker start --pool call-work-pool --with-healthcheck
+      "
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8060/health')"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - prefect-network-call

@@ -1,0 +1,15 @@
+{
+  "name": "icons",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/icons/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/icons/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

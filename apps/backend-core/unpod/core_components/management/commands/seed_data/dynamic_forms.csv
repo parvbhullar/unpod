@@ -1,0 +1,6 @@
+id,name,slug,description,type,parent_type,group_key,status,sort_order,created_at,updated_at,created_by_id
+4,Daily Configure Form,daily-configure-form,Configure Form form Daily Provider,form,provider,,active,0,2025-08-28 11:39:56.591816+00,2025-09-26 18:03:59.017306+00,
+6,WebSocket Configure Form,websocket-configure-form,"",form,provider,,active,0,2025-09-02 05:18:34.114207+00,2025-09-26 18:03:01.62931+00,
+2,LiveKit Configure Form,livekit-configure-form,Configure Form form LiveKit Provider,form,provider,,active,0,2025-08-28 11:36:57.225162+00,2025-09-26 18:04:34.670945+00,
+3,Vapi Configure Form,vapi-configure-form,Configure Form form Vapi Provider,form,provider,,active,0,2025-08-28 11:37:51.727069+00,2025-09-26 18:04:14.346022+00,
+5,Unpod.ai Configure Form,unpodai-configure-form,Configure Form form Unpod.ai Provider,form,provider,,active,0,2025-08-28 11:40:36.987385+00,2025-09-26 18:03:41.190439+00,

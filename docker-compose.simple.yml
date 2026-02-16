@@ -1,0 +1,319 @@
+# =============================================================================
+# Unpod - Complete Development Setup (Single Command)
+# =============================================================================
+# Brings up ALL services: databases + backend + frontend + centrifugo
+#
+# Usage:
+#   docker-compose -f docker-compose.simple.yml up -d          # start all
+#   docker-compose -f docker-compose.simple.yml up -d --build  # rebuild
+#   docker-compose -f docker-compose.simple.yml down            # stop
+#   docker-compose -f docker-compose.simple.yml down -v         # stop + remove data
+#   docker-compose -f docker-compose.simple.yml logs -f         # tail logs
+#
+# Access:
+#   Frontend:       http://localhost:3000
+#   Backend API:    http://localhost:8000
+#   Admin Panel:    http://localhost:8000/unpod-admin/
+#   API Docs:       http://localhost:8000/api/v2/platform/docs/
+#   API Services:   http://localhost:9116/docs (messaging, store, search, task)
+#   Centrifugo:     http://localhost:8100 (admin: admin / admin)
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # DATABASES
+  # ===========================================================================
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: unpod-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-unpod_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/docker/services/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - unpod
+
+  mongodb:
+    image: mongo:7
+    container_name: unpod-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-admin}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - unpod
+
+  redis:
+    image: redis:7-alpine
+    container_name: unpod-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - unpod
+
+  # ===========================================================================
+  # CENTRIFUGO (Real-time messaging server)
+  # ===========================================================================
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    container_name: unpod-centrifugo
+    restart: unless-stopped
+    ports:
+      - "8100:8000"
+    volumes:
+      - ./infrastructure/docker/services/centrifugo/config.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -q -O /dev/null http://localhost:8000/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - unpod
+
+  # ===========================================================================
+  # BACKEND-CORE (Django API)
+  # ===========================================================================
+
+  backend-core:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/django/Dockerfile.dev
+    container_name: unpod-backend-core
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo 'Waiting for PostgreSQL...' &&
+        while ! nc -z postgres 5432; do sleep 0.5; done &&
+        echo 'PostgreSQL ready!' &&
+        python manage.py migrate --no-input &&
+        python manage.py create_default_user &&
+        python manage.py seed_reference_data &&
+        python manage.py collectstatic --no-input 2>/dev/null || true &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - ./apps/backend-core:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.local
+      - DJANGO_DEBUG=True
+      - DJANGO_SECRET_KEY=docker-dev-secret-key-change-in-production
+      - DJANGO_READ_DOT_ENV_FILE=False
+      # Database (PostgreSQL)
+      - DB_ENGINE=django.db.backends.postgresql
+      - POSTGRES_DB=${POSTGRES_DB:-unpod_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      # Redis
+      - REDIS_URL=redis://redis:6379/0
+      # MongoDB
+      - MONGO_DB=messaging_service_local
+      - MONGO_DSN=mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD:-admin}@mongodb:27017/messaging_service_local?authSource=admin
+      # URLs
+      - BASE_URL=http://localhost:8000
+      - BASE_FRONTEND_URL=http://localhost:3000
+      # AWS S3 (dummy values for local dev)
+      - AWS_ACCESS_KEY_ID=local-dev-key
+      - AWS_SECRET_ACCESS_KEY=local-dev-secret
+      - AWS_STORAGE_BUCKET_NAME=unpod-dev
+      # Mux (dummy values — optional service)
+      - MUX_TOKEN_ID=dummy
+      - MUX_TOKEN_SECRET=dummy
+      # Agora (dummy values — optional service)
+      - AGORA_APP_ID=dummy
+      - AGORA_AUTH_CERTIFICATE=dummy
+      - AGORA_AUTH_ID=dummy
+      - AGORA_AUTH_SECRET=dummy
+      # Internal services (api-services FastAPI hub)
+      - MESSAGING_SERVICE_URL=http://api-services:9116
+      - STORE_SERVICE_URL=http://api-services:9116
+      - SUPERBOOK_SERVICE_URL=http://api-services:9116
+      - TASK_SERVICE_URL=http://api-services:9116
+      # Payment (dummy values — optional service)
+      - RAZORPAY_KEY=dummy
+      - RAZORPAY_SECRET=dummy
+      # Default admin user (created on first run)
+      - DJANGO_DEFAULT_ADMIN_EMAIL=admin@unpod.dev
+      - DJANGO_DEFAULT_ADMIN_USERNAME=admin
+      - DJANGO_DEFAULT_ADMIN_PASSWORD=admin123
+      # Email (SendGrid)
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY:-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}
+      - EMAIL_FROM_ADDRESS=Unpod <unpod.os@gmail.com>
+      # TTS / Voice
+      - CARTESIA_API_KEY=sk_car_goThZibDT9CLrpSkkqKzz6
+      # LiveKit
+      - LIVEKIT_URL=wss://unpod-open-source-7fks2k36.livekit.cloud
+      - LIVEKIT_API_KEY=APIXuoGT2pjH56J
+      - LIVEKIT_API_SECRET=Gml5SJa2sZahSEJ90KltVfIkMNmIRGledCE4Xov64a4
+      # Centrifugo
+      - CENTRIFUGO_ENABLED=true
+      - CENTRIFUGO_URL=http://centrifugo:8000/api
+      - CENTRIFUGO_WS_URL=ws://localhost:8100/connection/websocket
+      - CENTRIFUGO_API_KEY=unpod-dev-api-key
+      - CENTRIFUGO_TOKEN_HMAC_SECRET_KEY=unpod-dev-centrifugo-secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - unpod
+
+  # ===========================================================================
+  # API-SERVICES (FastAPI — messaging, store, search, task)
+  # ===========================================================================
+
+  api-services:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/fastapi/Dockerfile.dev
+    container_name: unpod-api-services
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo 'Waiting for MongoDB...' &&
+        while ! nc -z mongodb 27017; do sleep 0.5; done &&
+        echo 'MongoDB ready!' &&
+        uvicorn main:app --host 0.0.0.0 --port 9116 --reload
+      "
+    volumes:
+      - ./apps/api-services:/app
+    ports:
+      - "9116:9116"
+    environment:
+      - SETTINGS_FILE=settings.local
+      - PROJECT_NAME=API Service
+      - SERVICE_NAME=api_service
+      - SECRET_KEY=docker-dev-secret-key-change-in-production
+      # MongoDB
+      - MONGO_DB=messaging_service_local
+      - MONGO_DSN=mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD:-admin}@mongodb:27017/messaging_service_local?authSource=admin
+      # Redis
+      - REDIS_URL=redis://redis:6379/1
+      # PostgreSQL
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-unpod_db}
+      # AWS S3 (dummy values for local dev)
+      - AWS_ACCESS_KEY_ID=local-dev-key
+      - AWS_SECRET_ACCESS_KEY=local-dev-secret
+      - AWS_STORAGE_BUCKET_NAME=unpod-dev
+      # Kafka (optional — not running in simple setup)
+      - KAFKA_BROKER=
+      # AI / LLM (optional — set real keys to enable AI features)
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-dummy-local-dev-key}
+      # CORS
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+      # LiveKit
+      - LIVEKIT_URL=wss://unpod-open-source-7fks2k36.livekit.cloud
+      - LIVEKIT_API_KEY=APIXuoGT2pjH56J
+      - LIVEKIT_API_SECRET=Gml5SJa2sZahSEJ90KltVfIkMNmIRGledCE4Xov64a4
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - unpod
+
+  # ===========================================================================
+  # WEB FRONTEND (Next.js)
+  # ===========================================================================
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/frontend/Dockerfile.dev
+    container_name: unpod-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - appType=social
+      - noIndex=yes
+      - noFollow=yes
+      - apiUrl=http://localhost:8000/api/v1/
+      - serverApiUrl=http://backend-core:8000/api/v1/
+      - chatApiUrl=ws://localhost:8000/ws/v1/
+      - siteUrl=http://localhost:3000
+      - productId=unpod.ai
+      - isDevMode=yes
+      - currency=INR
+      - paymentGatewayKey=rzp_test_SDIKJd2pgEzv91
+      - ENABLE_CHECKSUM=false
+      - LIVEKIT_API_KEY=APIXuoGT2pjH56J
+      - LIVEKIT_API_SECRET=Gml5SJa2sZahSEJ90KltVfIkMNmIRGledCE4Xov64a4
+      - LIVEKIT_URL=wss://unpod-open-source-7fks2k36.livekit.cloud
+    depends_on:
+      - backend-core
+    networks:
+      - unpod
+    # ---------- DEV MODE (uncomment to develop frontend) ----------
+    # To edit frontend code with hot reload, comment the 'build:' block
+    # above and uncomment the section below:
+    #
+    # image: node:20-alpine
+    # working_dir: /app
+    # command: >
+    #   sh -c "
+    #     if [ ! -d node_modules/.cache ]; then
+    #       echo 'Installing dependencies...' && npm install --force;
+    #     fi &&
+    #     cd apps/web && npx next dev --hostname 0.0.0.0 --port 3000 --turbopack
+    #   "
+    # volumes:
+    #   - .:/app
+    # environment:
+    #   - NODE_ENV=development
+    #   - NODE_OPTIONS=--max-old-space-size=4096
+
+networks:
+  unpod:
+    driver: bridge
+    name: unpod-network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:

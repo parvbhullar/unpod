@@ -1,0 +1,14 @@
+{
+  "name": "@unpod/custom-hooks",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/lib/*",
+    "./package.json": "./package.json"
+  },
+  "nx": {
+    "name": "custom-hooks"
+  }
+}

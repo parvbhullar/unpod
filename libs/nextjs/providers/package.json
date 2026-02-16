@@ -1,0 +1,23 @@
+{
+  "name": "@unpod/providers",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json",
+    "./AppContextProvider": "./src/lib/context-provider/AppContextProvider/index.tsx",
+    "./AppInfoViewProvider": "./src/lib/context-provider/AppInfoViewProvider/index.tsx",
+    "./AuthContextProvider": "./src/lib/context-provider/AuthContextProvider/index.tsx",
+    "./AppHistoryProvider": "./src/lib/AppHistoryProvider/index.tsx",
+    "./AppLocaleProvider": "./src/lib/AppLocaleProvider/index.tsx",
+    "./AppDndProvider": "./src/lib/AppDndProvider/index.tsx",
+    "./AppThemeProvider": "./src/lib/AppThemeProvider/index.tsx",
+    "./AppStyleProvider": "./src/lib/AppStyleProvider/index.tsx",
+    "./AppModuleContextProvider": "./src/lib/AppModuleContextProvider/index.tsx",
+    "./AppSpaceContextProvider": "./src/lib/context-provider/AppSpaceContextProvider/index.tsx"
+  },
+  "nx": {
+    "name": "providers"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@unpod/helpers",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ApiHelper": "./src/lib/ApiHelper.ts",
+    "./AppKbHelper": "./src/lib/AppKbHelper.ts",
+    "./CalculationHelper": "./src/lib/CalculationHelper.ts",
+    "./ComponentHelper": "./src/lib/ComponentHelper.tsx",
+    "./CryptoHelper": "./src/lib/CryptoHelper.ts",
+    "./CurrencyHelper": "./src/lib/CurrencyHelper.ts",
+    "./DateHelper": "./src/lib/DateHelper.ts",
+    "./DraftHelper": "./src/lib/DraftHelper.ts",
+    "./FileHelper": "./src/lib/FileHelper.ts",
+    "./FormHelper": "./src/lib/FormHelper.ts",
+    "./GlobalHelper": "./src/lib/GlobalHelper.ts",
+    "./JsonHelper": "./src/lib/JsonHelper.ts",
+    "./ListHelper": "./src/lib/ListHelper.ts",
+    "./LocalizationFormatHelper": "./src/lib/LocalizationFormatHelper.ts",
+    "./NumberHelper": "./src/lib/NumberHelper.ts",
+    "./PaymentHelper": "./src/lib/PaymentHelper.ts",
+    "./PermissionHelper": "./src/lib/PermissionHelper.tsx",
+    "./StreamHelper": "./src/lib/StreamHelper.ts",
+    "./StringHelper": "./src/lib/StringHelper.ts",
+    "./TableHelper": "./src/lib/TableHelper.tsx",
+    "./UrlHelper": "./src/lib/UrlHelper.ts",
+    "./WebSocketMessageHelper": "./src/lib/WebSocketMessageHelper.ts",
+    "./package.json": "./package.json"
+  },
+  "nx": {
+    "name": "helpers"
+  }
+}

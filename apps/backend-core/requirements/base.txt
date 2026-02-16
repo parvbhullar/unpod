@@ -1,0 +1,77 @@
+argon2-cffi==25.1.0  # https://github.com/hynek/argon2_cffi
+cloudinary==1.44.1
+crispy-bootstrap5==2025.6  # https://github.com/django-crispy-forms/crispy-bootstrap5
+dj-rest-auth==7.0.2  # https://github.com/iMerica/dj-rest-auth
+
+# Django
+# ------------------------------------------------------------------------------
+django==5.2.10  # LTS - Long Term Support until April 2028
+django-allauth==65.14.0  # https://github.com/pennersr/django-allauth
+django-anymail[sendgrid]==14.0  # https://github.com/anymail/django-anymail
+django-cors-headers==4.9.0  # https://github.com/adamchainz/django-cors-headers
+django-crispy-forms==2.5  # https://github.com/django-crispy-forms/django-crispy-forms
+django-environ==0.12.0  # https://github.com/joke2k/django-environ
+django-filter==25.2  # https://github.com/carltongibson/django-filter
+django-import-export==4.4.0  # https://github.com/django-import-export/django-import-export
+django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
+django-multiselectfield==1.0.1  # Multi-select field for Django models
+openpyxl==3.1.5  # Required by django-import-export for Excel file support
+django-extensions==4.1  # https://github.com/django-extensions/django-extensions
+django-redis==6.0.0  # https://github.com/jazzband/django-redis
+django-storages[boto3]==1.14.6  # https://github.com/jschneier/django-storages
+#django-cron==0.6.0
+git+https://github.com/anujarkitekt/django-cron # Latest from master for Django 5.2 compatibility
+
+# Django REST Framework
+# ------------------------------------------------------------------------------
+djangorestframework==3.16.1  # https://github.com/encode/django-rest-framework
+djangorestframework-simplejwt==5.5.1  # https://github.com/jazzband/djangorestframework-simplejwt
+
+# DRF-spectacular for API documentation
+drf-spectacular==0.29.0  # https://github.com/tfranzel/drf-spectacular
+
+# Utilities
+# ------------------------------------------------------------------------------
+emoji==2.15.0
+exa_py==2.3.0  # Exa.ai API for web scraping
+Faker==40.1.2
+google-auth-oauthlib==1.2.4
+#hiredis==3.3.0  # https://github.com/redis/hiredis-py
+markdown==3.10.1
+msal==1.34.0
+mux-python==5.1.2
+
+# Data & Analytics
+# ------------------------------------------------------------------------------
+numpy==2.4.2  # Required by pandas
+pandas==2.2.3  # Data analysis library (keeping 2.x for stability)
+
+# Database
+# ------------------------------------------------------------------------------
+psycopg2-binary==2.9.11  # PostgreSQL adapter
+pymongo==4.16.0
+
+# Image & Document Processing
+# ------------------------------------------------------------------------------
+Pillow==12.1.0  # https://github.com/python-pillow/Pillow
+pydyf==0.12.1
+weasyprint==68.1
+
+# System & Security
+# ------------------------------------------------------------------------------
+psutil==7.2.2
+pyotp==2.9.0
+python-slugify==8.0.4  # https://github.com/un33k/python-slugify
+pytz==2025.2  # https://github.com/stub42/pytz
+PyJWT==2.11.0  # https://github.com/jpadilla/pyjwt
+
+# External Services
+# ------------------------------------------------------------------------------
+razorpay>=2.0.0  # Payment gateway integration
+redis==7.1.0  # https://github.com/redis/redis-py
+cent==5.2.0  # Centrifugo HTTP API client
+sendgrid==6.12.5
+
+# Messaging
+# ------------------------------------------------------------------------------
+kafka-python-ng==2.2.3

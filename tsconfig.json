@@ -1,0 +1,49 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/web"
+    },
+    {
+      "path": "./libs/nextjs/components"
+    },
+    {
+      "path": "./libs/nextjs/modules"
+    },
+    {
+      "path": "./libs/nextjs/livekit"
+    },
+    {
+      "path": "./libs/nextjs/providers"
+    },
+    {
+      "path": "./libs/nextjs/icons"
+    },
+    {
+      "path": "./libs/nextjs/external-libs"
+    },
+    {
+      "path": "./libs/nextjs/helpers"
+    },
+    {
+      "path": "./libs/nextjs/custom-hooks"
+    },
+    {
+      "path": "./libs/nextjs/mix"
+    },
+    {
+      "path": "./libs/nextjs/localization"
+    },
+    {
+      "path": "./libs/nextjs/services"
+    },
+    {
+      "path": "./libs/nextjs/constants"
+    },
+    {
+      "path": "./libs/nextjs/skeleton"
+    }
+  ]
+}

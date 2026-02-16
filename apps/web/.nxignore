@@ -1,0 +1,18 @@
+# Electron build output
+dist-electron/
+
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+.next/
+out/
+
+# Cache directories
+.turbo/
+.cache/
+
+# Tauri build artifacts (standalone Next.js server)
+apps/unpod-tauri/src-tauri/server/
+apps/unpod-tauri/src-tauri/binaries/

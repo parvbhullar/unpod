@@ -1,0 +1,42 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+    -   id: check-ast
+    -   id: check-added-large-files
+    -   id: check-case-conflict
+    # -   id: check-docstring-first
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: check-shebang-scripts-are-executable
+    -   id: check-symlinks
+    -   id: check-toml
+    -   id: check-yaml
+    -   id: check-xml
+    -   id: debug-statements
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: pretty-format-json
+        args: [--autofix, --indent, '   ', --no-ensure-ascii, --no-sort-keys]
+    -   id: trailing-whitespace
+    -   id: requirements-txt-fixer
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.8.3
+    hooks:
+    -   id: bandit
+        args: ['-iii', '-ll']
+        stages:
+        -   push
+-   repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+    -   id: flake8
+        args: ["--ignore=E501,E711,E741,E712,E266,W504,F811,E241,E265,E226,E275,F541,F841,W503,E302,E128,E231,E303,E225,E122,E272,E202,E222,E251,E402,E203 --per-file-ignores=__init__.py:F401"]
+-   repo: https://github.com/ambv/black
+    rev: 26.1.0
+    hooks:
+    -   id: black
+
+ci:
+    autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
+    autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate

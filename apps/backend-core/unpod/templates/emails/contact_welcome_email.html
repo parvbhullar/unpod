@@ -1,0 +1,26 @@
+{% extends "./base.html" %}
+
+{% block title %}Welcome to {APP_NAME}! Your Account Has Been Created{% endblock %}
+
+{% block content %}
+<p>Hi <strong>{{user.first_name}}</strong>,</p>
+<p>Welcome to <strong>{{APP_NAME}}</strong> – we're excited to have you with us!</p>
+
+<p>Your account has been successfully created. Here are your login details:</p>
+
+<ul>
+  <li><strong>Username:</strong> {{user.username}}</li>
+  <li><strong>Password:</strong> {{password}}</li>
+</ul>
+
+<p>Please click the link below to log in to your account:</p>
+
+<a class="button" href="{{signin_url}}" target="_blank">Login to Your Account</a>
+
+<p>For your security, we recommend changing your password after your first login.</p>
+
+<p>If you need any help, feel free to contact us at <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a>.</p>
+
+<p>Thanks,<br>
+The <strong>{{APP_NAME}}</strong> Team</p>
+{% endblock %}

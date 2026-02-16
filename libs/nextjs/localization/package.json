@@ -1,0 +1,14 @@
+{
+  "name": "@unpod/localization",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./languageData": "./src/languageData.ts",
+    "./package.json": "./package.json"
+  },
+  "nx": {
+    "name": "localization"
+  }
+}

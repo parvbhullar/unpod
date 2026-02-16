@@ -1,0 +1,354 @@
+{
+  "roles": [
+    {
+      "Department": "Human Resources",
+      "Role": "HR Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Human Resources",
+      "Role": "Recruitment Specialist",
+      "ParentRole": "HR Manager"
+    },
+    {
+      "Department": "Human Resources",
+      "Role": "Training and Development Coordinator",
+      "ParentRole": "HR Manager"
+    },
+    {
+      "Department": "Human Resources",
+      "Role": "Compensation and Benefits Analyst",
+      "ParentRole": "HR Manager"
+    },
+    {
+      "Department": "Human Resources",
+      "Role": "Employee Relations Manager",
+      "ParentRole": "HR Manager"
+    },
+    {
+      "Department": "Finance",
+      "Role": "Chief Financial Officer (CFO)",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Finance",
+      "Role": "Accountant",
+      "ParentRole": "CFO"
+    },
+    {
+      "Department": "Finance",
+      "Role": "Financial Analyst",
+      "ParentRole": "CFO"
+    },
+    {
+      "Department": "Finance",
+      "Role": "Tax Specialist",
+      "ParentRole": "CFO"
+    },
+    {
+      "Department": "Finance",
+      "Role": "Treasury Manager",
+      "ParentRole": "CFO"
+    },
+    {
+      "Department": "Marketing",
+      "Role": "Marketing Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Marketing",
+      "Role": "Social Media Specialist",
+      "ParentRole": "Marketing Manager"
+    },
+    {
+      "Department": "Marketing",
+      "Role": "Content Writer",
+      "ParentRole": "Marketing Manager"
+    },
+    {
+      "Department": "Marketing",
+      "Role": "Brand Manager",
+      "ParentRole": "Marketing Manager"
+    },
+    {
+      "Department": "Marketing",
+      "Role": "Market Research Analyst",
+      "ParentRole": "Marketing Manager"
+    },
+    {
+      "Department": "Sales",
+      "Role": "Sales Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Sales",
+      "Role": "Account Executive",
+      "ParentRole": "Sales Manager"
+    },
+    {
+      "Department": "Sales",
+      "Role": "Sales Representative",
+      "ParentRole": "Sales Manager"
+    },
+    {
+      "Department": "Sales",
+      "Role": "Business Development Manager",
+      "ParentRole": "Sales Manager"
+    },
+    {
+      "Department": "Sales",
+      "Role": "Key Account Manager",
+      "ParentRole": "Sales Manager"
+    },
+    {
+      "Department": "Operations",
+      "Role": "Operations Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Operations",
+      "Role": "Supply Chain Coordinator",
+      "ParentRole": "Operations Manager"
+    },
+    {
+      "Department": "Operations",
+      "Role": "Quality Assurance Analyst",
+      "ParentRole": "Operations Manager"
+    },
+    {
+      "Department": "Operations",
+      "Role": "Logistics Manager",
+      "ParentRole": "Operations Manager"
+    },
+    {
+      "Department": "Operations",
+      "Role": "Inventory Control Specialist",
+      "ParentRole": "Operations Manager"
+    },
+    {
+      "Department": "IT",
+      "Role": "Chief Technology Officer (CTO)",
+      "ParentRole": ""
+    },
+    {
+      "Department": "IT",
+      "Role": "Software Engineer",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "IT",
+      "Role": "Network Administrator",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "IT",
+      "Role": "Database Administrator",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "IT",
+      "Role": "Cybersecurity Specialist",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "IT",
+      "Role": "Engineering Manager",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "IT",
+      "Role": "Staff Engineer",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "IT",
+      "Role": "Snr Software Engineer",
+      "ParentRole": "CTO"
+    },
+    {
+      "Department": "Customer Service",
+      "Role": "Customer Service Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Customer Service",
+      "Role": "Customer Support Representative",
+      "ParentRole": "Customer Service Manager"
+    },
+    {
+      "Department": "Customer Service",
+      "Role": "Technical Support Specialist",
+      "ParentRole": "Customer Service Manager"
+    },
+    {
+      "Department": "Customer Service",
+      "Role": "Call Center Supervisor",
+      "ParentRole": "Customer Service Manager"
+    },
+    {
+      "Department": "Customer Service",
+      "Role": "Complaints Resolution Specialist",
+      "ParentRole": "Customer Service Manager"
+    },
+    {
+      "Department": "Research and Development",
+      "Role": "Research and Development Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Research and Development",
+      "Role": "Scientist",
+      "ParentRole": "Research and Development Manager"
+    },
+    {
+      "Department": "Research and Development",
+      "Role": "Lab Technician",
+      "ParentRole": "Research and Development Manager"
+    },
+    {
+      "Department": "Research and Development",
+      "Role": "Product Development Engineer",
+      "ParentRole": "Research and Development Manager"
+    },
+    {
+      "Department": "Research and Development",
+      "Role": "Research Analyst",
+      "ParentRole": "Research and Development Manager"
+    },
+    {
+      "Department": "Legal",
+      "Role": "Legal Counsel",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Legal",
+      "Role": "Paralegal",
+      "ParentRole": "Legal Counsel"
+    },
+    {
+      "Department": "Legal",
+      "Role": "Contracts Manager",
+      "ParentRole": "Legal Counsel"
+    },
+    {
+      "Department": "Legal",
+      "Role": "Intellectual Property Specialist",
+      "ParentRole": "Legal Counsel"
+    },
+    {
+      "Department": "Legal",
+      "Role": "Compliance Officer",
+      "ParentRole": "Legal Counsel"
+    },
+    {
+      "Department": "Administration",
+      "Role": "Office Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Administration",
+      "Role": "Executive Assistant",
+      "ParentRole": "Office Manager"
+    },
+    {
+      "Department": "Administration",
+      "Role": "Receptionist",
+      "ParentRole": "Office Manager"
+    },
+    {
+      "Department": "Administration",
+      "Role": "Facilities Coordinator",
+      "ParentRole": "Office Manager"
+    },
+    {
+      "Department": "Administration",
+      "Role": "Administrative Assistant",
+      "ParentRole": "Office Manager"
+    },
+    {
+      "Department": "Procurement",
+      "Role": "Procurement Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Procurement",
+      "Role": "Purchasing Agent",
+      "ParentRole": "Procurement Manager"
+    },
+    {
+      "Department": "Procurement",
+      "Role": "Vendor Relationship Manager",
+      "ParentRole": "Procurement Manager"
+    },
+    {
+      "Department": "Procurement",
+      "Role": "Inventory Planner",
+      "ParentRole": "Procurement Manager"
+    },
+    {
+      "Department": "Procurement",
+      "Role": "Sourcing Specialist",
+      "ParentRole": "Procurement Manager"
+    },
+    {
+      "Department": "Public Relations",
+      "Role": "Public Relations Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Public Relations",
+      "Role": "Media Relations Specialist",
+      "ParentRole": "Public Relations Manager"
+    },
+    {
+      "Department": "Public Relations",
+      "Role": "Corporate Communications Manager",
+      "ParentRole": "Public Relations Manager"
+    },
+    {
+      "Department": "Public Relations",
+      "Role": "Event Coordinator",
+      "ParentRole": "Public Relations Manager"
+    },
+    {
+      "Department": "Public Relations",
+      "Role": "Crisis Management Specialist",
+      "ParentRole": "Public Relations Manager"
+    },
+    {
+      "Department": "Quality Assurance",
+      "Role": "Quality Assurance Manager",
+      "ParentRole": ""
+    },
+    {
+      "Department": "Quality Assurance",
+      "Role": "Quality Control Analyst",
+      "ParentRole": "Quality Assurance Manager"
+    },
+    {
+      "Department": "Quality Assurance",
+      "Role": "Compliance Auditor",
+      "ParentRole": "Quality Assurance Manager"
+    },
+    {
+      "Department": "Quality Assurance",
+      "Role": "Documentation Specialist",
+      "ParentRole": "Quality Assurance Manager"
+    },
+    {
+      "Department": "Quality Assurance",
+      "Role": "Process Improvement Analyst",
+      "ParentRole": "Quality Assurance Manager"
+    },
+    {
+      "Department": "Product",
+      "Role": "Product Manager",
+      "ParentRole": "CPO"
+    },
+    {
+      "Department": "Product",
+      "Role": "Product Analyst",
+      "ParentRole": "Product Manager"
+    }
+  ]
+}

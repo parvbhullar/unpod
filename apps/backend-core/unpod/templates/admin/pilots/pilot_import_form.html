@@ -1,0 +1,83 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/css/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+  {# Load jQuery before Select2 (Django admin usually has it, but not guaranteed for custom pages) #}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  {# Load Select2 CSS and JS #}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+{% endblock %}
+
+{% block title %}Import Pilot{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+  › <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  {% with changelist_url_name="admin:"|add:opts.app_label|add:"_"|add:opts.model_name|add:"_changelist" %}
+    › <a href="{% url changelist_url_name %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  {% endwith %}
+  › {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.media }}
+    <fieldset class="module aligned">
+      {% if form.non_field_errors %}
+        <div class="errors">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        <div class="form-row">
+          <div>
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.field.required %}<span class="required">*</span>{% endif %}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+              <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+          </div>
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+    </fieldset>
+
+    <div class="submit-row">
+      <input type="submit" value="Save" class="default">
+    </div>
+  </form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const $select = $('.select2-field');
+  $select.select2({
+    width: '320px',
+  });
+
+  $select.on('select2:open', function() {
+    let searchField = $('.select2-container--open .select2-search__field');
+    if (searchField.length > 0) {
+      searchField[0].focus();
+    }
+  });
+});
+</script>
+{% endblock %}

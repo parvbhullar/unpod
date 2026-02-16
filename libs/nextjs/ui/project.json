@@ -1,0 +1,15 @@
+{
+  "name": "ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/ui/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/ui/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

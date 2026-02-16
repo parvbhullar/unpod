@@ -1,0 +1,24 @@
+agent_ids={
+        'qurious-kid-english':'a2d7207d-4acf-406f-a5e2-5da5cf8c9d78',
+        'qurious-kid-hindi':'7aa09c9b-6071-4763-81cd-b8c6de33143c',
+        'qurious-kid-marathi':'c3fb5f21-b61b-4955-9028-2656685b6dca',
+        'qurious-kid-kashmiri':'2ccd0a66-8f17-41c0-a8ee-0208307dfc4d',
+        'qurious-kid-uk':'172ef666-e236-4d47-a18b-477417456156',
+        'unpod-english-sales-agent':'73422b6f-0714-4408-8cc8-8922f10f413c',
+        'sales-agent':'fb6226b6-b547-4e88-8100-b029a4e26e0f',
+        'ninja-cart-agent':'9ea2a3bd-8b08-40a7-becf-57cfba534d04',
+        'ninja-cart-agent-hindi':'7f0720df-4d01-4acb-9283-618789a7691a',
+        'ninja-cart-agent-marathi':'6ba62284-5084-45f0-8d10-1a8e818e1fe7',
+        'ninjacart-collection-agent-hindi':'bbee4534-363e-4f48-acde-3f0772fd4a50',
+        'doctor-appointment':'4f870d5c-6fff-4c2a-8fa3-2de53a09bc8f',
+        'apollo-ai':'ce858249-f486-400a-81c1-2f173ebb6a03',
+        'apollo-program-ai':'05ed3fbd-aa45-47aa-a90d-a15d53df7070',
+        'apollo-ai-english':'d8417a3b-156b-4f12-a805-eb792805b1f0',
+        'apollo-program-ai-english':'43ebed40-0ae4-4f6d-a93c-5d9e45db295b',
+        'apollo-finance-english':'48d80535-618c-4e27-ad04-0adc5469dbf3',
+        'car-dealer-english':'ef9d2252-ac2c-490c-9b0f-c2b742696299',
+        'australian-scheme-agent':'9b7a6e35-9019-4260-ba37-e73f9e92b367',
+        'digital-recruitment-agent':'3d68ef9c-6478-40c1-8e95-f4ffcb49b672',
+        }
+
+agent_ids_list=list(agent_ids.keys())

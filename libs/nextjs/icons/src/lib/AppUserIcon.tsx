@@ -1,0 +1,34 @@
+import React from 'react';
+
+export type AppIconProps = React.HTMLAttributes<HTMLSpanElement>;
+
+export const AppUserIcon: React.FC<AppIconProps> = (props) => {
+  return (
+    <span className="anticon anticon-user" {...props}>
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M23.9997 30C17.6595 30 12.0213 33.0613 8.43169 37.8119C7.65911 38.8344 7.27282 39.3456 7.28546 40.0366C7.29522 40.5704 7.63042 41.2438 8.05043 41.5734C8.59408 42 9.34744 42 10.8542 42H37.1452C38.652 42 39.4053 42 39.949 41.5734C40.369 41.2438 40.7042 40.5704 40.7139 40.0366C40.7266 39.3456 40.3403 38.8344 39.5677 37.8119C35.9781 33.0613 30.3399 30 23.9997 30Z"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M23.9997 24C28.9703 24 32.9997 19.9706 32.9997 15C32.9997 10.0294 28.9703 6 23.9997 6C19.0291 6 14.9997 10.0294 14.9997 15C14.9997 19.9706 19.0291 24 23.9997 24Z"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+};
+
+export default AppUserIcon;

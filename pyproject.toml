@@ -1,0 +1,115 @@
+[tool.poetry]
+name = "unpod-monorepo"
+version = "1.0.0"
+description = "Unpod - AI-powered voice and communication platform"
+authors = ["Yogendra Singh <yogendra@unpod.ai>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://unpod.ai"
+repository = "https://github.com/parvbhullar/unpod-github"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# Django dependencies
+Django = "5.2.10"
+djangorestframework = "^3.14.0"
+djangorestframework-simplejwt = "^5.3.0"
+django-cors-headers = "^4.3.0"
+django-filter = "^23.5"
+drf-spectacular = "^0.27.0"
+channels = "^4.0.0"
+channels-redis = "^4.1.0"
+daphne = "^4.0.0"
+django-q2 = "^1.6.0"
+
+# Database
+psycopg2-binary = "^2.9.9"
+pymongo = "^4.16.0"
+dj-database-url = "^2.1.0"
+
+# Kafka
+kafka-python = "^2.0.2"
+
+# Redis & Caching
+redis = "^5.0.1"
+django-redis = "^5.4.0"
+
+# AWS & Storage
+boto3 = "^1.34.0"
+django-storages = "^1.14.2"
+
+# Utilities
+python-dotenv = "^1.0.0"
+python-jose = { extras = ["cryptography"], version = "^3.3.0" }
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
+python-dateutil = "^2.8.2"
+pytz = "^2023.3"
+Pillow = "^10.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-django = "^4.8.0"
+pytest-asyncio = "^0.23.3"
+pytest-cov = "^4.1.0"
+factory-boy = "^3.3.0"
+faker = "^22.0.0"
+black = "^24.1.1"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+mypy = "^1.8.0"
+pre-commit = "^3.6.0"
+django-debug-toolbar = "^4.3.0"
+django-extensions = "^3.2.3"
+ipdb = "^0.13.13"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | migrations
+  | __pycache__
+  | build
+  | dist
+  | node_modules
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+skip_glob = ["*/migrations/*", "*/__pycache__/*", "node_modules/*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["apps/backend-core"]
+addopts = "-v --cov --cov-report=html --cov-report=term"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+exclude = ["migrations", "__pycache__", "node_modules"]
+
+[tool.coverage.run]
+branch = true
+source = ["apps/backend-core/unpod"]
+omit = ["*/migrations/*", "*/__pycache__/*", "*/tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

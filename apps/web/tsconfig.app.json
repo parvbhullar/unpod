@@ -1,0 +1,88 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "dist",
+    "rootDir": "src",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "../../apps/web/.next/types/**/*.ts",
+    "../../dist/apps/web/.next/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "prod/types/**/*.ts",
+    "../../types/**/*.d.ts"
+  ],
+  "exclude": [
+    "out-tsc",
+    "dist",
+    "node_modules",
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    ".next",
+    "eslint.config.js",
+    "eslint.config.cjs",
+    "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../libs/nextjs/mix"
+    },
+    {
+      "path": "../../libs/nextjs/custom-hooks"
+    },
+    {
+      "path": "../../libs/nextjs/livekit"
+    },
+    {
+      "path": "../../libs/nextjs/external-libs"
+    },
+    {
+      "path": "../../libs/nextjs/skeleton"
+    },
+    {
+      "path": "../../libs/nextjs/services"
+    },
+    {
+      "path": "../../libs/nextjs/constants"
+    },
+    {
+      "path": "../../libs/nextjs/providers"
+    },
+    {
+      "path": "../../libs/nextjs/components"
+    },
+    {
+      "path": "../../libs/nextjs/helpers"
+    },
+    {
+      "path": "../../libs/nextjs/modules"
+    },
+    {
+      "path": "./tsconfig.e2e.json"
+    }
+  ]
+}

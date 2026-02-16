@@ -1,0 +1,16 @@
+{
+  "name": "@unpod/react-data-grid",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "nx": {
+    "name": "react-data-grid"
+  }
+}

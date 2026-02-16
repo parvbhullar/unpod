@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Unpod</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    .logo {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 30px auto;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .message {
+      font-size: 18px;
+      margin-top: 20px;
+      opacity: 0.9;
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">Unpod</div>
+  <div class="spinner"></div>
+  <div class="message">Starting application...</div>
+  <div class="error" id="error">
+    <p><strong>Connection Error</strong></p>
+    <p>Please ensure the development server is running:</p>
+    <code>npm run dev</code>
+  </div>
+</div>
+
+<script>
+  // For desktop app - redirect to the Next.js dev server
+  const NEXT_URL = 'http://localhost:3000/desktop/';
+  let attempts = 0;
+  const MAX_ATTEMPTS = 30; // 30 seconds
+
+  function checkServer() {
+    attempts++;
+
+    fetch(NEXT_URL)
+      .then(response => {
+        if (response.ok) {
+          // Server is ready, redirect
+          window.location.href = NEXT_URL;
+        } else {
+          retryOrShowError();
+        }
+      })
+      .catch(error => {
+        retryOrShowError();
+      });
+  }
+
+  function retryOrShowError() {
+    if (attempts < MAX_ATTEMPTS) {
+      setTimeout(checkServer, 1000);
+    } else {
+      document.querySelector('.spinner').style.display = 'none';
+      document.querySelector('.message').textContent = 'Could not connect to server';
+      document.getElementById('error').classList.add('show');
+    }
+  }
+
+  // Start checking
+  checkServer();
+</script>
+</body>
+</html>

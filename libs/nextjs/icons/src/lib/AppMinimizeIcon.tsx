@@ -1,0 +1,37 @@
+import React from 'react';
+
+export type AppIconProps = React.HTMLAttributes<HTMLSpanElement>;
+
+export const AppMinimizeIcon: React.FC<AppIconProps> = (props) => {
+  return (
+    <span className="anticon anticon-maximize" {...props}>
+      <svg
+        width="1em"
+        height="1em"
+        viewBox="0 0 25 25"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clipPath="url(#clip0_559_17564)">
+          <path
+            d="M5.5 5.5H19.5V19.5H12.5V21.5H19.5C20.61 21.5 21.5 20.6 21.5 19.5V5.5C21.5 4.4 20.61 3.5 19.5 3.5H5.5C4.4 3.5 3.5 4.4 3.5 5.5V12.5H5.5V5.5ZM10.5 21.5V19.5H6.91L16.74 9.67L15.33 8.26L5.5 18.09V14.5H3.5V21.5H10.5Z"
+            fill="currentColor"
+            fillOpacity="0.8"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_559_17564">
+            <rect
+              width="24"
+              height="24"
+              fill="white"
+              transform="translate(0.5 0.5)"
+            />
+          </clipPath>
+        </defs>
+      </svg>
+    </span>
+  );
+};
+
+export default AppMinimizeIcon;

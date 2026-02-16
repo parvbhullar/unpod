@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  mysql:
+    container_name: mysql-db
+    image: mysql:8.0.42
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-changeme}"
+    ports:
+      - "3307:3306"
+    volumes:
+      - ~/apps/mysql59/:/var/lib/mysql

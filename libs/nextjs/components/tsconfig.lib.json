@@ -1,0 +1,70 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": [
+      "node",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts",
+      "react",
+      "react-dom"
+    ],
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
+  },
+  "exclude": [
+    "out-tsc",
+    "dist",
+    "jest.config.ts",
+    "src/lib/modules/AppDocuments/index-backup.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.js",
+    "src/**/*.test.js",
+    "src/**/*.spec.jsx",
+    "src/**/*.test.jsx"
+  ],
+  "include": [
+    "src/**/*",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../../types/**/*.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../livekit/tsconfig.lib.json"
+    },
+    {
+      "path": "../mix/tsconfig.lib.json"
+    },
+    {
+      "path": "../external-libs/tsconfig.lib.json"
+    },
+    {
+      "path": "../localization/tsconfig.lib.json"
+    },
+    {
+      "path": "../icons/tsconfig.lib.json"
+    },
+    {
+      "path": "../skeleton/tsconfig.lib.json"
+    },
+    {
+      "path": "../constants/tsconfig.lib.json"
+    },
+    {
+      "path": "../custom-hooks/tsconfig.lib.json"
+    },
+    {
+      "path": "../providers/tsconfig.lib.json"
+    },
+    {
+      "path": "../helpers/tsconfig.lib.json"
+    }
+  ]
+}

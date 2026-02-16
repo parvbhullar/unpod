@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "types": ["node"],
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "target": "es2022"
+  },
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "../../types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "src-tauri/target"]
+}

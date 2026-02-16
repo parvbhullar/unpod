@@ -1,0 +1,7 @@
+# QA Deploy - Additional packages for QA deployment
+django-extensions==4.1
+psycopg2-binary==2.9.11
+razorpay==2.0.0
+#pandas==2.2.3
+django-multiselectfield==1.0.1
+gevent==25.9.1

@@ -1,0 +1,15 @@
+{
+  "name": "external-libs",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/external-libs/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/external-libs/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

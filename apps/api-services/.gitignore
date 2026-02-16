@@ -1,0 +1,31 @@
+# Python
+*.pyc
+__pycache__/
+*.egg-info/
+
+# Environments
+.venv
+venv/
+ENV/
+.env
+
+# IDE
+.vscode
+.idea/*
+
+# Logs
+*.log
+*.log.*
+logs/*
+
+# Settings (local overrides)
+/settings/local.py
+
+# Data & secrets
+*.pem
+*.csv
+*.xlsx
+*.ipynb
+*.jsonl
+*.cache
+data/*

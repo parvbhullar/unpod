@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=64.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "super"
+version = "0.5.2"
+description = "The Multi-Role Super Framework"
+readme = "README.md"
+authors = [
+    {name = "parbhullar", email = "parvinder@recalll.co"},
+]
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic",
+    "python-dotenv",
+    "click",
+    "pyyaml",
+    "aioredis",
+    "inflection",
+    "openai",
+    "numpy",
+    "anthropic",
+    "tiktoken",
+    "dspy",
+    "transformers",
+    "mem0ai",
+    "markitdown",
+    "llama-index",
+    "llama-index-llms-litellm",
+    "tavily-python",
+    "exa_py",
+    "langchain_core",
+    "langchain",
+    "prefect",
+    "langchain_anthropic",
+    "langchain_openai",
+    "pydantic-ai==0.0.12",
+    "pydantic-ai-slim==0.0.12",
+    "twisted",
+    "pytest",
+    "anyio",
+    "pytest-asyncio",
+    "pytest-tornasync",
+    "pytest-trio",
+    "pytest-twisted",
+    "livekit>=1.0.23",
+    "livekit-agents>=1.3.10",
+    "pipecat-ai[soundfile]>=0.0.99",
+    "langgraph>=1.0.6",
+    "psycopg2-binary>=2.9.11",
+    "livekit-plugins-openai>=1.3.12",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["super*", "super_services*"]

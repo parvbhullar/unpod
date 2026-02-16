@@ -1,0 +1,44 @@
+[Unit]
+Description=Unpod Backend Django Application
+After=network.target redis.service postgresql.service
+Wants=redis.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/html/unpod-backend
+Environment="DJANGO_SETTINGS_MODULE=config.settings.qa"
+Environment="PATH=/home/ubuntu/.virtualenvs/unpod_backend/bin"
+Environment="PYTHONUNBUFFERED=1"
+
+# Use gunicorn with our configuration file for stability
+ExecStart=/home/ubuntu/.virtualenvs/unpod_backend/bin/gunicorn \
+    --config gunicorn.conf.py \
+    config.wsgi:application
+
+# Restart policy - restart on failure with backoff
+Restart=always
+RestartSec=10
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+# Resource limits - prevent runaway memory usage
+# Set memory limit to 6GB (leave 2GB for system on 8GB VM)
+MemoryMax=6G
+MemoryHigh=5G
+
+# CPU limits (optional - uncomment if needed)
+# CPUQuota=350%
+
+# Kill timeout
+TimeoutStopSec=30
+KillMode=mixed
+KillSignal=SIGTERM
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=unpod-backend
+
+[Install]
+WantedBy=multi-user.target

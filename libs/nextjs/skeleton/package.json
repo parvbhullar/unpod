@@ -1,0 +1,36 @@
+{
+  "name": "@unpod/skeleton",
+  "version": "0.0.1",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
+  "exports": {
+    ".": "./src/index.tsx",
+    "./*": "./src/lib/*",
+    "./AIAgents": "./src/lib/AIAgents.tsx",
+    "./AIAgentStudio": "./src/lib/AIAgentStudio.tsx",
+    "./AIIdentityStudio": "./src/lib/AIIdentityStudio.tsx",
+    "./BridgeStudio": "./src/lib/BridgeStudio.tsx",
+    "./CallLogs": "./src/lib/CallLogs.tsx",
+    "./Dashboard": "./src/lib/Dashboard.tsx",
+    "./KnowledgeBase": "./src/lib/KnowledgeBase.tsx",
+    "./KnowledgeBaseSlug": "./src/lib/KnowledgeBaseSlug.tsx",
+    "./ModuleHub": "./src/lib/ModuleHub.tsx",
+    "./NewThread": "./src/lib/NewThread.tsx",
+    "./Setting": "./src/lib/Setting.tsx",
+    "./SharedWithMe": "./src/lib/SharedWithMe.tsx",
+    "./SidebarAgentList": "./src/lib/SidebarAgentList.tsx",
+    "./Space": "./src/lib/Space.tsx",
+    "./Superbook": "./src/lib/Superbook.tsx",
+    "./VoiceProfile": "./src/lib/VoiceProfile.tsx",
+    "./Wallet": "./src/lib/Wallet.tsx",
+    "./Notes": "./src/lib/Notes.tsx",
+    "./Conversation": "./src/lib/Conversation.tsx",
+    "./Notification": "./src/lib/Notification.tsx",
+    "./Header": "./src/lib/FullLayout/Header.tsx",
+    "./Billing": "./src/lib/Billing.tsx",
+    "./package.json": "./package.json"
+  },
+  "nx": {
+    "name": "skeleton"
+  }
+}

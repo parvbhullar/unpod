@@ -1,0 +1,15 @@
+{
+  "name": "feature-auth",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nextjs/feature-auth/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:frontend", "tech:nextjs", "domain:auth"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/nextjs/feature-auth/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

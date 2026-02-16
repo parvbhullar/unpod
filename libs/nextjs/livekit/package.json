@@ -1,0 +1,14 @@
+{
+  "name": "@unpod/livekit",
+  "version": "0.0.1",
+  "exports": {
+    "./AppVoiceAgent/*": "./src/AppVoiceAgent/*",
+    "./components/*": "./src/components/*",
+    "./hooks/*": "./src/hooks/*",
+    "./transcriptions/*": "./src/transcriptions/*",
+    "./package.json": "./package.json"
+  },
+  "nx": {
+    "name": "livekit"
+  }
+}
