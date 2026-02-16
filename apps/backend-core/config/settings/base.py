@@ -132,7 +132,6 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "allauth.socialaccount.providers.google",
-    "drf_spectacular",
     "dj_rest_auth",
     "import_export",
     "cloudinary",
@@ -142,19 +141,13 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "unpod.users",
     "unpod.apiV1.apps.Apiv1Config",
-    "unpod.apiV2Platform.apps.Apiv2PlatformConfig",
     "unpod.space",
     "unpod.roles",
     "unpod.thread",
     "unpod.core_components",
     "unpod.notification",
-    "unpod.subscription",
     "unpod.knowledge_base",
-    "unpod.wallet",
-    "unpod.channels",
-    "unpod.telephony",
     "unpod.documents",
-    "unpod.contacts",
     "unpod.metrics",
     "unpod.dynamic_forms",
     # Your stuff: custom apps go here
@@ -500,53 +493,11 @@ CORS_EXPOSE_HEADERS = [
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 # CORS_URLS_REGEX = r"^/api/.*$"
 
-# By Default swagger ui is available only to admin user. You can change permission classs to change that
-# See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Unpod API V2 Platform",
-    "DESCRIPTION": "OpenAPI 3.0 specification for Unpod Platform APIs",
-    "VERSION": "2.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
-    "SERVERS": [
-        {"url": "https://unpod.dev", "description": "Production server"},
-        {"url": "https://unpod.ai", "description": "Production server (AI)"},
-    ],
-    "SCHEMA_PATH_PREFIX": "/api/v2/platform",
-    "SCHEMA_PATH_PREFIX_TRIM": True,
-    "SCHEMA_PATH_PREFIX_INSERT": "/api/v2/platform",
-    "COMPONENT_SPLIT_REQUEST": True,
-    "SWAGGER_UI_SETTINGS": {
-        "deepLinking": True,
-        "persistAuthorization": True,
-        "displayOperationId": True,
-    },
-    "APPEND_COMPONENTS": {
-        "securitySchemes": {
-            "jwtAuth": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "Authorization",
-                "description": "JWT Authorization header. Example: 'JWT <token>'",
-            }
-        }
-    },
-    "SECURITY": [{"jwtAuth": []}],
-    "PREPROCESSING_HOOKS": ["unpod.common.schema.filter_v2_platform_endpoints"],
-    "POSTPROCESSING_HOOKS": [],
-    "SERVE_INCLUDE_SCHEMA": False,
-    "SORT_OPERATIONS": False,  # do not auto-sort
-    "SORT_COMPONENTS": False,  # keep serializer order
-}
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 CRON_CLASSES = [
-    "unpod.wallet.cron.GenerateTaskTransactionHistory",
     "unpod.thread.cron.CreateCronPost",
     "unpod.core_components.cron.EventTriggerCron",
-    "unpod.subscription.cron.AddCallLogConsumptionCronJob",
-    "unpod.subscription.cron.ProcessEndedSubscriptionsCronJob",
-    "unpod.subscription.cron.SubscriptionResetReminderCronJob",
 ]
 
 # AWS S3 Configuration
@@ -615,12 +566,6 @@ COMPANY_NAME = "Unpod.ai"
 SUPPORT_EMAIL = "info@unpod.ai"
 DEFAULT_ORG_HANDLE = "unpod.ai"
 
-# Telephony Configuration
-# SECURITY: Credentials loaded from environment variables
-LIBRESBC_URL = env(
-    "LIBRESBC_URL", default="https://internal-libresbc.unpod.local/libreapi/"
-)
-
 # Text-to-Speech / Speech-to-Text Services
 # SECURITY: Credentials loaded from environment variables
 # Made optional for backwards compatibility with existing QA environments
@@ -658,11 +603,6 @@ Q_CLUSTER = {
     "bulk": 10,
     "orm": "default",  # Use default database
 }
-
-# Telephony Test Mode
-# ------------------------------------------------------------------------------
-# Set to True to bypass external API calls (LibreSBC, LiveKit, VAPI) for testing
-TELEPHONY_TEST_MODE = env.bool("TELEPHONY_TEST_MODE", default=False)
 
 # SSE (Server-Sent Events) Configuration
 # ------------------------------------------------------------------------------

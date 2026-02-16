@@ -196,18 +196,15 @@ class TestShouldSkipChecksum:
     def test_should_skip_get_requests(self):
         """Test that GET requests are skipped"""
         assert should_skip_checksum("/api/v1/users/", "GET") is True
-        assert should_skip_checksum("/api/v2/platform/threads/", "GET") is True
 
     def test_should_not_skip_post_requests(self):
         """Test that POST requests are not skipped"""
         assert should_skip_checksum("/api/v1/users/", "POST") is False
-        assert should_skip_checksum("/api/v2/platform/threads/", "POST") is False
 
     def test_should_skip_file_upload_paths(self):
         """Test that file upload paths are skipped"""
         assert should_skip_checksum("/api/v1/media/upload/", "POST") is True
         assert should_skip_checksum("/api/v1/documents/create/", "POST") is True
-        assert should_skip_checksum("/api/v2/platform/media/", "POST") is True
 
     def test_should_skip_admin_paths(self):
         """Test that admin paths are skipped"""
@@ -222,7 +219,6 @@ class TestShouldSkipChecksum:
     def test_should_not_skip_api_paths(self):
         """Test that regular API paths are not skipped"""
         assert should_skip_checksum("/api/v1/threads/", "POST") is False
-        assert should_skip_checksum("/api/v2/platform/spaces/", "PUT") is False
 
 
 class TestExtractRequestBody:

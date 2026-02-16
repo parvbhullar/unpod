@@ -14,8 +14,6 @@ from typing import Any, Optional, Tuple
 
 # API prefixes to strip from URL to match frontend's relative URLs
 API_PREFIXES = [
-    "/api/v2/platform/",
-    "/api/v2/platform",
     "/api/v1/",
     "/api/v1",
 ]
@@ -29,7 +27,6 @@ def get_relative_url(path: str) -> str:
     Examples:
         /api/v1/auth/login/ -> auth/login/
         /api/v1/agents -> agents
-        /api/v2/platform/spaces/ -> spaces/
     """
     url = path
 
@@ -189,9 +186,6 @@ def should_skip_checksum(request_path: str, request_method: str, content_type: s
         True if checksum should be skipped, False otherwise
     """
     # Skip admin endpoints
-    if request_path.startswith("/api/v2/") or request_path.startswith("/api/v2/platform/docs/") or request_path.startswith("/api/v2/platform/schema/") or request_path.startswith("/api/v2/platform/redoc/"):
-        return True
-
     if request_path.startswith("/admin/"):
         return True
 

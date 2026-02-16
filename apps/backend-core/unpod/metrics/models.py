@@ -2,7 +2,6 @@ from django.db import models
 from unpod.common.enum import TrendTypes, StatusType, TrunkDirection ,MetricTypes
 from unpod.core_components.models import Pilot
 from unpod.space.models import SpaceOrganization, Space
-from unpod.telephony.models import VoiceBridge
 from unpod.common.enum import ProductTypes
 
 
@@ -32,9 +31,6 @@ class CallLog(models.Model):
     )
     source_number = models.CharField(max_length=15, null=True, db_index=True)
     destination_number = models.CharField(max_length=15, null=True, db_index=True)
-    bridge = models.ForeignKey(
-        VoiceBridge, on_delete=models.SET_NULL, null=True, blank=True
-    )
     organization = models.ForeignKey(
         SpaceOrganization, on_delete=models.SET_NULL, null=True
     )
@@ -46,7 +42,6 @@ class CallLog(models.Model):
 
     class Meta:
         unique_together = (
-            "bridge",
             "organization",
             "start_time",
             "source_number",
@@ -102,9 +97,6 @@ class Metrics(models.Model):
         db_index=True,
     )
     pilot = models.ForeignKey(Pilot, on_delete=models.SET_NULL, null=True, blank=True)
-    bridge = models.ForeignKey(
-        VoiceBridge, on_delete=models.SET_NULL, null=True, blank=True
-    )
     organization = models.ForeignKey(
         SpaceOrganization, on_delete=models.CASCADE, null=True, blank=True
     )
@@ -123,8 +115,6 @@ class Metrics(models.Model):
             models.Index(fields=['organization', 'metric_type', 'created_at'], name='metrics_org_type_time_idx'),
             # Pilot-specific metrics over time
             models.Index(fields=['pilot', 'metric_type', 'created_at'], name='metrics_pilot_type_time_idx'),
-            # Bridge-specific metrics over time
-            models.Index(fields=['bridge', 'metric_type', 'created_at'], name='metrics_bridge_type_time_idx'),
             # Active metrics filtering
             models.Index(fields=['status', 'metric_type'], name='metrics_status_type_idx'),
         ]

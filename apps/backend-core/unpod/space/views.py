@@ -25,7 +25,6 @@ from unpod.common.helpers.global_helper import (
 )
 from unpod.notification.models import Notification
 from unpod.notification.services import createNotification
-from unpod.subscription.services import assign_default_subscription
 
 from unpod.common.exception import APIException206
 from unpod.common.mixin import QueryOptimizationMixin
@@ -192,9 +191,6 @@ class SpaceOrganizationViewSet(viewsets.GenericViewSet):
             if hasattr(user, "userbasicdetail_user"):
                 user.userbasicdetail_user.active_space = space_obj
                 user.userbasicdetail_user.save()
-
-        assign_default_subscription("unpod.dev", user, organization)
-        assign_default_subscription("unpod.ai", user, organization)
 
         data = SpaceOrganizationSerializers(organization).data
         return Response(
@@ -654,7 +650,10 @@ class SpaceViewSet(QueryOptimizationMixin, viewsets.GenericViewSet):
                 if space_type == "knowledge_base":
                     space["has_evals"] = space.get("token") in evals_map
                     if space["has_evals"]:
-                        space["evals_info"] = evals_map.get(space.get("token"))
+                      evals_info = evals_map.get(space.get("token"))
+                      eval_data = evals_info.pop("eval_data", {})
+                      evals_info["eval_token"] = eval_data.get("space_token")
+                      space["evals_info"] = evals_info
             # if len(space_list):
             #     space_list.insert(0, getAllSpaceObject())
 

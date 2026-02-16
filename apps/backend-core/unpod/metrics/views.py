@@ -4,11 +4,9 @@ from datetime import datetime, timedelta
 
 from dateutil import parser
 from django.conf import settings
-from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Q, Sum
 from django.http import StreamingHttpResponse
-from django.utils import timezone
 from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,8 +15,6 @@ from unpod.common.logger import UnpodLogger
 from unpod.core_components.models import Pilot, TelephonyNumber
 from unpod.space.models import Space
 from unpod.space.models import SpaceOrganization
-# from unpod.telephony.models import VoiceBridgeNumber, TelephonyNumber, VoiceBridge
-from unpod.telephony.models import VoiceBridgeNumber, VoiceBridge
 from .models import Metrics, CallLog
 from .serializers import MetricsSerializer, CallLogSerializer
 from .utils import CallLogPagination
@@ -28,7 +24,6 @@ from unpod.common.mixin import QueryOptimizationMixin
 from ..common.enum import StatusType
 from ..common.exception import APIException206
 from ..common.renderers import UnpodJSONRenderer
-from ..space.services import get_organization_by_domain_handle
 from ..space.utils import checkSpaceOrg
 
 metrics_logger = UnpodLogger("metrics")
@@ -299,20 +294,10 @@ class CallLogViewSet(viewsets.ModelViewSet):
     def log_metrics_data(self, request):
         data = request.data.copy()
         space = Space.objects.get(id=data["space_id"])
+        product_id = request.headers.get("Product-Id", settings.DEFAULT_PRODUCT_ID)
 
         query = Q(handle=data["pilot"])
         pilot = Pilot.objects.filter(query).first()
-
-        bridge_obj = VoiceBridgeNumber.objects.filter(
-            Q(number__number__in=[data["source_number"]])
-            | Q(number__number__in=[data["destination_number"]])
-        ).first()
-
-        if bridge_obj:
-            data["bridge"] = bridge_obj.bridge.id
-            data["product_id"] = bridge_obj.bridge.product_id
-        else:
-            data["bridge"] = None
 
         data["organization"] = space.space_organization.id
         data["space"] = space.id
@@ -331,7 +316,7 @@ class CallLogViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             create_update_metric(
-                org=org, product_id=bridge_obj.bridge.product_id if bridge_obj else None
+                org=org, product_id=product_id
             )
             return Response(
                 {
@@ -353,7 +338,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
     def log_metric_file(self, request):
         uploaded_file = request.FILES.get("file")
         product_id = request.headers.get("Product-Id", "unpod.dev")
-        isdefault = None
         default_org = settings.DEFAULT_ORG_HANDLE
         if not uploaded_file:
             return Response(
@@ -368,110 +352,62 @@ class CallLogViewSet(viewsets.ModelViewSet):
         try:
             df = load_csv(uploaded_file)
 
-            # empty set and list for new metrics log we have to create and unique metrics based on bridge and org
-            metrics_to_create = set()
             new_metric_log = []
+            org = SpaceOrganization.objects.filter(
+                domain_handle=default_org
+            ).first()
 
             # unique numbers from list
             all_nums = set(
                 df["source"].apply(lambda x: normalize_number(str(x)))
             ) | set(df["destination"].apply(lambda x: normalize_number(str(x))))
 
-            # fetch numbers from db with associated bridge and Organization as well and create dict for mapping
-            vbns = VoiceBridgeNumber.objects.filter(
-                number__number__in=all_nums
-            ).select_related("bridge__organization")
+            # build a set of known telephony numbers for direction detection
+            known_numbers = set(
+                TelephonyNumber.objects.filter(
+                    number__in=all_nums
+                ).values_list("number", flat=True)
+            )
 
-            vbn_dict = {vbn.number.number: vbn for vbn in vbns}
             for _, row in df.iterrows():
                 source = normalize_number(str(row["source"]))
                 destination = normalize_number(str(row["destination"]))
-                vbn = vbn_dict.get(source) or vbn_dict.get(destination)
 
-                if not vbn:
-                    bridge = VoiceBridge.objects.filter(
-                        organization__domain_handle=default_org, name="unpod_default"
-                    ).first()
-                    org = SpaceOrganization.objects.filter(
-                        domain_handle=default_org
-                    ).first()
-                    if not bridge:
-                        bridge = VoiceBridge.objects.create(
-                            name="unpod_default",
-                            product_id=product_id,
-                            organization=org if org else None,
-                        )
-                    telephony_number = TelephonyNumber.objects.filter(
-                        Q(number=source) | Q(number=destination)
-                    ).first()
-
-                    if telephony_number:
-                        vbn, created = VoiceBridgeNumber.objects.update_or_create(
-                            number=telephony_number,
-                            bridge=bridge,
-                        )
-                        if created:  # only change on the first creation
-                            vbn.created_at = timezone.now() - timedelta(days=30)
-                            vbn.save(update_fields=["created_at"])
-
-                        isdefault = True
-                        vbns = VoiceBridgeNumber.objects.filter(
-                            number__number__in=all_nums,
-                        ).select_related("bridge__hub")
-
-                        vbn_dict = {vbn.number.number: vbn for vbn in vbns}
-                    else:
-                        continue
-
-                if vbn_dict.get(source):
+                if source in known_numbers:
                     direction = "outbound"
                     assistant_number = source
                     customer_number = destination
-
-                else:
+                elif destination in known_numbers:
                     direction = "inbound"
                     assistant_number = destination
                     customer_number = source
+                else:
+                    continue
 
-                org = vbn.bridge.organization
-                bridge = vbn.bridge
-
-                if (
-                    vbn.created_at < row["start_time"]
-                    and bridge.created_at < row["start_time"]
-                    or isdefault
-                ):
-                    new_metric_log.append(
-                        CallLog(
-                            start_time=row["start_time"],
-                            end_time=row["end_time"],
-                            source_number=assistant_number,
-                            call_type=direction,
-                            destination_number=customer_number,
-                            bridge=bridge,
-                            organization=org,
-                            product_id=bridge.product_id or Product.dev,
-                            end_reason=row["status"],
-                            call_duration=row["end_time"] - row["start_time"],
-                            call_status="success"
-                            if (row["end_time"] - row["start_time"]).total_seconds()
-                            > 10
-                            else "failed",
-                            metrics_metadata=json.loads(row.to_json()),
-                        )
+                new_metric_log.append(
+                    CallLog(
+                        start_time=row["start_time"],
+                        end_time=row["end_time"],
+                        source_number=assistant_number,
+                        call_type=direction,
+                        destination_number=customer_number,
+                        organization=org,
+                        product_id=product_id,
+                        end_reason=row["status"],
+                        call_duration=row["end_time"] - row["start_time"],
+                        call_status="success"
+                        if (row["end_time"] - row["start_time"]).total_seconds()
+                        > 10
+                        else "failed",
+                        metrics_metadata=json.loads(row.to_json()),
                     )
-
-                metrics_to_create.add((bridge, org))
+                )
 
             # create metric logs
             with transaction.atomic():
                 CallLog.objects.bulk_create(new_metric_log, ignore_conflicts=True)
 
-            # calculate metrics for unique bridge and org pairs
-            for bridge, org in metrics_to_create:
-                create_update_metric(
-                    org=org, product_id=bridge.product_id if bridge else product_id
-                )
+            create_update_metric(org=org, product_id=product_id)
 
             return Response(
                 {"message": "log updates successfully", "data": ""}, status=200
@@ -495,7 +431,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
             logs = CallLog.objects.filter(
                 organization__domain_handle=domain_handle
             ).select_related(
-                'bridge',
                 'agent',
                 'space',
                 'organization'
@@ -510,9 +445,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
                 "end_time",
                 "call_duration",
                 "end_reason",
-                "bridge",
-                "bridge__id",
-                "bridge__name",
                 "agent",
                 "agent__id",
                 "agent__name",
@@ -529,7 +461,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
             end_date = request.query_params.get("end_time")
             call_type = request.query_params.get("call_type")
             call_status = request.query_params.get("call_status")
-            bridge_name = request.query_params.get("bridge")
             source_number = request.query_params.get("source_number")
             call_id = request.query_params.get("call_id")
             destination_number = request.query_params.get("destination_number")
@@ -560,9 +491,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
                 filters["call_duration__lte"] = duration
 
             logs = logs.filter(**filters)
-
-            if bridge_name:
-                logs = logs.filter(bridge__name__icontains=bridge_name)
 
             sort = request.query_params.get("sort")
             sort_by = "-creation_time"  # default
@@ -638,7 +566,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
                 "end_time",
                 "call_duration",
                 "end_reason",
-                "bridge",
             ]
         )
 
@@ -656,7 +583,6 @@ class CallLogViewSet(viewsets.ModelViewSet):
                     log.end_time,
                     log.call_duration,
                     log.end_reason,
-                    log.bridge.name if log.bridge else "",
                 ]
             )
 
@@ -672,161 +598,3 @@ class CallLogViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SBCLogsViewSet(viewsets.ModelViewSet):
-    renderer_classes = [UnpodJSONRenderer]
-
-    def get_logs(self, request):
-        print(request.data)
-        return Response(request.data)
-
-    def create_logs(self, request):
-        data = request.data
-        metrics_logger.info(f"creating Call log from SBC Call {data}")
-        query = Q(number__number=data.get("destination_number")) | Q(
-            number__number=data.get("caller_number")
-        )
-        try:
-            vbn = VoiceBridgeNumber.objects.filter(query).first()
-
-            if vbn:
-                if vbn.number.number == data.get("destination_number"):
-                    direction = "inbound"
-                    customer_number = data.get("caller_number")
-                    assistant_number = data.get("destination_number")
-                else:
-                    direction = "outbound"
-                    assistant_number = data.get("caller_number")
-                    customer_number = data.get("destination_number")
-
-                start_time = data.get("answer_time", None)
-                end_time = data.get("end_time", None)
-
-                if start_time:
-                    start_time = datetime.fromisoformat(start_time)
-                if end_time:
-                    end_time = datetime.fromisoformat(end_time)
-                duration = end_time - start_time
-                key = "sbc-call-log:" + data.get("seshid", start_time)
-
-                try:
-                    if cache.get(key):
-                        metrics_logger.info(
-                            f"SBC Call Log already exists in cache {key}"
-                        )
-                        return Response(
-                            {"message": "log already exists", "data": data}, status=200
-                        )
-                    ttl = 100
-                    cache.set(key, 1, ttl)
-                except Exception as e:
-                    metrics_logger.error(f"Cache error: {e}")
-
-                CallLog.objects.create(
-                    start_time=start_time,
-                    end_time=end_time,
-                    source_number=assistant_number,  # Assistant Number
-                    call_type=direction,
-                    destination_number=customer_number,  # Customer Number
-                    bridge=vbn.bridge,
-                    organization=vbn.bridge.organization,
-                    product_id=vbn.bridge.product_id or Product.dev,
-                    call_duration=duration,
-                    metrics_metadata=data,
-                    call_status=data.get("status", "NA"),
-                    end_reason=data.get("hangup_cause", "NA"),
-                )
-
-                # TODO Add metrics usage here
-
-                metrics_logger.info(f"created Call log from SBC Call")
-                return Response(
-                    {"message": "log updates successfully", "data": data}, status=200
-                )
-            metrics_logger.info(f"SBC Call Not Found {query}")
-            return Response(
-                {
-                    "message": "Failed to create Call log",
-                },
-                status=206,
-            )
-
-        except Exception as e:
-            metrics_logger.error(f"an exception occured {e}")
-            return Response(
-                {
-                    "message": "Exception occured",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-    def calculate_logs(self, request):
-        from django.db.models import Sum, F, Count, DurationField, ExpressionWrapper
-
-        domain_handle = self.request.headers.get("Org-Handle", None)
-        organization = get_organization_by_domain_handle(domain_handle)
-
-        call_logs_query = CallLog.objects.filter(
-            organization=organization,
-            product_id=Product.Dev.value,
-            calculated=False,
-            call_duration__isnull=False,
-        ).exclude(call_duration=timedelta(0))
-
-        ids = list(call_logs_query.values_list("id", flat=True))
-
-        if not ids:
-            print(f"No new call logs for organization {organization.id}")
-
-            return Response(
-                {
-                    "message": "No new call logs for organization",
-                    "data": {},
-                },
-                status=200,
-            )
-
-        print("IDs: ", ids)
-
-        stats = CallLog.objects.filter(id__in=ids).aggregate(
-            total_seconds=Sum(
-                ExpressionWrapper(F("call_duration"), output_field=DurationField())
-            ),
-            call_count=Count("id"),
-        )
-
-        calls = CallLog.objects.filter(
-            organization=organization,
-            product_id=Product.Dev.value,
-            call_duration__isnull=False,
-        ).exclude(call_duration=timedelta(0))
-
-        seconds = sum(
-            (
-                call.call_duration.total_seconds()
-                for call in calls
-                if call.call_duration
-            ),
-            0,
-        )
-
-        newMinutes = (seconds + 59) // 60  # Round up to nearest minute
-
-        totalSeconds = stats.get("total_seconds", 0).total_seconds()
-        callsCount = stats.get("call_count", 0)
-        newTotalMinutes = (totalSeconds + 59) // 60  # Round up to nearest minute
-
-        print("CallLog: ", totalSeconds, callsCount)
-
-        return Response(
-            {
-                "message": "Failed to create Call log",
-                "data": {
-                    "total_seconds": totalSeconds,
-                    "new_total_minutes": newTotalMinutes,
-                    "seconds": seconds,
-                    "newMinutes": newMinutes,
-                    "calls_count": callsCount,
-                },
-            },
-            status=200,
-        )

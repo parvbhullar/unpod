@@ -30,6 +30,7 @@ from unpod.core_components.models import (
     TelephonyNumber,
 )
 from .resources import VoiceProfilesResource
+from ..common.services.livekit import get_livekit_trunks
 from ..common.utils import api_request
 from .forms import (
     ImportPilotForm,
@@ -43,7 +44,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 from ..dynamic_forms.models import DynamicFormValues, DynamicForm
-from ..telephony.utils import get_livekit_trunks
 
 
 # Register your models here.

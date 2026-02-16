@@ -93,7 +93,6 @@ class Space(CreatedUpdatedMixin):
     content_type = models.CharField(choices=KnowledgeBaseContentType.choices(),
                                     default=KnowledgeBaseContentType.general.name, max_length=20)
     pilots = GenericRelation('core_components.PilotLink', related_query_name='spaces')
-    app_configs = GenericRelation('channels.AppConfigLink', related_query_name='spaces')
     status = models.CharField(max_length=20, choices=StatusType.choices(), default=StatusType.active.name,
                               db_index=True)
 

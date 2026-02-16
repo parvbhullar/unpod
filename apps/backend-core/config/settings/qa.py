@@ -169,39 +169,3 @@ SARVAM_API_KEY = env("SARVAM_API_KEY")
 CARTESIA_API_KEY = env("CARTESIA_API_KEY")
 INWORLD_API_KEY = env("INWORLD_API_KEY")
 
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Unpod API V2 Platform",
-    "DESCRIPTION": "OpenAPI 3.0 specification for Unpod Platform APIs",
-    "VERSION": "2.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
-    "SERVERS": [
-        {"url": "https://qa.unpod.tv", "description": "QA server"},
-        {"url": "https://unpod.dev", "description": "Production server"},
-        {"url": "https://unpod.ai", "description": "Production server (AI)"},
-    ],
-    "SCHEMA_PATH_PREFIX": "/api/v2/platform",
-    "SCHEMA_PATH_PREFIX_TRIM": True,
-    "SCHEMA_PATH_PREFIX_INSERT": "/api/v2/platform",
-    "COMPONENT_SPLIT_REQUEST": True,
-    "SWAGGER_UI_SETTINGS": {
-        "deepLinking": True,
-        "persistAuthorization": True,
-        "displayOperationId": True,
-    },
-    "APPEND_COMPONENTS": {
-        "securitySchemes": {
-            "jwtAuth": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "Authorization",
-                "description": "JWT Authorization header. Example: 'JWT <token>'",
-            }
-        }
-    },
-    "SECURITY": [{"jwtAuth": []}],
-    "PREPROCESSING_HOOKS": ["unpod.common.schema.filter_v2_platform_endpoints"],
-    "POSTPROCESSING_HOOKS": [],
-    "SERVE_INCLUDE_SCHEMA": False,
-    "SORT_OPERATIONS": False,  # do not auto-sort
-    "SORT_COMPONENTS": False,  # keep serializer order
-}

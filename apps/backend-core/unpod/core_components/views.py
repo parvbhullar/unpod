@@ -98,7 +98,6 @@ from unpod.space.models import (
 from unpod.space.serializers import SpaceListSerializers
 from unpod.space.services import processInvitation, get_organization_by_domain_handle
 
-# from unpod.telephony.models import Provider
 from unpod.thread.models import PostInvite, ThreadPost, ThreadPostReaction
 from unpod.thread.serializers import PostReactionCreate
 from .services import PilotService

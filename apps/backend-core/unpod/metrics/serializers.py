@@ -160,7 +160,6 @@ class CallLogSerializer(serializers.ModelSerializer):
             "call_type",
             "organization",
             "product_id",
-            "bridge",
             "agent",
             "space",
             "creation_time",
@@ -186,15 +185,6 @@ class CallLogSerializer(serializers.ModelSerializer):
                 instance.save(update_fields=["call_duration"])
         else:
             data["call_duration"] = 0
-        # Handle bridge
-        if instance.bridge:
-            data["bridge"] = {
-                "id": instance.bridge.id,
-                "name": getattr(instance.bridge, "name", ""),
-            }
-        else:
-            data["bridge"] = None
-
         # Handle agent
         if instance.agent:
             data["agent"] = {

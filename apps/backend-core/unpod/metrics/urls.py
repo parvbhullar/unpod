@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import MetricsViewSet, CallLogViewSet, SBCLogsViewSet
+from .views import MetricsViewSet, CallLogViewSet
 
 router = DefaultRouter()
 router.register(r"", MetricsViewSet, basename="metrics-list")
@@ -38,20 +38,5 @@ urlpatterns = [
         "call-logs/",
         CallLogViewSet.as_view({"get": "get_call_logs"}),
         name="metrics_log",
-    ),
-    path(
-        "cdr/sbc_logs/",
-        SBCLogsViewSet.as_view({"post": "create_logs"}),
-        name="SBC_log",
-    ),
-    path(
-        "cdr/sbc_logs/",
-        SBCLogsViewSet.as_view({"get": "get_logs"}),
-        name="SBC_log",
-    ),
-    path(
-        "call-logs/calculate/",
-        SBCLogsViewSet.as_view({"post": "calculate_logs"}),
-        name="SBC_log",
     ),
 ]
