@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import type { RadioChangeEvent } from 'antd';
 import { Button, Col, Radio, Row } from 'antd';
 import { AppInput, AppTextArea } from '@unpod/components/antd';
 import SharedFields from '../SharedFields';
@@ -11,7 +12,7 @@ type SharedField = {
 };
 
 const WorkflowForm = () => {
-  const [workflowType, setWorkflowType] = useState('public');
+  const [workflowType, setWorkflowType] = useState<string>('public');
   const [sharedFields, setSharedFields] = useState<SharedField[]>([]);
   const [workflowData, setWorkflowData] = useState({
     name: '',
@@ -20,12 +21,14 @@ const WorkflowForm = () => {
   });
   void workflowData;
 
-  const handleWorkflowTypeChange = (event: any) => {
+  const handleWorkflowTypeChange = (event: RadioChangeEvent) => {
     const { target } = event;
     setWorkflowType(target.value ?? 'public');
   };
 
-  const handleChange = (event: any) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { target } = event;
     const { name, value } = target ?? {};
     if (name && value) {

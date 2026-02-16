@@ -1,8 +1,11 @@
+import type { FormInstance } from 'antd';
 import { Button, Flex, Form } from 'antd';
 import AppPilotSection from '@unpod/components/modules/AppPilotSection';
 import { useInfoViewContext } from '@unpod/providers';
 import { SaveOutlined } from '@ant-design/icons';
 import {
+  AnalysisItem,
+  FormField,
   INPUT_DEFAULT_VALUES,
   TYPE_BASED_DEFAULT_VALUES,
 } from '@unpod/constants';
@@ -11,14 +14,16 @@ import {
   StyledMainContainer,
   StyledTabRoot,
 } from '../index.styled';
+import type { Pilot } from '@unpod/constants/types';
+
 import { useIntl } from 'react-intl';
 
 const { useForm } = Form;
 
 type AnalysisFormProps = {
-  agentData?: any;
+  agentData: Pilot;
   updateAgentData?: (data: FormData) => void;
-  headerForm?: any;
+  headerForm?: FormInstance;
 };
 
 const AnalysisForm = ({ agentData, updateAgentData }: AnalysisFormProps) => {
@@ -37,11 +42,11 @@ const AnalysisForm = ({ agentData, updateAgentData }: AnalysisFormProps) => {
   const getInitialValues = () => {
     const initialValues: Record<string, any> = {};
     if (agentData?.components && agentData.components['Analysis']) {
-      agentData.components['Analysis'].forEach((component: any) => {
+      agentData.components['Analysis'].forEach((component: AnalysisItem) => {
         const values = component.form_values?.values || {};
-        component.form_fields.forEach((field: any) => {
+        component.form_fields.forEach((field: FormField) => {
           const defaultValue =
-            INPUT_DEFAULT_VALUES[field.default] ||
+            INPUT_DEFAULT_VALUES[field.default as string] ||
             TYPE_BASED_DEFAULT_VALUES[field.type] ||
             '';
           initialValues[`${component.slug}__${field.name}`] =

@@ -18,13 +18,7 @@ type PurposeListProps = {
   title?: boolean;
 };
 
-type CheckboxCardProps = {
-  item: PurposeItem;
-  handleChange: (labelText: string, checked: boolean) => void;
-  isChecked: (labelToCheck: string) => boolean;
-};
-
-const CheckboxCard = dynamic<CheckboxCardProps>(
+const CheckboxCard = dynamic<any>(
   () => import('@unpod/modules/AppIdentityAgentModule/CheckboxCard'),
   { ssr: false },
 );

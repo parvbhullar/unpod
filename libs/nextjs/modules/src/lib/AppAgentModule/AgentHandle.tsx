@@ -6,10 +6,11 @@ import {
 import { Typography } from 'antd';
 import AppCopyToClipboard from '@unpod/components/third-party/AppCopyToClipboard';
 import { MdOutlineLink } from 'react-icons/md';
+import type { Pilot } from '@unpod/constants/types';
 
 const { Text } = Typography;
 
-const AgentHandle = ({ agentData }: { agentData?: any }) => {
+const AgentHandle = ({ agentData }: { agentData: Pilot }) => {
   return (
     <StyledAgentHandle>
       {agentData?.handle && (

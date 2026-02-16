@@ -5,25 +5,24 @@ import { useOrgContext } from '@unpod/providers';
 import UserAvatar from '../../common/UserAvatar';
 import { useIntl } from 'react-intl';
 import type { DefaultOptionType } from 'antd/es/select';
+import type { InviteMember } from '@unpod/constants/types';
 
 type RoleOption = {
   key: string;
-  label: string;};
+  label: string;
+};
 
 type User = {
   email: string;
-  role_code: string;};
-
-type SharedUser = {
-  email: string;
-  role_code?: string;};
-
+  role_code: string;
+};
 
 type SharedUsersFormProps = {
   onAddUsers?: (users: User[]) => void;
   allowedRoles?: RoleOption[];
   defaultRole?: string;
-  selectedUsers?: SharedUser[];};
+  selectedUsers?: InviteMember[];
+};
 
 const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
   onAddUsers,

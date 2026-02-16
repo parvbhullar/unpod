@@ -1,3 +1,4 @@
+import type { FormInstance } from 'antd';
 import { Button, Flex, Form, Switch, Typography } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import {
@@ -25,14 +26,39 @@ import {
 import { useIntl } from 'react-intl';
 import { AppInput } from '@unpod/components/antd';
 import AppPhoneTagSelect from '@unpod/components/antd/AppPhoneTagSelect';
+import type { CallingTimeRange, Pilot } from '@unpod/constants/types';
 
 const { Item, useForm } = Form;
 const { Title, Text } = Typography;
 
 type AdvancedFormProps = {
-  agentData?: any;
+  agentData: Pilot;
   updateAgentData?: (data: FormData) => void;
-  headerForm?: any;
+  headerForm?: FormInstance;
+};
+
+type HandoverNumber = {
+  region?: string;
+  numbers?: string[];
+};
+
+export type AgentFormValues = {
+  enable_memory?: boolean;
+  enable_callback?: boolean;
+  notify_via_sms?: boolean;
+  enable_followup?: boolean;
+  followup_prompt?: string;
+  enable_handover?: boolean;
+  handover_number: HandoverNumber;
+  handover_prompt?: string;
+  handover_person_name?: string;
+  handover_person_role?: string;
+  instant_handover: boolean;
+  calling_days?: string[];
+  calling_time_ranges?: CallingTimeRange[];
+  number_of_words?: number;
+  voice_seconds?: number;
+  back_off_seconds?: number;
 };
 
 const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
@@ -43,7 +69,7 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
   const enable_followup = Form.useWatch('enable_followup', form);
   const enable_handover = Form.useWatch('enable_handover', form);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: AgentFormValues) => {
     const formData = new FormData();
     formData.append('type', agentData?.type || '');
     formData.append('enable_memory', String(values.enable_memory));
@@ -51,7 +77,7 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
     formData.append('notify_via_sms', String(values.notify_via_sms));
     formData.append('enable_followup', String(values.enable_followup));
 
-    if (enable_followup) {
+    if (enable_followup && values.followup_prompt) {
       formData.append('followup_prompt', values.followup_prompt);
     }
 
@@ -76,10 +102,12 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
     }
 
     if (values.calling_days && values.calling_time_ranges) {
-      const formattedRanges = values.calling_time_ranges.map((item: any) => ({
-        start: item.start?.format('HH:mm'),
-        end: item.end?.format('HH:mm'),
-      }));
+      const formattedRanges = values.calling_time_ranges.map(
+        (item: CallingTimeRange) => ({
+          start: item.start?.format('HH:mm'),
+          end: item.end?.format('HH:mm'),
+        }),
+      );
 
       formData.append('calling_days', JSON.stringify(values.calling_days));
       formData.append('calling_time_ranges', JSON.stringify(formattedRanges));
@@ -93,21 +121,21 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
     formData.append('voice_seconds', String(values.voice_seconds ?? 0));
     formData.append('back_off_seconds', String(values.back_off_seconds ?? 0));
 
-    const callbackHeadersMap = values.callback_headers
-      ? values.callback_headers.reduce(
-          (acc: Record<string, string>, item: any) => {
-            if (item.key && item.value) {
-              acc[item.key] = item.value;
-            }
-            return acc;
-          },
-          {},
-        )
-      : {};
-    formData.append('callback_headers', JSON.stringify(callbackHeadersMap));
-    if (values.callback_url) {
-      formData.append('callback_url', values.callback_url);
-    }
+    // const callbackHeadersMap = values.callback_headers
+    //   ? values.callback_headers.reduce(
+    //       (acc: Record<string, string>, item: any) => {
+    //         if (item.key && item.value) {
+    //           acc[item.key] = item.value;
+    //         }
+    //         return acc;
+    //       },
+    //       {},
+    //     )
+    //   : {};
+    // formData.append('callback_headers', JSON.stringify(callbackHeadersMap));
+    // if (values.callback_url) {
+    //   formData.append('callback_url', values.callback_url);
+    // }
 
     updateAgentData?.(formData);
   };
@@ -118,17 +146,15 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
     );
   };
 
-  const transformHeadersMapToArray = (headersMap?: Record<string, string>) => {
-    if (!headersMap) {
-      return [];
-    }
-    return Object.entries(headersMap).map(([key, value]) => ({
-      key: key,
-      value: value,
-    }));
-  };
-
-  console.log('handover_person_name', agentData);
+  // const transformHeadersMapToArray = (headersMap?: Record<string, string>) => {
+  //   if (!headersMap) {
+  //     return [];
+  //   }
+  //   return Object.entries(headersMap).map(([key, value]) => ({
+  //     key: key,
+  //     value: value,
+  //   }));
+  // };
 
   return (
     <Form
@@ -142,11 +168,11 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
         notify_via_sms: agentData?.notify_via_sms || false,
         enable_followup: agentData?.enable_followup || false,
         instant_handover: agentData?.instant_handover || false,
-        followup_prompt: agentData?.followup_prompt || '',
-        callback_headers: transformHeadersMapToArray(
-          agentData?.callback_headers,
-        ),
-        enable_handover: agentData?.enable_handover,
+        followup_prompt: agentData?.followup_prompt || false,
+        // callback_headers: transformHeadersMapToArray(
+        //   agentData?.callback_headers,
+        // ),
+        enable_handover: agentData?.enable_handover || false,
         handover_number: {
           region: agentData?.handover_number_cc || '+91',
           numbers: agentData?.handover_number
@@ -158,7 +184,7 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
         handover_prompt: agentData?.handover_prompt || '',
         handover_person_name: agentData?.handover_person_name || '',
         handover_person_role: agentData?.handover_person_role || '',
-        callback_url: agentData?.callback_url,
+        // callback_url: agentData?.callback_url,
         number_of_words: agentData?.number_of_words || 0,
         voice_seconds: agentData?.voice_seconds || 0,
         back_off_seconds: agentData?.back_off_seconds || 0,
@@ -167,8 +193,8 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
             ? agentData.calling_days
             : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         calling_time_ranges:
-          agentData?.calling_time_ranges?.length > 0
-            ? agentData.calling_time_ranges.map((item: any) => ({
+          (agentData?.calling_time_ranges?.length ?? 0) > 0
+            ? agentData.calling_time_ranges?.map((item: CallingTimeRange) => ({
                 start: dayjs(item.start, 'HH:mm'),
                 end: dayjs(item.end, 'HH:mm'),
               }))

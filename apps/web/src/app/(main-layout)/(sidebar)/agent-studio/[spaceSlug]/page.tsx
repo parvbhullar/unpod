@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getSpaceDetail } from '../actions';
 import type { PageProps } from '@/types/common';
 
-const AppSpaceModule = dynamic<Record<string, unknown>>(
+const AppSpaceModule = dynamic<any>(
   () => import('@unpod/modules/AppAgentModule'),
 );
 

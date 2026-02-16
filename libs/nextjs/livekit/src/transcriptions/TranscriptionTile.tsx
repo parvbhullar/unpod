@@ -9,13 +9,15 @@ import {
 import { LocalParticipant, Track } from 'livekit-client';
 
 type TranscriptionTileProps = {
-  agentAudioTrack: TrackReferenceOrPlaceholder;};
+  agentAudioTrack: TrackReferenceOrPlaceholder;
+};
 
 type ChatMessage = {
   name: string;
   message: string;
   timestamp: number;
-  isSelf: boolean;};
+  isSelf: boolean;
+};
 
 export const TranscriptionTile: React.FC<TranscriptionTileProps> = ({
   agentAudioTrack,

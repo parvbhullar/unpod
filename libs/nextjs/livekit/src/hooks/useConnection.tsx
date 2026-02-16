@@ -16,7 +16,8 @@ type ConnectionContextValue = {
   shouldConnect: boolean;
   mode: ConnectionMode;
   connect: (mode: ConnectionMode) => Promise<void>;
-  disconnect: () => Promise<void>;};
+  disconnect: () => Promise<void>;
+};
 
 const ConnectionContext = createContext<ConnectionContextValue | null>(null);
 
@@ -39,15 +40,12 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
       let token = '';
       let url = '';
 
-      console.log(
-        'process.env.NEXT_PUBLIC_LIVEKIT_URL',
-        process.env.NEXT_PUBLIC_LIVEKIT_URL,
-      );
+      console.log('process.env.LIVEKIT_URL', process.env.livekitUrl);
       if (mode === 'env') {
-        if (!process.env.NEXT_PUBLIC_LIVEKIT_URL) {
-          throw new Error('NEXT_PUBLIC_LIVEKIT_URL is not set');
+        if (!process.env.livekitUrl) {
+          throw new Error('LIVEKIT_URL is not set');
         }
-        url = process.env.NEXT_PUBLIC_LIVEKIT_URL;
+        url = process.env.livekitUrl;
         const params = new URLSearchParams();
         if (config.settings.room_name) {
           params.append('roomName', config.settings.room_name);

@@ -1,12 +1,7 @@
 import dynamic from 'next/dynamic';
 import type { PageProps } from '@/types/common';
 
-type AppSpaceModuleProps = {
-  tab: unknown;
-  id: unknown;
-};
-
-const AppSpaceModule = dynamic<AppSpaceModuleProps>(
+const AppSpaceModule = dynamic<any>(
   () => import('@unpod/modules/AppSpace/View'),
 );
 

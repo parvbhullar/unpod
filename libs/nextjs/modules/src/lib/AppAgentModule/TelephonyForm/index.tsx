@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Flex, Form, Select } from 'antd';
+import { Button, Flex, Form } from 'antd';
 import { MdOutlinePhoneEnabled } from 'react-icons/md';
 import { useGetDataApi, useInfoViewContext } from '@unpod/providers';
 import CardWrapper from '@unpod/components/common/CardWrapper';
@@ -11,37 +11,43 @@ import {
 import { SaveOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 import AppPhoneSelect from '@unpod/components/antd/AppPhoneSelect';
+import type { Pilot, TelephonyNumber } from '@unpod/constants/types';
 
 const { Item } = Form;
-const { Option } = Select;
 
 type TelephonyFormProps = {
-  agentData?: any;
+  agentData: Pilot;
   updateAgentData?: (data: FormData) => void;
-  headerForm?: any;
+};
+
+type TelephonyFormValues = {
+  phone_numbers: {
+    region: string;
+    numbers: string[];
+  };
 };
 
 const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
-  const [region, setRegion] = useState(agentData?.region || 'IN');
+  const [region, setRegion] = useState<string>(agentData?.region || 'IN');
   const { formatMessage } = useIntl();
 
   const infoViewContext = useInfoViewContext();
 
   const [{ loading, apiData: telephonyNumbers }, { setQueryParams }] =
-    useGetDataApi(
+    useGetDataApi<TelephonyNumber[]>(
       `core/telephony-numbers/`,
       { data: [] },
       { type: 'agent', region: region },
       true,
-    ) as any;
+    );
 
   useEffect(() => {
     setQueryParams({ type: 'agent', region: region });
   }, [region]);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: TelephonyFormValues) => {
     const selectedTelephonyObjects =
-      telephonyNumbers?.data?.filter((item: any) =>
+      telephonyNumbers?.data?.filter((item: TelephonyNumber) =>
         values.phone_numbers.numbers.includes(item.number),
       ) || [];
 
@@ -65,7 +71,7 @@ const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
           region: agentData?.region || 'IN',
           numbers:
             agentData?.telephony_config?.telephony?.map(
-              (item: any) => item.number,
+              (item: TelephonyNumber) => item.number,
             ) || [],
         },
       }}
@@ -95,16 +101,17 @@ const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
                 loading={loading}
                 mode="multiple"
                 suffixIcon={<MdOutlinePhoneEnabled fontSize={16} />}
-                onChange={(val: any) => {
+                onChange={(val: TelephonyFormValues['phone_numbers']) => {
                   setRegion(val?.region || 'IN');
                 }}
-              >
-                {telephonyNumbers?.data?.map((item: any) => (
-                  <Option key={item.number} value={item.number}>
-                    {item.number} {item.country && `(${item.country})`}
-                  </Option>
-                ))}
-              </AppPhoneSelect>
+                options={telephonyNumbers?.data?.map(
+                  (item: TelephonyNumber) => ({
+                    key: item.number,
+                    label: item.number,
+                    value: item.number,
+                  }),
+                )}
+              />
             </Item>
           </CardWrapper>
         </StyledMainContainer>

@@ -5,7 +5,7 @@ export const WidgetContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  background: white;
+  //background: white;
   width: 100%;
   min-height: 100%;
   max-height: 100%;

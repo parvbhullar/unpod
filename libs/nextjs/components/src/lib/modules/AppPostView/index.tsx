@@ -184,8 +184,7 @@ const AppPostView = ({
         </StyledAvatarWrapper>
         <StyledTitleContainer>
           <StyledPostTitle>
-            {process.env.appType === 'social' &&
-            post.post_type === POST_TYPE.ASK
+            {post.post_type === POST_TYPE.ASK
               ? post.content || post.title
               : post.title}
           </StyledPostTitle>
@@ -232,7 +231,6 @@ const AppPostView = ({
         <StyledContent>
           {post.content &&
             !(
-              process.env.appType === 'social' &&
               post.post_type === POST_TYPE.ASK
             ) && (
               <StyledContentWrapper>

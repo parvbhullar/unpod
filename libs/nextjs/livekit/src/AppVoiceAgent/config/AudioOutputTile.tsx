@@ -25,7 +25,7 @@ const StateOverlay = styled.div`
   color: #333333;
 
   text-transform: capitalize;
-  font-size: 24px;
+  font-size: 22px;
   background-color: #ffffff99;
   display: flex;
   justify-content: center;
@@ -34,12 +34,14 @@ const StateOverlay = styled.div`
 
 type AudioOutputTileConfig = {
   circular?: boolean;
-  agent?: Record<string, unknown>;};
+  agent?: Record<string, unknown>;
+};
 
 type AudioOutputTileProps = {
   trackRef?: TrackReferenceOrPlaceholder;
   state?: string;
-  config?: AudioOutputTileConfig;};
+  config?: AudioOutputTileConfig;
+};
 
 const AudioOutputTile: React.FC<AudioOutputTileProps> = ({
   trackRef,
@@ -61,7 +63,7 @@ const AudioOutputTile: React.FC<AudioOutputTileProps> = ({
     <AudioTileContainer>
       <BarVisualizer
         state={state}
-        barCount={45}
+        barCount={25}
         trackRef={trackRef}
         options={{ minHeight: 40, maxHeight: 70 }}
       />

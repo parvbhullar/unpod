@@ -28,7 +28,6 @@ import {
 export const httpLocalClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
-    AppType: process.env.appType,
     'Product-Id': process.env.productId,
   },
   // Use custom response transformer to capture raw data
@@ -43,7 +42,6 @@ export const httpClient: AxiosInstance = axios.create({
   baseURL: process.env.apiUrl,
   headers: {
     'Content-Type': 'application/json',
-    AppType: process.env.appType,
     'Product-Id': process.env.productId,
   },
   // Use custom response transformer to capture raw data

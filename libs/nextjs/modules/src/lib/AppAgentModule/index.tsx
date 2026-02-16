@@ -26,11 +26,12 @@ import IntegrationForm from './IntegrationForm';
 import TelephonyForm from './TelephonyForm';
 import Identity from './Identity';
 import { useIntl } from 'react-intl';
+import type { Pilot, Spaces } from '@unpod/constants/types';
 
 type AppAgentModuleProps = {
-  pilot?: any;
+  pilot: Pilot;
   isNew?: boolean;
-  currentSpace?: any;
+  currentSpace?: Spaces;
 };
 
 const AppAgentModule = ({
@@ -39,9 +40,9 @@ const AppAgentModule = ({
   currentSpace,
 }: AppAgentModuleProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { record, isNewRecord } = useAppModuleContext();
+  const { record, isNewRecord } = useAppModuleContext<Pilot>();
   const { setRecord, updateRecord, addNewRecord, setIsNewRecord } =
-    useAppModuleActionsContext();
+    useAppModuleActionsContext<Pilot>();
   const { formatMessage } = useIntl();
 
   const { isPageLoading, skeleton: Skeleton } = useSkeleton(
@@ -87,16 +88,14 @@ const AppAgentModule = ({
 
     const apiMethod = isNewRecord ? uploadPostDataApi : uploadPutDataApi;
 
-    apiMethod(
-      isNewRecord
-        ? `/core/pilots/`
-        : `core/pilots/${record?.handle}/`,
+    apiMethod<Pilot>(
+      isNewRecord ? `/core/pilots/` : `core/pilots/${record?.handle}/`,
       infoViewActionsContext,
       formData,
     )
-      .then((data: any) => {
+      .then((data) => {
         setRecord(data.data);
-        infoViewActionsContext.showMessage(data.message);
+        infoViewActionsContext.showMessage(data.message || 'Agent saved successfully');
         if (isNewRecord) {
           router.push(`/ai-studio/${data.data.handle}`);
           addNewRecord(data.data);
@@ -104,12 +103,12 @@ const AppAgentModule = ({
           updateRecord(data.data);
         }
       })
-      .catch((error: any) => {
+      .catch((error) => {
         infoViewActionsContext.showError(error.message);
       });
   };
 
-  const saveAgent = (agentData: any, state?: string) => {
+  const saveAgent = (agentData: Pilot, state?: string) => {
     const formData = new FormData();
     formData.append('name', agentData?.name || '');
     formData.append('type', agentData?.type || '');
@@ -136,7 +135,7 @@ const AppAgentModule = ({
         label: formatMessage({ id: 'aiStudio.identity' }),
         children: (
           <Identity
-            agentData={record}
+            agentData={record as Pilot}
             updateAgentData={updateAgentData}
             headerForm={form}
             hideNameField={true}
@@ -149,7 +148,7 @@ const AppAgentModule = ({
         disabled: isNewRecord,
         children: (
           <ModelForm
-            agentData={record}
+            agentData={record as Pilot}
             updateAgentData={updateAgentData}
             headerForm={form}
           />
@@ -165,7 +164,7 @@ const AppAgentModule = ({
           disabled: isNewRecord,
           children: (
             <VoiceForm
-              agentData={record}
+              agentData={record as Pilot}
               updateAgentData={updateAgentData}
               headerForm={form}
             />
@@ -177,9 +176,8 @@ const AppAgentModule = ({
           disabled: isNewRecord,
           children: (
             <TelephonyForm
-              agentData={record}
+              agentData={record as Pilot}
               updateAgentData={updateAgentData}
-              headerForm={form}
             />
           ),
         },
@@ -189,7 +187,7 @@ const AppAgentModule = ({
           disabled: isNewRecord,
           children: (
             <AdvancedForm
-              agentData={record}
+              agentData={record as Pilot}
               updateAgentData={updateAgentData}
               headerForm={form}
             />
@@ -211,7 +209,7 @@ const AppAgentModule = ({
         disabled: isNewRecord,
         children: (
           <AnalysisForm
-            agentData={record}
+            agentData={record as Pilot}
             updateAgentData={updateAgentData}
             headerForm={form}
           />
@@ -223,7 +221,7 @@ const AppAgentModule = ({
         disabled: isNewRecord,
         children: (
           <IntegrationForm
-            agentData={record}
+            agentData={record as Pilot}
             updateAgentData={updateAgentData}
             headerForm={form}
           />
@@ -242,7 +240,7 @@ const AppAgentModule = ({
   return (
     <StyledRoot>
       <AgentHeader
-        agentData={record}
+        agentData={record as Pilot}
         saveAgent={saveAgent}
         loading={infoViewContext.loading}
         form={form}

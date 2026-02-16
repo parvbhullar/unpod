@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const AppAgentModule = dynamic<Record<string, unknown>>(
+const AppAgentModule = dynamic<any>(
   () => import('@unpod/modules/AppAgentModule'),
 );
 

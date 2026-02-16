@@ -30,7 +30,8 @@ import {
 import { Button, Col } from 'antd';
 
 type PlaygroundProps = {
-  onConnect: (shouldConnect: boolean) => void;};
+  onConnect: (shouldConnect: boolean) => void;
+};
 
 const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
   const { config } = useConfig();

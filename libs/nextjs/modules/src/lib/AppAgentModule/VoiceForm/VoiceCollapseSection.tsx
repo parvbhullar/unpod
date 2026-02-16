@@ -1,13 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
-import {
-  Checkbox,
-  Collapse,
-  CollapseProps,
-  Flex,
-  Form,
-  Space,
-  Typography,
-} from 'antd';
+import type { CollapseProps, FormInstance } from 'antd';
+import { Checkbox, Collapse, Flex, Form, Space, Typography } from 'antd';
 import {
   ApiOutlined,
   AudioOutlined,
@@ -24,17 +17,23 @@ import TemperatureSlider from '../ModelForm/TemperatureSlider';
 import { StyledCollapseItemRow, StyledModelOption } from './index.styled';
 import AppTextArea from '@unpod/components/antd/AppTextArea';
 import { useIntl } from 'react-intl';
-import { ProviderModel, VoiceProfileLanguage } from '@unpod/constants';
+import {
+  Pilot,
+  ProviderModel,
+  ProviderModelVoice,
+  VoiceProfile,
+  VoiceProfileLanguage,
+} from '@unpod/constants/types';
 import { useGetDataApi } from '@unpod/providers';
 
 const { Text } = Typography;
 const { Item } = Form;
 
-interface VoiceCollapseSectionProps {
-  form: any;
-  agentData: any;
-  voiceProfile: any;
-}
+type VoiceCollapseSectionProps = {
+  form: FormInstance;
+  agentData: Pilot;
+  voiceProfile: VoiceProfile;
+};
 
 const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   agentData,
@@ -52,21 +51,21 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   const manualVoiceEnabled = Form.useWatch('manualVoiceId', form);
 
   const [{ apiData: modalProviderData, loading: providerLoading }] =
-    useGetDataApi(`core/providers/models/?model_type=LLM`, {
+    useGetDataApi<ProviderModel[]>(`core/providers/models/?model_type=LLM`, {
       data: [],
     });
-  const [{ apiData: providerTData, loading: providerTLoading }] = useGetDataApi(
-    `core/providers/models/?model_type=TRANSCRIBER`,
-    {
-      data: [],
-    },
-  );
-  const [{ apiData: providerVData, loading: providerVLoading }] = useGetDataApi(
-    `core/providers/models/?model_type=VOICE`,
-    {
-      data: [],
-    },
-  );
+
+  const [{ apiData: providerTData, loading: providerTLoading }] = useGetDataApi<
+    ProviderModel[]
+  >(`core/providers/models/?model_type=TRANSCRIBER`, {
+    data: [],
+  });
+
+  const [{ apiData: providerVData, loading: providerVLoading }] = useGetDataApi<
+    ProviderModel[]
+  >(`core/providers/models/?model_type=VOICE`, {
+    data: [],
+  });
 
   const [
     { apiData: llmModelData, loading: llmLoading },
@@ -122,7 +121,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
       );
       if (llmModelObj?.realtime_sts) {
         const llmProviderObj = providerVData?.data?.find(
-          (item: any) => item.id === llmProvider,
+          (item: ProviderModel) => item.id === llmProvider,
         );
 
         if (llmProviderObj) {
@@ -161,8 +160,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
       transcriberModelData?.data?.length &&
       voiceModelData?.data?.length
     ) {
-      const profile = voiceProfile?.data;
-      console.log('profile profile otherspace', profile);
+      const profile: VoiceProfile = voiceProfile?.data as VoiceProfile;
 
       form.setFieldsValue({
         transcriber_model: profile?.transcriber?.model,
@@ -297,6 +295,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
           </Item>
         </Fragment>
       ),
+      forceRender: true,
     },
 
     {
@@ -412,6 +411,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
           </Item>
         </Fragment>
       ),
+      forceRender: true,
     },
 
     {
@@ -442,7 +442,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               suffixIcon={<ApiOutlined />}
               loading={providerVLoading}
               onChange={onVoiceProviderChange}
-              options={providerVData?.data?.map((item: any) => ({
+              options={providerVData?.data?.map((item: ProviderModel) => ({
                 key: item.id,
                 value: item.id,
                 label: item.name,
@@ -469,7 +469,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               disabled={voiceModelData?.data?.length === 0}
               onChange={onVoiceModelChange}
               options={voiceModelData?.data?.map(
-                (item: any, index: number) => ({
+                (item: ProviderModel, index: number) => ({
                   key: index,
                   value: item.codename,
                   label: (
@@ -519,7 +519,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                   })}
                   suffixIcon={<AudioOutlined />}
                   disabled={voiceData?.length === 0}
-                  options={voiceData?.map((item: any) => ({
+                  options={voiceData?.map((item: ProviderModelVoice) => ({
                     key: item.code,
                     value: item.code,
                     label: item.name,
@@ -566,10 +566,13 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
           </Item>
         </Fragment>
       ),
+      forceRender: true,
     },
   ];
 
-  return <Collapse expandIconPlacement="end" items={items} />;
+  return (
+    <Collapse expandIconPlacement="end" items={items} />
+  );
 };
 
 export default VoiceCollapseSection;

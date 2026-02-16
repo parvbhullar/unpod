@@ -137,7 +137,8 @@ export type ScheduleOption = {
   key: string;
   title: string;
   date: string;
-  time: string;};
+  time: string;
+};
 
 /**
  * Get Schedule Options

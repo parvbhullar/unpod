@@ -12,7 +12,8 @@ import { SiGmail } from 'react-icons/si';
 export type ContentTypeItem = {
   id: string;
   name: string;
-  icon?: ReactNode;};
+  icon?: ReactNode;
+};
 
 export const contentTypeData: ContentTypeItem[] = [
   {
@@ -66,7 +67,8 @@ export const allowedFileTypes: Record<string, string> = {
 
 export type SpaceContentType = {
   id: string;
-  name: string;};
+  name: string;
+};
 
 export const SPACE_CONTENT_TYPES: SpaceContentType[] = [
   {
@@ -95,7 +97,8 @@ export type ContactSpaceField = {
   title: string;
   description: string;
   defaultValue: string;
-  required?: boolean;};
+  required?: boolean;
+};
 
 export const CONTACT_SPACE_FIELDS: ContactSpaceField[] = [
   {
@@ -154,7 +157,7 @@ export const CONNECTOR_ICONS: Record<string, ReactNode> = {
   gmail: <SiGmail fontSize={16} />,
 };
 
-export const SPACE_VISIBLE_CONTENT_TYPES = ['contact'] as const;
+export const SPACE_VISIBLE_CONTENT_TYPES = ['contact'];
 
 export type SpaceVisibleContentType =
   (typeof SPACE_VISIBLE_CONTENT_TYPES)[number];

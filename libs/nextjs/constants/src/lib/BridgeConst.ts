@@ -1,6 +1,7 @@
 export type CallStatusItem = {
   color: string;
-  label: string;};
+  label: string;
+};
 
 export const CALL_STATUS: Record<string, CallStatusItem> = {
   completed: { color: 'badge-success', label: 'callLogs.completed' },
@@ -15,7 +16,8 @@ export const CALL_STATUS: Record<string, CallStatusItem> = {
 };
 
 export type CallEndReasonItem = {
-  label: string;};
+  label: string;
+};
 
 export const CALL_END_REASONS: Record<string, CallEndReasonItem> = {
   'customer-ended-call': { label: 'Call Ended' },

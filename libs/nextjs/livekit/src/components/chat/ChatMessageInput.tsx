@@ -43,7 +43,8 @@ const HiddenInput = styled.span`
 type ChatMessageInputProps = {
   placeholder?: string;
   height?: number;
-  onSend?: (message: string) => void;};
+  onSend?: (message: string) => void;
+};
 
 export const ChatMessageInput: React.FC<ChatMessageInputProps> = ({
   placeholder,

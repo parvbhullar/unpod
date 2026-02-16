@@ -45,7 +45,9 @@ const ConfigureAgentModal = ({
   const router = useRouter();
   const listRef = useRef(null);
 
-  const [{ apiData, loading }, { setQueryParams, reCallAPI }] = useGetDataApi<Pilot[]>(
+  const [{ apiData, loading }, { setQueryParams, reCallAPI }] = useGetDataApi<
+    Pilot[]
+  >(
     'core/pilots/',
     { data: [] },
     {
@@ -53,7 +55,7 @@ const ConfigureAgentModal = ({
       page_size: 20,
       page: 1,
     },
-  )
+  );
 
   const updateAgentData = (formData: FormData, agentData: AgentData) => {
     const isLinked = agentData?.space?.slug === currentSpace?.slug;

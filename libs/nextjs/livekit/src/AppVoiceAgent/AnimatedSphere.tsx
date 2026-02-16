@@ -119,11 +119,14 @@ const WaveLayerWrapper = styled.div<{ size: number; $initialAngle?: number }>`
 `;
 
 // Animated wrapper for rotation
-const WaveLayerAnimated = styled.div<{ reverse?: boolean; $isReady?: boolean }>`
+const WaveLayerAnimated = styled.div<{
+  $reverse?: boolean;
+  $isReady?: boolean;
+}>`
   position: absolute;
   width: 100%;
   height: 100%;
-  animation: ${({ reverse }) => (reverse ? rotateReverse : rotate)} 17390s
+  animation: ${({ $reverse }) => ($reverse ? rotateReverse : rotate)} 17390s
     linear infinite;
   animation-play-state: ${({ $isReady }) => ($isReady ? 'running' : 'paused')};
   will-change: transform;
@@ -187,11 +190,13 @@ const TopHighlight = styled.div<{ size: number }>`
 type AnimatedSphereBreakpoints = {
   mobile?: number;
   tablet?: number;
-  desktop?: number;};
+  desktop?: number;
+};
 
 type AnimatedSphereProps = {
   size?: number;
-  breakpoints?: AnimatedSphereBreakpoints;};
+  breakpoints?: AnimatedSphereBreakpoints;
+};
 
 /**
  * AnimatedSphere Component
@@ -361,7 +366,7 @@ export const AnimatedSphere: React.FC<AnimatedSphereProps> = ({
 
       {/* Rotating wave layer 1 (Purple) - 15° initial angle */}
       <WaveLayerWrapper size={currentSize * 0.6} $initialAngle={15}>
-        <WaveLayerAnimated reverse={false} $isReady={isReady}>
+        <WaveLayerAnimated $reverse={false} $isReady={isReady}>
           <WaveLayerPulse $isReady={isReady}>
             <canvas
               ref={waveCanvas1Ref}
@@ -377,7 +382,7 @@ export const AnimatedSphere: React.FC<AnimatedSphereProps> = ({
 
       {/* Rotating wave layer 2 (Blue-Purple) - 30° initial angle (15° offset from first) */}
       <WaveLayerWrapper size={currentSize * 0.55} $initialAngle={30}>
-        <WaveLayerAnimated reverse={true} $isReady={isReady}>
+        <WaveLayerAnimated $reverse={true} $isReady={isReady}>
           <WaveLayerPulse $isReady={isReady}>
             <canvas
               ref={waveCanvas2Ref}

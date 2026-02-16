@@ -16,8 +16,9 @@ import {
   StyledTitleWrapper,
 } from './index.styled';
 import { useIntl } from 'react-intl';
-import type { Spaces } from '@unpod/constants/types';
+import type { KnowledgeBase } from '@unpod/constants/types';
 import GenerateEvalButton from '../../../modules/GenerateEvalButton/GenerateEvalButton';
+import { AppStatusBadge } from '../../AppStatusBadge';
 
 const { Text, Title } = Typography;
 
@@ -49,12 +50,13 @@ const TYPE_COLORS = {
 };
 
 type GridItemProps = {
-  data: Spaces;
-  onCardClick: (item: Spaces) => void;
+  data: KnowledgeBase;
+  onCardClick: (item: KnowledgeBase) => void;
   type?: string;
+  reCallAPI: () => void;
 };
 
-const GridItem = ({ data, onCardClick, type }: GridItemProps) => {
+const GridItem = ({ data, onCardClick, type, reCallAPI }: GridItemProps) => {
   const iconComponent =
     CONTENT_TYPE_ICONS[data.content_type as keyof typeof CONTENT_TYPE_ICONS] ??
     CONTENT_TYPE_ICONS.document;
@@ -82,12 +84,24 @@ const GridItem = ({ data, onCardClick, type }: GridItemProps) => {
             : null}
         </StyledIconCircle>
 
-        {type === 'kb' && (
+        {type === 'kb' && data.content_type !== 'evals' && (
           <EvalButtonWrapper>
-            <GenerateEvalButton
-              type="Knowledgebase"
-              token={data.token}
-            />
+            {data?.evals_info?.gen_status !== 'pending' ||
+            data?.evals_info?.gen_status === undefined ? (
+              <GenerateEvalButton
+                token={data.token}
+                force={data.has_evals as boolean}
+                text={
+                  data.has_evals ? 'common.refresh' : 'common.generateEvals'
+                }
+                reCallAPI={reCallAPI}
+              />
+            ) : (
+              <AppStatusBadge
+                status={data?.evals_info?.gen_status}
+                name={data?.evals_info?.gen_status}
+              />
+            )}
           </EvalButtonWrapper>
         )}
       </Flex>

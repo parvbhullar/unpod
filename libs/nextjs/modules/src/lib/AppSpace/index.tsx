@@ -12,9 +12,8 @@ import { FiPlus } from 'react-icons/fi';
 import { useIntl } from 'react-intl';
 
 const AppSpaceRoot = () => {
-  const [addNew, setAddNew] = useState(false);
+  const [addNew, setAddNew] = useState<boolean>(false);
   const { formatMessage } = useIntl();
-  const AppSpaceHeaderMenusAny = AppSpaceHeaderMenus as any;
 
   return (
     <Fragment>
@@ -23,10 +22,7 @@ const AppSpaceRoot = () => {
         hideAuthBtn
         isListingPage={false}
         pageTitle={
-          <AppSpaceHeaderMenusAny
-            addNew={addNew}
-            setAddNew={setAddNew}
-          />
+          <AppSpaceHeaderMenus addNew={addNew} setAddNew={setAddNew} />
         }
         rightOptions={
           <AppHeaderButton

@@ -3,7 +3,7 @@ import type { PageProps } from '@/types/common';
 
 import { getPilot } from './actions';
 
-const AppAgentModule = dynamic<Record<string, unknown>>(
+const AppAgentModule = dynamic<any>(
   () => import('@unpod/modules/AppAgentModule'),
 );
 export async function generateMetadata({

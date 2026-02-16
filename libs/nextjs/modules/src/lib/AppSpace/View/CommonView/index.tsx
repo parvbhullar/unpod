@@ -13,13 +13,11 @@ const CommonView = ({
   queryRef?: any;
   onDataSaved: (data?: any) => void;
 }) => {
-  const AppSpaceHeaderMenusAny = AppSpaceHeaderMenus as any;
-  const AppQueryWindowAny = AppQueryWindow as any;
   return (
     <Fragment>
       <PageHeader
         pageTitle={
-          <AppSpaceHeaderMenusAny
+          <AppSpaceHeaderMenus
             setAddNew={() => null}
             isContentHeader
             // breadcrumb={breadcrumb}
@@ -28,7 +26,7 @@ const CommonView = ({
       />
       <AppPageContainer>
         <StyledContainer>
-          <AppQueryWindowAny
+          <AppQueryWindow
             ref={queryRef}
             pilotPopover
             onDataSaved={onDataSaved}

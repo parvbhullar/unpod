@@ -4,7 +4,8 @@ export const AskAttachmentTypes =
 
 export type PaymentConfigType = {
   RAZORPAY_KEY_ID: string;
-  CURRENCY: string;};
+  CURRENCY: string;
+};
 
 export const PaymentConfig: PaymentConfigType = {
   RAZORPAY_KEY_ID: 'rzp_test_y6dtiSmMIHTUfd',
@@ -13,7 +14,8 @@ export const PaymentConfig: PaymentConfigType = {
 };
 
 export type MediaQueryConfig = {
-  query: string;};
+  query: string;
+};
 
 export const TabWidthQuery: MediaQueryConfig = { query: '(max-width: 768px)' };
 export const MobileWidthQuery: MediaQueryConfig = {

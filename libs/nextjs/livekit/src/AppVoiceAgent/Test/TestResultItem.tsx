@@ -11,6 +11,7 @@ import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
 import { AiOutlineLineChart } from 'react-icons/ai';
 import { FaFileAlt, FaPhone, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
 import AppList from '@unpod/components/common/AppList';
+import { StatusColor, TestStatus } from './PreviousTests';
 
 const { Text, Paragraph } = Typography;
 
@@ -43,6 +44,12 @@ const getIcon = (type: string | null) => {
   }
 };
 
+const statusColors: Record<TestStatus, StatusColor> = {
+  passed: { label: 'Passed', color: 'badge-success' },
+  failed: { label: 'Failed', color: 'badge-error' },
+  partial: { label: 'Partial', color: 'badge-warning' },
+};
+
 type Field = {
   label: string;
   value: string | number | null | undefined;
@@ -64,15 +71,11 @@ const TestResultItem = ({ item }: TestResultItemProps) => {
   return (
     <TestCard>
       <TestInfo>
-        <StyledFlex
-          justify="space-between"
-          align="center"
-          $mb={12}
-        >
+        <StyledFlex justify="space-between" align="center" $mb={12}>
           <Text strong>TestResult #0{item?.test_case_index}</Text>
           <AppStatusBadge
-            status={item?.passed === true ? 'badge-success' : 'badge-error'}
-            name={item?.passed === true ? 'Passed' : 'Failed'}
+            status={item?.passed ? 'passed' : 'failed'}
+            statusColors={statusColors}
             size="small"
             shape="round"
           />

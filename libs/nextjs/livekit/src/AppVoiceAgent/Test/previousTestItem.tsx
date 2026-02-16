@@ -110,7 +110,7 @@ const PreviousTestItem = ({ item, statusColors }: PreviousTestItemProps) => {
             <AppList
               data={visibleItems || []}
               renderItem={(item: TestResultProps) => (
-                <TestResultItem item={item} />
+                <TestResultItem item={item}  />
               )}
               onEndReached={loadMoreItems}
               footerProps={{

@@ -358,7 +358,11 @@ export const getPostAllowedRoles = (
   return roleList;
 };
 
-export const getPostIcon = (key = 'public', size = 16, className = ''): ReactNode => {
+export const getPostIcon = (
+  key = 'public',
+  size = 16,
+  className = '',
+): ReactNode => {
   switch (key) {
     case 'private':
       return <MdLockOutline fontSize={size} className={className} />;

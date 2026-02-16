@@ -7,7 +7,8 @@ import Button from '../../components/Button';
 import { FiMic, FiMicOff } from 'react-icons/fi';
 
 type TrackToggleProps = UseTrackToggleProps<any> & {
-  children?: ReactNode;};
+  children?: ReactNode;
+};
 
 export const TrackToggle: React.FC<TrackToggleProps> = (props) => {
   const { buttonProps, enabled } = useTrackToggle(props);

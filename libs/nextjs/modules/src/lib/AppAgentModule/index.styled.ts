@@ -3,6 +3,11 @@ import { Button, Segmented, Typography } from 'antd';
 
 const { Title } = Typography;
 
+type ToggleButtonProps = {
+  active?: boolean;
+  disabled?: boolean;
+}
+
 export const StyledRoot = styled.div`
   background-color: ${({ theme }) => theme.palette.background.default};
   border-radius: 8px;
@@ -219,7 +224,6 @@ export const StyledAgentRoot = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh !important;
 `;
 
 export const StyledDrawerWrapper = styled.div`
@@ -292,7 +296,7 @@ export const StyledTabRoot = styled.div`
   scrollbar-width: thin;
   height: calc(100vh - 210px);
   overflow-y: auto;
-  padding: 14px;
+  padding: 0 14px;
   overflow-x: hidden;
 `;
 
@@ -303,5 +307,23 @@ export const StyledMainContainer = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
     width: 100%;
+  }
+`;
+
+export const ToggleButton = styled.span<ToggleButtonProps>`
+  background: ${({ active }) => (active ? '#6c47ff' : 'transparent')};
+  color: ${({ active }) => (active ? '#fff' : '#888')};
+  padding: 4px 16px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  transition: background 0.2s;
+  user-select: none;
+
+  svg {
+    margin-right: 8px;
   }
 `;

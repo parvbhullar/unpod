@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import {
   StyledHeaderActions,
@@ -161,8 +161,6 @@ type EntityHeaderProps = {
   taskCallButton?: ReactNode;
 };
 
-const AppSpaceHeaderMenusAny = AppSpaceHeaderMenus as ComponentType<any>;
-
 const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
   const [addNew, setAddNew] = useState(false);
   const {
@@ -231,8 +229,7 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
             </Flex>
           </Flex>
         ) : (
-          <AppSpaceHeaderMenusAny
-            currentSpace={currentSpace}
+          <AppSpaceHeaderMenus
             addNew={addNew}
             setAddNew={setAddNew}
             isContentHeader={false}

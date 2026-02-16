@@ -23,9 +23,7 @@ import AnimatedSphere from '@unpod/livekit/AppVoiceAgent/AnimatedSphere'; // imp
 // import { UnpodLogoAnimation } from '@unpod/components';
 
 const Conversation = () => {
-  const {
-    setActiveConversation,
-  } = useAppSpaceActionsContext();
+  const { setActiveConversation } = useAppSpaceActionsContext();
   const {
     activeConversation,
     currentSpace,

@@ -5,21 +5,11 @@ import {
 } from '@unpod/providers';
 import AppList from '@unpod/components/common/AppList';
 import { AppDocumentsSkeleton } from '@unpod/skeleton/AppDocumentsSkeleton';
-import CallItem from './CallItem';
+import CallItem from './Item';
 import SubHeader from './SubHeader';
 import { StyledSearchBoxWrapper } from './index.styled';
 import { getUtcTimestamp } from '@unpod/helpers/DateHelper';
 import type { Dayjs } from 'dayjs';
-import type { Call } from '@unpod/constants/types';
-
-type CallsDataState = {
-  apiData?: Call[];
-  extraData?: { count?: number };
-  loading?: boolean;
-  isLoadingMore?: boolean;
-  page?: number;
-  hasMoreRecord?: boolean;
-};
 
 type FiltersState = {
   call_type?: string;
@@ -43,14 +33,7 @@ const Call = () => {
     isLoadingMore = false,
     page = 1,
     hasMoreRecord = false,
-  } = (callsData as CallsDataState) || {};
-  const typedCallsActions = callsActions as {
-    setLoadingMore: (value: boolean) => void;
-    updateInitialUrl: (url: string) => void;
-    setQueryParams: (params: Record<string, unknown>) => void;
-    setAllowApiCall: (value: boolean) => void;
-    setPage: (value: number) => void;
-  };
+  } = callsData;
 
   const records = apiData || [];
   const selectedDocIds = (selectedDocs as Array<string | number>) ?? [];
@@ -66,7 +49,7 @@ const Call = () => {
   }, [selectedDocIds, records]);
 
   useEffect(() => {
-    typedCallsActions.setQueryParams({
+    callsActions.setQueryParams({
       search: search || undefined,
       call_type: filters?.call_type === 'all' ? undefined : filters?.call_type,
       status:
@@ -88,10 +71,8 @@ const Call = () => {
   // Update API URL when filters or search changes
   useEffect(() => {
     if (currentSpace?.token) {
-      typedCallsActions.setAllowApiCall(true);
-      typedCallsActions.updateInitialUrl(
-        `tasks/space-task/${currentSpace?.token}/`,
-      );
+      callsActions.setAllowApiCall(true);
+      callsActions.updateInitialUrl(`spaces/${currentSpace?.slug}/calls/`);
     }
   }, [currentSpace?.token]);
 
@@ -105,8 +86,8 @@ const Call = () => {
 
   const onEndReached = () => {
     if (hasMoreRecord && !isLoadingMore) {
-      typedCallsActions.setLoadingMore(true);
-      typedCallsActions.setPage(page + 1);
+      callsActions.setLoadingMore(true);
+      callsActions.setPage(page + 1);
     }
   };
 
@@ -134,9 +115,7 @@ const Call = () => {
         data={apiData}
         initialLoader={<AppDocumentsSkeleton time={true} />}
         loading={loading}
-        renderItem={(data, index) => (
-          <CallItem key={index} data={data as Call} />
-        )}
+        renderItem={(data, index) => <CallItem key={index} data={data} />}
         onEndReached={onEndReached}
         footerProps={{
           loading: isLoadingMore,

@@ -5,8 +5,9 @@ import type {
   AppSpaceContextProviderProps,
   AppSpaceContextType,
   Call,
-  ConversationsHandle,
+  CallItem,
   Conversation,
+  ConversationsHandle,
   Document,
   NotesHandle,
   PathData,
@@ -48,7 +49,7 @@ const emptyConversationDataState: UsePaginatedDataState<Conversation[]> = {
   hasMoreRecord: false,
 };
 
-const emptyCallsDataState: UsePaginatedDataState<Call[]> = {
+const emptyCallsDataState: UsePaginatedDataState<CallItem[]> = {
   loading: false,
   apiData: [],
   extraData: {},
@@ -187,6 +188,18 @@ export const AppSpaceContextProvider: React.FC<
               .catch((error: { message: string }) => {
                 infoViewActionsContext.showError(error.message);
               });
+        } else if (pathData.tab === 'call') {
+          if (!activeDocument || activeDocument?.document_id !== pathData.id)
+            getDataApi<Call>(
+              `spaces/${currentSpace?.slug}/calls/${pathData.id}/`,
+              infoViewActionsContext,
+            )
+              .then((data) => {
+                setActiveCall(data.data);
+              })
+              .catch((error: { message: string }) => {
+                infoViewActionsContext.showError(error.message);
+              });
         } else if (pathData.tab === 'chat' || pathData.tab === 'note') {
           if (pathData.tab === 'chat') setActiveConversation(null);
           else if (pathData.tab === 'note') setActiveNote(null);
@@ -251,8 +264,8 @@ export const AppSpaceContextProvider: React.FC<
     false,
   );
 
-  const [callsData, callsActions] = usePaginatedDataApi<Call[]>(
-    `tasks/space-task/${currentSpace?.token}/`,
+  const [callsData, callsActions] = usePaginatedDataApi<CallItem[]>(
+    `spaces/${currentSpace?.slug}/calls/`,
     [],
     {
       page_size: 50,
@@ -260,15 +273,11 @@ export const AppSpaceContextProvider: React.FC<
     false,
     false,
     false,
-    (data: Call[]) => {
-      if (!activeCall && data?.length)
-        setActiveCall(
-          data?.filter((item) => item.task_id === pathData.id)[0] || null,
-        );
-    },
   );
 
-  const [connectorData, connectorActions] = usePaginatedConnectorDataApi<Document[]>(
+  const [connectorData, connectorActions] = usePaginatedConnectorDataApi<
+    Document[]
+  >(
     `knowledge_base/${currentSpace?.token}/connector-data/`,
     [],
     {

@@ -26,7 +26,8 @@ type AppPageHeaderProps = {
   isListingPage?: boolean;
   hideToggleBtn?: boolean;
   hideAuthBtn?: boolean;
-  children?: React.ReactNode;};
+  children?: React.ReactNode;
+};
 
 const AppPageHeader: React.FC<AppPageHeaderProps> = ({
   leftOptions,
