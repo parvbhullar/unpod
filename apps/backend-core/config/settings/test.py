@@ -27,3 +27,5 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+BASE_URL = "http://localhost:8000"
+BASE_FRONTEND_URL = "http://localhost:3000"

@@ -591,19 +591,6 @@ LMNT_API_KEY = env("LMNT_API_KEY", default="")
 SARVAM_API_KEY = env("SARVAM_API_KEY", default="")
 INWORLD_API_KEY = env("INWORLD_API_KEY", default="")
 
-# Django-Q2 Configuration (Replacement for django_cron)
-# ------------------------------------------------------------------------------
-Q_CLUSTER = {
-    "name": "unpod",
-    "workers": 4,
-    "recycle": 500,
-    "timeout": 300,
-    "retry": 360,
-    "queue_limit": 50,
-    "bulk": 10,
-    "orm": "default",  # Use default database
-}
-
 # SSE (Server-Sent Events) Configuration
 # ------------------------------------------------------------------------------
 SSE_HEARTBEAT_INTERVAL = env.int("SSE_HEARTBEAT_INTERVAL", default=30)  # seconds

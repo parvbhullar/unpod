@@ -9,8 +9,21 @@ from unpod.common.helpers.checksum_helper import (
     get_current_timestamp,
     is_timestamp_valid,
     should_skip_checksum,
-    extract_request_body,
+    get_relative_url,
 )
+
+
+class TestGetRelativeUrl:
+    """Test URL prefix stripping"""
+
+    def test_strip_v1_prefix(self):
+        assert get_relative_url("/api/v1/auth/login/") == "auth/login/"
+
+    def test_strip_v1_prefix_no_trailing_slash(self):
+        assert get_relative_url("/api/v1/agents") == "agents"
+
+    def test_no_prefix(self):
+        assert get_relative_url("/other/path/") == "other/path/"
 
 
 class TestChecksumGeneration:
@@ -22,7 +35,7 @@ class TestChecksumGeneration:
         timestamp = "2026-01-21T10:00:00Z"
         secret = "test-secret-key"
 
-        checksum = generate_checksum(data, timestamp, secret)
+        checksum = generate_checksum("POST", "users/", data, timestamp, secret)
 
         assert checksum is not None
         assert isinstance(checksum, str)
@@ -34,7 +47,7 @@ class TestChecksumGeneration:
         timestamp = "2026-01-21T10:00:00Z"
         secret = "test-secret-key"
 
-        checksum = generate_checksum(data, timestamp, secret)
+        checksum = generate_checksum("POST", "users/", data, timestamp, secret)
 
         assert checksum is not None
         assert isinstance(checksum, str)
@@ -46,7 +59,7 @@ class TestChecksumGeneration:
         timestamp = "2026-01-21T10:00:00Z"
         secret = "test-secret-key"
 
-        checksum = generate_checksum(data, timestamp, secret)
+        checksum = generate_checksum("POST", "users/", data, timestamp, secret)
 
         assert checksum is not None
         assert isinstance(checksum, str)
@@ -58,8 +71,8 @@ class TestChecksumGeneration:
         timestamp = "2026-01-21T10:00:00Z"
         secret = "test-secret-key"
 
-        checksum1 = generate_checksum(data, timestamp, secret)
-        checksum2 = generate_checksum(data, timestamp, secret)
+        checksum1 = generate_checksum("POST", "users/", data, timestamp, secret)
+        checksum2 = generate_checksum("POST", "users/", data, timestamp, secret)
 
         assert checksum1 == checksum2
 
@@ -68,8 +81,8 @@ class TestChecksumGeneration:
         data = {"test": "data"}
         timestamp = "2026-01-21T10:00:00Z"
 
-        checksum1 = generate_checksum(data, timestamp, "secret1")
-        checksum2 = generate_checksum(data, timestamp, "secret2")
+        checksum1 = generate_checksum("POST", "users/", data, timestamp, "secret1")
+        checksum2 = generate_checksum("POST", "users/", data, timestamp, "secret2")
 
         assert checksum1 != checksum2
 
@@ -83,8 +96,8 @@ class TestChecksumValidation:
         timestamp = "2026-01-21T10:00:00Z"
         secret = "test-secret-key"
 
-        checksum = generate_checksum(data, timestamp, secret)
-        is_valid = validate_checksum(data, timestamp, checksum, secret)
+        checksum = generate_checksum("POST", "users/", data, timestamp, secret)
+        is_valid = validate_checksum("POST", "users/", data, timestamp, checksum, secret)
 
         assert is_valid is True
 
@@ -95,7 +108,7 @@ class TestChecksumValidation:
         secret = "test-secret-key"
 
         checksum = "invalid-checksum-value"
-        is_valid = validate_checksum(data, timestamp, checksum, secret)
+        is_valid = validate_checksum("POST", "users/", data, timestamp, checksum, secret)
 
         assert is_valid is False
 
@@ -104,8 +117,8 @@ class TestChecksumValidation:
         data = {"test": "data"}
         timestamp = "2026-01-21T10:00:00Z"
 
-        checksum = generate_checksum(data, timestamp, "secret1")
-        is_valid = validate_checksum(data, timestamp, checksum, "secret2")
+        checksum = generate_checksum("POST", "users/", data, timestamp, "secret1")
+        is_valid = validate_checksum("POST", "users/", data, timestamp, checksum, "secret2")
 
         assert is_valid is False
 
@@ -116,8 +129,8 @@ class TestChecksumValidation:
         timestamp = "2026-01-21T10:00:00Z"
         secret = "test-secret-key"
 
-        checksum = generate_checksum(original_data, timestamp, secret)
-        is_valid = validate_checksum(tampered_data, timestamp, checksum, secret)
+        checksum = generate_checksum("POST", "users/", original_data, timestamp, secret)
+        is_valid = validate_checksum("POST", "users/", tampered_data, timestamp, checksum, secret)
 
         assert is_valid is False
 
@@ -126,9 +139,9 @@ class TestChecksumValidation:
         data = {"test": "data"}
         secret = "test-secret-key"
 
-        assert validate_checksum(data, "", "checksum", secret) is False
-        assert validate_checksum(data, "timestamp", "", secret) is False
-        assert validate_checksum(data, "timestamp", "checksum", "") is False
+        assert validate_checksum("POST", "users/", data, "", "checksum", secret) is False
+        assert validate_checksum("POST", "users/", data, "timestamp", "", secret) is False
+        assert validate_checksum("POST", "users/", data, "timestamp", "checksum", "") is False
 
 
 class TestTimestampValidation:
@@ -193,45 +206,31 @@ class TestTimestampValidation:
 class TestShouldSkipChecksum:
     """Test checksum skip logic for specific paths"""
 
-    def test_should_skip_get_requests(self):
-        """Test that GET requests are skipped"""
-        assert should_skip_checksum("/api/v1/users/", "GET") is True
-
-    def test_should_not_skip_post_requests(self):
-        """Test that POST requests are not skipped"""
-        assert should_skip_checksum("/api/v1/users/", "POST") is False
-
-    def test_should_skip_file_upload_paths(self):
-        """Test that file upload paths are skipped"""
-        assert should_skip_checksum("/api/v1/media/upload/", "POST") is True
-        assert should_skip_checksum("/api/v1/documents/create/", "POST") is True
-
     def test_should_skip_admin_paths(self):
         """Test that admin paths are skipped"""
         assert should_skip_checksum("/admin/users/", "POST") is True
         assert should_skip_checksum("/admin/", "GET") is True
+
+    def test_should_skip_unpod_admin_paths(self):
+        """Test that unpod-admin paths are skipped"""
+        assert should_skip_checksum("/unpod-admin/", "GET") is True
 
     def test_should_skip_static_paths(self):
         """Test that static/media paths are skipped"""
         assert should_skip_checksum("/static/css/style.css", "GET") is True
         assert should_skip_checksum("/media/images/photo.jpg", "GET") is True
 
+    def test_should_skip_health_check(self):
+        """Test that health check paths are skipped"""
+        assert should_skip_checksum("/health/", "GET") is True
+
+    def test_should_skip_multipart_form_data(self):
+        """Test that multipart/form-data POST requests are skipped"""
+        assert should_skip_checksum("/api/v1/upload/", "POST", "multipart/form-data; boundary=---") is True
+
     def test_should_not_skip_api_paths(self):
         """Test that regular API paths are not skipped"""
         assert should_skip_checksum("/api/v1/threads/", "POST") is False
-
-
-class TestExtractRequestBody:
-    """Test request body extraction"""
-
-    def test_extract_request_body_json(self):
-        """Test extracting JSON request body"""
-        # This would need a mock Django request object
-        # For now, just test that the function exists and handles None
-        body, is_json = extract_request_body(None)
-
-        assert body is None
-        assert is_json is False
 
 
 class TestEndToEndChecksum:
@@ -239,7 +238,6 @@ class TestEndToEndChecksum:
 
     def test_full_checksum_flow(self):
         """Test complete checksum generation and validation flow"""
-        # Simulate request data
         request_data = {
             "user": "test_user",
             "action": "create_post",
@@ -251,10 +249,10 @@ class TestEndToEndChecksum:
         timestamp = get_current_timestamp()
 
         # 2. Generate checksum (frontend would do this)
-        checksum = generate_checksum(request_data, timestamp, secret)
+        checksum = generate_checksum("POST", "threads/", request_data, timestamp, secret)
 
         # 3. Validate checksum (backend would do this)
-        is_valid = validate_checksum(request_data, timestamp, checksum, secret)
+        is_valid = validate_checksum("POST", "threads/", request_data, timestamp, checksum, secret)
 
         assert is_valid is True
 
@@ -268,10 +266,10 @@ class TestEndToEndChecksum:
         old_timestamp = old_time.isoformat() + "Z"
 
         # Generate checksum with old timestamp
-        checksum = generate_checksum(request_data, old_timestamp, secret)
+        checksum = generate_checksum("POST", "users/", request_data, old_timestamp, secret)
 
         # Checksum is valid...
-        assert validate_checksum(request_data, old_timestamp, checksum, secret) is True
+        assert validate_checksum("POST", "users/", request_data, old_timestamp, checksum, secret) is True
 
         # ...but timestamp is expired
         assert is_timestamp_valid(old_timestamp, max_age_seconds=300) is False
@@ -283,12 +281,12 @@ class TestEndToEndChecksum:
         timestamp = get_current_timestamp()
 
         # Generate checksum for original data
-        checksum = generate_checksum(original_data, timestamp, secret)
+        checksum = generate_checksum("POST", "payments/", original_data, timestamp, secret)
 
         # Attacker modifies the data
         tampered_data = {"amount": 1000, "recipient": "attacker"}
 
         # Validation should fail
-        is_valid = validate_checksum(tampered_data, timestamp, checksum, secret)
+        is_valid = validate_checksum("POST", "payments/", tampered_data, timestamp, checksum, secret)
 
         assert is_valid is False

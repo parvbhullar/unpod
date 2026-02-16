@@ -4,15 +4,15 @@ Module for all Form Tests.
 import pytest
 from django.utils.translation import gettext_lazy as _
 
-from unpod.users.forms import UserAdminCreationForm
+from unpod.users.forms import UserCreationForm
 from unpod.users.models import User
 
 pytestmark = pytest.mark.django_db
 
 
-class TestUserAdminCreationForm:
+class TestUserCreationForm:
     """
-    Test class for all tests related to the UserAdminCreationForm
+    Test class for all tests related to the UserCreationForm
     """
 
     def test_username_validation_error_msg(self, user: User):
@@ -25,7 +25,7 @@ class TestUserAdminCreationForm:
 
         # The user already exists,
         # hence cannot be created.
-        form = UserAdminCreationForm(
+        form = UserCreationForm(
             {
                 "username": user.username,
                 "password1": user.password,

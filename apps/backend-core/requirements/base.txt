@@ -30,6 +30,11 @@ djangorestframework-simplejwt==5.5.1  # https://github.com/jazzband/djangorestfr
 # DRF-spectacular for API documentation
 drf-spectacular==0.29.0  # https://github.com/tfranzel/drf-spectacular
 
+# HTTP Clients
+# ------------------------------------------------------------------------------
+requests==2.32.5  # https://github.com/psf/requests
+aiohttp==3.13.3  # https://github.com/aio-libs/aiohttp (Prefect integration)
+
 # Utilities
 # ------------------------------------------------------------------------------
 emoji==2.15.0
@@ -40,6 +45,7 @@ google-auth-oauthlib==1.2.4
 markdown==3.10.1
 msal==1.34.0
 mux-python==5.1.2
+python-dateutil==2.9.0.post0  # https://github.com/dateutil/dateutil
 
 # Data & Analytics
 # ------------------------------------------------------------------------------
@@ -75,3 +81,19 @@ sendgrid==6.12.5
 # Messaging
 # ------------------------------------------------------------------------------
 kafka-python-ng==2.2.3
+
+# Production Server
+# ------------------------------------------------------------------------------
+gunicorn==25.1.0  # https://github.com/benoitc/gunicorn
+
+# Testing
+# ------------------------------------------------------------------------------
+pytest==9.0.2  # https://github.com/pytest-dev/pytest
+pytest-django==4.12.0  # https://github.com/pytest-dev/pytest-django
+factory-boy==3.3.3  # https://github.com/FactoryBoy/factory_boy
+
+# Dev/CI Tools
+# ------------------------------------------------------------------------------
+django-stubs==5.2.9  # https://github.com/typeddjango/django-stubs (mypy plugin)
+djangorestframework-stubs==3.16.8  # https://github.com/typeddjango/djangorestframework-stubs
+django-coverage-plugin==3.2.0  # https://github.com/nedbat/django_coverage_plugin
