@@ -5,7 +5,6 @@ import Documents from './Documents';
 import { SpaceSkeleton } from '@unpod/skeleton';
 import Tasks from './Tasks';
 import Dashboard from './Dashboard';
-import Conversation from './Conversation';
 import CallLogs from './Calls';
 
 const Content = ({
@@ -22,7 +21,6 @@ const Content = ({
   dashboardRef: any;
 }) => {
   const { activeTab, currentSpace, notesRef } = useAppSpaceContext();
-  const ConversationAny = Conversation as any;
   const DashboardAny = Dashboard as any;
   const TasksAny = Tasks as any;
 
@@ -44,24 +42,6 @@ const Content = ({
         {activeTab === 'doc' && <Documents />}
       </StyledTabContent>
 
-      {activeTab ? (
-        <StyledTabContent
-          className={clsx({
-            active: activeTab === 'chat',
-          })}
-        >
-          {activeTab === 'chat' && (
-            <ConversationAny
-              onNoteSaved={() => {
-                notesRef?.current?.refreshData?.();
-                onTabChange('note');
-              }}
-            />
-          )}
-        </StyledTabContent>
-      ) : (
-        <SpaceSkeleton />
-      )}
       {/*
 
       <StyledTabContent

@@ -41,7 +41,7 @@ export default function OTPVerification({
   setEmail,
 }: OTPVerificationProps) {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { storeToken, setActiveOrg, getSubscription, onSuccessAuthenticate } =
+  const { storeToken, setActiveOrg, onSuccessAuthenticate } =
     useAuthActionsContext();
   const { formatMessage } = useIntl();
 
@@ -84,7 +84,6 @@ export default function OTPVerification({
                 const userData = data.data;
                 if (userData?.active_organization?.domain_handle) {
                   setOrgHeader(userData.active_organization.domain_handle);
-                  getSubscription();
                   setActiveOrg(userData.active_organization as Organization);
                 }
                 if (userData) {
@@ -161,7 +160,6 @@ export default function OTPVerification({
                 const userData = data.data;
                 if (userData?.active_organization?.domain_handle) {
                   setOrgHeader(userData.active_organization.domain_handle);
-                  getSubscription();
                   setActiveOrg(userData.active_organization as Organization);
                 }
                 if (userData) {

@@ -35,7 +35,7 @@ const FinalSummary: React.FC<FinalSummaryProps> = ({ agent }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const onboarded = searchParams?.get('onboarded') === 'true';
-  const { getSubscription, setActiveOrg, updateAuthUser } =
+  const {setActiveOrg, updateAuthUser } =
     useAuthActionsContext();
   const { startTour } = useTourActionsContext();
   const { activeOrg } = useAuthContext();
@@ -58,7 +58,6 @@ const FinalSummary: React.FC<FinalSummaryProps> = ({ agent }) => {
           throw new Error('No active organization');
         }
         setOrgHeader(data.active_organization.domain_handle);
-        getSubscription();
         updateAuthUser(data);
         setActiveOrg({ ...activeOrg, ...data.active_organization });
         if (onboarded) {

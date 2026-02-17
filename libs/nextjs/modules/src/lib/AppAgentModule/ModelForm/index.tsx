@@ -23,11 +23,11 @@ import {
   StickyFooter,
   StyledMainContainer,
   StyledTabRoot,
+  StyledContent
 } from '../index.styled';
 import { useIntl } from 'react-intl';
 import AppTable from '@unpod/components/third-party/AppTable';
 import { StyledRowItem } from '../AdvancedForm/index.styled';
-import { StyledContent } from '../../AppWallet/index.styled';
 import { KnowledgeBase, Pilot } from '@unpod/constants/types';
 import type { FormInstance } from 'antd/es/form';
 import { getEvalColumns } from './getEvalColumns';

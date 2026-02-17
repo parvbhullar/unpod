@@ -29,7 +29,6 @@ const Signup = () => {
     signUpUser,
     updateAuthUser,
     storeToken,
-    getSubscription,
   } = useAuthActionsContext();
   const { redirectTo } = useAppHistory();
   const searchParams = useSearchParams();
@@ -110,7 +109,6 @@ const Signup = () => {
                 setOrgHeader(
                   responsePayload?.data.user.active_organization.domain_handle,
                 );
-                getSubscription();
               }
 
               if (responsePayload?.data?.user) {
@@ -177,7 +175,6 @@ const Signup = () => {
                       setOrgHeader(
                         apiPayload.data.active_organization.domain_handle,
                       );
-                      getSubscription();
                     }
 
                     if (apiPayload.data) {

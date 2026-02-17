@@ -1,20 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
-import {
-  MdHistory,
-  MdKey,
-  MdLockOpen,
-  MdOutlineWorkspaces,
-} from 'react-icons/md';
-import { Popover, Tooltip } from 'antd';
-import { useAuthActionsContext, useAuthContext } from '@unpod/providers';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import {useEffect, useState} from 'react';
+import {MdHistory, MdKey, MdLockOpen, MdOutlineWorkspaces,} from 'react-icons/md';
+import {Popover, Tooltip} from 'antd';
+import {useAuthActionsContext, useAuthContext} from '@unpod/providers';
+import {useParams, usePathname, useRouter} from 'next/navigation';
 import AppLink from '@unpod/components/next/AppLink';
 import clsx from 'clsx';
-import { getFirstLetter } from '@unpod/helpers/StringHelper';
+import {getFirstLetter} from '@unpod/helpers/StringHelper';
 import Notification from '../Notification';
 import UserInfo from './UserInfo';
-import { isEmptyObject } from '@unpod/helpers/GlobalHelper';
+import {isEmptyObject} from '@unpod/helpers/GlobalHelper';
 import HubSelectionList from './HubSelectionList';
 import {
   StyledInnerContainer,
@@ -26,13 +21,12 @@ import {
   StyledUserMenus,
 } from './index.styled';
 import AIMenu from '@/core/AppLayout/MainLayout/LayoutSidebar/AIMenu';
-import SIPMenu from '@/core/AppLayout/MainLayout/LayoutSidebar/SIPMenu';
 import DrawerMenu from '@/core/AppLayout/MainLayout/LayoutSidebar/DrawerMenu';
 import AdminMenu from '@/core/AppLayout/MainLayout/LayoutSidebar/AdminMenu';
-import { RiRobot2Line } from 'react-icons/ri';
+import {RiRobot2Line} from 'react-icons/ri';
 import useIsDesktop from '@unpod/custom-hooks/useIsDesktop';
-import { useIntl } from 'react-intl';
-import type { Organization, User } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {Organization, User} from '@unpod/constants/types';
 
 const LayoutSidebar = () => {
   const [openOrgMenu, setOpenOrgMenu] = useState(false);
@@ -49,12 +43,8 @@ const LayoutSidebar = () => {
   const { orgSlug } = params;
 
   const { isAuthenticated, user, activeOrg } = useAuthContext();
-  const { getSubscription } = useAuthActionsContext();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  useEffect(() => {
-    if (isAuthenticated && activeOrg) getSubscription();
-  }, [isAuthenticated, activeOrg]);
 
   useEffect(() => {
     if (pathname && isAuthenticated) {
@@ -233,11 +223,8 @@ const UserMainMenu = ({
       )}
       {isAuthenticated &&
         activeOrg?.domain_handle &&
-        (process.env.productId === 'unpod.dev' ? (
-          <SIPMenu onClickMenu={onClickMenu} />
-        ) : (
-          <AIMenu />
-        ))}
+        <AIMenu/>
+      }
     </StyledMainMenus>
   );
 };

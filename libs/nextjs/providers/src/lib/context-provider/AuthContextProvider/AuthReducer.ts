@@ -3,7 +3,6 @@ import type {
   AuthState,
   GlobalData,
   Organization,
-  Subscription,
   User,
 } from '@unpod/constants/types';
 
@@ -14,7 +13,6 @@ export const AUTH_ACTIONS = {
   UPDATE_ACTIVE_ORGANIZATION: 'UPDATE_ACTIVE_ORGANIZATION',
   LOGOUT_AUTH_USER: 'LOGOUT_AUTH_USER',
   SET_VISITOR_ID: 'SET_VISITOR_ID',
-  UPDATE_SUBSCRIPTION: 'UPDATE_SUBSCRIPTION',
   UPDATE_GLOBAL_DATA: 'UPDATE_GLOBAL_DATA',
 } as const;
 
@@ -67,13 +65,6 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
       return {
         ...state,
         visitorId: action.payload as string | null,
-      };
-    }
-
-    case AUTH_ACTIONS.UPDATE_SUBSCRIPTION: {
-      return {
-        ...state,
-        subscription: action.payload as Subscription | null,
       };
     }
 

@@ -6,7 +6,6 @@ import { RiRobot2Line } from 'react-icons/ri';
 import { useAuthContext } from '@unpod/providers';
 import { tablePageSize } from '@unpod/constants';
 import AppSidebar from '@unpod/components/common/AppSidebar';
-import { TAB_KEYS } from '../../AppSIPBridge/constants';
 import {
   useAppModuleActionsContext,
   useAppModuleContext,
@@ -64,7 +63,7 @@ const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
     setIsNewRecord(false);
     const activeTab = params?.get('tab') || null;
     const routeUrl =
-      activeTab && TAB_KEYS.includes(activeTab)
+      activeTab
         ? `/${path}/${key}?tab=${activeTab}`
         : `/${path}/${key}`;
     router.push(routeUrl);
