@@ -102,7 +102,8 @@ const getSequencerInterval = (state: string | undefined, barCount: number) => {
 type CircularVisualizerConfig = {
   color?: string;
   activeColor?: string;
-  image?: string;};
+  image?: string;
+};
 
 type CircularVisualizerProps = {
   config?: CircularVisualizerConfig;
@@ -112,7 +113,8 @@ type CircularVisualizerProps = {
   options?: {
     minHeight?: number;
     maxHeight?: number;
-  };};
+  };
+};
 
 const CircularVisualizer: React.FC<CircularVisualizerProps> = ({
   config,

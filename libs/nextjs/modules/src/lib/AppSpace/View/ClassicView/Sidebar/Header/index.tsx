@@ -1,4 +1,3 @@
-import type { ComponentType } from 'react';
 import { useMemo, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { App, Dropdown, Modal, Space, Tooltip } from 'antd';
@@ -31,9 +30,6 @@ import { useIntl } from 'react-intl';
 import AppSpaceCallModal from '@unpod/components/modules/AppSpaceContactCall/AppSpaceCallModal';
 import DocSelector from '../../MainContent/Content/Calls/DocSelector';
 
-const AppSpaceHeaderMenusAny = AppSpaceHeaderMenus as ComponentType<any>;
-const ConfigureAgentModalAny = ConfigureAgentModal as ComponentType<any>;
-
 const SidebarHeader = () => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const router = useRouter();
@@ -43,7 +39,7 @@ const SidebarHeader = () => {
     setActiveConversation,
     setActiveNote,
     setActiveDocument,
-    setSelectedDocs
+    setSelectedDocs,
   } = useAppSpaceActionsContext();
   const { currentSpace, activeTab, connectorData } = useAppSpaceContext();
   const { formatMessage } = useIntl();
@@ -53,7 +49,7 @@ const SidebarHeader = () => {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isChannelOpen, setChannelOpen] = useState(false);
   const [downloadLog, setDownloadLog] = useState(false);
-  const [isConfigureOpen, setIsConfigureOpen] = useState(false);
+  const [isConfigureOpen, setIsConfigureOpen] = useState<boolean>(false);
   const [isCallModalOpen, setCallModalOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const showCallIcon = activeTab === 'call' || activeTab === 'doc';
@@ -244,8 +240,7 @@ const SidebarHeader = () => {
 
   return (
     <StyledHeader>
-      <AppSpaceHeaderMenusAny
-        currentSpace={currentSpace}
+      <AppSpaceHeaderMenus
         addNew={addNew}
         setAddNew={setAddNew}
         // breadcrumb={breadcrumb}
@@ -309,9 +304,8 @@ const SidebarHeader = () => {
         closable={false}
         title={formatMessage({ id: 'space.linkAgent' })}
       >
-        <ConfigureAgentModalAny
+        <ConfigureAgentModal
           currentSpace={currentSpace}
-          setIsConfigureOpen={setIsConfigureOpen}
           $bodyHeight={170}
           onClose={() => setIsConfigureOpen(false)}
         />

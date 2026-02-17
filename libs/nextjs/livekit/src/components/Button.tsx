@@ -27,7 +27,8 @@ const shapeStyles: Record<ButtonShape, RuleSet<object>> = {
 type StyledButtonProps = {
   danger?: boolean;
   shape?: ButtonShape;
-  color?: string;};
+  color?: string;
+};
 
 const StyledButtonWrapper = styled.button.withConfig({
   shouldForwardProp: (prop) =>
@@ -66,7 +67,8 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   shape?: 'default' | 'round' | 'circle';
   danger?: boolean;
   color?: string;
-  variant?: string;};
+  variant?: string;
+};
 
 const Button: React.FC<ButtonProps> = ({ icon, children, ...rest }) => {
   return (

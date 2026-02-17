@@ -4,17 +4,17 @@ import { TestAgentButton } from './TestAgentButton';
 import PreviousTests from './PreviousTests';
 import TestView from './TestView';
 import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { Spaces } from '@unpod/constants';
+import { Pilot, Spaces } from '@unpod/constants';
 
 type TestAgentProps = {
-  agentData?: any;
+  agentData?: Pilot;
   [key: string]: unknown;
 };
 
-export interface ResponseType {
+export type ResponseType = {
   type: string;
   label: string;
-}
+};
 
 const TestAgent = ({ agentData, ...rest }: TestAgentProps) => {
   const [startCall, setStartCall] = useState<boolean>(false);
@@ -41,14 +41,14 @@ const TestAgent = ({ agentData, ...rest }: TestAgentProps) => {
         setStartCall(true);
         setResponse({
           type: 'success',
-          label: response?.message,
+          label: response?.message || 'Test Started Successful',
         });
       })
       .catch((err: any) => {
         infoViewActionsContext.showError(err?.message || 'Test Failed');
         setResponse({
           type: 'error',
-          label: err?.message,
+          label: err?.message || 'Test Failed',
         });
       });
   };
@@ -64,7 +64,7 @@ const TestAgent = ({ agentData, ...rest }: TestAgentProps) => {
       </TopContainer>
 
       {startCall && (
-        <TestView agentName={agentData?.name} response={response} />
+        <TestView agentName={agentData?.name as string} response={response} setStartCall={setStartCall} />
       )}
 
       <PreviousTests agentId={agentData?.handle} startCall={startCall} />

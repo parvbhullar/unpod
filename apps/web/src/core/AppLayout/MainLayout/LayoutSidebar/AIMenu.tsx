@@ -58,11 +58,9 @@ const AIMenu = () => {
   };
 
   const getSpaces = useCallback(() => {
-    (
-      getDataApi(`spaces/`, infoViewActionsContext, {
-        case: 'all',
-      }) as Promise<{ data: Spaces[] }>
-    )
+    getDataApi<Spaces[]>(`spaces/`, infoViewActionsContext, {
+      case: 'all',
+    })
       .then((response) => {
         if (!user?.active_space?.slug && response.data[0]) {
           updateAuthUser({
@@ -86,7 +84,7 @@ const AIMenu = () => {
       setActiveSpaceType(user?.active_space?.content_type ?? null);
       setSpaceSlug(user?.active_space?.slug);
     }
-  }, [isAuthenticated, getSpaces, activeOrg?.domain_handle]);
+  }, [isAuthenticated, activeOrg?.domain_handle, user?.active_space]);
 
   return (
     <StyledMainMenus orientation="vertical" align="center">

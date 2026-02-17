@@ -14,4 +14,4 @@ export * from './calls';
 export * from './tasks';
 export * from './context';
 export * from './api-hooks';
-export * from './TestAgent'
+export * from './TestAgent';

@@ -14,9 +14,10 @@ import { RiRobot2Line } from 'react-icons/ri';
 import { useTheme } from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import { MobileWidthQuery } from '@unpod/constants';
+import type { Pilot } from '@unpod/constants/types';
 
 type AgentTitleProps = {
-  agentData?: any;
+  agentData: Pilot;
   onSave?: () => void;
   onClose?: () => void;
 };

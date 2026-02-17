@@ -5,7 +5,7 @@ import AppLoader from '@unpod/components/common/AppLoader';
 import AppList from '@unpod/components/common/AppList';
 import PreviousTestItem from './previousTestItem';
 import { TestItem } from '@unpod/constants';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 const { Text } = Typography;
 export type TestStatus = 'passed' | 'failed' | 'partial';
@@ -15,10 +15,10 @@ type PreviousTestsProps = {
   startCall?: boolean;
 };
 
-export interface StatusColor {
+export type StatusColor = {
   label: string;
   color: string;
-}
+};
 
 const statusColors: Record<TestStatus, StatusColor> = {
   passed: { label: 'Passed', color: 'badge-success' },
@@ -34,7 +34,7 @@ const getTestStatus = (passRate: string): TestStatus => {
 };
 
 const PreviousTests = ({ agentId, startCall }: PreviousTestsProps) => {
-  const [{ apiData, loading }] = useGetDataApi(
+  const [{ apiData, loading }, { reCallAPI }] = useGetDataApi(
     `core/tests/test-agent/${agentId}/`,
     { data: [] as TestItem[] },
   );
@@ -47,6 +47,10 @@ const PreviousTests = ({ agentId, startCall }: PreviousTestsProps) => {
       })) ?? []
     );
   }, [apiData?.data]);
+
+  useEffect(() => {
+    reCallAPI();
+  }, [startCall]);
 
   return (
     <TestsWrapper>
@@ -69,7 +73,7 @@ const PreviousTests = ({ agentId, startCall }: PreviousTestsProps) => {
           )}
         />
       </TestsContent>
-      {loading && <AppLoader position={'absolute'} />}
+      {loading && <AppLoader position={'absolute'}  />}
     </TestsWrapper>
   );
 };

@@ -16,12 +16,14 @@ type CentrifugoConfig = {
   channel_name?: string;
   agent_name?: string;
   space_token?: string;
-  metadata?: Record<string, unknown>;};
+  metadata?: Record<string, unknown>;
+};
 
 type LocationRequestResolver = {
   resolve: (value: { accepted: boolean }) => void;
   reject: (error: Error) => void;
-  timeout?: ReturnType<typeof setTimeout>;};
+  timeout?: ReturnType<typeof setTimeout>;
+};
 
 /**
  * Custom hook to manage conversation messaging using Centrifugo
@@ -83,8 +85,7 @@ export const useCentrifugoDataChannel = ({
       return centrifugoUrl;
     }
     // Then try environment variables
-    const envUrl =
-      process.env.centrifugoUrl || process.env.NEXT_PUBLIC_CENTRIFUGO_URL;
+    const envUrl = process.env.centrifugoUrl || process.env.CENTRIFUGO_URL;
     if (envUrl) {
       return envUrl;
     }

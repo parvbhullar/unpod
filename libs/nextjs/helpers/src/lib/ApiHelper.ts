@@ -23,7 +23,8 @@ type SanitizableValue =
   | SanitizableObject;
 
 type SanitizableObject = {
-  [key: string]: SanitizableValue;};
+  [key: string]: SanitizableValue;
+};
 
 type SanitizableArray = SanitizableValue[];
 

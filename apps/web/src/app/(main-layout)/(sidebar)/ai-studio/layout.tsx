@@ -2,12 +2,7 @@ import PageContentLayout from '@/core/AppLayout/PageContentLayout';
 import dynamic from 'next/dynamic';
 import type { LayoutProps } from '@/types/common';
 
-type SidebarProps = {
-  path: string;
-  title: string;
-};
-
-const Sidebar = dynamic<SidebarProps>(
+const Sidebar = dynamic<any>(
   () => import('@unpod/modules/AppAgentStudio/Sidebar'),
 );
 

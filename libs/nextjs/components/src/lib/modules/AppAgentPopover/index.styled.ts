@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Button, Input } from 'antd';
 import { lighten } from 'polished';
 import AppCustomMenus from '../../common/AppCustomMenus';
-import { GlobalTheme } from '@unpod/constants';
+import type { GlobalTheme } from '@unpod/constants/types';
 
 export const StyledKbMenus = styled.div`
   display: flex;

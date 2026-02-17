@@ -3,7 +3,8 @@ import { User } from '@unpod/constants';
 export type RazorpayResponse = {
   razorpay_payment_id?: string;
   razorpay_order_id?: string;
-  razorpay_signature?: string;};
+  razorpay_signature?: string;
+};
 
 export type OrderPayload = {
   key: string | undefined;
@@ -24,7 +25,8 @@ export type OrderPayload = {
   };
   theme: {
     color: string;
-  };};
+  };
+};
 
 export const getOrderPayload = (
   amount: number,
@@ -78,7 +80,8 @@ export const getOrderPayload = (
 export type SubscriptionModule = {
   codename?: string;
   remaining?: number;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export const getSubscriptionModule = (
   modules: SubscriptionModule[] | null | undefined,

@@ -358,27 +358,27 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
       .then((fingerprint: unknown) => {
         setVisitorId(String(fingerprint));
 
-        const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-        const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+        const apiKey = process.env.FIREBASE_API_KEY;
+        const projectId = process.env.FIREBASE_PROJECT_ID;
         const messagingSenderId =
-          process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID;
-        const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
-        const measurementId = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID;
+          process.env.FIREBASE_MESSAGING_SENDER_ID;
+        const appId = process.env.FIREBASE_APP_ID;
+        const measurementId = process.env.FIREBASE_MEASUREMENT_ID;
         const authDomain =
-          process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+          process.env.FIREBASE_AUTH_DOMAIN ||
           (projectId ? `${projectId}.firebaseapp.com` : undefined);
         const storageBucket =
-          process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+          process.env.FIREBASE_STORAGE_BUCKET ||
           (projectId ? `${projectId}.appspot.com` : undefined);
 
         const missing: string[] = [];
-        if (!apiKey) missing.push('NEXT_PUBLIC_FIREBASE_API_KEY');
-        if (!projectId) missing.push('NEXT_PUBLIC_FIREBASE_PROJECT_ID');
+        if (!apiKey) missing.push('FIREBASE_API_KEY');
+        if (!projectId) missing.push('FIREBASE_PROJECT_ID');
         if (!messagingSenderId)
-          missing.push('NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID');
-        if (!appId) missing.push('NEXT_PUBLIC_FIREBASE_APP_ID');
+          missing.push('FIREBASE_MESSAGING_SENDER_ID');
+        if (!appId) missing.push('FIREBASE_APP_ID');
         if (!measurementId)
-          missing.push('NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID');
+          missing.push('FIREBASE_MEASUREMENT_ID');
 
         if (missing.length > 0) {
           console.warn(

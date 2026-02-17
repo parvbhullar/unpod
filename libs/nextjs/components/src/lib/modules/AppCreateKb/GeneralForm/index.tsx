@@ -118,7 +118,7 @@ const GeneralForm = ({
             <Select.Option key={role.id} value={role.id}>
               <Space>
                 {role?.icon}
-                {formatMessage({ id: role.name })}
+                {role.name}
               </Space>
             </Select.Option>
           ))}

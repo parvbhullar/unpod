@@ -2,7 +2,8 @@ import React from 'react';
 
 type LoadingSVGProps = {
   diameter?: number;
-  strokeWidth?: number;};
+  strokeWidth?: number;
+};
 
 export const LoadingSVG: React.FC<LoadingSVGProps> = ({
   diameter = 20,

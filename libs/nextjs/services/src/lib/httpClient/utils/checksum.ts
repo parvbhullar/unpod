@@ -94,7 +94,7 @@ export const shouldSkipChecksum = (url: string | undefined): boolean => {
  */
 export const isChecksumEnabled = (): boolean => {
   return (
-    process.env.ENABLE_CHECKSUM === 'true' && !!process.env.CHECKSUM_SECRET
+    process.env.enableChecksum === 'true' && !!process.env.checksumSecret
   );
 };
 
@@ -103,5 +103,5 @@ export const isChecksumEnabled = (): boolean => {
  * @returns string
  */
 export const getChecksumSecret = (): string => {
-  return process.env.CHECKSUM_SECRET || '';
+  return process.env.checksumSecret || '';
 };

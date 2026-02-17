@@ -1,4 +1,4 @@
-export interface TestResultProps {
+export type TestResultProps = {
   test_case_index: number;
   question: string;
   expected_answer: string;
@@ -10,9 +10,9 @@ export interface TestResultProps {
   expected_tool: string | null;
   answer_similarity_score: number;
   answer_match_details: string | null;
-}
+};
 
-export interface TestItem {
+export type TestItem = {
   created: string;
   modified: string;
   eval_id: string;
@@ -29,4 +29,4 @@ export interface TestItem {
     test_case_count: number;
   };
   [key: string]: unknown;
-}
+};

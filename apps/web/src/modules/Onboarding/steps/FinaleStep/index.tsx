@@ -18,11 +18,7 @@ import { StyledText } from './index.styled';
 import { DrawerBody } from '@unpod/components/antd';
 import type { Organization, Pilot, User } from '@unpod/constants/types';
 
-type VoiceAgentProps = {
-  agentData?: Pilot | null;
-};
-
-const VoiceAgent = dynamic<VoiceAgentProps>(
+const VoiceAgent = dynamic<any>(
   () => import('@unpod/modules/AppAgentModule/VoiceAgent'),
   { ssr: false },
 );

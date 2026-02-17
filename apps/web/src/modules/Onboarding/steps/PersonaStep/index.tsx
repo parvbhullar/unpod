@@ -22,13 +22,7 @@ type PersonaStepProps = {
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-type PersonaFormProps = {
-  form: ReturnType<typeof Form.useForm>[0];
-  agentData: Pilot;
-  domainData?: PersonaStepProps['domainData'];
-};
-
-const PersonaForm = dynamic<PersonaFormProps>(
+const PersonaForm = dynamic<any>(
   () => import('@unpod/modules/AppIdentityAgentModule/Persona/PersonaForm'),
   { ssr: false },
 );

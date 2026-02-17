@@ -1,4 +1,4 @@
-import type { VoiceProfile } from '@unpod/constants/types';
+import type { GlobalTheme, VoiceProfile } from '@unpod/constants/types';
 
 import { useEffect, useRef, useState } from 'react';
 import { Space, Tooltip, Typography } from 'antd';
@@ -34,7 +34,7 @@ const { Text } = Typography;
 type PlayPauseButtonProps = {
   data: VoiceProfile;
   isSelected?: boolean;
-  theme?: any;
+  theme?: GlobalTheme;
 };
 
 const PlayPauseButton = ({ data, isSelected, theme }: PlayPauseButtonProps) => {

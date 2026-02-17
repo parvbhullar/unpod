@@ -22,7 +22,8 @@ type AgentViewProps = {
   source?: string;
   metadata?: Record<string, unknown>;
   config?: Record<string, unknown>;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AgentView: React.FC<AgentViewProps> = ({
   spaceToken,

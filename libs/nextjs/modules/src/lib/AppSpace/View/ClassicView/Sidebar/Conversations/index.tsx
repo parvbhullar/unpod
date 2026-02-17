@@ -1,6 +1,6 @@
 import type { Ref } from 'react';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
-import type { Conversation } from '@unpod/constants/types';
+import type { Conversation, ConversationsHandle } from '@unpod/constants/types';
 import {
   getDataApi,
   useAppSpaceActionsContext,
@@ -13,7 +13,6 @@ import ConversationItem from './ConversationItem';
 import AppList from '@unpod/components/common/AppList';
 import { ConversationsSkeleton } from '@unpod/skeleton/Conversation';
 import { useRouter } from 'next/navigation';
-import type { ConversationsHandle } from '@unpod/constants/types';
 
 type ConversationThread = Conversation & {
   slug?: string;

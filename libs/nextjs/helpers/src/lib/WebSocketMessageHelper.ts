@@ -11,12 +11,14 @@ export type WebSocketParticipant = {
   metadata?: string;
   permissions?: {
     agent?: boolean;
-  };};
+  };
+};
 
 export type WebSocketMessage = {
   data?: string;
   timestamp?: number | string;
-  participant?: WebSocketParticipant;};
+  participant?: WebSocketParticipant;
+};
 
 export type MessageUser = {
   role?: string;
@@ -26,7 +28,8 @@ export type MessageUser = {
   full_name?: string;
   profile_color?: string;
   user_token?: string;
-  is_active?: number;};
+  is_active?: number;
+};
 
 export type MessageData = {
   block_id?: string;
@@ -44,7 +47,8 @@ export type MessageData = {
   parent?: Record<string, unknown>;
   created?: string;
   event?: string;
-  timestamp?: number | string;};
+  timestamp?: number | string;
+};
 
 export type MessageDataContent = {
   content?: string;
@@ -54,16 +58,19 @@ export type MessageDataContent = {
     items?: Array<{ id?: string; status?: string }>;
   };
   block_type?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export type CurrentPost = {
-  post_id?: string;};
+  post_id?: string;
+};
 
 export type StreamInfo = {
   topic?: string;
   timestamp?: number;
   id?: string;
-  size?: number;};
+  size?: number;
+};
 
 /**
  * Parse JSON data safely with error handling
@@ -100,7 +107,8 @@ type CreateLiveKitMessageOptions = {
   source: string;
   topic?: string | null;
   streamInfo?: StreamInfo | null;
-  kind?: string | null;};
+  kind?: string | null;
+};
 
 const createLiveKitMessage = ({
   data,
@@ -225,7 +233,8 @@ export type WebSocketUpdateResult = {
   streaming?: boolean;
   shouldScroll?: boolean;
   finalizeStreamItems?: boolean;
-  dataLoading?: boolean;};
+  dataLoading?: boolean;
+};
 
 /**
  * Handle block event - process streaming message
@@ -594,7 +603,8 @@ export type StateSetters = {
   setStreamItems: React.Dispatch<React.SetStateAction<MessageData[]>>;
   setThinking: React.Dispatch<React.SetStateAction<boolean>>;
   setStreaming: React.Dispatch<React.SetStateAction<boolean>>;
-  setDataLoading?: React.Dispatch<React.SetStateAction<boolean>>;};
+  setDataLoading?: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 /**
  * Apply WebSocket message updates to component state
@@ -709,10 +719,12 @@ export const applyWebSocketUpdates = (
 };
 
 export type ProcessLiveKitOptions = {
-  validator?: (data: Record<string, unknown>) => boolean;};
+  validator?: (data: Record<string, unknown>) => boolean;
+};
 
 export type ParticipantInfo = {
-  identity?: string;};
+  identity?: string;
+};
 
 /**
  * Process LiveKit DataPacket and create message

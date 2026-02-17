@@ -83,7 +83,8 @@ export const LANGUAGE_NAMES = new Proxy(
 
 export type KeyFeature = {
   key: string;
-  label: string;};
+  label: string;
+};
 
 export const KEY_FEATURES: KeyFeature[] = [
   {
@@ -113,7 +114,8 @@ export type PurposeCategory = {
   label: string;
   desc: string;
   icon: ReactNode;
-  color: string;};
+  color: string;
+};
 
 export const PURPOSE_CATEGORIES: PurposeCategory[] = [
   {
@@ -141,7 +143,8 @@ export const PURPOSE_CATEGORIES: PurposeCategory[] = [
 
 export type DayOption = {
   value: string;
-  label: string;};
+  label: string;
+};
 
 export const DAYS: DayOption[] = [
   { value: 'Mon', label: 'advanced.dayMon' },

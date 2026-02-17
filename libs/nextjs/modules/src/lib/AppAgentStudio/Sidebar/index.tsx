@@ -12,6 +12,7 @@ import {
   useAppModuleContext,
 } from '@unpod/providers/AppModuleContextProvider';
 import { SidebarAgentList } from '@unpod/skeleton';
+import type { Pilot } from '@unpod/constants/types';
 
 const pageLimit = tablePageSize * 2;
 type SidebarProps = {
@@ -33,7 +34,7 @@ const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
       hasMoreRecord: boolean;
       page: number;
     };
-    record: any;
+    record: Pilot;
   };
   const { apiData, loading, isLoadingMore, hasMoreRecord, page } = listData;
   const { listActions, setRecord, setIsNewRecord } =

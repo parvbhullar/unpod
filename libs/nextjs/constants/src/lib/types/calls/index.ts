@@ -36,6 +36,15 @@ type PostCallData = {
   [key: string]: unknown;
 };
 
+export type CallItem = {
+  name: string;
+  number: string;
+  task_id: string;
+  status: string;
+  call_type: string;
+  created: string;
+};
+
 export type Call = {
   status?: string;
   created?: string;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { MenuProps } from 'antd';
+import type { FormInstance, MenuProps } from 'antd';
 import { Dropdown, Flex, Form, Space } from 'antd';
 import {
   MdDeleteOutline,
@@ -20,9 +20,9 @@ import {
 import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
 import {
   StyledContainer,
-  StyledDrawerWrapper,
   StyledSegmented,
   StyledTitleContainer,
+  ToggleButton,
 } from './index.styled';
 import AgentTitle from './AgentTitile';
 import { useApp } from '@unpod/custom-hooks';
@@ -38,14 +38,16 @@ import AppRegionField from '@unpod/components/common/AppRegionField';
 import AppCopyToClipboard from '@unpod/components/third-party/AppCopyToClipboard';
 import { IoDuplicateOutline } from 'react-icons/io5';
 import { DesktopWidthQuery } from '@unpod/constants';
+import type { Pilot } from '@unpod/constants/types';
+
 import { useIntl } from 'react-intl';
 import TestAgent from '@unpod/livekit/AppVoiceAgent/Test/TestAgent';
 
 type AgentHeaderProps = {
-  agentData?: any;
+  agentData: Pilot;
   saveAgent?: (data: any, state?: string) => void;
   loading?: boolean;
-  form: any;
+  form: FormInstance;
 };
 
 const AgentHeader = ({
@@ -97,7 +99,7 @@ const AgentHeader = ({
   };
 
   const onAgentDelete = () => {
-    deleteRecord(agentData.handle);
+    deleteRecord(agentData.handle as string);
     if (listData.apiData.length > 1) {
       if (listData.apiData[0].handle === agentData.handle) {
         router.push(`/ai-studio/${listData.apiData[1].handle}`);
@@ -110,10 +112,7 @@ const AgentHeader = ({
   };
 
   const onDelete = () => {
-    deleteDataApi(
-      `core/pilots/${agentData?.handle}/`,
-      infoViewActionsContext,
-    )
+    deleteDataApi(`core/pilots/${agentData?.handle}/`, infoViewActionsContext)
       .then((response: any) => {
         infoViewActionsContext.showMessage(response.message);
         onAgentDelete();
@@ -123,7 +122,7 @@ const AgentHeader = ({
       });
   };
   const onDuplicateAgent = () => {
-    postDataApi(
+    postDataApi<Pilot>(
       `core/pilots/${agentData?.handle}/clone/`,
       infoViewActionsContext,
       {
@@ -177,42 +176,22 @@ const AgentHeader = ({
         gap: 4,
       }}
     >
-      <span
+      <ToggleButton
+        active={agentData?.type === 'Message'}
+        disabled={!agentData?.handle}
         onClick={() => onMenuClick({ key: 'chat' } as any)}
-        style={{
-          background: agentData?.type === 'Message' ? '#6c47ff' : 'transparent',
-          color: agentData?.type === 'Message' ? '#fff' : '#888',
-          padding: '4px 16px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          fontWeight: 500,
-          fontSize: 16,
-          cursor: agentData?.handle ? 'pointer' : 'not-allowed',
-          opacity: agentData?.handle ? 1 : 0.5,
-          transition: 'background 0.2s',
-        }}
         aria-disabled={!agentData?.handle}
       >
-        <MdOutlineChat style={{ marginRight: 8 }} />
-      </span>
-      <span
+        <MdOutlineChat />
+      </ToggleButton>
+      <ToggleButton
+        active={agentData?.type === 'Voice'}
+        disabled={!agentData?.handle}
         onClick={() => onMenuClick({ key: 'voice' } as any)}
-        style={{
-          background: agentData?.type === 'Voice' ? '#6c47ff' : 'transparent',
-          color: agentData?.type === 'Voice' ? '#fff' : '#888',
-          padding: '4px 16px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          fontWeight: 500,
-          fontSize: 16,
-          cursor: agentData?.handle ? 'pointer' : 'not-allowed',
-          opacity: agentData?.handle ? 1 : 0.5,
-          transition: 'background 0.2s',
-        }}
         aria-disabled={!agentData?.handle}
       >
-        <MdOutlineMic style={{ marginRight: 8 }} />
-      </span>
+        <MdOutlineMic />
+      </ToggleButton>
     </div>
   );
 
@@ -399,29 +378,29 @@ const AgentHeader = ({
           </Space>
         </Flex>
       </Form>
-      <StyledDrawerWrapper>
-        <AppDrawer
-          open={isTalkToAgentOpen}
-          onClose={() => setIsTalkToAgentOpen(false)}
-          padding="0"
-          title={formatMessage({ id: 'common.talkToAgent' })}
-          style={{ position: 'fixed' }}
-          closable
-        >
-          {isTalkToAgentOpen ? <VoiceAgent agentData={agentData} /> : null}
-        </AppDrawer>
 
-        <AppDrawer
-          open={isTestAgentOpen}
-          onClose={() => setIsTestAgentOpen(false)}
-          padding="0"
-          // title={formatMessage({ id: 'common.talkToAgent' })}
-          title={'🎙️ Agent Testing'}
-          size={500}
-        >
-          {isTestAgentOpen ? <TestAgent agentData={agentData} /> : null}
-        </AppDrawer>
-      </StyledDrawerWrapper>
+      <AppDrawer
+        open={isTalkToAgentOpen}
+        onClose={() => setIsTalkToAgentOpen(false)}
+        padding="0"
+        title={formatMessage({ id: 'common.talkToAgent' })}
+        closable
+        overflowY="hidden"
+      >
+        {isTalkToAgentOpen ? <VoiceAgent agentData={agentData} /> : null}
+      </AppDrawer>
+
+      <AppDrawer
+        open={isTestAgentOpen}
+        onClose={() => setIsTestAgentOpen(false)}
+        padding="0"
+        // title={formatMessage({ id: 'common.talkToAgent' })}
+        title={'🎙️ Agent Testing'}
+        size={500}
+        overflowY="hidden"
+      >
+        {isTestAgentOpen ? <TestAgent agentData={agentData} /> : null}
+      </AppDrawer>
     </StyledContainer>
   );
 };
