@@ -1,19 +1,14 @@
 'use client';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import AppLink from '@unpod/components/next/AppLink';
-import { useRouter } from 'next/navigation';
-import { Button, Card, Checkbox, Form, Row, Typography } from 'antd';
+import {useRouter} from 'next/navigation';
+import {Button, Card, Checkbox, Form, Row, Typography} from 'antd';
 import AppPageLayout from '@unpod/components/common/AppPageLayout';
-import { AppInput, AppPassword } from '@unpod/components/antd';
-import {
-  postDataApi,
-  useAuthActionsContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { consoleLog, isEmptyObject } from '@unpod/helpers/GlobalHelper';
-import { EMAIL_REGX, PASSWORD_REGX } from '@unpod/constants';
-import { useAppHistory } from '@unpod/providers/AppHistoryProvider';
-import useIsDesktop from '@unpod/custom-hooks/useIsDesktop';
+import {AppInput, AppPassword} from '@unpod/components/antd';
+import {postDataApi, useAuthActionsContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {consoleLog, isEmptyObject} from '@unpod/helpers/GlobalHelper';
+import {EMAIL_REGX, PASSWORD_REGX} from '@unpod/constants';
+import {useAppHistory} from '@unpod/providers/AppHistoryProvider';
 import {
   StyledAuthContainer,
   StyledAuthContent,
@@ -21,8 +16,8 @@ import {
   StyledContentWrapper,
   StyledHeader,
 } from '../auth.styled';
-import { useIntl } from 'react-intl';
-import type { User } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {User} from '@unpod/constants/types';
 
 const { Paragraph } = Typography;
 const { Item } = Form;
@@ -47,7 +42,6 @@ const SignInForm = ({ setEmail, setVerifyEmail, email }: SignInFormProps) => {
   const { redirectTo } = useAppHistory();
   const { signInUser, getGlobalData } = useAuthActionsContext();
   const router = useRouter();
-  const { isDesktopApp } = useIsDesktop();
   const { formatMessage } = useIntl();
 
   const [verificationOtpSent, setVerificationOtpSent] = useState(false);
@@ -141,7 +135,6 @@ const SignInForm = ({ setEmail, setVerifyEmail, email }: SignInFormProps) => {
                         setOrgHeader(
                           data.data.active_organization.domain_handle,
                         );
-                        getSubscription();
                       }
 
                       updateAuthUser(data.data);
@@ -316,14 +309,12 @@ const SignInForm = ({ setEmail, setVerifyEmail, email }: SignInFormProps) => {
               </Button>
             </Item>
 
-            {isDesktopApp && (
               <Paragraph type="secondary" className="text-center">
                 {formatMessage({ id: 'auth.noAccount' })}
                 <AppLink href="/auth/signup">
                   {formatMessage({ id: 'auth.signUp' })}
                 </AppLink>
               </Paragraph>
-            )}
           </Form>
         </Card>
       </StyledAuthContainer>

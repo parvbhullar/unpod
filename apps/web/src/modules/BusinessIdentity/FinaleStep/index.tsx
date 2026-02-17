@@ -31,7 +31,7 @@ const FinalSummary = ({ agent }: FinalSummaryProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const router = useRouter();
-  const { getSubscription, setActiveOrg, updateAuthUser } =
+  const { setActiveOrg, updateAuthUser } =
     useAuthActionsContext();
   const { startTour } = useTourActionsContext();
   const { activeOrg } = useAuthContext();
@@ -45,7 +45,6 @@ const FinalSummary = ({ agent }: FinalSummaryProps) => {
           return;
         }
         setOrgHeader(data.active_organization.domain_handle);
-        getSubscription();
         updateAuthUser(data);
         setActiveOrg({ ...activeOrg, ...data.active_organization });
         startTour();

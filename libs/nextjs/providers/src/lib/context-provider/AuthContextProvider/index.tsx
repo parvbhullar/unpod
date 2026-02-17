@@ -26,7 +26,6 @@ import type {
   AuthState,
   GlobalData,
   Organization,
-  Subscription,
   User,
 } from '@unpod/constants/types';
 
@@ -36,7 +35,6 @@ const ContextState: AuthState = {
   isAuthenticated: false,
   isLoading: true,
   visitorId: null,
-  subscription: null,
   currency: process.env.currency,
   globalData: {
     permissions: null,
@@ -71,7 +69,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     isAuthenticated: props?.isAuthenticate || false,
     isLoading: !props?.isAuthenticate,
     visitorId: null,
-    subscription: null,
     currency: process.env.currency,
     globalData: {
       permissions: null,
@@ -89,7 +86,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
       const user = userData.user;
       if (user?.active_organization) {
         setOrgHeader(user?.active_organization.domain_handle);
-        getSubscription();
       }
       if (user) {
         onSuccessAuthenticate(user);
@@ -109,10 +105,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     }));
   }, []);
 
-  const setSubscription = useCallback((subscription: Subscription | null) => {
-    setState((prev: AuthState) => ({ ...prev, subscription }));
-  }, []);
-
   const updateAuthLoading = useCallback((loading: boolean) => {
     setState((prev: AuthState) => ({ ...prev, isLoading: loading }));
   }, []);
@@ -126,7 +118,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
       ...prev,
       user: null,
       isAuthenticated: false,
-      subscription: null,
       activeOrg: null,
     }));
   }, []);
@@ -214,23 +205,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     }
   }, [state.activeOrg?.domain_handle]);
 
-  const getSubscription = useCallback(() => {
-    getDataApi<Subscription>('subscriptions/user-subscription/', infoViewActionsContext)
-      .then((res) => {
-        setSubscription(res.data);
-      })
-      .catch((response: unknown) => {
-        setSubscription(null);
-        consoleLog('getSubscription error', response);
-      });
-  }, [infoViewActionsContext, setSubscription]);
-
-  const getAuthUser = useCallback((): Promise<unknown> => {
+ const getAuthUser = useCallback((): Promise<unknown> => {
     return new Promise((resolve, reject) => {
       getDataApi<User>('auth/me/', infoViewActionsContext)
         .then((res) => {
           updateAuthUser(res.data);
-          getSubscription();
           return resolve(res);
         })
         .catch((response: unknown) => {
@@ -238,7 +217,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
           return reject(response);
         });
     });
-  }, [infoViewActionsContext, updateAuthUser, getSubscription]);
+  }, [infoViewActionsContext, updateAuthUser]);
 
   const signUpUser = useCallback(
     (payload: unknown): Promise<unknown> => {
@@ -273,7 +252,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
                       setOrgHeader(
                         meRes.data.active_organization.domain_handle,
                       );
-                      getSubscription();
                       setActiveOrg(meRes.data.active_organization);
                     }
 
@@ -296,7 +274,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     [
       infoViewActionsContext,
       storeToken,
-      getSubscription,
       setActiveOrg,
       updateAuthUser,
     ],
@@ -309,7 +286,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
           deleteToken()
             .then(() => {
               setAuthToken(null);
-              setSubscription(null);
               logoutAuthUser();
               return resolve(response);
             })
@@ -321,7 +297,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
           return reject(response);
         });
     });
-  }, [infoViewActionsContext, deleteToken, setSubscription, logoutAuthUser]);
+  }, [infoViewActionsContext, deleteToken, logoutAuthUser]);
 
   const onSuccessAuthenticate = (user: User): void => {
     getGlobalData()
@@ -408,8 +384,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
                 .then((meRes) => {
                   if (meRes.data?.active_organization?.domain_handle) {
                     setOrgHeader(meRes.data.active_organization.domain_handle);
-
-                    getSubscription();
                   }
                   onSuccessAuthenticate(meRes.data);
                 })
@@ -442,7 +416,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
       onSuccessAuthenticate,
       storeToken,
       setActiveOrg,
-      getSubscription,
       getAuthUser,
       updateAuthUser,
       signInUser,
@@ -453,7 +426,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     [
       storeToken,
       setActiveOrg,
-      getSubscription,
       getAuthUser,
       updateAuthUser,
       signInUser,

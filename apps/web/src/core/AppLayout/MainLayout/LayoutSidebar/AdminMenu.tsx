@@ -20,7 +20,6 @@ type AdminMenuProps = {
 const AdminMenu = ({ onClickMenu }: AdminMenuProps) => {
   const pathname = usePathname();
   const { isDesktopApp } = useIsDesktop();
-  console.log('subscription in admin menu', isDesktopApp);
   const { formatMessage } = useIntl();
   return (
     <StyledMainMenus orientation="vertical" align="center">
@@ -62,23 +61,7 @@ const AdminMenu = ({ onClickMenu }: AdminMenuProps) => {
           />
         </Tooltip>
       </AppLink>
-      {/*    {!isDesktopApp  &&
-        subscription?.allowed_modules?.includes('channels') && (
-          <AppLink href="/bridges">
-            <Tooltip placement="right" title={formatMessage({ id: 'nav.telephony' })}>
-              <StyledMiniAvatar
-                icon={<MdOutlinePhone fontSize={21} />}
-                onClick={() => onClickMenu('/bridges')}
-                className={
-                  pathname.startsWith('/bridges/') &&
-                  pathname !== '/bridges/audit/'
-                    ? 'active'
-                    : ''
-                }
-              />
-            </Tooltip>
-          </AppLink>
-        )}{' '}*/}
+
       {!isDesktopApp && (
         <AppLink href="/call-logs" data-tour="admin-call-logs">
           <Tooltip

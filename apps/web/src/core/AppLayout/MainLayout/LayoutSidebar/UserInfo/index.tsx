@@ -32,11 +32,9 @@ function getItem(
 const UserInfo = () => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const { logoutUser } = useAuthActionsContext();
-  const { user, subscription } = useAuthContext();
+  const { user } = useAuthContext();
   const pathname = usePathname();
   const { isDesktopApp } = useIsDesktop();
-  const hasSubscription = (subscription as { has_subscription?: boolean } | null)
-    ?.has_subscription;
   const { formatMessage } = useIntl();
 
   const items = useMemo<MenuProps['items']>(() => {
@@ -60,19 +58,6 @@ const UserInfo = () => {
         </span>,
         '/profile/',
       ),
-      hasSubscription &&
-        getItem(
-          formatMessage({ id: 'nav.myWallet' }),
-          'my-wallet',
-          <MdOutlineAccountBalanceWallet style={{ fontSize: 16 }} />,
-          `/wallet/`,
-        ),
-      getItem(
-        formatMessage({ id: 'nav.billing' }),
-        'billing',
-        <TbCalendarDollar style={{ fontSize: 16 }} />,
-        '/billing/',
-      ),
       getItem(
         formatMessage({ id: 'nav.signOut' }),
         'logout',
@@ -80,7 +65,7 @@ const UserInfo = () => {
       ),
     ];
     return baseItems.filter(Boolean) as MenuProps['items'];
-  }, [user, hasSubscription]);
+  }, [user]);
 
   const onUserMenuClick: MenuProps['onClick'] = (options) => {
     if (options.key === 'logout') {

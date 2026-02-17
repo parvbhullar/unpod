@@ -1,26 +1,21 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {
   StyledDivider,
   StyledMainMenus,
   StyledMiniAvatar,
 } from '@/core/AppLayout/MainLayout/LayoutSidebar/index.styled';
-import { MdChecklist, MdOutlineCall, MdVoiceChat } from 'react-icons/md';
+import {MdChecklist, MdOutlineCall} from 'react-icons/md';
 import AppLink from '@unpod/components/next/AppLink';
-import { Tooltip } from 'antd';
-import { useIntl } from 'react-intl';
-import { RiChat3Line } from 'react-icons/ri';
-import { usePathname } from 'next/navigation';
-import {
-  getDataApi,
-  useAuthActionsContext,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { HiUserGroup } from 'react-icons/hi';
-import { HiOutlineUsers } from 'react-icons/hi2';
-import { TbBrandGoogleAnalytics } from 'react-icons/tb';
-import type { Spaces } from '@unpod/constants/types';
+import {Tooltip} from 'antd';
+import {useIntl} from 'react-intl';
+import {RiChat3Line} from 'react-icons/ri';
+import {usePathname} from 'next/navigation';
+import {getDataApi, useAuthActionsContext, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {HiUserGroup} from 'react-icons/hi';
+import {HiOutlineUsers} from 'react-icons/hi2';
+import {TbBrandGoogleAnalytics} from 'react-icons/tb';
+import type {Spaces} from '@unpod/constants/types';
 
 const AIMenu = () => {
   const infoViewActionsContext = useInfoViewActionsContext();
@@ -88,17 +83,6 @@ const AIMenu = () => {
 
   return (
     <StyledMainMenus orientation="vertical" align="center">
-      <AppLink href={`/spaces/${spaceSlug}/chat/`}>
-        <Tooltip placement="right" title={formatMessage({ id: 'nav.chat' })}>
-          <StyledMiniAvatar
-            icon={<MdVoiceChat />}
-            className={
-              pathname.includes(`spaces/${spaceSlug}/chat`) ? 'active' : ''
-            }
-          />
-        </Tooltip>
-      </AppLink>
-
       <AppLink href={`/spaces/${spaceSlug}/call/`} data-tour="calls">
         <Tooltip placement="right" title={formatMessage({ id: 'nav.calls' })}>
           <StyledMiniAvatar

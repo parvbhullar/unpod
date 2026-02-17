@@ -327,3 +327,13 @@ export const ToggleButton = styled.span<ToggleButtonProps>`
     margin-right: 8px;
   }
 `;
+
+export const StyledContent = styled.div`
+  flex: 1;
+  padding: 20px 0 0 0;
+
+  @media screen and (min-width: 480px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`;
