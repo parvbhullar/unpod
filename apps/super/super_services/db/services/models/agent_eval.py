@@ -10,7 +10,6 @@ from super_services.libs.core.mixin import CreateUpdateMixinModel
 class AgentQAPairBaseModel(MongoDBModel, CreateUpdateMixinModel):
     """Model for storing QA pairs generated from agent configuration."""
 
-    agent_id: str = Field(...)
     question: str = Field(...)
     answer: str = Field(...)
     keywords: List[str] = Field(default_factory=list)
@@ -23,10 +22,12 @@ class AgentQAPairModel(BaseRepository):
         model = AgentQAPairBaseModel
         collection = "agent_qa_pairs"
         indexes = [
-            Index(fields=["agent_id"]),
             Index(fields=["status"]),
             Index(fields=["batch_id"]),
         ]
+
+    def __init__(self, token):
+        self.Meta.collection = f"collection_data_{token}"
 
 
 # =============================================================================
@@ -35,8 +36,6 @@ class AgentQAPairModel(BaseRepository):
 class KBQAPairBaseModel(MongoDBModel, CreateUpdateMixinModel):
     """Model for storing QA pairs generated from knowledge base documents."""
 
-    agent_id: str = Field(...)
-    kb_token: str = Field(...)
     question: str = Field(...)
     answer: str = Field(...)
     keywords: List[str] = Field(default_factory=list)
@@ -49,8 +48,9 @@ class KBQAPairModel(BaseRepository):
         model = KBQAPairBaseModel
         collection = "kb_qa_pairs"
         indexes = [
-            Index(fields=["agent_id"]),
-            Index(fields=["kb_token"]),
             Index(fields=["status"]),
             Index(fields=["batch_id"]),
         ]
+
+    def __init__(self, token):
+        self.Meta.collection = f"collection_data_{token}"

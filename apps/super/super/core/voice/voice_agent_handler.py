@@ -288,16 +288,29 @@ def _prewarm_embedding_model(cache: ServiceCache, logger: logging.Logger) -> Non
         ).lower()
         model_name = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
-        if embedding_backend == "onnx":
-            # Use ChromaDB's built-in ONNX MiniLM (faster)
+        if embedding_backend == "onnx" and "minilm" in model_name.lower():
+            # Use ChromaDB's built-in ONNX MiniLM (faster, but only for MiniLM)
             embedding_fn = embedding_functions.ONNXMiniLM_L6_V2()
-            logger.info(f"[PREWARM] ONNX embedding function created")
+            logger.info(f"[PREWARM] ONNX embedding function created: {model_name}")
         else:
-            # Default: SentenceTransformer (PyTorch)
+            # SentenceTransformer: supports any model including multilingual
             embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
                 model_name=model_name
             )
             logger.info(f"[PREWARM] SentenceTransformer embedding loaded: {model_name}")
+
+        # Materialize model artifacts at prewarm time to avoid first-call downloads
+        # during a live conversation (e.g., ONNX tarball fetch).
+        force_materialize = (
+            os.getenv("PREWARM_EMBEDDING_INFERENCE", "true").lower() == "true"
+        )
+        if force_materialize:
+            _embed_start = perf_counter()
+            _ = embedding_fn(["prewarm embedding model"])
+            logger.info(
+                f"[PREWARM] Embedding inference warmup complete: "
+                f"{(perf_counter() - _embed_start) * 1000:.0f}ms"
+            )
 
         # Also create shared ChromaDB ephemeral client
         chroma_client = chromadb.EphemeralClient()
@@ -383,8 +396,8 @@ def prewarm_process(proc) -> None:
 load_dotenv(override=True)
 
 # S3 configuration for call recordings (LiveKit Egress)
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
+S3_SECRET_KEY = os.getenv("S3_SECRET_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", os.getenv("AWS_DEFAULT_REGION"))
 
@@ -711,10 +724,10 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             self._logger.info(f"[RECORDING] Starting session recording for room: {room_name}")
 
             # Check if S3 credentials are configured
-            if not all([AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY]):
+            if not all([AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME, S3_ACCESS_KEY, S3_SECRET_KEY]):
                 self._logger.warning(
                     "[RECORDING] S3 credentials not fully configured. "
-                    "Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME"
+                    "Set S3_ACCESS_KEY, S3_SECRET_KEY, AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME"
                 )
                 return ""
 
@@ -728,8 +741,8 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                         s3=api.S3Upload(
                             bucket=AWS_STORAGE_BUCKET_NAME,
                             region=AWS_S3_REGION_NAME,
-                            access_key=AWS_ACCESS_KEY_ID,
-                            secret=AWS_SECRET_ACCESS_KEY,
+                            access_key=S3_ACCESS_KEY,
+                            secret=S3_SECRET_KEY,
                         ),
                     )
                 ],
@@ -757,6 +770,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
     ):
         try:
             if _agent:
+                await self._start_session_recording(ctx,user_state)
                 await self._init_event_bridge(ctx)
                 await self._signal_agent_joined(ctx, user_state)
                 if self._event_bridge:
@@ -1538,8 +1552,20 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         except Exception as e:
             self._logger.error(f"Error in execute_post_call: {e}")
         finally:
-            # CRITICAL: Always clean up session resources to prevent memory leaks
             await self._cleanup_session(user_state)
+
+    async def _start_session_recording(self,ctx,user_state):
+        recording_session_id = self._session_id or str(user_state.thread_id) or ctx.room.name
+        self._track_task(
+            asyncio.create_task(
+                self._start_recording_background(
+                    ctx=ctx,
+                    user_state=user_state,
+                    session_id=recording_session_id,
+                ),
+                name="recording_background",
+            )
+        )
 
     async def _resolve_inbound_sip_config(
         self, ctx: JobContext
@@ -1555,9 +1581,23 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         self._logger.info("[INBOUND] Starting inbound SIP config resolution...")
 
         async def resolve_config_by_number():
-            """Inner coroutine to resolve config from phone number."""
+            """Inner coroutine to resolve config from phone number.
+            Retries participant lookup since SIP caller may not have joined yet.
+            """
             _config_start = perf_counter()
-            agent_number = await self.get_agent_number(ctx)
+            agent_number = None
+            max_attempts = 5
+            for attempt in range(max_attempts):
+                agent_number = await self.get_agent_number(ctx)
+                if agent_number:
+                    break
+                if attempt < max_attempts - 1:
+                    self._logger.debug(
+                        f"[INBOUND] SIP participant not yet joined, "
+                        f"retrying ({attempt + 1}/{max_attempts})..."
+                    )
+                    await asyncio.sleep(0.5)
+
             self._logger.info(
                 f"[TIMING] get_agent_number: {(perf_counter() - _config_start) * 1000:.0f}ms"
             )
@@ -1565,7 +1605,8 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
 
             if not agent_number:
                 self._logger.warning(
-                    "[INBOUND] Could not get agent number for inbound SIP call. "
+                    "[INBOUND] Could not get agent number for inbound SIP call "
+                    f"after {max_attempts} attempts. "
                     "Check participant attributes for sip.trunkPhoneNumber or sip.calledNumber"
                 )
                 return None, None, agent_number
@@ -2224,6 +2265,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             "llm_provider",
             "llm_model",
             "llm_inference",
+            "speaking_plan",
             "superkik",  # SuperKik-specific config
         ]
 
@@ -2231,8 +2273,17 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         for key in override_keys:
             if key in executor_config and executor_config[key]:
                 old_val = merged.get(key)
-                merged[key] = executor_config[key]
-                overrides_applied.append(f"{key}: {old_val} -> {executor_config[key]}")
+                if (
+                    key == "speaking_plan"
+                    and isinstance(old_val, dict)
+                    and isinstance(executor_config[key], dict)
+                ):
+                    merged_plan = old_val.copy()
+                    merged_plan.update(executor_config[key])
+                    merged[key] = merged_plan
+                else:
+                    merged[key] = executor_config[key]
+                overrides_applied.append(f"{key}: {old_val} -> {merged.get(key)}")
 
         if overrides_applied:
             self._logger.info(
@@ -2715,23 +2766,6 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                     f"Participant ready: {participant.identity}, kind: {participant.kind}"
                 )
 
-                # Start recording in background (non-blocking) to avoid delaying agent startup
-                # Recording URL will be set on user_state when ready
-                recording_session_id = self._session_id or str(user_state.thread_id) or ctx.room.name
-
-                self._track_task(
-                    asyncio.create_task(
-                        self._start_recording_background(
-                            ctx=ctx,
-                            user_state=user_state,
-                            session_id=recording_session_id,
-                        ),
-                        name="recording_background",
-                    )
-                )
-
-                # OPTIMIZATION: Don't wait for task creation - start call immediately
-                # Task IDs will be updated in user_state when ready (background)
                 if task_creation:
                     # Schedule background callback to update user_state when task is ready
                     asyncio.create_task(

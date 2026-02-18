@@ -19,9 +19,9 @@ import time
 import uuid
 from abc import ABC
 from datetime import datetime
-from typing import TYPE_CHECKING, Annotated, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from pydantic import Field
+# from pydantic import Field
 from dotenv import load_dotenv
 
 from super.core.callback.base import BaseCallback
@@ -42,6 +42,7 @@ from super.core.voice.schema import AgentConfig, CallSession, UserState, Modalit
 # Conversation Intelligence imports
 try:
     from super.core.voice.livekit.conversation_state import DynamicConversationState
+
     CONVERSATION_INTELLIGENCE_AVAILABLE = True
 except ImportError:
     CONVERSATION_INTELLIGENCE_AVAILABLE = False
@@ -65,11 +66,11 @@ from super.core.voice.common.common import build_call_result
 from super.core.voice.common.prefect import trigger_post_call
 
 if TYPE_CHECKING:
-    from livekit.agents import JobContext, llm
+    # from livekit.agents import JobContext, llm
     from livekit.agents.voice import AgentSession
 
 load_dotenv(override=True)
-from livekit.agents import ChatContext, ChatMessage
+# from livekit.agents import ChatContext, ChatMessage
 from super_services.db.services.models.task import TaskModel
 
 # from super.core.voice.managers.knowledge_base import KnowledgeBaseManager
@@ -81,13 +82,14 @@ try:
     from livekit.agents.voice import (
         Agent,
         AgentSession,
-        RunContext,
+        # RunContext,
         ConversationItemAddedEvent,
         UserInputTranscribedEvent,
         AgentStateChangedEvent,
     )
-    from livekit.agents import llm, stt
-    from livekit.agents.llm import function_tool
+    from livekit.agents import stt
+
+    # from livekit.agents.llm import function_tool
 
     LIVEKIT_AVAILABLE = True
 except ImportError:
@@ -158,6 +160,27 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             model_config or (user_state.model_config if user_state else None) or {}
         )
 
+        # Seed eval ground truth for post-call judgement when present in config/context.
+        if self.user_state:
+            if not isinstance(self.user_state.extra_data, dict):
+                self.user_state.extra_data = {}
+            if "eval_ground_truth" not in self.user_state.extra_data:
+                qa_pairs = []
+                if isinstance(self.config, dict):
+                    qa_pairs = (
+                        self.config.get("qa_pairs")
+                        or self.config.get("evaluation_qa_pairs")
+                        or []
+                    )
+                if not qa_pairs and isinstance(
+                    self.user_state.extra_data.get("data"), dict
+                ):
+                    qa_pairs = self.user_state.extra_data.get("data", {}).get(
+                        "qa_pairs", []
+                    )
+                if isinstance(qa_pairs, list) and qa_pairs:
+                    self.user_state.extra_data["eval_ground_truth"] = qa_pairs
+
         # Log config for STT/TTS debugging
         self._logger.info(
             f"[LITE_HANDLER_INIT] Config received - "
@@ -207,13 +230,17 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         self._services_initialized = False
         self._first_response_sent = asyncio.Event()
         self._kb_ready = asyncio.Event()
+        self._kb_warmup_task: Optional[asyncio.Task] = None
+        self._kb_auto_injected: bool = False
 
         # Realtime mode detection
         # In full realtime mode, TTS is not available - realtime LLM handles audio natively
         self._is_realtime_mode = self.config.get("llm_realtime", False)
         self._mixed_realtime_mode = self.config.get("mixed_realtime_mode", False)
         # Full realtime = realtime mode without mixed mode (no TTS available)
-        self._is_full_realtime = self._is_realtime_mode and not self._mixed_realtime_mode
+        self._is_full_realtime = (
+            self._is_realtime_mode and not self._mixed_realtime_mode
+        )
 
         # Agent/user references for callbacks
         self.agent: Optional[User] = None
@@ -358,13 +385,16 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             )
 
             # Start background KB warmup (non-blocking)
-            # With preloaded embeddings from ServiceCache, KB init is fast (~50-100ms)
-            # so we start immediately instead of waiting for first response
-            if self.use_rag_processor and self._kb_enabled():
-                asyncio.create_task(
+            # KB warmup now starts whenever knowledge_base is configured,
+            # regardless of use_rag_processor (which only controls sync enrichment).
+            if self._kb_enabled():
+                self._kb_warmup_task = asyncio.create_task(
                     self._background_kb_warmup(immediate=True),
                     name=f"{self._session_id}-kb-warmup",
                 )
+            else:
+                # Unblock get_docs() waiters when KB warmup is not applicable.
+                self._kb_ready.set()
 
             self._services_initialized = True
             elapsed = (perf_counter() - preload_start) * 1000
@@ -382,6 +412,68 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             return False
         return bool(self.config.get("knowledge_base"))
 
+    async def _auto_inject_kb_context(self) -> None:
+        """Proactively inject KB context when LLM hasn't called get_docs.
+
+        Fires once after _KB_AUTO_INJECT_TURN turns if the agent has
+        a ready KB manager but the LLM never invoked get_docs.
+        Uses generate_reply to provide a KB-informed follow-up.
+        """
+        if self._kb_auto_injected:
+            return
+        self._kb_auto_injected = True
+
+        try:
+            kb_manager = getattr(self, "_kb_manager", None)
+            if not kb_manager:
+                self._logger.warning("[KB_AUTO_INJECT] No KB manager available")
+                return
+
+            # Get last user message as query
+            last_user_msg = ""
+            for entry in reversed(self.user_state.transcript):
+                if entry.get("role") == "user":
+                    last_user_msg = entry.get("content", "")
+                    break
+
+            if not last_user_msg:
+                return
+
+            self._logger.info(
+                f"[KB_AUTO_INJECT] LLM skipped get_docs, "
+                f"proactively querying KB: {last_user_msg[:80]}"
+            )
+
+            docs = await kb_manager.get_docs(
+                query=last_user_msg,
+                user_state=self.user_state,
+            )
+
+            if not docs or isinstance(docs, dict):
+                self._logger.info("[KB_AUTO_INJECT] No documents found")
+                return
+
+            context_parts = [
+                doc.content if hasattr(doc, "content") else str(doc) for doc in docs[:3]
+            ]
+            context = "\n".join(context_parts)
+
+            if self._session and context.strip():
+                await self._session.generate_reply(
+                    instructions=(
+                        "Here is relevant information from the knowledge base "
+                        "that you should reference:\n"
+                        f"{context}\n\n"
+                        "Use this context to enhance your response."
+                    )
+                )
+                self._logger.info(
+                    "[KB_AUTO_INJECT] Injected KB context via generate_reply"
+                )
+
+        except Exception as e:
+            self._logger.warning(f"[KB_AUTO_INJECT] Failed: {e}")
+
     async def _background_kb_warmup(self, immediate: bool = True) -> None:
         """
         Warm up KB in background.
@@ -394,6 +486,10 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                       for first response. Default: False for backward compat.
         """
         try:
+            if not self._kb_enabled():
+                self._kb_ready.set()
+                return
+
             if not immediate:
                 # Legacy behavior: wait for first response
                 await asyncio.wait_for(
@@ -402,34 +498,35 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 )
                 await asyncio.sleep(0.5)
 
-            if self._kb_enabled():
-                _start = asyncio.get_event_loop().time()
+            _start = asyncio.get_event_loop().time()
 
-                from super.core.voice.managers.knowledge_base import (
-                    KnowledgeBaseManager,
-                )
+            from super.core.voice.managers.knowledge_base import (
+                KnowledgeBaseManager,
+            )
 
-                kb_manager = KnowledgeBaseManager(
-                    logger=self._logger.getChild("kb"),
-                    session_id=self._session_id,
-                    user_state=self.user_state,
-                    config=self.config,
-                )
+            kb_manager = KnowledgeBaseManager(
+                logger=self._logger.getChild("kb"),
+                session_id=self._session_id,
+                user_state=self.user_state,
+                config=self.config,
+            )
 
-                # Initialize index (uses preloaded embeddings from ServiceCache)
-                await kb_manager._init_context_retrieval()
+            # Phase 1: initialize local retrieval path and mark ready ASAP.
+            await kb_manager._init_context_retrieval()
+            self._kb_manager = kb_manager
+            self._kb_ready.set()
+            self._logger.info(
+                "[KB_WARMUP] Local KB retrieval initialized; signaling ready for get_docs"
+            )
 
-                # Preload documents from remote service (if configured)
-                await kb_manager._preload_knowledge_base_documents(self.user_state)
+            # Phase 2: continue expensive remote preload in background.
+            await kb_manager._preload_knowledge_base_documents(self.user_state)
 
-                self._kb_manager = kb_manager
-                self._kb_ready.set()
-
-                elapsed_ms = (asyncio.get_event_loop().time() - _start) * 1000
-                self._logger.info(
-                    f"Background KB warmup complete in {elapsed_ms:.0f}ms "
-                    f"(immediate={immediate})"
-                )
+            elapsed_ms = (asyncio.get_event_loop().time() - _start) * 1000
+            self._logger.info(
+                f"Background KB warmup complete in {elapsed_ms:.0f}ms "
+                f"(immediate={immediate})"
+            )
 
         except asyncio.TimeoutError:
             self._logger.warning("KB warmup timeout - first response not sent")
@@ -485,7 +582,9 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             userdata=userdata, user_state=self.user_state
         )
 
-    async def _persist_session_quality_metrics(self, reason: str = "session_end") -> None:
+    async def _persist_session_quality_metrics(
+        self, reason: str = "session_end"
+    ) -> None:
         """
         Persist quality metrics and call summary from DynamicConversationState when session ends.
 
@@ -551,7 +650,9 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 self.user_state.extra_data["quality_metrics"] = metrics
                 self.user_state.extra_data["conversation_state"] = conv_state.to_dict()
                 self.user_state.extra_data["call_summary"] = call_summary_dict
-                self._logger.debug("Quality metrics and call summary added to user_state.extra_data")
+                self._logger.debug(
+                    "Quality metrics and call summary added to user_state.extra_data"
+                )
 
             # Save call summary to database using TaskModel
             task_id = self.user_state.task_id if self.user_state else None
@@ -563,19 +664,27 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     status="completed",
                     output=call_summary_dict,
                 )
-                self._logger.info(f"[CALL_SUMMARY] Saved to execution log | task_id={task_id}")
+                self._logger.info(
+                    f"[CALL_SUMMARY] Saved to execution log | task_id={task_id}"
+                )
 
                 # 2. Update TaskModel.output with call summary for quick access
                 try:
-                    TaskModel.update_one(
+                    TaskModel._get_collection().update_one(
                         {"task_id": task_id},
                         {"$set": {"output.call_summary": call_summary_dict}},
                     )
-                    self._logger.info(f"[CALL_SUMMARY] Updated task output | task_id={task_id}")
+                    self._logger.info(
+                        f"[CALL_SUMMARY] Updated task output | task_id={task_id}"
+                    )
                 except Exception as db_error:
-                    self._logger.error(f"[CALL_SUMMARY] Failed to update task: {db_error}")
+                    self._logger.error(
+                        f"[CALL_SUMMARY] Failed to update task: {db_error}"
+                    )
             else:
-                self._logger.warning("[CALL_SUMMARY] No task_id available, skipping DB storage")
+                self._logger.warning(
+                    "[CALL_SUMMARY] No task_id available, skipping DB storage"
+                )
 
             # Persist to JSONL file
             filepath = conv_state.persist_quality_metrics(reason=reason)
@@ -626,9 +735,94 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         except Exception as e:
             self._logger.debug(f"Error recording agent response for quality: {e}")
 
+    def _ensure_eval_records(self) -> Dict[str, Any]:
+        """Ensure user_state.extra_data.eval_records exists for post-call eval."""
+        if not self.user_state:
+            return {}
+
+        if not isinstance(self.user_state.extra_data, dict):
+            self.user_state.extra_data = {}
+
+        eval_records = self.user_state.extra_data.get("eval_records")
+        if not isinstance(eval_records, dict):
+            eval_records = {}
+            self.user_state.extra_data["eval_records"] = eval_records
+
+        if not isinstance(eval_records.get("tool_calls"), list):
+            eval_records["tool_calls"] = []
+        if not isinstance(eval_records.get("agent_responses"), list):
+            eval_records["agent_responses"] = []
+        if not isinstance(eval_records.get("user_messages"), list):
+            eval_records["user_messages"] = []
+        if not isinstance(eval_records.get("sequence_counter"), int):
+            eval_records["sequence_counter"] = 0
+
+        return eval_records
+
+    def _next_eval_sequence(self) -> int:
+        eval_records = self._ensure_eval_records()
+        if not eval_records:
+            return 0
+        eval_records["sequence_counter"] += 1
+        return eval_records["sequence_counter"]
+
+    def _record_eval_user_message(self, content: str) -> None:
+        """Capture user message for call-end QA alignment."""
+        try:
+            eval_records = self._ensure_eval_records()
+            if not eval_records:
+                return
+            eval_records["user_messages"].append(
+                {
+                    "sequence_id": self._next_eval_sequence(),
+                    "content": content,
+                    "timestamp": datetime.utcnow().isoformat(),
+                }
+            )
+        except Exception as e:
+            self._logger.debug(f"Failed to record user eval message: {e}")
+
+    def _record_eval_agent_response(self, content: str) -> None:
+        """Capture assistant response for call-end QA evaluation."""
+        try:
+            eval_records = self._ensure_eval_records()
+            if not eval_records:
+                return
+            eval_records["agent_responses"].append(
+                {
+                    "sequence_id": self._next_eval_sequence(),
+                    "content": content,
+                    "timestamp": datetime.utcnow().isoformat(),
+                }
+            )
+        except Exception as e:
+            self._logger.debug(f"Failed to record assistant eval response: {e}")
+
     def create_agent(self, ctx) -> "Agent":
         """Create the LiveKit agent (state built internally by agent)."""
         instructions = self.prompt_manager._create_assistant_prompt()
+
+        # Inject KB awareness into system prompt when KB is configured
+        if self._kb_enabled():
+            kb_raw = self.config.get("knowledge_base", {})
+            if isinstance(kb_raw, list):
+                kb_hint = ", ".join(
+                    entry.get("name", str(entry))
+                    if isinstance(entry, dict)
+                    else str(entry)
+                    for entry in kb_raw
+                )
+            elif isinstance(kb_raw, dict):
+                kb_hint = kb_raw.get("name", str(kb_raw))
+            else:
+                kb_hint = str(kb_raw)
+            instructions += (
+                "\n\n## Knowledge Base\n"
+                "You have access to a knowledge base via the **get_docs** tool. "
+                "ALWAYS call get_docs before answering domain-specific, factual, "
+                f"or product/service questions. Knowledge bases: {kb_hint}"
+            )
+            self._logger.info("[KB] Injected KB instructions into system prompt")
 
         agent = LiveKitLiteAgent(
             handler=self,
@@ -896,7 +1090,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 return
 
             if not event.is_final:
-                 return
+                return
 
             # Reset idle timer on user activity
             self._reset_idle_timer()
@@ -912,11 +1106,13 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     "participant": self.user_state.extra_data.get("identity"),
                 }
             )
+            self._record_eval_user_message(content)
 
             # Ensure user is a User object (defensive check)
             user = self.user_state.user
             if isinstance(user, dict):
                 import uuid
+
                 raw_id = user.get("id", user.get("user_id"))
                 user_id = str(raw_id) if raw_id is not None else str(uuid.uuid4())
                 user = User.add_user(
@@ -1008,7 +1204,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 if self.use_conversation_intelligence and session.userdata:
                     try:
                         userdata = session.userdata
-                        if hasattr(userdata, 'record_agent_response'):
+                        if hasattr(userdata, "record_agent_response"):
                             result = userdata.record_agent_response(
                                 response_text=content,
                                 stage=userdata.current_stage,
@@ -1078,7 +1274,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
             nonlocal llm_met, tts_met, eou_met
 
-            nonlocal turn_count, cumulative_stt, cumulative_llm, cumulative_tts, cumulative_total, stt_met, real_time_model_met, realtime_total,prompt_tokens,completion_tokens
+            nonlocal turn_count, cumulative_stt, cumulative_llm, cumulative_tts, cumulative_total, stt_met, real_time_model_met, realtime_total, prompt_tokens, completion_tokens
 
             metrics.log_metrics(ev.metrics)
 
@@ -1102,7 +1298,12 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 realtime_total += real_time_model_met
 
                 latency_data = self.user_state.extra_data.get("latency_metrics", [])
-                latency_data.append({"realtime_latency":real_time_model_met, "realtime_avg":realtime_total / turn_count})
+                latency_data.append(
+                    {
+                        "realtime_latency": real_time_model_met,
+                        "realtime_avg": realtime_total / turn_count,
+                    }
+                )
                 print(
                     f"\n\n real_time_model_met avg : {realtime_total / turn_count} \n\n "
                 )
@@ -1128,7 +1329,19 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 avg__current_total = cumulative_total / turn_count
                 # avg_total = (avg_stt + avg_llm + avg_tts)/turn_count
 
-                self.add_latency_chart(turn_count,llm_latency,tts_latency,stt_latency,current_turn_total,avg_llm,avg_stt,avg_tts,avg__current_total,prompt_tokens,completion_tokens)
+                self.add_latency_chart(
+                    turn_count,
+                    llm_latency,
+                    tts_latency,
+                    stt_latency,
+                    current_turn_total,
+                    avg_llm,
+                    avg_stt,
+                    avg_tts,
+                    avg__current_total,
+                    prompt_tokens,
+                    completion_tokens,
+                )
 
                 print(f"\n{'=' * 60}")
                 print(f"Turn #{turn_count} Metrics:")
@@ -1142,22 +1355,51 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 # print(f"  Overall Avg Total: {avg_total:.2f}s")
                 print(f"{'=' * 60}\n")
 
+                # # Auto-inject KB context if LLM skipped get_docs
+                # _KB_AUTO_INJECT_TURN = 2
+                # if (
+                #     turn_count == _KB_AUTO_INJECT_TURN
+                #     and self._kb_enabled()
+                #     and not self._kb_auto_injected
+                #     and self._kb_ready.is_set()
+                #     and self._agent
+                #     and getattr(self._agent, "_kb_tool_calls", 0) == 0
+                # ):
+                #     self._logger.warning(
+                #         f"[KB_AUTO_INJECT] get_docs not called after "
+                #         f"{turn_count} turns, auto-injecting KB context"
+                #     )
+                #     asyncio.create_task(self._auto_inject_kb_context())
+
                 eou_met = None
                 llm_met = None
                 tts_met = None
                 stt_met = None
-                prompt_tokens=0
-                completion_tokens=0
+                prompt_tokens = 0
+                completion_tokens = 0
 
-    def add_latency_chart(self,turn_count,llm_latency,tts_latency,stt_latency,current_turn_total,avg_llm,avg_stt,avg_tts,avg__current_total,prompt_tokens,completion_tokens):
-        if not isinstance(self.user_state.extra_data,dict):
+    def add_latency_chart(
+        self,
+        turn_count,
+        llm_latency,
+        tts_latency,
+        stt_latency,
+        current_turn_total,
+        avg_llm,
+        avg_stt,
+        avg_tts,
+        avg__current_total,
+        prompt_tokens,
+        completion_tokens,
+    ):
+        if not isinstance(self.user_state.extra_data, dict):
             self.user_state.extra_data = {}
 
-        latency_data = self.user_state.extra_data.get("latency_metrics",[])
+        latency_data = self.user_state.extra_data.get("latency_metrics", [])
         provider_data = self.user_state.extra_data.get("service_modes")
 
         latency_entry = {
-            "turn_count":turn_count,
+            "turn_count": turn_count,
             "llm_latency": llm_latency,
             "tts_latency": tts_latency,
             "stt_latency": stt_latency,
@@ -1172,22 +1414,19 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
         if provider_data:
             try:
-                latency_entry['stt_provider']=provider_data.stt_provider
-                latency_entry['tts_provider']=provider_data.tts_provider
-                latency_entry['llm_provider']=provider_data.llm_provider
-                latency_entry['llm_type']=provider_data.llm_type
-                latency_entry['stt_type']=provider_data.stt_type
-                latency_entry['tts_type']=provider_data.tts_type
+                latency_entry["stt_provider"] = provider_data.stt_provider
+                latency_entry["tts_provider"] = provider_data.tts_provider
+                latency_entry["llm_provider"] = provider_data.llm_provider
+                latency_entry["llm_type"] = provider_data.llm_type
+                latency_entry["stt_type"] = provider_data.stt_type
+                latency_entry["tts_type"] = provider_data.tts_type
 
             except Exception as e:
                 pass
 
-
         latency_data.append(latency_entry)
 
         self.user_state.extra_data["latency_metrics"] = latency_data
-
-
 
     def _parse_block_message(
         self, raw_message: str
@@ -1632,6 +1871,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
         # Record agent response for quality metrics (Gap #2 fix)
         await self._record_agent_response_for_quality(content)
+        self._record_eval_agent_response(content)
 
         # Notify plugins
         await self.plugins.broadcast_event("on_agent_speech", content)
@@ -2491,7 +2731,9 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     "first_message",
                     "Hello! How can I help you today?",
                 )
-                first_message = self.prompt_manager._replace_template_params(first_message)
+                first_message = self.prompt_manager._replace_template_params(
+                    first_message
+                )
                 await session.generate_reply(instructions=first_message)
             else:
                 self._logger.info(
@@ -2778,7 +3020,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             if self.use_conversation_intelligence and self._session:
                 try:
                     userdata = self._session.userdata
-                    if hasattr(userdata, 'get_quality_metrics'):
+                    if hasattr(userdata, "get_quality_metrics"):
                         quality_metrics = userdata.get_quality_metrics()
                         self._logger.info(userdata.get_quality_log_line())
                         self._logger.info(
@@ -3020,7 +3262,6 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         self._idle_warning_count = 0
         self._logger.debug("[IDLE] Timer reset - activity detected")
 
-
     async def _start_idle_monitor(self) -> None:
         """Start the idle timeout monitoring task."""
         if self._idle_monitor_running:
@@ -3098,7 +3339,9 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             return
 
         # Get user language from config
-        user_language = self.config.get("preferred_language", "en") if self.config else "en"
+        user_language = (
+            self.config.get("preferred_language", "en") if self.config else "en"
+        )
 
         # Get localized warning message
         param = f"idle_warning_{warning_number}"

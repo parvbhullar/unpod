@@ -11,7 +11,7 @@ CALL_ENVS = {
     "TOGETHER_API_KEY": os.environ.get("TOGETHER_API_KEY"),
     "DEEPINFRA_API_KEY": os.environ.get("DEEPINFRA_API_KEY"),
     "SERP_API_KEY": os.environ.get("SERP_API_KEY"),
-    "STABLE_DIFFUSION_KEY": os.environ.get("STABLE_DIFFUSION_KEY"),
+    "STABLE_DEFUSION_KEY": os.environ.get("STABLE_DEFUSION_KEY"),
     "TAVILY_API_KEY": os.environ.get("TAVILY_API_KEY"),
     "EXA_API_KEY": os.environ.get("EXA_API_KEY"),
     "WEB_PROXY": os.environ.get("WEB_PROXY"),
@@ -25,8 +25,10 @@ CALL_ENVS = {
     "CUSTOM_SEARCH_ENGINE_ID": os.environ.get("CUSTOM_SEARCH_ENGINE_ID"),
     "QUESTION_TYPE_MODEL": os.environ.get("QUESTION_TYPE_MODEL"),
     "CLIPDROP_API_KEY": os.environ.get("CLIPDROP_API_KEY"),
-    "ELEVENLABS_API_KEY": os.environ.get("ELEVENLABS_API_KEY"),
-    "API_SERVICE_URL": os.environ.get("API_SERVICE_URL"),
+    "ELEVEN_LABS_KEY": os.environ.get("ELEVEN_LABS_KEY"),
+    "AGENTS_SEARCH_API": os.environ.get("AGENTS_SEARCH_API"),
+    "SEARCH_SERVICE_URL": os.environ.get("SEARCH_SERVICE_URL"),
+    "STORE_SERVICE_URL": os.environ.get("STORE_SERVICE_URL"),
     "MEMORY_PROVIDER": os.environ.get("MEMORY_PROVIDER"),
     "MEMORY_SERVICE_HOST": os.environ.get("MEMORY_SERVICE_HOST"),
     "MEMORY_SERVICE_PORT": os.environ.get("MEMORY_SERVICE_PORT"),
@@ -49,11 +51,12 @@ CALL_ENVS = {
     "TWILIO_PHONE_NUMBER": os.environ.get("TWILIO_PHONE_NUMBER"),
     "TWILIO_SIP_DOMAIN": os.environ.get("TWILIO_SIP_DOMAIN"),
     "TWILIO_TRUNK_ID": os.environ.get("TWILIO_TRUNK_ID"),
-    "VAPI_API_KEY": os.environ.get("VAPI_API_KEY"),
+    "VAPI_AUTH_TOKEN": os.environ.get("VAPI_AUTH_TOKEN"),
     "VAPI_PHONE_NUMBER_ID": os.environ.get("VAPI_PHONE_NUMBER_ID"),
     "ZEP_KEY": os.environ.get("ZEP_KEY"),
     "PLAYHT_API_KEY": os.environ.get("PLAYHT_API_KEY"),
     "PLAYHT_USER_ID": os.environ.get("PLAYHT_USER_ID"),
+    "ELEVEN_API_KEY": os.environ.get("ELEVEN_API_KEY"),
     "SARVAM_API_KEY": os.environ.get("SARVAM_API_KEY"),
     "AWS_ACCESS_KEY_ID": os.environ.get("AWS_ACCESS_KEY_ID"),
     "AWS_SECRET_ACCESS_KEY": os.environ.get("AWS_SECRET_ACCESS_KEY"),
@@ -77,7 +80,7 @@ CALL_ENVS = {
     "LIVEKIT_ROOM_NAME": os.environ.get("LIVEKIT_ROOM_NAME"),
     "DISCORD_APP_ID": os.environ.get("DISCORD_APP_ID"),
     "DISCORD_PUBLIC_KEY": os.environ.get("DISCORD_PUBLIC_KEY"),
-    "VAPI_URL": os.environ.get("VAPI_URL", "https://api.vapi.ai"),
+    "VAPI_BASE": os.environ.get("VAPI_BASE", "https://api.vapi.ai"),
     # Recordings
     "INBOUND_CALLS_EXECUTION_PATH": os.environ.get("INBOUND_CALLS_EXECUTION_PATH")
     or "calls_cron.json",
@@ -101,6 +104,6 @@ CALL_ENVS = {
     # SMS
     "MSG91_AUTH_KEY": os.environ.get("MSG91_AUTH_KEY"),
     # Extra
-    "BUSINESS_HOURS_BYPASS_NUMBERS": "+919738301026,+919460819718",
+    "BUSINESS_HOURS_BYPASS_NUMBERS": os.environ.get("BUSINESS_HOURS_BYPASS_NUMBERS"),
     "BUSINESS_HOURS_END": "21",
 }

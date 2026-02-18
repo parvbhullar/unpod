@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, asdict
-from typing import Optional, List, Any
+from typing import Optional, List, Any, Dict
 import pytest
 
 from livekit.agents import AgentSession, ChatContext, inference, llm
@@ -15,6 +15,7 @@ from super.core.voice.livekit.lite_handler import LiveKitLiteHandler
 @dataclass
 class TestCaseResult:
     """Result of a single test case evaluation."""
+
     test_case_index: int
     question: str
     expected_answer: str
@@ -34,6 +35,7 @@ class TestCaseResult:
 @dataclass
 class EvalResults:
     """Aggregated evaluation results."""
+
     agent_id: str
     total_cases: int = 0
     passed_cases: int = 0
@@ -74,7 +76,7 @@ class EvalResults:
             "failed_cases": self.failed_cases,
             "pass_rate": f"{self.pass_rate:.1f}%",
             "avg_similarity_score": f"{self.avg_similarity_score:.1f}%",
-            "test_results": [r.to_dict() for r in self.test_results]
+            "test_results": [r.to_dict() for r in self.test_results],
         }
 
     def summary(self) -> str:
@@ -92,32 +94,545 @@ class EvalResults:
 
 
 class EvalTestAgent:
-    def __init__(self ,model_config):
+    def __init__(self, model_config):
         self.config = model_config
-        self.service_factory  =LiveKitServiceFactory(model_config)
+        self.service_factory = LiveKitServiceFactory(model_config)
 
+    async def evaluate_call_records(
+        self,
+        eval_records: Dict[str, Any],
+        qa_pairs: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """
+        Evaluate live call records (user/tool/assistant traces) against QA ground truth.
+        """
+        qa_pairs = self._normalize_qa_pairs(qa_pairs or [])
+        if not isinstance(eval_records, dict):
+            eval_records = {}
+
+        user_messages = eval_records.get("user_messages", []) or []
+        agent_responses = eval_records.get("agent_responses", []) or []
+        tool_calls = eval_records.get("tool_calls", []) or []
+
+        threshold = float(self.config.get("eval_answer_threshold", 2.0))
+        question_match_threshold = float(
+            self.config.get("eval_question_match_threshold", 2.0)
+        )
+        results: List[Dict[str, Any]] = []
+        passed_cases = 0
+        skipped_records = 0
+        skipped_details: List[Dict[str, Any]] = []
+
+        # Sort for deterministic matching by runtime sequence.
+        user_messages = sorted(user_messages, key=lambda x: x.get("sequence_id", 0))
+        agent_responses = sorted(agent_responses, key=lambda x: x.get("sequence_id", 0))
+        tool_calls = sorted(tool_calls, key=lambda x: x.get("sequence_id", 0))
+
+        async with self._judge_llm() as judge_llm_model:
+            for user_record in user_messages:
+                user_seq = user_record.get("sequence_id", -1)
+                next_user_seq = self._next_user_seq(user_seq, user_messages)
+                matched_response = self._find_response_for_window(
+                    user_seq=user_seq,
+                    next_user_seq=next_user_seq,
+                    responses=agent_responses,
+                )
+                matched_tool = self._find_tool_for_window(
+                    user_seq=user_seq,
+                    next_user_seq=next_user_seq,
+                    tools=tool_calls,
+                )
+
+                actual_response = (matched_response or {}).get("content", "")
+                actual_tool = (matched_tool or {}).get("tool_name", "")
+                user_text = str(user_record.get("content", "") or "")
+
+                if not user_text.strip():
+                    skipped_records += 1
+                    skipped_details.append(
+                        {
+                            "eval_record_sequence_id": user_seq,
+                            "user_message": user_text,
+                            "reason": "empty_user_message",
+                        }
+                    )
+                    continue
+
+                qa_match = self._best_qa_for_record(
+                    user_text=user_text,
+                    qa_pairs=qa_pairs,
+                    actual_tool=actual_tool,
+                    question_match_threshold=question_match_threshold,
+                )
+                if qa_match is None:
+                    skipped_records += 1
+                    best_guess = self._best_qa_similarity_only(
+                        user_text=user_text,
+                        qa_pairs=qa_pairs,
+                    )
+                    skipped_details.append(
+                        {
+                            "eval_record_sequence_id": user_seq,
+                            "user_message": user_text,
+                            "reason": "no_qa_match_above_threshold",
+                            "best_question_match_score": round(
+                                float(best_guess.get("score", 0.0)), 2
+                            ),
+                            "threshold": question_match_threshold,
+                            "best_qa_question": best_guess.get("question"),
+                        }
+                    )
+                    continue
+
+                qa_idx, qa, question_score = qa_match
+                question = str(qa.get("question", "") or "")
+                expected_answer = str(
+                    qa.get("answer", qa.get("expected_answer", "")) or ""
+                )
+                expected_intent = str(qa.get("intent", "") or "").strip()
+                expected_tool = str(
+                    qa.get("tool_name", qa.get("expected_tool", "")) or ""
+                ).strip()
+
+                llm_judgement = await self._judge_case_with_llm(
+                    judge_llm_model=judge_llm_model,
+                    question=question,
+                    expected_answer=expected_answer,
+                    expected_intent=expected_intent,
+                    expected_tool=expected_tool,
+                    actual_response=actual_response,
+                    actual_tool=actual_tool,
+                    answer_threshold=threshold,
+                )
+
+                if llm_judgement.get("parse_error"):
+                    answer_score = (
+                        self._calculate_text_similarity(
+                            actual_response, expected_answer
+                        )
+                        if actual_response and expected_answer
+                        else 0.0
+                    )
+                    answer_pass = not expected_answer or answer_score >= threshold
+                    tool_pass = (
+                        True
+                        if not expected_tool
+                        else expected_tool.lower() == str(actual_tool).lower()
+                    )
+                    intent_pass = (
+                        True
+                        if not expected_intent
+                        else self._intent_match_heuristic(
+                            expected_intent, actual_response, question
+                        )
+                    )
+                    passed = bool(answer_pass and tool_pass and intent_pass)
+                    judge_reason = (
+                        llm_judgement.get("reason")
+                        or "LLM parse failed; heuristic fallback used"
+                    )
+                else:
+                    answer_score = float(llm_judgement.get("answer_score", 0.0) or 0.0)
+                    answer_pass = bool(llm_judgement.get("answer_pass", False))
+                    tool_pass = bool(llm_judgement.get("tool_pass", False))
+                    intent_pass = bool(llm_judgement.get("intent_pass", False))
+                    passed = bool(llm_judgement.get("passed", False))
+                    judge_reason = llm_judgement.get("reason", "")
+
+                if passed:
+                    passed_cases += 1
+
+                results.append(
+                    {
+                        "qa_index": qa_idx,
+                        "index": len(results),
+                        "eval_record_sequence_id": user_seq,
+                        "question": question,
+                        "matched_user_message": user_text,
+                        "question_match_score": round(float(question_score or 0.0), 2),
+                        "expected_answer": expected_answer,
+                        "expected_tool": expected_tool or None,
+                        "expected_intent": expected_intent or None,
+                        "actual_response": actual_response or None,
+                        "actual_tool": actual_tool or None,
+                        "answer_similarity_score": round(answer_score, 2),
+                        "answer_pass": answer_pass,
+                        "tool_pass": tool_pass,
+                        "intent_pass": intent_pass,
+                        "passed": passed,
+                        "judge_reason": judge_reason,
+                    }
+                )
+
+        total = len(qa_pairs)
+        evaluated_total = len(results)
+        failed = evaluated_total - passed_cases
+        pass_rate = (passed_cases / evaluated_total * 100.0) if evaluated_total else 0.0
+        return {
+            "total_cases": evaluated_total,
+            "total_qa_pairs": total,
+            "total_eval_records": len(user_messages),
+            "skipped_eval_records": skipped_records,
+            "skipped_details": skipped_details,
+            "passed_cases": passed_cases,
+            "failed_cases": failed,
+            "pass_rate": round(pass_rate, 2),
+            "threshold": threshold,
+            "question_match_threshold": question_match_threshold,
+            "records_count": {
+                "user_messages": len(user_messages),
+                "agent_responses": len(agent_responses),
+                "tool_calls": len(tool_calls),
+            },
+            "test_results": results,
+        }
+
+    def _best_qa_for_record(
+        self,
+        user_text: str,
+        qa_pairs: List[Dict[str, Any]],
+        actual_tool: str = "",
+        question_match_threshold: float = 35.0,
+    ) -> Optional[tuple[int, Dict[str, Any], float]]:
+        """Pick best QA reference for one user record; returns None if below threshold."""
+        if not user_text or not qa_pairs:
+            return None
+
+        actual_tool_l = str(actual_tool or "").lower()
+        best_idx = -1
+        best_qa: Optional[Dict[str, Any]] = None
+        best_score = -1.0
+
+        for idx, qa in enumerate(qa_pairs):
+            question = str(qa.get("question", "") or "")
+            if not question:
+                continue
+
+            score = self._calculate_text_similarity(user_text, question)
+
+            expected_tool = str(
+                qa.get("tool_name", qa.get("expected_tool", "")) or ""
+            ).lower()
+            if expected_tool and actual_tool_l and expected_tool == actual_tool_l:
+                score += 10.0
+
+            if score > best_score:
+                best_score = score
+                best_idx = idx
+                best_qa = qa
+
+        if best_qa is None or best_score < question_match_threshold:
+            return None
+
+        return best_idx, best_qa, best_score
+
+    def _best_qa_similarity_only(
+        self,
+        user_text: str,
+        qa_pairs: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """Return the closest QA question match without applying threshold."""
+        best_score = -1.0
+        best_question = None
+        for qa in qa_pairs:
+            question = str(qa.get("question", "") or "")
+            if not question:
+                continue
+            score = self._calculate_text_similarity(user_text, question)
+            if score > best_score:
+                best_score = score
+                best_question = question
+        return {
+            "score": best_score if best_score > -1 else 0.0,
+            "question": best_question,
+        }
+
+    def _match_eval_records_to_qa_pairs(
+        self,
+        user_messages: List[Dict[str, Any]],
+        qa_pairs: List[Dict[str, Any]],
+        tool_calls: List[Dict[str, Any]],
+        question_match_threshold: float = 35.0,
+    ) -> List[Dict[str, Any]]:
+        """
+        Match only relevant QA pairs against observed eval records.
+
+        Strategy:
+        - One QA pair max per user message (greedy).
+        - Similarity between user utterance and QA question drives matching.
+        - Small bonus if expected tool appears anywhere in observed tool calls.
+        - Keep only matches above threshold.
+        """
+        if not user_messages or not qa_pairs:
+            return []
+
+        observed_tools = {str(t.get("tool_name", "") or "").lower() for t in tool_calls}
+
+        remaining = list(enumerate(qa_pairs))
+        matched: List[Dict[str, Any]] = []
+
+        for um in user_messages:
+            user_text = str(um.get("content", "") or "")
+            best = None
+            best_score = -1.0
+
+            for qa_idx, qa in remaining:
+                question = str(qa.get("question", "") or "")
+                if not question:
+                    continue
+
+                score = self._calculate_text_similarity(user_text, question)
+
+                expected_tool = str(
+                    qa.get("tool_name", qa.get("expected_tool", "")) or ""
+                ).lower()
+                if expected_tool and expected_tool in observed_tools:
+                    score += 8.0
+
+                if score > best_score:
+                    best_score = score
+                    best = (qa_idx, qa)
+
+            if best is None:
+                continue
+
+            qa_idx, qa = best
+            if best_score < question_match_threshold:
+                continue
+
+            matched.append(
+                {
+                    "qa_index": qa_idx,
+                    "qa": qa,
+                    "user_message": um,
+                    "question_score": best_score,
+                }
+            )
+
+            remaining = [(i, q) for i, q in remaining if i != qa_idx]
+
+        return matched
+
+    def _normalize_qa_pairs(self, qa_pairs: Any) -> List[Dict[str, Any]]:
+        """
+        Normalize QA input into a flat list of dicts.
+
+        Handles accidental nested lists, JSON strings, and wrapper objects.
+        """
+        import json
+
+        normalized: List[Dict[str, Any]] = []
+
+        def _walk(item: Any) -> None:
+            if item is None:
+                return
+            if isinstance(item, list):
+                for sub in item:
+                    _walk(sub)
+                return
+            if isinstance(item, str):
+                try:
+                    parsed = json.loads(item)
+                except Exception:
+                    return
+                _walk(parsed)
+                return
+            if isinstance(item, dict):
+                # Common wrapper payloads
+                if isinstance(item.get("qa_pairs"), list):
+                    _walk(item.get("qa_pairs"))
+                    return
+                if isinstance(item.get("cases"), list):
+                    _walk(item.get("cases"))
+                    return
+                # Actual QA case
+                if any(
+                    k in item
+                    for k in [
+                        "question",
+                        "answer",
+                        "expected_answer",
+                        "intent",
+                        "tool_name",
+                        "expected_tool",
+                    ]
+                ):
+                    normalized.append(item)
+                return
+
+        _walk(qa_pairs)
+        return normalized
+
+    def _find_best_user_message(
+        self, question: str, user_messages: List[Dict[str, Any]]
+    ) -> Optional[Dict[str, Any]]:
+        if not question or not user_messages:
+            return user_messages[0] if user_messages else None
+
+        best_msg = None
+        best_score = -1.0
+        for msg in user_messages:
+            content = str(msg.get("content", "") or "")
+            score = self._calculate_text_similarity(question, content)
+            if score > best_score:
+                best_score = score
+                best_msg = msg
+        return best_msg
+
+    def _next_user_seq(
+        self, current_seq: int, user_messages: List[Dict[str, Any]]
+    ) -> Optional[int]:
+        candidates = [
+            int(m.get("sequence_id", 0))
+            for m in user_messages
+            if int(m.get("sequence_id", 0)) > int(current_seq)
+        ]
+        return min(candidates) if candidates else None
+
+    def _find_response_for_window(
+        self,
+        user_seq: int,
+        next_user_seq: Optional[int],
+        responses: List[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        if not responses:
+            return None
+        for resp in responses:
+            seq = int(resp.get("sequence_id", 0))
+            if seq > int(user_seq) and (
+                next_user_seq is None or seq < int(next_user_seq)
+            ):
+                return resp
+        return responses[0]
+
+    def _find_tool_for_window(
+        self,
+        user_seq: int,
+        next_user_seq: Optional[int],
+        tools: List[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        if not tools:
+            return None
+        for tool in tools:
+            seq = int(tool.get("sequence_id", 0))
+            if seq > int(user_seq) and (
+                next_user_seq is None or seq < int(next_user_seq)
+            ):
+                return tool
+        return None
+
+    def _intent_match_heuristic(
+        self, expected_intent: str, response: str, question: str
+    ) -> bool:
+        expected = expected_intent.lower().strip()
+        if not expected:
+            return True
+        response_l = (response or "").lower()
+        question_l = (question or "").lower()
+        if expected in response_l:
+            return True
+        if expected in question_l:
+            return True
+        return self._calculate_text_similarity(expected, response_l) >= 35.0
+
+    async def _judge_case_with_llm(
+        self,
+        judge_llm_model,
+        question: str,
+        expected_answer: str,
+        expected_intent: str,
+        expected_tool: str,
+        actual_response: str,
+        actual_tool: str,
+        answer_threshold: float,
+    ) -> Dict[str, Any]:
+        """
+        LLM judge for a single realtime eval case. The judge decides pass/fail.
+        """
+        import json
+        import re
+
+        prompt = f"""You are a strict evaluator for voice-agent QA cases.
+
+            Ground truth:
+            - Question: {question}
+            - Expected answer: {expected_answer}
+            - Expected intent: {expected_intent or "<none>"}
+            - Expected tool: {expected_tool or "<none>"}
+
+            Observed agent behavior:
+            - Actual response: {actual_response or "<empty>"}
+            - Actual tool called: {actual_tool or "<none>"}
+
+            Task:
+            1) Judge answer quality (0-100) against expected answer.
+            2) Judge intent match (true/false) when expected intent is provided; otherwise true.
+            3) Judge tool match (true/false) when expected tool is provided; otherwise true.
+            4) Decide final pass/fail. Be strict.
+            5) Use answer threshold = {answer_threshold}.
+
+            Return ONLY valid JSON with this exact schema:
+            {{
+              "passed": true/false,
+              "answer_score": 0-100,
+              "answer_pass": true/false,
+              "intent_pass": true/false,
+              "tool_pass": true/false,
+              "reason": "short reason"
+            }}
+            """
+        try:
+            chat_ctx = ChatContext()
+            chat_ctx.add_message(role="user", content=prompt)
+            # LiveKit inference returns an LLMStream directly (not awaitable).
+            response = judge_llm_model.chat(chat_ctx=chat_ctx)
+
+            response_text = ""
+            async for chunk in response:
+                if hasattr(chunk, "delta") and hasattr(chunk.delta, "content"):
+                    response_text += chunk.delta.content or ""
+                elif hasattr(chunk, "content"):
+                    response_text += chunk.content or ""
+
+            json_match = re.search(r"\{[\s\S]*\}", response_text)
+            if not json_match:
+                return {
+                    "parse_error": True,
+                    "reason": f"No JSON from judge: {response_text[:180]}",
+                }
+
+            parsed = json.loads(json_match.group())
+            return {
+                "passed": bool(parsed.get("passed", False)),
+                "answer_score": float(parsed.get("answer_score", 0.0) or 0.0),
+                "answer_pass": bool(parsed.get("answer_pass", False)),
+                "intent_pass": bool(parsed.get("intent_pass", False)),
+                "tool_pass": bool(parsed.get("tool_pass", False)),
+                "reason": str(parsed.get("reason", "")),
+                "parse_error": False,
+            }
+        except Exception as e:
+            return {"parse_error": True, "reason": f"Judge error: {str(e)}"}
 
     async def new_userdata(self):
         return UserState(
-            knowledge_base=self.config.get('knowledge_base', []),
+            knowledge_base=self.config.get("knowledge_base", []),
         )
 
     def _main_llm(self) -> llm.LLM | llm.RealtimeModel:
-
         llm_model = self.service_factory.create_llm()
 
         if not llm_model:
             llm_model = inference.LLM(
-                "openai/gpt-5.1", extra_kwargs={"parallel_tool_calls": False, "temperature": 0.45}
+                "openai/gpt-5.1",
+                extra_kwargs={"parallel_tool_calls": False, "temperature": 0.45},
             )
 
         return llm_model
 
     def _judge_llm(self) -> llm.LLM:
         """Create a judge LLM for intent evaluation and similarity scoring."""
-        return inference.LLM(
-            "openai/gpt-4o-mini", extra_kwargs={"temperature": 0.2}
-        )
+        return inference.LLM("openai/gpt-4o-mini", extra_kwargs={"temperature": 0.2})
 
     @pytest.mark.asyncio
     async def test_llm_agent(self, test_cases) -> EvalResults:
@@ -139,19 +654,21 @@ class EvalTestAgent:
             self._judge_llm() as judge_llm_model,
             AgentSession(llm=main_llm_model, userdata=userdata) as sess,
         ):
-            await sess.start(LiveKitLiteAgent(
-                user_state=userdata,
-                handler=LiveKitLiteHandler(),
-                instructions=self.config.get("system_prompt", ''),
-                testing_mode=True
-            ))
+            await sess.start(
+                LiveKitLiteAgent(
+                    user_state=userdata,
+                    handler=LiveKitLiteHandler(),
+                    instructions=self.config.get("system_prompt", ""),
+                    testing_mode=True,
+                )
+            )
 
             for idx, case in enumerate(test_cases):
                 user_input = case.get("question")
                 expected_output = case.get("answer")
                 is_first_message = case.get("is_first_message", False)
                 is_tool_call = case.get("is_tool_call", False)
-                intent = case.get('intent', '')
+                intent = case.get("intent", "")
                 expected_tool = case.get("tool_name", None)
 
                 if not user_input:
@@ -163,7 +680,7 @@ class EvalTestAgent:
                     expected_answer=expected_output,
                     intent=intent,
                     passed=False,
-                    expected_tool=expected_tool
+                    expected_tool=expected_tool,
                 )
 
                 try:
@@ -175,18 +692,24 @@ class EvalTestAgent:
                     all_events = self._get_all_events(result)
 
                     if is_first_message:
-                        msg_assert = result.expect.next_event().is_message(role="assistant")
+                        msg_assert = result.expect.next_event().is_message(
+                            role="assistant"
+                        )
                         actual_response = self._extract_message_content(msg_assert)
 
                         # Fallback: get response from all events
                         if actual_response is None:
-                            actual_response = self._extract_response_from_events(all_events)
+                            actual_response = self._extract_response_from_events(
+                                all_events
+                            )
 
                         await msg_assert.judge(judge_llm_model, intent=intent)
 
                         # Final fallback: try to get from msg_assert after judge
                         if actual_response is None:
-                            actual_response = self._extract_from_assert_after_judge(msg_assert)
+                            actual_response = self._extract_from_assert_after_judge(
+                                msg_assert
+                            )
 
                         # Last resort: get from result.expect events after processing
                         if actual_response is None:
@@ -195,11 +718,11 @@ class EvalTestAgent:
                         test_result.passed = True
 
                     else:
-
                         if is_tool_call:
-
                             try:
-                                fn_assert = result.expect.next_event().is_function_call(name=expected_tool)
+                                fn_assert = result.expect.next_event().is_function_call(
+                                    name=expected_tool
+                                )
                                 tool_called = expected_tool
                                 result.expect.next_event().is_function_call_output()
 
@@ -207,18 +730,24 @@ class EvalTestAgent:
                                 test_result.error_message = f"Tool call failed: {self._extract_clean_error_message(str(tool_err))}"
                                 test_result.tool_called = None
 
-                        msg_assert = result.expect.next_event().is_message(role="assistant")
+                        msg_assert = result.expect.next_event().is_message(
+                            role="assistant"
+                        )
                         actual_response = self._extract_message_content(msg_assert)
 
                         # Fallback: get response from all events
                         if actual_response is None:
-                            actual_response = self._extract_response_from_events(all_events)
+                            actual_response = self._extract_response_from_events(
+                                all_events
+                            )
 
                         await msg_assert.judge(judge_llm_model, intent=intent)
 
                         # Final fallback: try to get from msg_assert after judge
                         if actual_response is None:
-                            actual_response = self._extract_from_assert_after_judge(msg_assert)
+                            actual_response = self._extract_from_assert_after_judge(
+                                msg_assert
+                            )
 
                         # Last resort: get from result.expect events after processing
                         if actual_response is None:
@@ -230,7 +759,10 @@ class EvalTestAgent:
                     # Try to get response from result object if still None
                     if actual_response is None:
                         try:
-                            if hasattr(result, '_final_output') and result._final_output:
+                            if (
+                                hasattr(result, "_final_output")
+                                and result._final_output
+                            ):
                                 actual_response = result._final_output
                         except Exception:
                             pass
@@ -241,10 +773,12 @@ class EvalTestAgent:
 
                     # Try extracting from msg_assert string representation
                     if actual_response is None and msg_assert is not None:
-                        actual_response = self._extract_response_from_error(str(msg_assert))
+                        actual_response = self._extract_response_from_error(
+                            str(msg_assert)
+                        )
 
                     # Try to get from expect's internal state
-                    if actual_response is None and hasattr(result, 'expect'):
+                    if actual_response is None and hasattr(result, "expect"):
                         expect_str = str(result.expect)
                         actual_response = self._extract_response_from_error(expect_str)
 
@@ -254,21 +788,29 @@ class EvalTestAgent:
                     # Calculate answer similarity score for passing tests
                     if actual_response and expected_output:
                         # Fallback to text similarity
-                        test_result.answer_similarity_score = self._calculate_text_similarity(
-                            actual_response, expected_output
+                        test_result.answer_similarity_score = (
+                            self._calculate_text_similarity(
+                                actual_response, expected_output
+                            )
                         )
 
                 except AssertionError as e:
                     test_result.passed = False
-                    test_result.error_message = self._extract_clean_error_message(str(e))
+                    test_result.error_message = self._extract_clean_error_message(
+                        str(e)
+                    )
                     # Try to extract actual response from error context
                     if test_result.actual_response is None:
-                        test_result.actual_response = self._extract_response_from_error(str(e))
+                        test_result.actual_response = self._extract_response_from_error(
+                            str(e)
+                        )
 
                     # Calculate similarity even for failed tests
                     if test_result.actual_response and expected_output:
-                        test_result.answer_similarity_score = self._calculate_text_similarity(
-                            test_result.actual_response, expected_output
+                        test_result.answer_similarity_score = (
+                            self._calculate_text_similarity(
+                                test_result.actual_response, expected_output
+                            )
                         )
 
                 except Exception as e:
@@ -307,9 +849,9 @@ class EvalTestAgent:
             # ChatMessage has text_content property
 
             # Try getting _event first (ChatMessageAssert stores event here)
-            event = getattr(msg_assert, '_event', None)
+            event = getattr(msg_assert, "_event", None)
             if event is None:
-                event = getattr(msg_assert, 'event', None)
+                event = getattr(msg_assert, "event", None)
                 if callable(event):
                     event = event()
 
@@ -317,18 +859,18 @@ class EvalTestAgent:
                 return None
 
             # Get the item (ChatMessage) from the event
-            item = getattr(event, 'item', None)
+            item = getattr(event, "item", None)
             if item is None:
                 return None
 
             # ChatMessage has text_content property
-            if hasattr(item, 'text_content'):
+            if hasattr(item, "text_content"):
                 text_content = item.text_content
                 if text_content:
                     return text_content
 
             # Fallback: try content attribute directly
-            content = getattr(item, 'content', None)
+            content = getattr(item, "content", None)
             if content is not None:
                 if isinstance(content, list) and content:
                     # Content is list of str | ImageContent | AudioContent
@@ -347,6 +889,7 @@ class EvalTestAgent:
     def _extract_response_from_error(self, error_str: str) -> Optional[str]:
         """Try to extract the actual response from an error message."""
         import re
+
         try:
             # Try to find content in the error string
             patterns = [
@@ -368,11 +911,11 @@ class EvalTestAgent:
         events = []
         try:
             # Try to access events from result object
-            if hasattr(result, 'events'):
+            if hasattr(result, "events"):
                 events = list(result.events)
-            elif hasattr(result, '_events'):
+            elif hasattr(result, "_events"):
                 events = list(result._events)
-            elif hasattr(result, 'expect') and hasattr(result.expect, '_events'):
+            elif hasattr(result, "expect") and hasattr(result.expect, "_events"):
                 events = list(result.expect._events)
         except Exception as e:
             print(f"Debug: Could not get events: {e}")
@@ -384,27 +927,27 @@ class EvalTestAgent:
             for event in events:
                 # Check if it's a ChatMessageEvent with assistant role
                 event_type = type(event).__name__
-                if 'ChatMessageEvent' in event_type or 'Message' in event_type:
-                    item = getattr(event, 'item', None)
+                if "ChatMessageEvent" in event_type or "Message" in event_type:
+                    item = getattr(event, "item", None)
                     if item is None:
                         continue
 
                     # Get role - can be attribute or dict key
-                    role = getattr(item, 'role', None)
+                    role = getattr(item, "role", None)
                     if role is None and isinstance(item, dict):
-                        role = item.get('role', '')
+                        role = item.get("role", "")
 
-                    if role == 'assistant':
+                    if role == "assistant":
                         # Try text_content property first (ChatMessage object)
-                        if hasattr(item, 'text_content'):
+                        if hasattr(item, "text_content"):
                             text_content = item.text_content
                             if text_content:
                                 return text_content
 
                         # Try content attribute
-                        content = getattr(item, 'content', None)
+                        content = getattr(item, "content", None)
                         if content is None and isinstance(item, dict):
-                            content = item.get('content', [])
+                            content = item.get("content", [])
 
                         if content:
                             if isinstance(content, list):
@@ -433,7 +976,7 @@ class EvalTestAgent:
 
             # Get all attributes of the object
             for attr_name in dir(msg_assert):
-                if attr_name.startswith('__'):
+                if attr_name.startswith("__"):
                     continue
                 try:
                     attr_val = getattr(msg_assert, attr_name)
@@ -462,21 +1005,21 @@ class EvalTestAgent:
 
         # If it's a dict, look for 'content' key
         if isinstance(obj, dict):
-            if 'content' in obj:
-                content = obj['content']
+            if "content" in obj:
+                content = obj["content"]
                 if isinstance(content, list) and content:
                     return str(content[0])
                 elif isinstance(content, str):
                     return content
             # Check nested 'item' dict
-            if 'item' in obj and isinstance(obj['item'], dict):
-                return self._try_extract_content(obj['item'])
+            if "item" in obj and isinstance(obj["item"], dict):
+                return self._try_extract_content(obj["item"])
 
         # If it has an 'item' attribute
-        if hasattr(obj, 'item'):
+        if hasattr(obj, "item"):
             item = obj.item
-            if isinstance(item, dict) and 'content' in item:
-                content = item['content']
+            if isinstance(item, dict) and "content" in item:
+                content = item["content"]
                 if isinstance(content, list) and content:
                     return str(content[0])
                 elif isinstance(content, str):
@@ -497,12 +1040,21 @@ class EvalTestAgent:
                     return extracted
 
             # Try common attributes on expect object
-            for attr_name in ['_events', 'events', '_processed_events', 'processed_events', '_history', 'history']:
+            for attr_name in [
+                "_events",
+                "events",
+                "_processed_events",
+                "processed_events",
+                "_history",
+                "history",
+            ]:
                 if hasattr(expect_obj, attr_name):
                     events = getattr(expect_obj, attr_name)
                     if events:
                         try:
-                            events_list = list(events) if not isinstance(events, list) else events
+                            events_list = (
+                                list(events) if not isinstance(events, list) else events
+                            )
                             response = self._extract_response_from_events(events_list)
                             if response:
                                 return response
@@ -511,14 +1063,16 @@ class EvalTestAgent:
                             for event in events_list:
                                 event_str = str(event)
                                 if "'content':" in event_str:
-                                    extracted = self._extract_response_from_error(event_str)
+                                    extracted = self._extract_response_from_error(
+                                        event_str
+                                    )
                                     if extracted:
                                         return extracted
                         except Exception:
                             continue
 
             # Try parent reference if exists
-            if hasattr(expect_obj, '_parent'):
+            if hasattr(expect_obj, "_parent"):
                 parent = expect_obj._parent
                 if parent:
                     return self._extract_from_expect(parent)
@@ -542,7 +1096,7 @@ class EvalTestAgent:
             # Get only the part before the context
             clean_message = error_str.split(context_marker)[0].strip()
             # Remove trailing newlines
-            clean_message = clean_message.rstrip('\n')
+            clean_message = clean_message.rstrip("\n")
             if clean_message:
                 return clean_message
 
@@ -575,7 +1129,7 @@ class EvalTestAgent:
             cleaned = re.sub(pattern, "", cleaned, flags=re.DOTALL)
 
         # Clean up multiple newlines and whitespace
-        cleaned = re.sub(r'\n\s*\n', '\n', cleaned)
+        cleaned = re.sub(r"\n\s*\n", "\n", cleaned)
         cleaned = cleaned.strip()
 
         # If we still have content, return it; otherwise return first line of original
@@ -583,14 +1137,11 @@ class EvalTestAgent:
             return cleaned
 
         # Fallback: return just the first line
-        first_line = error_str.split('\n')[0].strip()
+        first_line = error_str.split("\n")[0].strip()
         return first_line if first_line else error_str[:200]
 
     async def _calculate_answer_similarity(
-            self,
-            actual_response: str,
-            expected_answer: str,
-            judge_llm_model
+        self, actual_response: str, expected_answer: str, judge_llm_model
     ) -> tuple[float, str]:
         """
         Use LLM to judge how well the actual response matches the expected answer.
@@ -633,9 +1184,9 @@ class EvalTestAgent:
 
             response_text = ""
             async for chunk in response:
-                if hasattr(chunk, 'delta') and hasattr(chunk.delta, 'content'):
+                if hasattr(chunk, "delta") and hasattr(chunk.delta, "content"):
                     response_text += chunk.delta.content or ""
-                elif hasattr(chunk, 'content'):
+                elif hasattr(chunk, "content"):
                     response_text += chunk.content or ""
 
             # Parse the JSON response
@@ -643,7 +1194,7 @@ class EvalTestAgent:
             import re
 
             # Try to extract JSON from response
-            json_match = re.search(r'\{[^}]+\}', response_text)
+            json_match = re.search(r"\{[^}]+\}", response_text)
             if json_match:
                 result = json.loads(json_match.group())
                 score = float(result.get("score", 0))
@@ -668,15 +1219,82 @@ class EvalTestAgent:
         words2 = set(text2.lower().split())
 
         # Remove common stop words
-        stop_words = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been',
-                      'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
-                      'would', 'could', 'should', 'may', 'might', 'can', 'to',
-                      'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as',
-                      'and', 'or', 'but', 'if', 'then', 'else', 'when', 'up', 'out',
-                      'so', 'than', 'too', 'very', 'just', 'also', 'now', 'here',
-                      'there', 'where', 'why', 'how', 'all', 'each', 'every', 'both',
-                      'few', 'more', 'most', 'other', 'some', 'such', 'no', 'not',
-                      'only', 'own', 'same', 'that', 'this', 'these', 'those', 'it'}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "was",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "could",
+            "should",
+            "may",
+            "might",
+            "can",
+            "to",
+            "of",
+            "in",
+            "for",
+            "on",
+            "with",
+            "at",
+            "by",
+            "from",
+            "as",
+            "and",
+            "or",
+            "but",
+            "if",
+            "then",
+            "else",
+            "when",
+            "up",
+            "out",
+            "so",
+            "than",
+            "too",
+            "very",
+            "just",
+            "also",
+            "now",
+            "here",
+            "there",
+            "where",
+            "why",
+            "how",
+            "all",
+            "each",
+            "every",
+            "both",
+            "few",
+            "more",
+            "most",
+            "other",
+            "some",
+            "such",
+            "no",
+            "not",
+            "only",
+            "own",
+            "same",
+            "that",
+            "this",
+            "these",
+            "those",
+            "it",
+        }
 
         words1 = words1 - stop_words
         words2 = words2 - stop_words
@@ -688,13 +1306,3 @@ class EvalTestAgent:
         union = words1.union(words2)
 
         return (len(intersection) / len(union)) * 100
-
-
-
-
-
-
-
-
-
-

@@ -1,16 +1,9 @@
 import json
 import os
 import urllib.parse
-from pathlib import Path
 from dotenv import load_dotenv
 
-# Load root .env (monorepo unified config), fallback to service-local .env
-_MONOREPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent  # configs/ → super/ → super/ → apps/ → root
-_root_env = _MONOREPO_ROOT / ".env"
-if _root_env.exists():
-    load_dotenv(str(_root_env))
-else:
-    load_dotenv()
+load_dotenv()
 
 #####
 # App Configs
@@ -94,15 +87,18 @@ EMAIL_FROM = os.environ.get("EMAIL_FROM") or SMTP_USER
 
 
 #####
-# Search Service Configs (derived from API_SERVICE_URL)
+# Search Service Configs
 #####
-API_SERVICE_URL = os.environ.get(
-    "API_SERVICE_URL", "http://0.0.0.0:9116/api/v1"
-).rstrip("/")
-AGENTS_SEARCH_API = API_SERVICE_URL + "/search/query/agents/"
-DOC_SEARCH_URL = API_SERVICE_URL + "/search/query/docs/"
-QUERY_URL = API_SERVICE_URL + "/search/query/"
+SEARCH_SERVICE_URL = os.environ.get(
+    "SEARCH_SERVICE_URL", "http://qa-search-service.co/"
+)
+AGENTS_SEARCH_API = SEARCH_SERVICE_URL + "/api/v1/search/query/agents/"
+DOC_SEARCH_URL = SEARCH_SERVICE_URL + "/api/v1/search/query/docs/"
+QUERY_URL = SEARCH_SERVICE_URL + "/api/v1/search/query/"
 
+STORE_SERVICE_URL = os.environ.get("STORE_SERVICE_URL", "http://qa-store-service.co")
+
+# STORE_SERVICE_URL=os.environ.get("STORE_SERVICE_URL","http://qa-store-service.co/")
 
 #####
 # Memory Configs

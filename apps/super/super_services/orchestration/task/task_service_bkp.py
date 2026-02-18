@@ -8,7 +8,7 @@ from typing import Dict, Optional, List
 # from dateutil import parser
 import json
 
-from super.apps.calls_orc.providers import CallProviderFactory, VapiProvider
+from super.app.providers import CallProviderFactory, VapiProvider
 from super.core.logging.logging import print_log
 from super_services.db.services.models.task import RunModel, TaskModel, TaskExecutionLogModel, ArtifactModel
 from super_services.db.services.repository.wallet import addTaskRequest, calculateBit, checkWallet
@@ -75,7 +75,7 @@ class TaskService:
             (SELECT id FROM core_components_pilot WHERE handle = %(assignee)s LIMIT 1),
             (SELECT tvn.bridge_id
             FROM telephony_voicebridgenumber tvn
-            JOIN telephony_telephonynumber n ON tvn.number_id = n.id
+            JOIN core_components_telephony_number n ON tvn.number_id = n.id
             WHERE n.number = %(source)s OR n.number = %(destination)s
             LIMIT 1),
             (SELECT space_organization_id FROM space_space WHERE id = %(space_id)s LIMIT 1),
@@ -87,7 +87,7 @@ class TaskService:
                 SELECT b.product_id
                 FROM telephony_voicebridge b
                 JOIN telephony_voicebridgenumber tvn ON tvn.bridge_id = b.id
-                JOIN telephony_telephonynumber n ON tvn.number_id = n.id
+                JOIN core_components_telephony_number n ON tvn.number_id = n.id
                 WHERE n.number = %(source)s OR n.number = %(destination)s
                 LIMIT 1
             )
@@ -360,7 +360,7 @@ class TaskService:
                         {"task_exec_id": exec_id},
                         {"status": TaskStatusEnum.in_progress},
                     )
-                    from super.apps.calls_orc.call_execution import execute_call
+                    from super.app.call_execution import execute_call
 
 
                     quality = task.input.get("quality", "good")
@@ -856,7 +856,7 @@ class TaskService:
                     "call_recovery_task_retried",
                 )
             elif self._is_api_error(error):
-                from super.apps.calls_orc.call_execution import execute_post_call_workflow
+                from super.app.call_execution import execute_post_call_workflow
                 # API Error: Fetch the call status from provider and run post-call workflow
                 try:
                     print_log(
@@ -1078,7 +1078,7 @@ class TaskService:
             tasks = list(TaskModel.find(**query))
 
             for task in tasks:
-                from super.apps.calls_orc.call_execution import execute_post_call_workflow
+                from super.app.call_execution import execute_post_call_workflow
                 # API Error: Fetch the call status from provider and run post-call workflow
                 try:
                     print_log(

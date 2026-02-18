@@ -66,7 +66,7 @@ from livekit.agents import (
     JobContext,
     WorkerOptions,
     cli,
-
+    AutoSubscribe,
 )
 
 from super_services.libs.core.timezone_utils import normalize_phone_number
@@ -112,7 +112,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         self._configuration = configuration
         self.config = model_config or None
         self.user_state = None
-
+        self.agent_name = agent_name
         self._job_context: Optional[JobContext] = None
         self._transport_type = TransportType.LIVEKIT
         self.agent_config = AgentConfig(
@@ -121,6 +121,11 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             callback=callback,
         )
         self._agent = None
+
+    async def execute(self, objective: str | Message = "", *args, **kwargs) -> Any:
+        """Run worker execution from async contexts."""
+        self._logger.info("execute() called; delegating to execute_agent()")
+        return await asyncio.to_thread(self.execute_agent)
 
 
     async def _init_variables(self, user_state: UserState):
@@ -171,9 +176,6 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         dialing_timeout_seconds = 45  # Allow up to 45 seconds for call to connect
 
         self._logger.info("dialing")
-        self.message_callback(
-            f"Call Status:Dialing\n", role="system", user_state=user_state
-        )
 
         while perf_counter() - start_time < dialing_timeout_seconds:
             elapsed = perf_counter() - start_time
@@ -188,11 +190,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
 
             if call_status == "active":
                 self._logger.info("user has picked up")
-                self.message_callback(
-                    f"Call Status:User has picked up\n",
-                    role="system",
-                    user_state=user_state,
-                )
+
                 user_state.call_status = CallStatusEnum.CONNECTED
                 await self.run_agent(ctx, user_state, _agent)
                 return
@@ -200,21 +198,10 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             elif call_status == "automation":
                 pass
             elif participant.disconnect_reason == rtc.DisconnectReason.USER_REJECTED:
-                if _agent:
-                    await _agent.end_ongoing_agent()
-
                 self._logger.info("user rejected the call, exiting job")
-                self.message_callback(
-                    f"Call Status:User rejected the call\n",
-                    role="system",
-                    user_state=user_state,
-                )
-                user_state.call_status = CallStatusEnum.CANCELLED
-                await self.execute_post_call(user_state)
 
-                # res = await build_call_result(user_state)
-                # await trigger_post_call(user_state=user_state, res=res)
-                self.message_callback("EOF\n", role="system", user_state=user_state)
+                user_state.call_status = CallStatusEnum.CANCELLED
+
                 ctx.shutdown()
                 break
 
@@ -223,19 +210,14 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                     await _agent.end_ongoing_agent()
 
                 self._logger.info("user did not pick up, exiting job")
-                self.message_callback(
-                    f"Call Status:User did not pick up\n",
-                    role="system",
-                    user_state=user_state,
-                )
+
                 user_state.end_time = user_state.start_time
                 user_state.call_status = CallStatusEnum.NOT_CONNECTED
-                await self.execute_post_call(user_state)
 
                 # res = await build_call_result(user_state)
                 # await trigger_post_call(user_state=user_state, res=res)
 
-                self.message_callback("EOF\n", role="system", user_state=user_state)
+
                 ctx.shutdown()
                 break
 
@@ -246,17 +228,13 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 self._logger.info(
                     f"User has disconnected: {participant.disconnect_reason}"
                 )
-                self.message_callback(
-                    f"Call Status:User has hanged up\n",
-                    role="system",
-                    user_state=user_state,
-                )
+
                 user_state.call_status = CallStatusEnum.COMPLETED
-                await self.execute_post_call(user_state)
+
 
                 # res = await build_call_result(user_state)
                 # await trigger_post_call(user_state=user_state, res=res)
-                self.message_callback("EOF\n", role="system", user_state=user_state)
+
                 ctx.shutdown()
                 break
 
@@ -267,19 +245,12 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 self._logger.info(
                     f"User has disconnected: {participant.disconnect_reason}"
                 )
-                self.message_callback(
-                    f"Call Status:User has hanged up\n",
-                    role="system",
-                    user_state=user_state,
-                )
+
 
                 user_state.call_status = CallStatusEnum.FAILED
-                await self.execute_post_call(user_state)
 
-                # res = await build_call_result(user_state)
-                # await trigger_post_call(user_state=user_state, res=res)
 
-                self.message_callback("EOF\n", role="system", user_state=user_state)
+
                 ctx.shutdown()
                 break
             await asyncio.sleep(0.1)
@@ -289,36 +260,22 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             self._logger.info(
                 "SIP Failed - dialing timeout after %ds", dialing_timeout_seconds
             )
-            self.message_callback(
-                f"Call Status:SIP Failed\n",
-                role="system",
-                user_state=user_state,
-            )
+
             user_state.end_time = user_state.start_time
             user_state.call_status = CallStatusEnum.FAILED
-            await self.execute_post_call(user_state)
-            self.message_callback("EOF\n", role="system", user_state=user_state)
         ctx.shutdown()
 
     async def _create_assistant(
         self, user_state, ctx: JobContext, handler_class, handler_name
     ):
 
-        import time
-
-        _start = time.time()
-        print(f"[TIMING] _create_assistant START")
-
         try:
-            _ctor_start = time.time()
-            # Ensure agent_name is in config for transport identity
             handler_config = (
                 dict(user_state.model_config) if user_state.model_config else {}
             )
             if "agent_name" not in handler_config:
                 handler_config["agent_name"] = self.agent_name
 
-            print(f"\n\n {handler_name} \n\n {handler_class}")
             self._agent = handler_class(
                 session_id=user_state.thread_id,
                 user_state=user_state,
@@ -326,15 +283,8 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 model_config=handler_config,
                 observer=CustomMetricObserver,
             )
-            print(
-                f"[TIMING] {handler_name} constructor: {(time.time() - _ctor_start) * 1000:.0f}ms"
-            )
 
-            _preload_start = time.time()
             started = await self._agent.preload_agent(user_state, CustomMetricObserver)
-            print(
-                f"[TIMING] preload_agent: {(time.time() - _preload_start) * 1000:.0f}ms"
-            )
 
             if started:
                 return True
@@ -393,7 +343,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                     f"Creating SIP participant: trunk={trunk_id}, phone={phone_number}, room={room_name}"
                 )
                 if not phone_number:
-                    return ctx.wait_for_participant()
+                    return await ctx.wait_for_participant()
 
                 for i in range(2):
                     try:
@@ -407,15 +357,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                                 krisp_enabled=True,
                             )
                         )
-
-                        # Wait for participant to connect
                         participant = await ctx.wait_for_participant(identity=identity)
-                        self._logger.info(
-                            f"SIP participant connected: {participant.identity}"
-                        )
-
-                        if participant:
-                            await self._instant_handover(user_state, trunk_id,ctx)
 
                         return participant
 
@@ -455,19 +397,17 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             )
 
             await ctx.connect()
-
             self._job_context = ctx
-
 
             metadata = json.loads(ctx.job.metadata) if ctx.job.metadata else {}
 
             extra_data = {}
+            extra_data = {}
 
-            user_data={}
+            user_data=metadata.get('data',{})
 
             agent_id=metadata.get("data",{}).get("agent_id","gamestop-iu3kqyk3rf4x")
             model_config=await self._get_config_with_cache(agent_id)
-
 
             user_state = UserState(
                 user_name=user_data.get("contact_name", "User"),
@@ -487,7 +427,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 transcript=[],
                 room_name=ctx.room.name,
                 task_id=user_data.get("task_id", ""),
-                extra_data={"perf_logs": self._temp_perf_logs},
+                extra_data={},
             )
             self.user_state = user_state
 
@@ -500,20 +440,15 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             participant = await self._create_sip_participant_in_room(
                 ctx=ctx, data=user_data, user_state=user_state
             )
+            if asyncio.iscoroutine(participant):
+                participant = await participant
 
-            if participant.kind in [
-                rtc.ParticipantKind.PARTICIPANT_KIND_SIP,
-                rtc.ParticipantKind.PARTICIPANT_KIND_STANDARD,
-            ]:
+            if participant:
                 await self.manage_call(
                     ctx, participant, user_state, self._agent, "outbound"
                 )
             else:
-                self._logger.error(
-                    f"[ERROR] Failed to create/get participant - "
-
-                )
-                self.message_callback("EOF\n", role="system", user_state=user_state)
+                pass
 
         except Exception as e:
             error_str = str(e)
@@ -538,14 +473,63 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 )
 
             if hasattr(self, "user_state") and self.user_state is not None:
-                self.message_callback(
-                    "EOF\n", role="system", user_state=self.user_state
-                )
+              pass
             raise e
+
+    async def entrypoint_console(self,ctx:JobContext):
+
+        await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
+
+        metadata = json.loads(ctx.job.metadata) if ctx.job.metadata else {}
+
+        _get_handlers = asyncio.create_task(
+            self._get_handler_classes(ctx=ctx), name="handler_class"
+        )
+
+        extra_data = {}
+        extra_data = {}
+
+        user_data = metadata.get('data', {})
+
+        agent_id = metadata.get("data", {}).get("agent_id", "gamestop-iu3kqyk3rf4x")
+        model_config = await self._get_config_with_cache(agent_id)
+
+        user_state = UserState(
+            user_name=user_data.get("contact_name", "User"),
+            space_name=user_data.get("space_name", "Unpod AI"),
+            contact_number=user_data.get("contact_number"),
+            token=user_data.get("token", ""),
+            language=model_config.get("language", "English"),
+            thread_id=str(user_data.get("thread_id", "")),
+            user=user_data.get("user", {}),
+            model_config=model_config,
+            persona=model_config.get("persona"),
+            system_prompt=model_config.get("script"),
+            first_message=model_config.get("first_message"),
+            knowledge_base=model_config.get("knowledge_base", []),
+            start_time=datetime.utcnow(),
+            usage=create_default_usage(model_config),
+            transcript=[],
+            room_name=ctx.room.name,
+            task_id=user_data.get("task_id", ""),
+            extra_data={},
+        )
+        self.user_state = user_state
+
+        handler_class, handler_name = await _get_handlers
+
+        await self._create_assistant(
+            user_state, ctx, handler_class, handler_name
+        )
+        try:
+            await self.run_agent(ctx,user_state, self._agent)
+        except Exception as e:
+            pass
 
     def execute_agent(self):
         """Execute agent worker - synchronous wrapper for cli.run_app"""
         try:
+            livekit_services._ensure_livekit_plugins_loaded(self._logger)
             try:
                 cli.run_app(
                     WorkerOptions(
@@ -558,7 +542,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 )
             finally:
                 # Ensure cleanup on normal exit
-                self._sync_cleanup()
+               pass
 
         except Exception as e:
             self._logger.error(f"Error in execute_agent: {e}")
@@ -570,7 +554,6 @@ if __name__ == "__main__":
     from super_services.voice.models.config import ModelConfig
     env = get_env_name()
     AGENT_NAME = os.environ.get("AGENT_NAME", f"unpod-{env}-general-agent-v3")
-
 
     voice_agent = VoiceAgentHandler(
         callback=MessageCallBack(), model_config=ModelConfig(), agent_name=AGENT_NAME, handler_type=os.environ.get("WORKER_HANDLER", "livekit")

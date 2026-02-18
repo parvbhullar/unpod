@@ -76,6 +76,9 @@ class PromptConfig:
     # Custom persona (user's system_prompt, appended at end)
     custom_persona: Optional[str] = None
 
+    # Strict script mode: prioritize campaign script over generic examples/patterns
+    strict_script_mode: bool = False
+
 
 def compose_prompt(config: PromptConfig) -> str:
     """
@@ -108,8 +111,17 @@ def compose_prompt(config: PromptConfig) -> str:
         identity += f"\nCurrent date/time: {config.current_datetime}"
     sections.append(identity)
 
-    # 2. Core voice rules
-    sections.append(VOICE_RULES)
+    # 2. Custom persona (user's system_prompt) - HIGH PRIORITY
+    # Business context must come BEFORE generic rules to take precedence
+    if config.custom_persona and config.custom_persona.strip():
+        sections.append(f"## YOUR BUSINESS CONTEXT - FOLLOW THIS EXACTLY\n{config.custom_persona}")
+        print(f"[DEBUG] Business context loaded: {config.custom_persona[:200]}...")
+    else:
+        print("[DEBUG] WARNING: No business context found in config.custom_persona")
+
+    # 2. Core voice rules (skip generic examples in strict scripted campaigns)
+    if not config.strict_script_mode:
+        sections.append(VOICE_RULES)
 
     # 3. STT error handling
     sections.append(STT_ERROR_HANDLING)
@@ -118,7 +130,10 @@ def compose_prompt(config: PromptConfig) -> str:
     sections.append(REFERENCE_CONTEXT_HANDLING)
 
     # 5. Conversation patterns
-    patterns_to_add = config.patterns.copy() if config.patterns else [Pattern.SUPPORT]
+    # In strict scripted campaigns, avoid generic support/sales/booking examples.
+    patterns_to_add = [] if config.strict_script_mode else (
+        config.patterns.copy() if config.patterns else [Pattern.SUPPORT]
+    )
 
     # Auto-add multilingual if language is not English
     # Covers Indian languages and any non-English language for code-switching support
@@ -152,6 +167,14 @@ def compose_prompt(config: PromptConfig) -> str:
         if Pattern.MULTILINGUAL not in patterns_to_add:
             patterns_to_add.append(Pattern.MULTILINGUAL)
 
+    if config.strict_script_mode:
+        sections.append(
+            "## Script Execution Mode\n"
+            "- Follow the provided business/campaign script exactly.\n"
+            "- Do not use generic support fallback lines.\n"
+            "- On yes/ok/go-ahead acknowledgments, continue to the next scripted line."
+        )
+
     for pattern in patterns_to_add:
         if pattern in PATTERN_MAP:
             sections.append(PATTERN_MAP[pattern])
@@ -167,10 +190,6 @@ def compose_prompt(config: PromptConfig) -> str:
         sections.append(MEMORY_GUIDELINES)
     if config.include_followup:
         sections.append(FOLLOWUP_GUIDELINES)
-
-    # 8. Custom persona (user's system_prompt)
-    if config.custom_persona and config.custom_persona.strip():
-        sections.append(f"## Your Specific Role\n{config.custom_persona}")
 
     return "\n\n".join(sections)
 
@@ -255,6 +274,7 @@ def create_prompt_from_agent_config(
         include_memory=config.get("enable_memory", False),
         include_followup=config.get("follow_up_enabled", False),
         custom_persona=custom_persona,
+        strict_script_mode=config.get("strict_script_mode", False),
     )
 
     return compose_prompt(prompt_config)

@@ -1,11 +1,9 @@
 import os
 import sys
 
-_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
-sys.path.insert(0, _root)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from dotenv import load_dotenv
-load_dotenv(os.path.join(_root, ".env"), override=True)
-load_dotenv(os.path.join(_root, "super_services", ".env"))
+load_dotenv(override=True)
 
 from super_services.libs.core.utils import get_env_name
 from super.core.voice.voice_agent_handler import VoiceAgentHandler

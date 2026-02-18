@@ -677,7 +677,7 @@ class SuperVoiceAgent(SimpleVoiceHandler):
             elif tts_provider == "elevenlabs":
                 from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
                 return ElevenLabsTTSService(
-                    api_key=os.getenv("ELEVENLABS_API_KEY"),
+                    api_key=os.getenv("ELEVEN_API_KEY"),
                     voice_id=self.config.get("tts_voice"),
                     model=self.config.get("tts_model", "eleven_multilingual_v2")
                 )

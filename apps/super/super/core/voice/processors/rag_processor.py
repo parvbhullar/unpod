@@ -20,6 +20,7 @@ Usage:
 """
 
 import logging
+import os
 import re
 import time
 from typing import TYPE_CHECKING, List, Optional, Set
@@ -82,6 +83,7 @@ class RAGProcessor(FrameProcessor):
         similarity_top_k: int = 3,
         min_query_length: int = 3,
         min_word_count_for_lookup: int = 2,
+        min_score: Optional[float] = None,
         enabled: bool = True,
         context_prefix: str = "<reference_context>",
         skip_ner_check: bool = False,
@@ -99,6 +101,8 @@ class RAGProcessor(FrameProcessor):
             similarity_top_k: Number of similar documents to retrieve.
             min_query_length: Minimum query length to trigger RAG search.
             min_word_count_for_lookup: Minimum word count to consider for KB lookup.
+            min_score: Minimum score threshold for context injection.
+                      Defaults to RAG_MIN_SCORE env var or 0.30.
             enabled: Whether RAG enrichment is enabled.
             context_prefix: Prefix for context section in enriched text.
             skip_ner_check: If True, skip NER check and always perform lookup.
@@ -110,6 +114,9 @@ class RAGProcessor(FrameProcessor):
         self._similarity_top_k = similarity_top_k
         self._min_query_length = min_query_length
         self._min_word_count_for_lookup = min_word_count_for_lookup
+        self._min_score = min_score if min_score is not None else float(
+            os.getenv("RAG_MIN_SCORE", 0.30)
+        )
         self._enabled = enabled
         self._context_prefix = context_prefix
         self._skip_ner_check = skip_ner_check
@@ -221,6 +228,16 @@ class RAGProcessor(FrameProcessor):
             docs = await self._retrieve_documents(query)
 
             if docs:
+                # Score gate: skip context injection if best result is below threshold
+                best_score = max(d.score for d in docs if d.score is not None) if docs else 0
+                if best_score < self._min_score:
+                    self._logger.debug(
+                        f"RAG score gate: best_score={best_score:.4f} < "
+                        f"min_score={self._min_score}, skipping context for: {query[:50]}..."
+                    )
+                    docs = []
+
+            if docs:
                 # Build context string
                 context_str = self._build_context_string(docs)
 
@@ -235,7 +252,8 @@ class RAGProcessor(FrameProcessor):
 
                 self._total_enrichments += 1
                 self._logger.debug(
-                    f"RAG enriched with {len(docs)} docs: {query[:50]}..."
+                    f"RAG enriched with {len(docs)} docs "
+                    f"(best_score={best_score:.4f}): {query[:50]}..."
                 )
             else:
                 self._logger.debug(f"RAG: no relevant docs for: {query[:50]}...")
@@ -274,12 +292,16 @@ class RAGProcessor(FrameProcessor):
         return []
 
     def _build_context_string(self, docs: List["SearchDoc"]) -> str:
-        """Build formatted context string from retrieved documents."""
+        """Build formatted context string from retrieved documents with source identifiers."""
         context_parts = []
-        for i, doc in enumerate(docs, 1):
+        for doc in docs:
             content = doc.content.strip() if doc.content else ""
             if content:
-                context_parts.append(f"- {content}")
+                source = getattr(doc, "semantic_identifier", "") or ""
+                if source:
+                    context_parts.append(f"- [{source}] {content}")
+                else:
+                    context_parts.append(f"- {content}")
 
         return "\n".join(context_parts)
 

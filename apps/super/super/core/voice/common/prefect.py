@@ -3,6 +3,27 @@ from super_services.prefect_setup.deployments.utils import (
 )
 import uuid
 from datetime import datetime
+from super_services.libs.core.redis import REDIS
+
+
+def _set_cached_config(key: str) -> None:
+    try:
+        cache_key = f"{key}"
+        REDIS.setex(cache_key, 100, "scheduled")
+    except Exception:
+        pass
+
+
+def _get_cached_config(key: str):
+    """Get config from Redis cache."""
+    try:
+        cache_key = f"{key}"
+        data = REDIS.get(cache_key)
+        if data:
+            return data
+    except Exception:
+        pass
+    return None
 
 
 def create_entry(coll: str, data: dict):
@@ -115,6 +136,7 @@ async def store_perf_logs(user_state) -> None:
         print(f"[PERF_LOG] Error storing perf logs: {e}")
         print(f"[PERF_LOG] Traceback: {traceback.format_exc()}")
 
+
 def get_providers(model_config):
     if not model_config:
         return {}
@@ -123,12 +145,12 @@ def get_providers(model_config):
         return {}
 
     data = {
-        "stt_provider":model_config.get("stt_provider"),
-        "tts_provider":model_config.get("tts_provider"),
-        "llm_provider":model_config.get("llm_provider"),
-        "tts_model":model_config.get("tts_model"),
-        "llm_model":model_config.get("llm_model"),
-        "stt_model":model_config.get("stt_model"),
+        "stt_provider": model_config.get("stt_provider"),
+        "tts_provider": model_config.get("tts_provider"),
+        "llm_provider": model_config.get("llm_provider"),
+        "tts_model": model_config.get("tts_model"),
+        "llm_model": model_config.get("llm_model"),
+        "stt_model": model_config.get("stt_model"),
     }
 
     return data
@@ -136,13 +158,12 @@ def get_providers(model_config):
 
 async def trigger_post_call(user_state, res):
     try:
-        # from super_services.orchestration.cron_jobs.post_call import post_call_flow, FlowJob
-
-        # job=FlowJob(
-        #     user_state.task_id,
-        #     res,
-        #     user_state
+        # from super_services.orchestration.cron_jobs.post_call import (
+        #     post_call_flow,
+        #     FlowJob,
         # )
+        #
+        # job = FlowJob(user_state.task_id, res, user_state)
         # await post_call_flow(job)
 
         user_state = normalise_user_state(user_state)
@@ -151,22 +172,30 @@ async def trigger_post_call(user_state, res):
             if not isinstance(user_state.extra_data, dict):
                 user_state.extra_data = {}
 
-            latency_metrics = user_state.extra_data.get("latency_metrics",[])
+            latency_metrics = user_state.extra_data.get("latency_metrics", [])
 
             if latency_metrics:
-                data={
+                data = {
                     "metrics": latency_metrics,
                     "agent_id": user_state.model_config.get("agent_id"),
-                    "created_at":datetime.utcnow().isoformat(),
-                    "providers":get_providers(user_state.model_config),
-                    "thread_id":user_state.thread_id,
-                    "provider":user_state.extra_data.get('provider',"livekit")
-                    }
+                    "created_at": datetime.utcnow().isoformat(),
+                    "providers": get_providers(user_state.model_config),
+                    "thread_id": user_state.thread_id,
+                    "provider": user_state.extra_data.get("provider", "livekit"),
+                }
 
                 create_entry("agent_latency_metrics", data)
 
         except Exception as e:
             print(f"[latency_metrics] Exception: {e}")
+
+        key = _get_cached_config(f"prefect:{user_state.task_id}")
+
+        if key:
+            print("task already in processing skipping flow ")
+            return
+
+        _set_cached_config(f"prefect:{user_state.task_id}")
 
         await trigger_deployment(
             "Post-Call-Flow",

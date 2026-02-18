@@ -1,17 +1,9 @@
 import os
 import sys
-from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from dotenv import load_dotenv
-
-# Load root .env (monorepo unified config), fallback to service-local .env
-_MONOREPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent.parent  # executors/ → orchestration/ → super_services/ → super/ → apps/ → root
-_root_env = _MONOREPO_ROOT / ".env"
-if _root_env.exists():
-    load_dotenv(str(_root_env), override=True)
-else:
-    load_dotenv(override=True)
+load_dotenv(override=True)
 
 from super_services.libs.core.utils import get_env_name
 from super.core.voice.superkik import SuperkikAgentHandler

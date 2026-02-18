@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 import dspy
 from dotenv import load_dotenv
@@ -46,4 +47,15 @@ class StructuredDataExtractor(dspy.Module):
                 current_time=datetime.now(),
                 success_eval_result=success_eval
             )
-            return result.extracted_data
+
+            res = result.extracted_data
+
+            try:
+                if isinstance(result.extracted_data, str):
+                    res = json.loads(result.extracted_data)
+            except Exception as e:
+                res = result.extracted_data
+
+            return res
+
+

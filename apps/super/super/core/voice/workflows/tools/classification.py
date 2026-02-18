@@ -12,7 +12,7 @@ from ..dspy_config import get_dspy_lm
 load_dotenv(override=True)
 import json
 
-API_SERVICE_URL = os.getenv("API_SERVICE_URL", "").rstrip("/")
+STORE_SERVICE_URL = os.getenv("STORE_SERVICE_URL")
 
 
 class CallSummarySignature(dspy.Signature):
@@ -222,7 +222,7 @@ class CallClassificationService:
 
     async def process_doc(self, data):
         try:
-            url = f"{API_SERVICE_URL}/store/collection-doc-data/{self.token}/{self.document_id}"
+            url = f"{STORE_SERVICE_URL}/api/v1/store/collection-doc-data/{self.token}/{self.document_id}"
             response = requests.get(url)
 
             if response.status_code == 200:

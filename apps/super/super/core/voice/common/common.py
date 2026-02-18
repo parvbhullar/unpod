@@ -94,7 +94,7 @@ class PerfTimer:
 
 
 async def build_call_result(user_state):
-    from super.core.voice.providers.base import CallResult
+    from super.app.providers.base import CallResult
     from datetime import datetime
 
     try:
@@ -125,6 +125,12 @@ async def build_call_result(user_state):
     conversation_userdata = user_state.extra_data.get("conversation_userdata")
     if conversation_userdata:
         data["conversation_userdata"] = conversation_userdata
+    eval_records = user_state.extra_data.get("eval_records")
+    if isinstance(eval_records, dict):
+        data["eval_records"] = eval_records
+    eval_ground_truth = user_state.extra_data.get("eval_ground_truth")
+    if isinstance(eval_ground_truth, list):
+        data["eval_ground_truth"] = eval_ground_truth
 
     call_result = CallResult(
         status="completed",
@@ -184,7 +190,11 @@ def get_headers(webhook_plan):
         headers.update(webhook_headers)
     elif isinstance(webhook_headers, list):
         for item in webhook_headers:
-            if isinstance(item, dict) and "header_name" in item and "header_value" in item:
+            if (
+                isinstance(item, dict)
+                and "header_name" in item
+                and "header_value" in item
+            ):
                 headers[item["header_name"]] = item["header_value"]
 
     return headers
@@ -280,3 +290,52 @@ async def send_web_notification(
             )
             print("webhook request failed", str(e))
             return "Failed to process webhook request"
+
+
+def _convert_to_bool(value) -> bool:
+    """Convert string/empty values to boolean."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.lower() in ("true", "1", "yes")
+    return bool(value)
+
+
+def get_collection_pair(token):
+    try:
+        # from bson import ObjectId
+        from pymongo import MongoClient
+        from super_services.libs.config import settings
+
+        client = MongoClient(settings.MONGO_DSN)
+        db = client[settings.MONGO_DB]
+        collection = db[f"collection_data_{token}"]
+        result = list(collection.find({}, {"_id": 0}))
+
+        # Convert string booleans to actual booleans
+        for item in result:
+            item["is_tool_call"] = _convert_to_bool(item.get("is_tool_call", False))
+            item["is_first_message"] = _convert_to_bool(
+                item.get("is_first_message", False)
+            )
+
+        client.close()
+        print(f"Fetched {len(result)} QA pairs from collection_data_{token}")
+        return result
+
+    except Exception as e:
+        print(f"Could not get collection pairs: {str(e)}")
+        return []
+
+
+def get_qa_pairs(tokens):
+    if not isinstance(tokens, list):
+        tokens = [tokens]
+    pairs = []
+
+    for token in tokens:
+        pair = get_collection_pair(token)
+        if pair:
+            pairs.append(pair)
+
+    return pairs

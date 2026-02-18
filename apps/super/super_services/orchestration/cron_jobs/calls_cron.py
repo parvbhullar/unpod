@@ -13,6 +13,7 @@ This cron job runs every 5 minutes and:
 import asyncio
 import json
 import os
+import time
 import traceback
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -49,8 +50,8 @@ class CallsSyncService:
 
     def __init__(self) -> None:
         """Initialize the CallsSyncService with environment configuration."""
-        self.auth_token = os.getenv("VAPI_API_KEY")
-        self.base_url = os.getenv("VAPI_URL", "https://api.vapi.ai")
+        self.auth_token = os.getenv("VAPI_AUTH_TOKEN")
+        self.base_url = os.getenv("VAPI_BASE", "https://api.vapi.ai")
         self.state_file = os.getenv(
             "INBOUND_CALLS_EXECUTION_PATH", "/tmp/calls_sync_state.json"
         )
@@ -222,6 +223,55 @@ class CallsSyncService:
 
         return data
 
+    def fetch_data_with_retry(
+        self, url: str, params: dict = None, max_retries: int = 3
+    ) -> Optional[dict]:
+        """Fetch data from URL with retry logic."""
+
+        for attempt in range(max_retries):
+            try:
+                start_time = time.time()
+
+                response = requests.get(
+                    url,
+                    headers=self.get_auth_headers(),
+                    params=params,
+                    timeout=60,
+                )
+                response.raise_for_status()
+
+                data = response.json()
+                time_taken = round(time.time() - start_time, 2)
+
+                print(f"API call took {time_taken}s, attempt {attempt + 1}")
+
+                if time_taken > 10:
+                    print(f"⚠️ Slow API call ({time_taken}s): {response.request.url}")
+
+                # Retry only if response is empty AND slow
+                if not data and time_taken > 20 and attempt < max_retries:
+                    print(f"Empty response after {time_taken}s, retrying...")
+                    time.sleep(2**attempt)
+                    continue
+
+                return data
+
+            except requests.RequestException as e:
+                print(f"Attempt {attempt + 1} failed for {url}: {e}")
+
+                if attempt == max_retries - 1:
+                    print(f"❌ Max retries exceeded for {url}")
+                    return None
+
+                time.sleep(2**attempt)  # Exponential backoff
+
+            except ValueError as e:
+                # JSON decoding failed
+                print(f"Invalid JSON response from {url}: {e}")
+                return None
+
+        return None
+
     def fetch_all_recent_calls(
         self,
         last_run_time: Optional[str] = None,
@@ -268,12 +318,7 @@ class CallsSyncService:
 
             try:
                 print(f"Fetching calls page {page_count + 1} with params: {params}")
-                response = requests.get(
-                    url, headers=self.get_auth_headers(), params=params, timeout=60
-                )
-                response.raise_for_status()
-                calls = response.json()
-
+                calls = self.fetch_data_with_retry(url, params)
                 if not calls:
                     # No more records
                     break
@@ -483,7 +528,9 @@ class CallsSyncService:
 
         try:
             # Build prefix with call_id for efficient search
-            prefix = f"{self.vapi_s3_prefix}{call_id}" if self.vapi_s3_prefix else call_id
+            prefix = (
+                f"{self.vapi_s3_prefix}{call_id}" if self.vapi_s3_prefix else call_id
+            )
             paginator = self.s3_client.get_paginator("list_objects_v2")
 
             for page in paginator.paginate(Bucket=self.aws_bucket, Prefix=prefix):
@@ -594,7 +641,9 @@ class CallsSyncService:
             end_time = datetime.now(timezone.utc)
 
         # Strip timezone for comparison
-        start_naive = start_time.replace(tzinfo=None) if start_time.tzinfo else start_time
+        start_naive = (
+            start_time.replace(tzinfo=None) if start_time.tzinfo else start_time
+        )
         end_naive = end_time.replace(tzinfo=None) if end_time.tzinfo else end_time
 
         recordings_map: dict[str, dict] = {}
@@ -617,7 +666,9 @@ class CallsSyncService:
             print(f"Searching SBC recordings in {len(date_prefixes)} date prefix(es)")
 
             for date_prefix in date_prefixes:
-                for page in paginator.paginate(Bucket=self.aws_bucket, Prefix=date_prefix):
+                for page in paginator.paginate(
+                    Bucket=self.aws_bucket, Prefix=date_prefix
+                ):
                     for obj in page.get("Contents", []):
                         key = obj["Key"]
 
@@ -632,7 +683,9 @@ class CallsSyncService:
 
                         try:
                             time_part = parts[0]
-                            file_time = datetime.strptime(time_part, "%Y-%m-%d-%H-%M-%S")
+                            file_time = datetime.strptime(
+                                time_part, "%Y-%m-%d-%H-%M-%S"
+                            )
                         except (ValueError, IndexError):
                             continue
 
@@ -1107,7 +1160,7 @@ class CallsSyncService:
                 (SELECT id FROM core_components_pilot WHERE handle = %(assignee)s LIMIT 1),
                 (SELECT tvn.bridge_id
                 FROM telephony_voicebridgenumber tvn
-                JOIN telephony_telephonynumber n ON tvn.number_id = n.id
+                JOIN core_components_telephony_number n ON tvn.number_id = n.id
                 WHERE n.number = %(source)s OR n.number = %(destination)s
                 LIMIT 1),
                 (SELECT space_organization_id FROM space_space WHERE id = %(space_id)s LIMIT 1),
@@ -1158,7 +1211,9 @@ class CallsSyncService:
                     executeQuery(query, params=params, commit=True)
                 except Exception as e:
                     # Ignore duplicate entry errors (PostgreSQL uses "duplicate key")
-                    if "duplicate key" not in str(e).lower() and "Duplicate entry" not in str(e):
+                    if "duplicate key" not in str(
+                        e
+                    ).lower() and "Duplicate entry" not in str(e):
                         print(f"Error inserting call log: {e}")
 
             print(f"{len(logs)} calls processed for {assistant_id}")
@@ -1205,7 +1260,7 @@ class CallsSyncService:
         all_calls = self.fetch_all_recent_calls(
             last_run_time=last_run_time,
             assistant_id=assistant_id,
-            call_type="inboundPhoneCall"
+            call_type="inboundPhoneCall",
         )
         print(f"[SYNC] Step 2: Fetched {len(all_calls)} calls")
 
@@ -1569,10 +1624,12 @@ def calls_sync_cron(
 ) -> dict:
     """Synchronous entry point for cron scheduler."""
     service = CallsSyncService()
-    return asyncio.run(service.sync_flow(
-        assistant_id=assistant_id,
-        start_date=start_date,
-    ))
+    return asyncio.run(
+        service.sync_flow(
+            assistant_id=assistant_id,
+            start_date=start_date,
+        )
+    )
 
 
 # Legacy function for backward compatibility
@@ -1585,17 +1642,13 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Calls Sync Service")
-    parser.add_argument(
-        "--assistant-id", type=str, help="Filter by VAPI assistant ID"
-    )
+    parser.add_argument("--assistant-id", type=str, help="Filter by VAPI assistant ID")
     parser.add_argument(
         "--start-date",
         type=str,
         help="Start datetime in ISO 8601 format (e.g., 2025-01-01T10:00:00Z)",
     )
-    parser.add_argument(
-        "--run-id", type=str, help="Sync a specific run ID"
-    )
+    parser.add_argument("--run-id", type=str, help="Sync a specific run ID")
 
     args = parser.parse_args()
 

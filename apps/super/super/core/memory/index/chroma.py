@@ -10,9 +10,11 @@ Supports multiple embedding backends:
 - onnx: Portable, ~1.5-2x faster (~10-25ms per embedding)
 """
 
+import hashlib
 import os
 import re
 import time
+import asyncio
 from datetime import datetime
 from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
 
@@ -121,7 +123,7 @@ class ChromaIndex(BaseIndex):
         self,
         index_name: str = "default",
         persist_directory: Optional[str] = None,
-        embedding_model_name: str = "all-MiniLM-L6-v2",
+        embedding_model_name: Optional[str] = None,
         embedding_backend: Optional[Union["EmbeddingBackend", str]] = None,
         preloaded_embedding_fn: Optional[Callable] = None,
         preloaded_chroma_client: Optional[Any] = None,
@@ -154,7 +156,9 @@ class ChromaIndex(BaseIndex):
 
         self._index_name = index_name or f"chroma_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         self._persist_directory = persist_directory
-        self._embedding_model_name = embedding_model_name
+        self._embedding_model_name = embedding_model_name or os.getenv(
+            "EMBEDDING_MODEL", "paraphrase-multilingual-MiniLM-L12-v2"
+        )
         self._embedding_backend = self._resolve_embedding_backend(embedding_backend)
 
         # Initialize ChromaDB client - use preloaded if available
@@ -174,7 +178,7 @@ class ChromaIndex(BaseIndex):
             logger.info("Using preloaded embedding function (fast init)")
         else:
             self._embedding_fn = self._create_embedding_function(
-                embedding_model_name,
+                self._embedding_model_name,
                 embedding_functions,
             )
 
@@ -188,7 +192,7 @@ class ChromaIndex(BaseIndex):
 
         logger.info(
             f"ChromaIndex initialized: collection={self._collection.name}, "
-            f"embedding_model={embedding_model_name}, backend={self._embedding_backend}, "
+            f"embedding_model={self._embedding_model_name}, backend={self._embedding_backend}, "
             f"preloaded={preloaded_embedding_fn is not None}"
         )
 
@@ -245,6 +249,12 @@ class ChromaIndex(BaseIndex):
             sanitized = sanitized[:63]
         return sanitized
 
+    @staticmethod
+    def _content_hash(text: str) -> str:
+        """Generate a stable hash for document content to detect duplicates."""
+        normalized = " ".join(text.split()).strip().lower()
+        return hashlib.md5(normalized.encode("utf-8")).hexdigest()
+
     def should_refresh_index(self) -> bool:
         """Check if index should be refreshed based on document count."""
         count = self._collection.count()
@@ -271,41 +281,64 @@ class ChromaIndex(BaseIndex):
 
         start_time = time.perf_counter()
 
-        # Prepare documents for ChromaDB, deduplicating by ID
-        seen_ids: dict[str, int] = {}
+        # Prepare documents for ChromaDB:
+        # - dedupe exact duplicate content
+        # - preserve distinct sections even when they share document_id
+        seen_ids: set[str] = set()
+        duplicate_id_counters: dict[str, int] = {}
+        seen_content_hashes: set[str] = set()
         ids = []
         documents = []
         metadatas = []
+        dedup_count = 0
+        duplicate_id_count = 0
 
         for i, doc in enumerate(docs):
-            doc_id = doc.document_id or f"doc_{i}_{int(time.time() * 1000)}"
+            base_doc_id = doc.document_id or f"doc_{i}_{int(time.time() * 1000)}"
 
-            # Handle duplicate IDs by keeping only the last occurrence
+            # Skip docs with duplicate content (different IDs, same text)
+            content_hash = self._content_hash(doc.content)
+            if content_hash in seen_content_hashes:
+                dedup_count += 1
+                continue
+            seen_content_hashes.add(content_hash)
+
+            # Preserve sections that share the same base ID by assigning stable
+            # chunk suffixes instead of overwriting previous entries.
+            doc_id = base_doc_id
             if doc_id in seen_ids:
-                # Replace the previous entry with this one
-                prev_idx = seen_ids[doc_id]
-                documents[prev_idx] = doc.content
-                metadatas[prev_idx] = {
-                    "blurb": doc.blurb or "",
-                    "source_type": doc.source_type or "",
-                    "semantic_identifier": doc.semantic_identifier or "",
-                    "url": doc.url or "",
-                    "score": str(doc.score or 0.0),
-                }
+                duplicate_id_count += 1
+                next_suffix = duplicate_id_counters.get(base_doc_id, 1)
+                while f"{base_doc_id}__chunk_{next_suffix}" in seen_ids:
+                    next_suffix += 1
+                doc_id = f"{base_doc_id}__chunk_{next_suffix}"
+                duplicate_id_counters[base_doc_id] = next_suffix + 1
             else:
-                seen_ids[doc_id] = len(ids)
-                ids.append(doc_id)
-                documents.append(doc.content)
-                metadatas.append({
-                    "blurb": doc.blurb or "",
-                    "source_type": doc.source_type or "",
-                    "semantic_identifier": doc.semantic_identifier or "",
-                    "url": doc.url or "",
-                    "score": str(doc.score or 0.0),
-                })
+                duplicate_id_counters.setdefault(base_doc_id, 1)
 
-        # Upsert to collection (handles both new and existing documents)
-        self._collection.upsert(
+            seen_ids.add(doc_id)
+            ids.append(doc_id)
+            documents.append(doc.content)
+            metadatas.append({
+                "blurb": doc.blurb or "",
+                "source_type": doc.source_type or "",
+                "semantic_identifier": doc.semantic_identifier or "",
+                "url": doc.url or "",
+                "score": str(doc.score or 0.0),
+                "original_document_id": base_doc_id,
+            })
+
+        if dedup_count:
+            logger.debug(f"Content-hash dedup removed {dedup_count} duplicate documents")
+        if duplicate_id_count:
+            logger.debug(
+                f"Expanded {duplicate_id_count} duplicate document IDs into unique chunk IDs"
+            )
+
+        # Upsert to collection (handles both new and existing documents).
+        # Run in thread to avoid blocking the event loop on embedding/upsert CPU.
+        await asyncio.to_thread(
+            self._collection.upsert,
             ids=ids,
             documents=documents,
             metadatas=metadatas,
@@ -332,16 +365,29 @@ class ChromaIndex(BaseIndex):
         Returns:
             List of SearchDoc objects
         """
-        if self._collection.count() == 0:
+        collection_count = await asyncio.to_thread(self._collection.count)
+        if collection_count == 0:
             logger.debug("ChromaDB collection is empty, returning empty results")
             return []
+
+        # Optional fetch_k lets callers retrieve a wider candidate pool for reranking.
+        raw_fetch_k = kwargs.get("fetch_k")
+        if raw_fetch_k is None:
+            n_results = min(k, collection_count)
+        else:
+            try:
+                fetch_k = max(k, int(raw_fetch_k))
+            except (TypeError, ValueError):
+                fetch_k = k
+            n_results = min(fetch_k, collection_count)
 
         start_time = time.perf_counter()
 
         try:
-            results = self._collection.query(
+            results = await asyncio.to_thread(
+                self._collection.query,
                 query_texts=[query],
-                n_results=min(k, self._collection.count()),
+                n_results=n_results,
                 include=["documents", "metadatas", "distances"],
             )
 
@@ -354,11 +400,12 @@ class ChromaIndex(BaseIndex):
                     # Convert distance to similarity score (cosine distance to similarity)
                     similarity_score = 1.0 - distance
 
+                    doc_id = results["ids"][0][i] if results.get("ids") else f"result_{i}"
                     search_doc = SearchDoc(
                         blurb=metadata.get("blurb", ""),
                         content=doc_content,
                         source_type=metadata.get("source_type", ""),
-                        document_id=results["ids"][0][i] if results.get("ids") else f"result_{i}",
+                        document_id=doc_id,
                         semantic_identifier=metadata.get("semantic_identifier", ""),
                         metadata=metadata,
                         url=metadata.get("url", ""),
@@ -367,6 +414,19 @@ class ChromaIndex(BaseIndex):
                     search_docs.append(search_doc)
 
             elapsed_ms = (time.perf_counter() - start_time) * 1000
+            if search_docs:
+                score_range = f"[{search_docs[-1].score:.4f}..{search_docs[0].score:.4f}]"
+                top_ids = [d.document_id for d in search_docs[:3]]
+                logger.debug(
+                    f"ChromaDB search: query={query!r}, k={k}, n_results={n_results}, "
+                    f"found={len(search_docs)}, scores={score_range}, "
+                    f"top_ids={top_ids}, elapsed={elapsed_ms:.2f}ms"
+                )
+            else:
+                logger.debug(
+                    f"ChromaDB search: query={query!r}, k={k}, n_results={n_results}, "
+                    f"found=0, elapsed={elapsed_ms:.2f}ms"
+                )
             logger.info(f"ChromaDB search found {len(search_docs)} results in {elapsed_ms:.2f}ms")
 
             return search_docs
@@ -375,26 +435,36 @@ class ChromaIndex(BaseIndex):
             logger.error(f"ChromaDB search error: {e}")
             return []
 
-    def search_sync(self, query: str, k: int = 3) -> List[SearchDoc]:
+    def search_sync(self, query: str, k: int = 3, fetch_k: Optional[int] = None) -> List[SearchDoc]:
         """
         Synchronous search for use in non-async contexts (e.g., frame processors).
 
         Args:
             query: Search query string
             k: Number of results to return
+            fetch_k: Optional wider candidate pool size for reranking
 
         Returns:
             List of SearchDoc objects
         """
-        if self._collection.count() == 0:
+        collection_count = self._collection.count()
+        if collection_count == 0:
             return []
+
+        if fetch_k is None:
+            n_results = min(k, collection_count)
+        else:
+            try:
+                n_results = min(max(k, int(fetch_k)), collection_count)
+            except (TypeError, ValueError):
+                n_results = min(k, collection_count)
 
         start_time = time.perf_counter()
 
         try:
             results = self._collection.query(
                 query_texts=[query],
-                n_results=min(k, self._collection.count()),
+                n_results=n_results,
                 include=["documents", "metadatas", "distances"],
             )
 
@@ -405,11 +475,12 @@ class ChromaIndex(BaseIndex):
                     distance = results["distances"][0][i] if results.get("distances") else 0.0
                     similarity_score = 1.0 - distance
 
+                    doc_id = results["ids"][0][i] if results.get("ids") else f"result_{i}"
                     search_doc = SearchDoc(
                         blurb=metadata.get("blurb", ""),
                         content=doc_content,
                         source_type=metadata.get("source_type", ""),
-                        document_id=results["ids"][0][i] if results.get("ids") else f"result_{i}",
+                        document_id=doc_id,
                         semantic_identifier=metadata.get("semantic_identifier", ""),
                         metadata=metadata,
                         url=metadata.get("url", ""),
@@ -418,7 +489,19 @@ class ChromaIndex(BaseIndex):
                     search_docs.append(search_doc)
 
             elapsed_ms = (time.perf_counter() - start_time) * 1000
-            logger.debug(f"ChromaDB sync search: {len(search_docs)} results in {elapsed_ms:.2f}ms")
+            if search_docs:
+                score_range = f"[{search_docs[-1].score:.4f}..{search_docs[0].score:.4f}]"
+                top_ids = [d.document_id for d in search_docs[:3]]
+                logger.debug(
+                    f"ChromaDB sync search: query={query!r}, k={k}, n_results={n_results}, "
+                    f"found={len(search_docs)}, scores={score_range}, "
+                    f"top_ids={top_ids}, elapsed={elapsed_ms:.2f}ms"
+                )
+            else:
+                logger.debug(
+                    f"ChromaDB sync search: query={query!r}, k={k}, n_results={n_results}, "
+                    f"found=0, elapsed={elapsed_ms:.2f}ms"
+                )
 
             return search_docs
 
@@ -445,6 +528,11 @@ class ChromaIndex(BaseIndex):
     def is_initialized(self) -> bool:
         """Check if the index is properly initialized."""
         return self._is_setup
+
+    @property
+    def embedding_model_name(self) -> str:
+        """Return the embedding model name being used."""
+        return self._embedding_model_name
 
     @property
     def embedding_backend(self) -> str:

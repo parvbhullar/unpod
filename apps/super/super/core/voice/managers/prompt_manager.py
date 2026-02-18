@@ -117,6 +117,7 @@ When user says ANY of these:
 - ❌ Ending with only a question and waiting
 - ❌ Asking permission before every statement
 - ❌ Saying the same pitch when user says "go" or "continue"
+- ❌ No Single/Double Numerals: 1, 2, 3, 1, 2, 3, 23, 45. Use words instead.
 
 ### Conversation Momentum
 - Keep the conversation moving forward
@@ -140,6 +141,9 @@ RIGHT: "The key features include expert faculty, comprehensive study materials, 
 
 WRONG: "# Our Programs\n**Classroom Mode**: Best for..."
 RIGHT: "Let me tell you about our programs. Classroom mode is best for..."
+
+WRONG: "5 se 6 din, 5 to 6 days"
+RIGHT: "panch se che din, five to six days"
 
 Speak lists naturally:
 - "First option is X, then there's Y, and also Z"
@@ -473,7 +477,8 @@ class PromptManager:
 
         # Check for new conversational prompts feature flag
         if self.config.get("use_conversational_prompts", False):
-            return self._create_conversational_prompt(current_date, current_time_str)
+            prompt = self._create_conversational_prompt(current_date, current_time_str)
+            return self._enforce_instruction_limit(prompt)
 
         # Get agent details
         agent_name = (
@@ -569,7 +574,46 @@ class PromptManager:
                         )
 
 
-        return assistant_prompt
+        return self._enforce_instruction_limit(assistant_prompt)
+
+    def _enforce_instruction_limit(self, prompt: str) -> str:
+        """
+        Enforce a safe instructions limit for realtime backends.
+
+        OpenAI Realtime rejects oversized `session.instructions` payloads.
+        This trims long prompts before they reach the model/session layer.
+        """
+        if not prompt:
+            return prompt
+
+        provider = str(self.config.get("llm_provider", "")).lower()
+        model = str(self.config.get("llm_model", "")).lower()
+        is_realtime = "realtime" in provider or "realtime" in model
+
+        # Keep this conservative for OpenAI Realtime (API hard cap is 16384 tokens).
+        if not is_realtime:
+            return prompt
+
+        max_tokens = int(self.config.get("max_system_prompt_tokens", 12000))
+        current_tokens = estimate_tokens(prompt)
+        if current_tokens <= max_tokens:
+            return prompt
+
+        # Char-based progressive trim guided by token estimator.
+        # We keep the beginning of the prompt because it contains core behavior.
+        ratio = max_tokens / max(current_tokens, 1)
+        target_len = max(512, int(len(prompt) * ratio * 0.95))
+        trimmed = prompt[:target_len]
+
+        while estimate_tokens(trimmed) > max_tokens and len(trimmed) > 512:
+            trimmed = trimmed[: int(len(trimmed) * 0.9)]
+
+        self._logger.warning(
+            "System prompt too long for realtime (%s tokens). Trimmed to <= %s tokens.",
+            current_tokens,
+            max_tokens,
+        )
+        return trimmed
 
     def _create_conversational_prompt(
         self, current_date: str, current_time_str: str
@@ -596,13 +640,17 @@ class PromptManager:
 
         # Get system prompt (custom persona) and replace template params
         use_section_based = self.use_flows
+        print(f"[DEBUG] use_flows flag: {use_section_based}")
         if use_section_based:
             custom_persona = (
                 "Please follow the defined conversation sections and flow structure."
             )
+            print("[DEBUG] WARNING: Using generic flow prompt instead of system_prompt!")
         else:
             custom_persona = self.config.get("system_prompt", "")
+            print(f"[DEBUG] Raw system_prompt from config: {custom_persona[:200]}...")
             custom_persona = self._replace_template_params(custom_persona)
+            print(f"[DEBUG] System prompt after template replacement: {custom_persona[:200]}...")
 
         # Inject dynamic context into custom persona
         dynamic_context = self._build_dynamic_context()
@@ -635,12 +683,14 @@ class PromptManager:
         }
 
         # Create prompt using composer
+        print(f"[DEBUG] About to call create_prompt_from_agent_config with custom_persona: {custom_persona[:100] if custom_persona else 'None'}...")
         prompt = create_prompt_from_agent_config(
             config=composer_config,
             agent_name=agent_name,
             current_datetime=f"{current_date} {current_time_str}",
             custom_persona=custom_persona if custom_persona else None,
         )
+        print(f"[DEBUG] Final prompt from composer (first 300 chars): {prompt[:300]}...")
 
         # Add dashboard interpretation and conversational leadership rules
         prompt += DASHBOARD_INTERPRETATION_RULES

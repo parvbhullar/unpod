@@ -5,7 +5,7 @@ from prefect.runtime import flow_run
 from super.app.call_profile import update_profile_by_task_id
 from super_services.db.services.models.task import TaskModel, RunModel
 from dataclasses import dataclass, asdict
-from super.core.voice.providers.base import CallResult
+from super.app.providers.base import CallResult
 from super.core.voice.schema import UserState
 from super.core.voice.common.services import save_execution_log
 from super_services.db.services.schemas.task import TaskStatusEnum
@@ -58,10 +58,15 @@ async def create_task_output(
             + (float(call_result.data.get("cost", 0.0)) * 5) / 100
         )
 
+        number = call_result.contact_number
+
+        if isinstance(number, str) and number.startswith("0"):
+            number=number[1:]
+
         new_output = {
             "call_id": call_result.call_id,
             "customer": call_result.customer,
-            "contact_number": call_result.contact_number,
+            "contact_number": number,
             "call_end_reason": call_result.call_end_reason,
             "recording_url": call_result.recording_url,
             "transcript": call_result.transcript,
@@ -258,3 +263,18 @@ async def post_call_flow(job: FlowJob):
         await update_profile_by_task_id(job.task_id)
     else:
         await update_task(current_task, task_output)
+
+if __name__ == "__main__":
+    from super_services.voice.models.config import ModelConfig
+    job=FlowJob(
+        task_id="T0c81bc0d072311f1878d43cd8a99e069",
+        call_result=CallResult(
+            status="notConnected",
+            data={}
+        ),
+        user_state=UserState(
+        model_config=ModelConfig().get_config('digital-recruitment-agent-1jq7qhesciwb')
+        ),
+    )
+    import asyncio
+    asyncio.run(post_call_flow(job))

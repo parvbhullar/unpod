@@ -1,7 +1,10 @@
+import importlib
 import importlib.util
 import sys
 from pathlib import Path
 import pytest
+
+from tests.core.voice.helpers.runtime_imports import prepare_runtime_imports
 
 
 def _load_service_common():
@@ -13,6 +16,25 @@ def _load_service_common():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_livekit_import_resolves_sdk_when_test_path_is_present(monkeypatch):
+    root = Path(__file__).resolve().parents[4]
+    monkeypatch.syspath_prepend(str(root / "tests" / "core" / "voice"))
+    sys.modules.pop("livekit", None)
+    sys.modules.pop("livekit.api", None)
+    shadowed_livekit = importlib.import_module("livekit")
+    assert "tests/core/voice/livekit" in (getattr(shadowed_livekit, "__file__", "") or "")
+
+    prepare_runtime_imports()
+    from livekit import api  # type: ignore
+
+    assert api is not None
+
+
+def test_bson_stub_supports_objectid_import():
+    objectid = importlib.import_module("bson.objectid")
+    assert hasattr(objectid, "InvalidId")
 
 
 def test_normalize_tts_provider_model_unpod_to_inworld():
@@ -59,6 +81,7 @@ def test_livekit_factory_uses_shared_inference_logic(monkeypatch):
     root = Path(__file__).resolve().parents[4]
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
+    prepare_runtime_imports()
     try:
         from super.core.voice.services.livekit_services import LiveKitServiceFactory
     except Exception as exc:

@@ -26,8 +26,8 @@ class CallUpdater:
         self.prefix = os.getenv("S3_FILE_PATH", "")
         self.region = os.getenv("AWS_DEFAULT_REGION")
         self.s3 = boto3.client("s3")
-        self.auth_token = os.getenv("VAPI_API_KEY")
-        self.base_url = os.getenv("VAPI_URL", "https://api.vapi.ai")
+        self.auth_token = os.getenv("VAPI_AUTH_TOKEN")
+        self.base_url = os.getenv("VAPI_BASE")
         self.state_file = os.getenv("INBOUND_CALLS_EXECUTION_PATH")
         self.webhook_handler = WebhookHandler()
 

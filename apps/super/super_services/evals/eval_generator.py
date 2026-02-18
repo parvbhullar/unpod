@@ -6,7 +6,6 @@ Generates QA pairs from agent configuration and knowledge base documents using O
 import os
 import json
 import uuid
-import logging
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 
@@ -19,8 +18,6 @@ from super_services.db.services.models.agent_eval import (
     KBQAPairModel,
 )
 
-logger = logging.getLogger(__name__)
-
 
 @dataclass
 class QAPair:
@@ -29,6 +26,27 @@ class QAPair:
     question: str
     answer: str
     keywords: List[str]
+
+
+def _fetch_eval_info(gen_type, linked_handle, multi_fetch=False):
+    from super_services.libs.core.db import executeQuery
+
+    query = "SELECT * FROM knowledge_base_knowledgebaseevals WHERE eval_type=%s AND linked_handle=%s"
+    params = (
+        gen_type,
+        linked_handle,
+    )
+    if multi_fetch and isinstance(linked_handle, list):
+        placeholders = ",".join(["%s"] * len(linked_handle))
+        query = f"SELECT * FROM knowledge_base_knowledgebaseevals WHERE eval_type=%s AND linked_handle IN ({placeholders})"
+        params = (gen_type, *linked_handle)
+    eval_info = executeQuery(
+        query,
+        params=params,
+        many=multi_fetch,
+    )
+    print(eval_info)
+    return eval_info
 
 
 class EvalGenerator:
@@ -42,32 +60,69 @@ class EvalGenerator:
     # OpenAI model to use for QA generation
     OPENAI_MODEL = "gpt-4o"
 
-    def __init__(self, agent_id: str):
+    def __init__(self, gen_type: str, agent_id: str, kn_token: str, logger):
+        self.gen_type = gen_type
         self.agent_id = agent_id
+        self.kn_token = kn_token.split(",") if kn_token else None
         self.batch_id = f"batch_{uuid.uuid4().hex[:12]}"
         self.openai_client = openai.AsyncClient(api_key=os.getenv("OPENAI_API_KEY"))
+        self.logger = logger
 
-    def _agent_qa_pairs_exist(self) -> int:
+    def _agent_qa_pairs_exist(self, eval_token) -> int:
         """Check if QA pairs already exist for this agent_id."""
         try:
-            count = AgentQAPairModel._get_collection().count_documents(
-                {"agent_id": self.agent_id, "status": "active"}
-            )
+            count = AgentQAPairModel(eval_token).count(status="active")
             return count
         except Exception as e:
-            logger.error(f"Error checking agent QA pairs: {e}")
+            self.logger.info(f"Error checking agent QA pairs: {e}")
             return 0
 
-    def _kb_qa_pairs_exist(self, kb_token: str) -> int:
+    def _kb_qa_pairs_exist(self, eval_token: str) -> int:
         """Check if QA pairs already exist for this kb_token."""
         try:
-            count = KBQAPairModel._get_collection().count_documents(
-                {"agent_id": self.agent_id, "kb_token": kb_token, "status": "active"}
-            )
+            count = KBQAPairModel(eval_token).count(status="active")
             return count
         except Exception as e:
-            logger.error(f"Error checking KB QA pairs: {e}")
+            self.logger.info(f"Error checking KB QA pairs: {e}")
             return 0
+
+    def _update_eval_status(
+        self,
+        eval_id: str,
+        status: str,
+        batch_id: str = None,
+        batch_saved_count: int = 0,
+        extra_metadata: dict = {},
+    ):
+        from super_services.libs.core.db import executeQuery
+
+        """Update status of all QA pairs for this eval_token."""
+        metadata = {}
+        if status == "completed":
+            metadata = {
+                "last_batch_id": batch_id,
+                "batch_saved_count": batch_saved_count,
+            }
+        if extra_metadata:
+            metadata = {**metadata, **extra_metadata}
+        query = "UPDATE knowledge_base_knowledgebaseevals SET gen_status = %s, WHERE id = %s"
+        params = (
+            status,
+            eval_id,
+        )
+        if metadata:
+            query = """
+                UPDATE knowledge_base_knowledgebaseevals
+                SET gen_status = %s,
+                    eval_data = eval_data || %s
+                WHERE id = %s
+            """
+            params = (
+                status,
+                json.dumps(metadata),
+                eval_id,
+            )
+        executeQuery(query, params=params, commit=True)
 
     async def generate_all_evals(
         self, force_regenerate: bool = False
@@ -82,15 +137,10 @@ class EvalGenerator:
         Returns:
             Dict with generation statistics
         """
-        logger.info(f"Starting eval generation for agent: {self.agent_id}")
+        self.logger.info(f"Starting eval generation for agent: {self.agent_id}")
 
         # Fetch agent config
-        agent_config = self._get_agent_config()
-        if not agent_config:
-            raise ValueError(f"Agent config not found for: {self.agent_id}")
-
         results = {
-            "agent_id": self.agent_id,
             "batch_id": self.batch_id,
             "agent_qa_count": 0,
             "kb_qa_count": 0,
@@ -99,56 +149,118 @@ class EvalGenerator:
             "errors": [],
         }
 
-        # Check if agent QA pairs already exist
-        existing_agent_qa = self._agent_qa_pairs_exist()
-        if existing_agent_qa > 0 and not force_regenerate:
-            skip_msg = f"Agent QA pairs already exist ({existing_agent_qa} pairs) - skipping generation"
-            logger.info(skip_msg)
-            results["skipped"].append(skip_msg)
-            results["agent_qa_count"] = existing_agent_qa
-        else:
-            # Generate QA pairs from agent config and save to agent_qa_pairs collection
-            try:
-                agent_qa_pairs = await self._generate_agent_qa_pairs(agent_config)
-                saved_count = await self._save_agent_qa_pairs(agent_qa_pairs)
-                results["agent_qa_count"] = saved_count
-                logger.info(f"Generated {saved_count} agent QA pairs")
-            except Exception as e:
-                error_msg = f"Failed to generate agent QA pairs: {str(e)}"
-                logger.error(error_msg)
-                results["errors"].append(error_msg)
+        gen_eval_kb = False
+        if self.gen_type == "knowledgebase":
+            gen_eval_kb = True
+        elif self.gen_type == "pilot":
+            gen_eval_kb = True
+            agent_config = self._get_agent_config()
+            if not agent_config:
+                raise ValueError(f"Agent config not found for: {self.agent_id}")
+
+            eval_config = _fetch_eval_info("pilot", self.agent_id)
+            if not eval_config:
+                raise ValueError(f"Eval config not found for: {self.agent_id}")
+
+            eval_token = eval_config.get("eval_data", {}).get("space_token")
+            eval_id = eval_config.get("id")
+            if not eval_token:
+                raise ValueError(f"Eval token not found for: {self.agent_id}")
+
+            # Check if agent QA pairs already exist
+            existing_agent_qa = self._agent_qa_pairs_exist(eval_token)
+            if existing_agent_qa > 0 and not force_regenerate:
+                skip_msg = f"Agent QA pairs already exist ({existing_agent_qa} pairs) - skipping generation"
+                self.logger.info(skip_msg)
+                results["skipped"].append(skip_msg)
+                results["agent_qa_count"] = existing_agent_qa
+                self._update_eval_status(
+                    eval_id, "completed", extra_metadata={"already_generated": True}
+                )
+            else:
+                # Generate QA pairs from agent config and save to agent_qa_pairs collection
+                try:
+                    agent_qa_pairs = await self._generate_agent_qa_pairs(agent_config)
+                    saved_count = await self._save_agent_qa_pairs(
+                        eval_token, agent_qa_pairs
+                    )
+                    results["agent_qa_count"] = saved_count
+                    self._update_eval_status(
+                        eval_id, "completed", results["batch_id"], saved_count
+                    )
+                    self.logger.info(f"Generated {saved_count} agent QA pairs")
+                except Exception as e:
+                    error_msg = f"Failed to generate agent QA pairs: {str(e)}"
+                    self.logger.info(f"Error --> {error_msg}")
+                    results["errors"].append(error_msg)
 
         # Generate QA pairs from knowledge base documents and save to kb_qa_pairs collection
-        kb_list = agent_config.get("knowledge_base", [])
-        for kb in kb_list:
-            kb_token = kb.get("token")
-            kb_name = kb.get("name")
-            if not kb_token:
-                continue
+        if gen_eval_kb:
+            print("Generating evals for knowledgebase")
+            if not self.kn_token and self.gen_type == "knowledgebase":
+                raise ValueError(
+                    "Knowledge base token(s) required for knowledgebase eval type"
+                )
+            kb_list = self.kn_token
+            for kb_token in kb_list:
+                eval_config = _fetch_eval_info("knowledgebase", kb_token)
+                if not eval_config:
+                    raise ValueError(
+                        f"Eval config not found for knowledgebase: {kb_token}"
+                    )
 
-            # Check if KB QA pairs already exist for this kb_token
-            existing_kb_qa = self._kb_qa_pairs_exist(kb_token)
-            if existing_kb_qa > 0 and not force_regenerate:
-                skip_msg = f"KB '{kb_name}' QA pairs already exist ({existing_kb_qa} pairs) - skipping"
-                logger.info(skip_msg)
-                results["skipped"].append(skip_msg)
-                results["kb_qa_count"] += existing_kb_qa
-                continue
+                eval_token = eval_config.get("eval_data", {}).get("space_token")
+                eval_id = eval_config.get("id")
+                if not eval_token:
+                    raise ValueError(
+                        f"Eval token not found for knowledgebase: {kb_token}"
+                    )
+                kb_name = eval_config.get("eval_name")
+                kb_name = kb_name.replace("Evals", "").strip()
+                existing_kb_qa = self._kb_qa_pairs_exist(eval_token)
+                if existing_kb_qa > 0 and not force_regenerate:
+                    skip_msg = f"KB '{kb_token}' QA pairs already exist ({existing_kb_qa} pairs) - skipping"
+                    self.logger.info(skip_msg)
+                    results["skipped"].append(skip_msg)
+                    results["kb_qa_count"] += existing_kb_qa
+                    self._update_eval_status(
+                        eval_id, "completed", extra_metadata={"already_generated": True}
+                    )
+                    continue
 
-            try:
-                documents = await self._fetch_kb_documents(kb_token)
-                if documents:
-                    kb_qa_pairs = await self._generate_kb_qa_pairs(documents, kb_name)
-                    saved_count = await self._save_kb_qa_pairs(kb_qa_pairs, kb_token)
-                    results["kb_qa_count"] += saved_count
-                    logger.info(f"Generated {saved_count} KB QA pairs for {kb_name}")
-            except Exception as e:
-                error_msg = f"Failed to generate KB QA pairs for {kb_name}: {str(e)}"
-                logger.error(error_msg)
-                results["errors"].append(error_msg)
+                try:
+                    documents = await self._fetch_kb_documents(kb_token)
+                    if documents:
+                        kb_qa_pairs = await self._generate_kb_qa_pairs(
+                            documents, kb_name
+                        )
+                        saved_count = await self._save_kb_qa_pairs(
+                            eval_token, kb_qa_pairs
+                        )
+                        results["kb_qa_count"] += saved_count
+                        self._update_eval_status(
+                            eval_id, "completed", results["batch_id"], saved_count
+                        )
+                        self.logger.info(
+                            f"Generated {saved_count} KB QA pairs for {kb_name}"
+                        )
+                    else:
+                        self._update_eval_status(
+                            eval_id,
+                            "completed",
+                            extra_metadata={
+                                "message": "No documents found in knowledge base"
+                            },
+                        )
+                except Exception as e:
+                    error_msg = (
+                        f"Failed to generate KB QA pairs for {kb_name}: {str(e)}"
+                    )
+                    self.logger.info(f"Error --> {error_msg}")
+                    results["errors"].append(error_msg)
 
         results["total_qa_count"] = results["agent_qa_count"] + results["kb_qa_count"]
-        logger.info(
+        self.logger.info(
             f"Eval generation complete. Total: {results['total_qa_count']} QA pairs"
         )
 
@@ -160,7 +272,7 @@ class EvalGenerator:
             config = ModelConfig().get_config(self.agent_id)
             return config if config else None
         except Exception as e:
-            logger.error(f"Error fetching agent config: {e}")
+            self.logger.info(f"Error --> fetching agent config: {e}")
             return None
 
     async def _fetch_kb_documents(self, kb_token: str) -> List[Dict[str, Any]]:
@@ -168,12 +280,12 @@ class EvalGenerator:
         Fetch all documents from a knowledge base.
         Uses the search service API to get all documents.
         """
-        api_service_url = os.getenv("API_SERVICE_URL", "").rstrip("/")
-        if not api_service_url:
-            logger.warning("API_SERVICE_URL not configured")
+        search_service_url = os.getenv("SEARCH_SERVICE_URL", "").rstrip("/")
+        if not search_service_url:
+            self.logger.warning("SEARCH_SERVICE_URL not configured")
             return []
 
-        url = f"{api_service_url}/search/query/docs/"
+        url = f"{search_service_url}/api/v1/search/query/docs/"
         payload = {
             "query": "file",  # Generic query to fetch all documents
             "kn_token": [kb_token],
@@ -188,13 +300,15 @@ class EvalGenerator:
                     .get("search_response_summary", {})
                     .get("top_sections", [])
                 )
-                logger.info(f"Fetched {len(docs)} documents from KB {kb_token}")
+                self.logger.info(f"Fetched {len(docs)} documents from KB {kb_token}")
                 return docs
             else:
-                logger.warning(f"Failed to fetch KB documents: {response.status_code}")
+                self.logger.warning(
+                    f"Failed to fetch KB documents: {response.status_code}"
+                )
                 return []
         except Exception as e:
-            logger.error(f"Error fetching KB documents: {e}")
+            self.logger.info(f"Error --> fetching KB documents: {e}")
             return []
 
     async def _generate_agent_qa_pairs(
@@ -284,7 +398,7 @@ Output ONLY a valid JSON array with this exact format (no markdown, no code bloc
                 qa_pairs = await self._call_openai_for_qa_pairs(prompt, max_pairs=50)
                 all_qa_pairs.extend(qa_pairs)
             except Exception as e:
-                logger.warning(f"Failed to generate QA for document: {e}")
+                self.logger.warning(f"Failed to generate QA for document: {e}")
                 continue
 
         return all_qa_pairs
@@ -327,7 +441,7 @@ Output ONLY a valid JSON array with this exact format (no markdown, no code bloc
             qa_data = json.loads(content)
 
             if not isinstance(qa_data, list):
-                logger.warning("OpenAI response is not a list")
+                self.logger.warning("OpenAI response is not a list")
                 return []
 
             qa_pairs = []
@@ -344,68 +458,51 @@ Output ONLY a valid JSON array with this exact format (no markdown, no code bloc
             return qa_pairs
 
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse OpenAI response as JSON: {e}")
+            self.logger.info(f"Failed to parse OpenAI response as JSON: {e}")
             return []
         except Exception as e:
-            logger.error(f"OpenAI API error: {e}")
+            self.logger.info(f"OpenAI API error: {e}")
             raise
 
-    async def _save_agent_qa_pairs(self, qa_pairs: List[QAPair]) -> int:
+    async def _save_agent_qa_pairs(self, eval_token, qa_pairs: List[QAPair]) -> int:
         """
         Save Agent QA pairs to agent_qa_pairs collection.
 
         Returns:
             Number of QA pairs saved
         """
-        saved_count = 0
-
+        final_data = []
         for qa in qa_pairs:
-            try:
-                data = {
-                    "agent_id": self.agent_id,
-                    "question": qa.question,
-                    "answer": qa.answer,
-                    "keywords": [kw.lower() for kw in qa.keywords],
-                    "status": "active",
-                    "batch_id": self.batch_id,
-                }
-                AgentQAPairModel.save_single_to_db(data)
-                saved_count += 1
+            data = {
+                "question": qa.question,
+                "answer": qa.answer,
+                "keywords": [kw.lower() for kw in qa.keywords],
+                "status": "active",
+                "batch_id": self.batch_id,
+            }
+            final_data.append(data)
+        saved_results = AgentQAPairModel(eval_token).save_many_to_db(final_data)
+        return len(saved_results)
 
-            except Exception as e:
-                logger.warning(f"Failed to save agent QA pair: {e}")
-                continue
-
-        return saved_count
-
-    async def _save_kb_qa_pairs(self, qa_pairs: List[QAPair], kb_token: str) -> int:
+    async def _save_kb_qa_pairs(self, eval_token, qa_pairs: List[QAPair]) -> int:
         """
         Save KB QA pairs to kb_qa_pairs collection.
 
         Returns:
             Number of QA pairs saved
         """
-        saved_count = 0
-
+        final_data = []
         for qa in qa_pairs:
-            try:
-                data = {
-                    "agent_id": self.agent_id,
-                    "kb_token": kb_token,
-                    "question": qa.question,
-                    "answer": qa.answer,
-                    "keywords": [kw.lower() for kw in qa.keywords],
-                    "status": "active",
-                    "batch_id": self.batch_id,
-                }
-                KBQAPairModel.save_single_to_db(data)
-                saved_count += 1
-
-            except Exception as e:
-                logger.warning(f"Failed to save KB QA pair: {e}")
-                continue
-
-        return saved_count
+            data = {
+                "question": qa.question,
+                "answer": qa.answer,
+                "keywords": [kw.lower() for kw in qa.keywords],
+                "status": "active",
+                "batch_id": self.batch_id,
+            }
+            final_data.append(data)
+        saved_results = KBQAPairModel(eval_token).save_many_to_db(final_data)
+        return len(saved_results)
 
 
 def get_agent_qa_pairs(agent_id: str) -> List[Dict[str, Any]]:
@@ -416,8 +513,12 @@ def get_agent_qa_pairs(agent_id: str) -> List[Dict[str, Any]]:
         List of QA pair dictionaries with question, answer, keywords
     """
     try:
+        eval_config = _fetch_eval_info("pilot", agent_id)
+        if not eval_config:
+            return []
+        eval_token = eval_config.get("eval_data", {}).get("space_token")
         qa_pairs: List[AgentQAPairModel.Meta.model] = list(
-            AgentQAPairModel.find(agent_id=agent_id, status="active")
+            AgentQAPairModel(eval_token).find(status="active")
         )
 
         return [
@@ -430,7 +531,7 @@ def get_agent_qa_pairs(agent_id: str) -> List[Dict[str, Any]]:
             for qa in qa_pairs
         ]
     except Exception as e:
-        logger.error(f"Error fetching agent QA pairs: {e}")
+        print(f"Error fetching agent QA pairs: {e}")
         return []
 
 
@@ -446,24 +547,37 @@ def get_kb_qa_pairs(agent_id: str, kb_token: str = None) -> List[Dict[str, Any]]
         List of QA pair dictionaries with question, answer, keywords
     """
     try:
-        filter_params = {"agent_id": agent_id, "status": "active"}
-        if kb_token:
-            filter_params["kb_token"] = kb_token
-
-        qa_pairs = list(KBQAPairModel._get_collection().find(filter_params))
-
-        return [
-            {
-                "question": qa.get("question"),
-                "answer": qa.get("answer"),
-                "keywords": qa.get("keywords", []),
-                "source": "knowledge_base",
-                "kb_token": qa.get("kb_token"),
-            }
-            for qa in qa_pairs
-        ]
+        if not kb_token:
+            agent_config = ModelConfig().get_config(agent_id)
+            if not agent_config:
+                return []
+            knowledge_base = agent_config.get("knowledge_base")
+            if not knowledge_base:
+                return []
+        else:
+            knowledge_base = [{"token": kb_token}]
+        kn_tokens = [kb["token"] for kb in knowledge_base]
+        evals_config = _fetch_eval_info("knowledgebase", kn_tokens, multi_fetch=True)
+        all_pairs = []
+        for eval_config in evals_config:
+            eval_token = eval_config.get("eval_data", {}).get("space_token")
+            linked_handle = eval_config.get("linked_handle")
+            qa_pairs: List[KBQAPairModel.Meta.model] = list(
+                KBQAPairModel(eval_token).find(status="active")
+            )
+            for qa in qa_pairs:
+                all_pairs.append(
+                    {
+                        "question": qa.question,
+                        "answer": qa.answer,
+                        "keywords": qa.keywords,
+                        "source": "knowledge_base",
+                        "kn_token": linked_handle,
+                    }
+                )
+        return all_pairs
     except Exception as e:
-        logger.error(f"Error fetching KB QA pairs: {e}")
+        print(f"Error fetching KB QA pairs: {e}")
         return []
 
 

@@ -8,6 +8,7 @@ import asyncio
 import json
 import os
 import re
+import unicodedata
 from datetime import datetime
 from typing import TYPE_CHECKING, Annotated, Any, AsyncIterable, List, Optional, Dict
 
@@ -31,6 +32,7 @@ try:
         TurnResponse,
         build_conversation_state,
     )
+
     CONVERSATION_INTELLIGENCE_AVAILABLE = True
 except ImportError:
     CONVERSATION_INTELLIGENCE_AVAILABLE = False
@@ -48,7 +50,7 @@ try:
     from livekit.agents import JobContext
     from livekit.agents.voice import Agent, RunContext
     from livekit.agents import llm
-    from livekit.agents.llm import function_tool ,ToolError
+    from livekit.agents.llm import function_tool, ToolError
     from livekit.agents import ChatContext, ChatMessage
 
     LIVEKIT_AVAILABLE = True
@@ -61,8 +63,10 @@ except ImportError:
 
     def function_tool(*args, **kwargs):
         """Stub decorator when LiveKit not available."""
+
         def decorator(func):
             return func
+
         if args and callable(args[0]):
             return args[0]
         return decorator
@@ -113,14 +117,110 @@ class LiveKitLiteAgent(Agent):
         # Realtime mode detection
         # In full realtime mode, TTS is not available - realtime LLM handles audio natively
         self._is_realtime_mode = config.get("llm_realtime", False) if config else False
-        self._mixed_realtime_mode = config.get("mixed_realtime_mode", False) if config else False
+        self._mixed_realtime_mode = (
+            config.get("mixed_realtime_mode", False) if config else False
+        )
         # Full realtime = realtime mode without mixed mode (no TTS available)
-        self._is_full_realtime = self._is_realtime_mode and not self._mixed_realtime_mode
+        self._is_full_realtime = (
+            self._is_realtime_mode and not self._mixed_realtime_mode
+        )
+
+        # KB tool usage tracking for auto-inject fallback
+        self._kb_tool_calls: int = 0
 
         if self._is_full_realtime:
-            self._logger.info("Full realtime mode: session.say() unavailable, using generate_reply()")
+            self._logger.info(
+                "Full realtime mode: session.say() unavailable, using generate_reply()"
+            )
         elif self._is_realtime_mode:
             self._logger.info("Mixed realtime mode: TTS available for session.say()")
+
+    def _ensure_eval_records(self) -> Dict[str, Any]:
+        """Ensure user_state.extra_data.eval_records exists and return it."""
+        if not isinstance(self.user_state.extra_data, dict):
+            self.user_state.extra_data = {}
+
+        eval_records = self.user_state.extra_data.get("eval_records")
+        if not isinstance(eval_records, dict):
+            eval_records = {}
+            self.user_state.extra_data["eval_records"] = eval_records
+
+        if not isinstance(eval_records.get("tool_calls"), list):
+            eval_records["tool_calls"] = []
+        if not isinstance(eval_records.get("agent_responses"), list):
+            eval_records["agent_responses"] = []
+        if not isinstance(eval_records.get("user_messages"), list):
+            eval_records["user_messages"] = []
+        if not isinstance(eval_records.get("sequence_counter"), int):
+            eval_records["sequence_counter"] = 0
+
+        return eval_records
+
+    def _next_eval_sequence(self) -> int:
+        eval_records = self._ensure_eval_records()
+        eval_records["sequence_counter"] += 1
+        return eval_records["sequence_counter"]
+
+    def _to_eval_safe(self, value: Any, depth: int = 0) -> Any:
+        """Convert nested values into JSON-safe shape for persistence."""
+        if depth > 4:
+            return str(value)
+        if isinstance(value, (str, int, float, bool)) or value is None:
+            return value
+        if isinstance(value, dict):
+            return {str(k): self._to_eval_safe(v, depth + 1) for k, v in value.items()}
+        if isinstance(value, (list, tuple, set)):
+            return [self._to_eval_safe(v, depth + 1) for v in value]
+        return str(value)
+
+    def _record_tool_call(
+        self,
+        tool_name: str,
+        args: Optional[Dict[str, Any]] = None,
+        result: Any = None,
+        status: str = "success",
+        error: Optional[str] = None,
+    ) -> None:
+        """Store tool call telemetry for post-call realtime eval."""
+        try:
+            eval_records = self._ensure_eval_records()
+            eval_records["tool_calls"].append(
+                {
+                    "sequence_id": self._next_eval_sequence(),
+                    "tool_name": tool_name,
+                    "args": self._to_eval_safe(args or {}),
+                    "result": self._to_eval_safe(result),
+                    "status": status,
+                    "error": error,
+                    "timestamp": datetime.utcnow().isoformat(),
+                }
+            )
+        except Exception as e:
+            self._logger.debug(f"Failed to record tool call for eval: {e}")
+
+    def _tool_success(
+        self, tool_name: str, args: Optional[Dict[str, Any]], result: Any
+    ) -> Any:
+        self._record_tool_call(
+            tool_name=tool_name, args=args, result=result, status="success"
+        )
+        return result
+
+    def _tool_failure(
+        self,
+        tool_name: str,
+        args: Optional[Dict[str, Any]],
+        error: str,
+        result: Any = None,
+    ) -> Any:
+        self._record_tool_call(
+            tool_name=tool_name,
+            args=args,
+            result=result,
+            status="failure",
+            error=error,
+        )
+        return result
 
     # === CORE TOOLS ===
 
@@ -135,6 +235,7 @@ class LiveKitLiteAgent(Agent):
         ] = "",
     ):
         """Call this tool if you have detected a voicemail system, AFTER hearing the voicemail greeting"""
+        tool_args = {"greeting_message": greeting_message}
         await self.session.generate_reply(
             instructions="Leave a voicemail message letting the user know you'll call back later."
         )
@@ -155,6 +256,11 @@ class LiveKitLiteAgent(Agent):
 
         await asyncio.sleep(3)
 
+        self._record_tool_call(
+            tool_name="voicemail_detector",
+            args=tool_args,
+            result={"status": "voicemail_detected"},
+        )
         await self.handler._handle_tool_end_call("voicemail_detected")
 
     @function_tool(
@@ -167,31 +273,37 @@ class LiveKitLiteAgent(Agent):
             str, Field(description="Brief reason for the transfer request")
         ] = "",
     ):
+        tool_args = {"reason": reason}
         if self.config.get("handover_enabled"):
             await self.handler._stop_idle_monitor()
 
             number = self.config.get("handover_number")
-            if isinstance(number,list):
+            if isinstance(number, list):
                 import random
+
                 number = random.choice(number)
 
             from super.core.voice.livekit.telephony import SIPManager
 
-            trunk_id = SIPManager.get_trunk_id(
-                self.user_state.model_config or {}
-            )
+            trunk_id = SIPManager.get_trunk_id(self.user_state.model_config or {})
             identity = f"idt_{number}"
             name = f"idt_{number}"
 
             if self.user_state.extra_data.get("handover_initiated"):
-                return {"status": "handover call already initiated pls wait "}
+                return self._tool_success(
+                    "handover_tool",
+                    tool_args,
+                    {"status": "handover call already initiated pls wait "},
+                )
 
             if self.testing_mode:
-                return {"status": "successfully transfered call  "}
+                return self._tool_success(
+                    "handover_tool",
+                    tool_args,
+                    {"status": "successfully transfered call  "},
+                )
 
-            self._logger.info(
-                f"Transferring call to {number} with trunk: {trunk_id}"
-            )
+            self._logger.info(f"Transferring call to {number} with trunk: {trunk_id}")
             if number:
                 number = normalize_phone_number(number)
                 max_attempts = 2
@@ -200,7 +312,9 @@ class LiveKitLiteAgent(Agent):
                 for attempt in range(max_attempts):
                     try:
                         from livekit.agents.beta.workflows import WarmTransferTask
-                        from super.core.voice.prompts.guidelines import HANOVER_INSTRUCTIONS
+                        from super.core.voice.prompts.guidelines import (
+                            HANOVER_INSTRUCTIONS,
+                        )
 
                         transfer = WarmTransferTask(
                             target_phone_number=number,
@@ -240,11 +354,13 @@ class LiveKitLiteAgent(Agent):
                     self.session.output.set_audio_enabled(True)
                     self.session.input.set_audio_enabled(True)
 
-                    self.user_state.transcript.append({
-                        "role": "system",
-                        "type": "handover call",
-                        "message": "human agent busy"
-                    })
+                    self.user_state.transcript.append(
+                        {
+                            "role": "system",
+                            "type": "handover call",
+                            "message": "human agent busy",
+                        }
+                    )
                     await self.session.generate_reply(
                         instructions=(
                             "The line is busy right now. "
@@ -253,21 +369,27 @@ class LiveKitLiteAgent(Agent):
                             "help with."
                         )
                     )
-                    return {
-                        "status": "user busy",
-                        "instructions": (
-                            "the handover person is busy, "
-                            "continue the conversation"
-                        ),
-                    }
+                    return self._tool_success(
+                        "handover_tool",
+                        tool_args,
+                        {
+                            "status": "user busy",
+                            "instructions": (
+                                "the handover person is busy, "
+                                "continue the conversation"
+                            ),
+                        },
+                    )
 
                 # Success path — reached via break from retry loop
                 self._logger.info(f"Call transfer complete: {result}")
-                self.user_state.transcript.append({
-                    "role": "system",
-                    "type": "handover call",
-                    "message": "call successfully handed over to human agent"
-                })
+                self.user_state.transcript.append(
+                    {
+                        "role": "system",
+                        "type": "handover call",
+                        "message": "call successfully handed over to human agent",
+                    }
+                )
 
                 self.session.output.set_audio_enabled(False)
                 self.session.input.set_audio_enabled(False)
@@ -287,9 +409,7 @@ class LiveKitLiteAgent(Agent):
                 in_call_analyzer = InCallWorkflow(
                     user_state=self.user_state, logger=self._logger
                 )
-                handover_data = (
-                    await in_call_analyzer.generate_handover_summary()
-                )
+                handover_data = await in_call_analyzer.generate_handover_summary()
 
                 from super.core.voice.common.common import (
                     send_web_notification,
@@ -316,13 +436,10 @@ class LiveKitLiteAgent(Agent):
                             f"Starting transcription for "
                             f"existing participant: {p.identity}"
                         )
-                        await self.handler._start_participant_transcription(
-                            p, room
-                        )
+                        await self.handler._start_participant_transcription(p, room)
 
                     self._logger.info(
-                        "Started multi-participant transcription "
-                        "after handover"
+                        "Started multi-participant transcription " "after handover"
                     )
 
                 except Exception as e:
@@ -334,10 +451,14 @@ class LiveKitLiteAgent(Agent):
                         f"{traceback.format_exc()}"
                     )
 
-                return {"status": "handover call completed"}
+                return self._tool_success(
+                    "handover_tool", tool_args, {"status": "handover call completed"}
+                )
 
         await self.handler._start_idle_monitor()
-        return {"status": "cant transfer call"}
+        return self._tool_success(
+            "handover_tool", tool_args, {"status": "cant transfer call"}
+        )
 
     @function_tool(
         name="get_past_calls",
@@ -349,8 +470,13 @@ class LiveKitLiteAgent(Agent):
             str, Field(description="Optional search query to filter past calls")
         ] = "",
     ):
+        tool_args = {"query": query}
         if self.testing_mode:
-            return {"status":"call has been fetched successfully"}
+            return self._tool_success(
+                "get_past_calls",
+                tool_args,
+                {"status": "call has been fetched successfully"},
+            )
         if self.config.get("enable_memory") and not self.memory_loaded:
             chat_context_data = None
             if self.user_state and self.user_state.extra_data:
@@ -370,7 +496,9 @@ class LiveKitLiteAgent(Agent):
                 if self.self.user_state.contact_number.startswith("0"):
                     numbers.append(self.self.user_state.contact_number[1:])
                     from super_services.db.services.models.task import TaskModel
-                    list(TaskModel._get_collection()
+
+                    list(
+                        TaskModel._get_collection()
                         .find(
                             {
                                 "$or": [
@@ -379,9 +507,7 @@ class LiveKitLiteAgent(Agent):
                                     {"input.number": {"$in": numbers}},
                                     {"output.customer": {"$in": numbers}},
                                 ],
-                                "assignee": self.config.get(
-                                    "agent_id"
-                                ),
+                                "assignee": self.config.get("agent_id"),
                             },
                             {"output.transcript": 1},
                         )
@@ -389,9 +515,15 @@ class LiveKitLiteAgent(Agent):
                         .limit(5)
                     )
 
-            return {"call_details": chat_context_data}
+            return self._tool_success(
+                "get_past_calls", tool_args, {"call_details": chat_context_data}
+            )
 
-        return {"call_details": "unable top get recent calls data"}
+        return self._tool_success(
+            "get_past_calls",
+            tool_args,
+            {"call_details": "unable top get recent calls data"},
+        )
 
     @function_tool(
         name="create_followup_or_callback",
@@ -403,6 +535,7 @@ class LiveKitLiteAgent(Agent):
             str, Field(description="User's preferred callback time, if provided")
         ] = "",
     ):
+        tool_args = {"preferred_time": preferred_time}
         if self.config.get("follow_up_enabled"):
             chat_ctx = self.chat_ctx.copy()
             chat_ctx.add_message(
@@ -415,19 +548,31 @@ class LiveKitLiteAgent(Agent):
             )
             await self.update_chat_ctx(chat_ctx)
 
-            return {
-                "instructions": "ask user about the time when they will be avaible to initiate a call",
-                "response": "if user has alredy provided with a time of call just say ok i will call you back at the given time",
-            }
+            return self._tool_success(
+                "create_followup_or_callback",
+                tool_args,
+                {
+                    "instructions": "ask user about the time when they will be avaible to initiate a call",
+                    "response": "if user has alredy provided with a time of call just say ok i will call you back at the given time",
+                },
+            )
         else:
-            return {
-                "instructions": "ask user about the time when they will be avaible to initiate a call",
-                "response": "ok i will process your request",
-            }
+            return self._tool_success(
+                "create_followup_or_callback",
+                tool_args,
+                {
+                    "instructions": "ask user about the time when they will be avaible to initiate a call",
+                    "response": "ok i will process your request",
+                },
+            )
 
     @function_tool(
         name="get_docs",
-        description="""Get documents from knowledge base. To answer user queries""",
+        description=(
+            "Search the knowledge base for relevant information. "
+            "ALWAYS call this tool if answer is not in context before answering domain-specific, factual, "
+            "or product/service-related questions from the user."
+        ),
     )
     async def get_docs(
         self,
@@ -436,7 +581,9 @@ class LiveKitLiteAgent(Agent):
         kb_name: Annotated[str, Field(description="Knowledge Base Name")] = "",
     ):
         """Get documents from knowledge base."""
+        tool_args = {"query": query, "kb_name": kb_name}
         try:
+            self._kb_tool_calls += 1
             self._logger.info(f"Getting docs with query: {query}, kb_name: {kb_name}")
 
             kb_manager = getattr(self.handler, "_kb_manager", None)
@@ -474,7 +621,9 @@ class LiveKitLiteAgent(Agent):
 
             if isinstance(docs, dict) and "error" in docs:
                 self._logger.warning(f"KB lookup returned error: {docs}")
-                return None, json.dumps(docs)
+                result = (None, json.dumps(docs))
+                self._tool_failure("get_docs", tool_args, str(docs), result=result)
+                return result
 
             if docs:
                 doc_list = [
@@ -485,18 +634,27 @@ class LiveKitLiteAgent(Agent):
                     }
                     for i, doc in enumerate(docs)
                 ]
-                result = {"Reference Docs": doc_list[:3]}
+                result = {"Reference Docs": doc_list}
                 self._logger.info(f"Retrieved {len(doc_list)} documents")
-                return None, json.dumps(result)
+                output = (None, json.dumps(result))
+                self._tool_success("get_docs", tool_args, output)
+                return output
 
             self._logger.info("No documents found for query")
-            return None, json.dumps({"Reference Docs": []})
+            output = (None, json.dumps({"Reference Docs": []}))
+            self._tool_success("get_docs", tool_args, output)
+            return output
 
         except Exception as e:
             self._logger.error(f"Error getting docs: {e}")
-            return None, json.dumps(
-                {"error": str(e), "message": "Unable to retrieve information"}
+            output = (
+                None,
+                json.dumps(
+                    {"error": str(e), "message": "Unable to retrieve information"}
+                ),
             )
+            self._tool_failure("get_docs", tool_args, str(e), result=output)
+            return output
 
     @function_tool(
         name="end_call",
@@ -521,10 +679,13 @@ class LiveKitLiteAgent(Agent):
         ] = "user_goodbye",
     ):
         """End the call gracefully when user indicates they want to finish."""
+        tool_args = {"reason": reason}
         self._logger.info(f"[END_CALL_TOOL] Called with reason: {reason}")
 
         if self.testing_mode:
-            return {"status":"call ended successfully"}
+            return self._tool_success(
+                "end_call", tool_args, {"status": "call ended successfully"}
+            )
         # Capture conversation quality metrics before ending
         call_summary = None
         if self._conv_state:
@@ -565,10 +726,14 @@ class LiveKitLiteAgent(Agent):
 
         await self.handler._handle_tool_end_call(reason)
 
-        return {
-            "status": "ending_call",
-            "message": "Call ending gracefully. Say a brief goodbye to the user.",
-        }
+        return self._tool_success(
+            "end_call",
+            tool_args,
+            {
+                "status": "ending_call",
+                "message": "Call ending gracefully. Say a brief goodbye to the user.",
+            },
+        )
 
     # === CONVERSATION TOOLS ===
 
@@ -580,15 +745,25 @@ class LiveKitLiteAgent(Agent):
     async def record_user_info(
         self,
         _context: RunContext,
-        key: Annotated[str, Field(description="Info type (e.g., 'name', 'visit_date', 'contact_method')")],
+        key: Annotated[
+            str,
+            Field(
+                description="Info type (e.g., 'name', 'visit_date', 'contact_method')"
+            ),
+        ],
         value: Annotated[str, Field(description="The value to record")],
     ) -> Dict[str, Any]:
         """Record user information."""
+        tool_args = {"key": key, "value": value}
         if self._conv_state:
             self._conv_state.record_user_info_item(key, value)
             self._logger.info(f"[USER_INFO] {key}={value}")
-            return {"status": "recorded", "key": key, "value": value}
-        return {"status": "no_state"}
+            return self._tool_success(
+                "record_user_info",
+                tool_args,
+                {"status": "recorded", "key": key, "value": value},
+            )
+        return self._tool_success("record_user_info", tool_args, {"status": "no_state"})
 
     @function_tool(
         name="mark_topic_covered",
@@ -598,9 +773,15 @@ class LiveKitLiteAgent(Agent):
     async def mark_topic_covered(
         self,
         _context: RunContext,
-        topic_id: Annotated[str, Field(description="The topic ID from checklist (e.g., 'pricing', 'location')")],
+        topic_id: Annotated[
+            str,
+            Field(
+                description="The topic ID from checklist (e.g., 'pricing', 'location')"
+            ),
+        ],
     ) -> Dict[str, Any]:
         """Mark a checklist topic as covered."""
+        tool_args = {"topic_id": topic_id}
         if self._conv_state:
             self._conv_state.mark_block_delivered(topic_id)
             progress = self._conv_state.get_delivery_progress()
@@ -608,12 +789,18 @@ class LiveKitLiteAgent(Agent):
                 f"[TOPIC] Marked covered: {topic_id} "
                 f"({progress['delivered']}/{progress['total']})"
             )
-            return {
-                "status": "marked",
-                "topic": topic_id,
-                "progress": progress,
-            }
-        return {"status": "no_state"}
+            return self._tool_success(
+                "mark_topic_covered",
+                tool_args,
+                {
+                    "status": "marked",
+                    "topic": topic_id,
+                    "progress": progress,
+                },
+            )
+        return self._tool_success(
+            "mark_topic_covered", tool_args, {"status": "no_state"}
+        )
 
     @function_tool(
         name="report_breakdown",
@@ -627,14 +814,16 @@ class LiveKitLiteAgent(Agent):
         self,
         _context: RunContext,
         breakdown_type: Annotated[
-            str,
-            Field(description="Type: 'non_understanding' or 'misunderstanding'")
+            str, Field(description="Type: 'non_understanding' or 'misunderstanding'")
         ],
         reason: Annotated[str, Field(description="Brief reason for breakdown")] = "",
     ) -> Dict[str, Any]:
         """Report a conversation breakdown for repair handling."""
+        tool_args = {"breakdown_type": breakdown_type, "reason": reason}
         if not self._conv_state:
-            return {"status": "no_state"}
+            return self._tool_success(
+                "report_breakdown", tool_args, {"status": "no_state"}
+            )
 
         valid_types = ["non_understanding", "misunderstanding"]
         if breakdown_type not in valid_types:
@@ -655,13 +844,17 @@ class LiveKitLiteAgent(Agent):
             f"reason={reason}"
         )
 
-        return {
-            "status": "repair_mode",
-            "breakdown_type": breakdown_type,
-            "retry_count": self._conv_state.repair_retry_count,
-            "suggested_strategy": repair_strategy,
-            "instruction": "Use the suggested strategy to repair the conversation",
-        }
+        return self._tool_success(
+            "report_breakdown",
+            tool_args,
+            {
+                "status": "repair_mode",
+                "breakdown_type": breakdown_type,
+                "retry_count": self._conv_state.repair_retry_count,
+                "suggested_strategy": repair_strategy,
+                "instruction": "Use the suggested strategy to repair the conversation",
+            },
+        )
 
     @function_tool(
         name="mark_objective_achieved",
@@ -673,23 +866,35 @@ class LiveKitLiteAgent(Agent):
         _context: RunContext,
         outcome: Annotated[
             str,
-            Field(description="Outcome: 'primary_success', 'fallback_success', or 'declined'")
+            Field(
+                description="Outcome: 'primary_success', 'fallback_success', or 'declined'"
+            ),
         ] = "primary_success",
     ) -> Dict[str, Any]:
         """Mark conversation objective as achieved."""
+        tool_args = {"outcome": outcome}
         if not self._conv_state:
-            return {"status": "no_state"}
+            return self._tool_success(
+                "mark_objective_achieved", tool_args, {"status": "no_state"}
+            )
 
-        self._conv_state.objective_achieved = outcome in ["primary_success", "fallback_success"]
+        self._conv_state.objective_achieved = outcome in [
+            "primary_success",
+            "fallback_success",
+        ]
         self._conv_state.objective_outcome = outcome
 
         self._logger.info(f"[OBJECTIVE] Marked: {outcome}")
 
-        return {
-            "status": "recorded",
-            "objective_achieved": self._conv_state.objective_achieved,
-            "outcome": outcome,
-        }
+        return self._tool_success(
+            "mark_objective_achieved",
+            tool_args,
+            {
+                "status": "recorded",
+                "objective_achieved": self._conv_state.objective_achieved,
+                "outcome": outcome,
+            },
+        )
 
     # === LLM NODE OVERRIDE (Structured Output) ===
 
@@ -741,38 +946,277 @@ class LiveKitLiteAgent(Agent):
 
     #     structured_instruction = f"""
     #     {base_context}
-        
+
     #     [RESPONSE TRACKING]
     #     After your spoken response, add a JSON block to track state:
     #     ```json
     #     {{"covered": ["topic_id"], "user_info": {{"key": "value"}}, "objective_outcome": null}}
     #     ```
-        
+
     #     Available topic IDs: {topic_ids}
     #     - covered: List topic IDs you just explained (empty if none)
     #     - user_info: Any info user shared (name, preferred_time, etc.)
     #     - objective_outcome: "primary_success" if user accepted CTA, "declined" if rejected, null otherwise
-        
+
     #     The JSON block will be parsed automatically - your spoken words come first.
     #     """
     #     return structured_instruction
 
     # Regex to match LLM-generated command tags like <Transfer the call here>, <Disconnect the call>
     _COMMAND_TAG_RE = re.compile(r"<[^>]{3,}>")
+    _COMMAND_TAG_START_RE = re.compile(r"<\s*[A-Za-z/]")
+    _WHITESPACE_RE = re.compile(r"\s+")
+    _NO_AUDIO_FRAMES_ERR = "no audio frames were pushed for text"
+
+    # Patterns for LLM-generated code/tool blocks that must not reach TTS.
+    _TOOL_CODE_START_RE = re.compile(r"tool_code\b", re.IGNORECASE)
+    _PRINT_CALL_RE = re.compile(r"print\s*\(", re.IGNORECASE)
+    # Fenced code blocks: ```lang ... ```
+    _CODE_FENCE_RE = re.compile(r"```[\s\S]*?```")
+    # Bare function-call syntax: word.word(...) with nested parens
+    _BARE_FUNC_CALL_RE = re.compile(r"\b\w+\.\w+\([^)]*(?:\([^)]*\)[^)]*)*\)")
+
+    @classmethod
+    def _find_matching_paren_end(cls, text: str, open_paren_idx: int) -> Optional[int]:
+        """Return index after matching ')' for an opening '(' or None if incomplete."""
+        depth = 0
+        in_single = False
+        in_double = False
+        escaped = False
+
+        for idx in range(open_paren_idx, len(text)):
+            ch = text[idx]
+
+            if escaped:
+                escaped = False
+                continue
+
+            if ch == "\\" and (in_single or in_double):
+                escaped = True
+                continue
+
+            if ch == "'" and not in_double:
+                in_single = not in_single
+                continue
+
+            if ch == '"' and not in_single:
+                in_double = not in_double
+                continue
+
+            if in_single or in_double:
+                continue
+
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth -= 1
+                if depth == 0:
+                    return idx + 1
+
+        return None
+
+    @classmethod
+    def _find_incomplete_command_tag_start(cls, buffer: str) -> int:
+        """Find start index of trailing incomplete <command> tag, else -1."""
+        last_lt = buffer.rfind("<")
+        if last_lt == -1:
+            return -1
+
+        last_gt = buffer.rfind(">")
+        if last_lt < last_gt:
+            return -1
+
+        suffix = buffer[last_lt:]
+        if cls._COMMAND_TAG_START_RE.match(suffix):
+            return last_lt
+        return -1
+
+    @classmethod
+    def _find_incomplete_tool_code_start(cls, buffer: str) -> int:
+        """Find start index of trailing incomplete tool_code print(...) block."""
+        last_match = None
+        for match in cls._TOOL_CODE_START_RE.finditer(buffer):
+            last_match = match
+
+        if not last_match:
+            return -1
+
+        tool_start = last_match.start()
+        print_match = cls._PRINT_CALL_RE.search(buffer, pos=tool_start)
+        if not print_match:
+            return tool_start
+
+        open_paren_idx = buffer.find("(", print_match.start(), print_match.end())
+        if open_paren_idx == -1:
+            return tool_start
+
+        close_idx = cls._find_matching_paren_end(buffer, open_paren_idx)
+        if close_idx is None:
+            return tool_start
+
+        return -1
+
+    @classmethod
+    def _strip_tool_code_blocks(cls, text: str) -> str:
+        """Remove complete tool_code print(...) blocks with nested-paren support."""
+        cursor = 0
+        parts: list[str] = []
+
+        while cursor < len(text):
+            match = cls._TOOL_CODE_START_RE.search(text, cursor)
+            if not match:
+                parts.append(text[cursor:])
+                break
+
+            parts.append(text[cursor : match.start()])
+            parts.append(" ")
+
+            print_match = cls._PRINT_CALL_RE.search(text, pos=match.end())
+            if not print_match:
+                cursor = match.end()
+                continue
+
+            open_paren_idx = text.find("(", print_match.start(), print_match.end())
+            if open_paren_idx == -1:
+                cursor = print_match.end()
+                continue
+
+            close_idx = cls._find_matching_paren_end(text, open_paren_idx)
+            if close_idx is None:
+                cursor = len(text)
+                break
+
+            cursor = close_idx
+
+        return "".join(parts)
+
+    @classmethod
+    def _split_processable_tts_text(cls, buffer: str) -> tuple[str, str]:
+        """
+        Split text into processable prefix and carry-over suffix.
+
+        If the buffer ends with an incomplete command tag start, keep it in the
+        carry-over so split tags across streamed chunks are removed correctly.
+        """
+        if not buffer:
+            return "", ""
+
+        candidates: list[int] = []
+
+        incomplete_tag_start = cls._find_incomplete_command_tag_start(buffer)
+        if incomplete_tag_start >= 0:
+            candidates.append(incomplete_tag_start)
+
+        incomplete_tool_start = cls._find_incomplete_tool_code_start(buffer)
+        if incomplete_tool_start >= 0:
+            candidates.append(incomplete_tool_start)
+
+        if not candidates:
+            return buffer, ""
+
+        cut_idx = min(candidates)
+        return buffer[:cut_idx], buffer[cut_idx:]
+
+    @classmethod
+    def _strip_non_speakable(cls, text: str) -> str:
+        """Remove tool_code blocks, code fences, bare function calls, and command tags."""
+        result = cls._strip_tool_code_blocks(text)
+        result = cls._CODE_FENCE_RE.sub(" ", result)
+        result = cls._BARE_FUNC_CALL_RE.sub(" ", result)
+        result = cls._COMMAND_TAG_RE.sub(" ", result)
+        result = cls._WHITESPACE_RE.sub(" ", result)
+        return result
 
     async def tts_node(
         self, text: AsyncIterable[str], model_settings: Any
     ) -> AsyncIterable[Any]:
-        """Override tts_node to strip non-speakable command tags before TTS synthesis."""
+        """Override tts_node to strip non-speakable content before TTS synthesis.
+
+        Filters out:
+        - LLM command tags (<Transfer the call>, etc.)
+        - Gemini-style tool_code blocks (tool_code\\nprint(...))
+        - Fenced code blocks (```...```)
+        - Bare function-call snippets
+
+        In realtime mode, text is streamed directly without filtering.
+        """
+
+        # Realtime mode: bypass all text filtering, stream raw text to TTS
+        if self._is_realtime_mode:
+            async for frame in Agent.default.tts_node(self, text, model_settings):
+                yield frame
+            return
+
+        sanitized_chunks: list[str] = []
 
         async def _filtered_text() -> AsyncIterable[str]:
+            pending = ""
             async for chunk in text:
-                cleaned = self._COMMAND_TAG_RE.sub("", chunk).strip()
-                if cleaned:
+                if not chunk:
+                    continue
+
+                pending += chunk
+                processable, pending = self._split_processable_tts_text(pending)
+
+                if not processable:
+                    continue
+
+                cleaned = self._strip_non_speakable(processable)
+                if cleaned.strip():
+                    sanitized_chunks.append(cleaned)
                     yield cleaned
 
-        async for frame in Agent.default.tts_node(self, _filtered_text(), model_settings):
-            yield frame
+            # Best-effort flush: drop dangling partial command tags.
+            if pending:
+                if not (pending.startswith("<") and ">" not in pending):
+                    cleaned = self._strip_non_speakable(pending)
+                    if cleaned.strip():
+                        sanitized_chunks.append(cleaned)
+                        yield cleaned
+
+        emitted_frames = False
+        try:
+            async for frame in Agent.default.tts_node(
+                self, _filtered_text(), model_settings
+            ):
+                emitted_frames = True
+                yield frame
+            return
+        except Exception as exc:
+            # Retry once with an ASCII-safe utterance when provider returns zero audio.
+            if emitted_frames or self._NO_AUDIO_FRAMES_ERR not in str(exc).lower():
+                raise
+
+            fallback_text = self._build_ascii_safe_tts_text(" ".join(sanitized_chunks))
+            if not fallback_text:
+                raise
+
+            self._logger.warning(
+                "[TTS_SANITIZE] No audio frames from provider; retrying with ASCII-safe text."
+            )
+
+            async def _fallback_text_stream() -> AsyncIterable[str]:
+                yield fallback_text
+
+            async for frame in Agent.default.tts_node(
+                self, _fallback_text_stream(), model_settings
+            ):
+                yield frame
+
+    @classmethod
+    def _build_ascii_safe_tts_text(cls, text: str) -> str:
+        """Build a conservative ASCII fallback text for providers that fail on mixed scripts."""
+        if not text:
+            return ""
+
+        normalized = text.replace("&", " and ")
+        normalized = (
+            unicodedata.normalize("NFKD", normalized)
+            .encode("ascii", "ignore")
+            .decode("ascii")
+        )
+        normalized = cls._WHITESPACE_RE.sub(" ", normalized).strip()
+        return normalized
 
     def _process_llm_response(self, response: str) -> None:
         """Parse LLM response for structured data and apply to state."""
@@ -832,7 +1276,10 @@ class LiveKitLiteAgent(Agent):
         # Check objective outcome
         outcome = data.get("objective_outcome")
         if outcome in ["primary_success", "fallback_success", "declined"]:
-            self._conv_state.objective_achieved = outcome in ["primary_success", "fallback_success"]
+            self._conv_state.objective_achieved = outcome in [
+                "primary_success",
+                "fallback_success",
+            ]
             self._conv_state.objective_outcome = outcome
             self._logger.info(f"[STRUCTURED] Objective: {outcome}")
 
@@ -859,7 +1306,9 @@ class LiveKitLiteAgent(Agent):
             content_keywords = topic.content.lower().split()[:5]
 
             # Match if multiple keywords found
-            matches = sum(1 for kw in topic_keywords + content_keywords if kw in response_lower)
+            matches = sum(
+                1 for kw in topic_keywords + content_keywords if kw in response_lower
+            )
             if matches >= 2:
                 self._conv_state.mark_block_delivered(topic.id)
                 self._logger.info(f"[HEURISTIC] Likely covered: {topic.id}")
@@ -867,7 +1316,10 @@ class LiveKitLiteAgent(Agent):
     # === LIFECYCLE ===
 
     async def update_chat_ctx(
-        self, chat_ctx: "llm.ChatContext", *, exclude_invalid_function_calls: bool = True
+        self,
+        chat_ctx: "llm.ChatContext",
+        *,
+        exclude_invalid_function_calls: bool = True,
     ) -> None:
         try:
             if hasattr(super(), "update_chat_ctx"):
@@ -944,11 +1396,10 @@ class LiveKitLiteAgent(Agent):
             if len(truncated_messages) < len(current_messages):
                 current_items = turn_ctx.items
                 non_message_items = [
-                    item for item in current_items
+                    item
+                    for item in current_items
                     if not hasattr(item, "role")
-                    or getattr(item, "role", "") not in (
-                        "user", "assistant", "system"
-                    )
+                    or getattr(item, "role", "") not in ("user", "assistant", "system")
                 ]
                 turn_ctx.items = non_message_items + truncated_messages
 
@@ -959,7 +1410,9 @@ class LiveKitLiteAgent(Agent):
 
         # Separate system messages from conversation
         sys_msgs = [m for m in messages if getattr(m, "role", "") == "system"]
-        conv_msgs = [m for m in messages if getattr(m, "role", "") in ("user", "assistant")]
+        conv_msgs = [
+            m for m in messages if getattr(m, "role", "") in ("user", "assistant")
+        ]
 
         # Calculate current token usage
         def msg_tokens(m: Any) -> int:
@@ -1033,14 +1486,28 @@ class LiveKitLiteAgent(Agent):
 
         # Non-understanding indicators
         non_understanding_patterns = [
-            "what", "huh", "sorry", "repeat", "again", "samajh nahi",
-            "kya bola", "pardon", "didn't catch", "can't hear",
+            "what",
+            "huh",
+            "sorry",
+            "repeat",
+            "again",
+            "samajh nahi",
+            "kya bola",
+            "pardon",
+            "didn't catch",
+            "can't hear",
         ]
 
         # Misunderstanding indicators
         misunderstanding_patterns = [
-            "no i meant", "that's not what", "i said", "maine kaha",
-            "galat", "wrong", "not that", "actually i want",
+            "no i meant",
+            "that's not what",
+            "i said",
+            "maine kaha",
+            "galat",
+            "wrong",
+            "not that",
+            "actually i want",
         ]
 
         # Check for non-understanding
@@ -1088,11 +1555,22 @@ class LiveKitLiteAgent(Agent):
         """Called when agent becomes active."""
         await super().on_enter()
         # Say first message if configured
-        first_msg = self.config.get("first_message", "Hello! How can I assist you today?")
+        first_msg = self.config.get(
+            "first_message", "Hello! How can I assist you today?"
+        )
+        if self.config.get("strict_script_mode", False):
+            generic_openers = {"hello", "hello!", "hi", "hi!", "hey", "hey!"}
+            if str(first_msg).strip().lower() in generic_openers:
+                user_name = getattr(self.user_state, "user_name", "") or ""
+                first_msg = (
+                    f"हॅलो, {user_name} बोलताय का?" if user_name else "हॅलो, बोलताय का?"
+                )
 
         # In full realtime mode, TTS is not available - use generate_reply instead
         if self._is_full_realtime:
-            self._logger.info(f"Full realtime mode: Using generate_reply for first message")
+            self._logger.info(
+                f"Full realtime mode: Using generate_reply for first message"
+            )
             await self.session.generate_reply(
                 instructions=f"Start the conversation by saying: {first_msg}"
             )

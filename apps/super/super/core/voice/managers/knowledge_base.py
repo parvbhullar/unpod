@@ -14,6 +14,7 @@ Environment Variables:
 import asyncio
 import logging
 import os
+import re
 import time
 from typing import Any, Dict, List, Optional, Union
 
@@ -24,6 +25,36 @@ from super.core.memory.index.factory import VectorBackend, create_vector_index
 from super.core.memory.search.schema import SearchDoc
 from pipecat.services.llm_service import FunctionCallParams
 from super.core.voice.schema import UserState
+
+
+# Domain abbreviation → expansion mappings for query enrichment.
+# Each key is matched case-insensitively as a whole word; the expansion is
+# appended to the query so that the vector search can find documents using
+# either the abbreviation or the full phrase.
+_DOMAIN_SYNONYMS: Dict[str, str] = {
+    "pyq": "previous year question",
+    "gs": "general studies",
+    "otr": "one time registration",
+    "csat": "civil services aptitude test",
+    "ias": "indian administrative service",
+    "ifs": "indian foreign service",
+    "ips": "indian police service",
+    "upsc": "union public service commission",
+    "sip": "systematic investment plan",
+}
+
+
+def _expand_query(query: str) -> str:
+    """Expand domain abbreviations in *query* for better vector recall."""
+    query_lower = query.lower()
+    expansions: List[str] = []
+    for abbr, full in _DOMAIN_SYNONYMS.items():
+        # Whole-word match to avoid false positives (e.g. "gas" containing "gs")
+        if re.search(rf"\b{re.escape(abbr)}\b", query_lower):
+            expansions.append(full)
+    if expansions:
+        return f"{query} ({' '.join(expansions)})"
+    return query
 
 
 class KnowledgeBaseManager:
@@ -59,8 +90,11 @@ class KnowledgeBaseManager:
         self.config = config or {}
         self._memory_index: Optional[BaseIndex] = None
         self._index_name = self.index_name(session_id, user_state)
-        self.kb_page_size = int(os.getenv("INMEMORY_KB_PAGE_SIZE", 3))
+        self.kb_page_size = int(os.getenv("INMEMORY_KB_PAGE_SIZE", 5))
         self._refresh_index = self.config.get("refresh_index", False)
+        self._preload_in_progress: bool = False
+        self._preload_complete: asyncio.Event = asyncio.Event()
+        self._preload_complete.set()
 
         # Determine vector backend
         if vector_backend is not None:
@@ -131,7 +165,50 @@ class KnowledgeBaseManager:
             await self._init_context_retrieval()
 
         try:
-            results = await self._memory_index.search(query, k=k)
+            # Expand domain abbreviations for better vector recall
+            expanded_query = _expand_query(query)
+
+            # Retrieve a wider candidate pool for reranking when enabled.
+            use_reranker = os.getenv("KB_USE_RERANKER", "true").lower() == "true"
+            fetch_k = k
+            if use_reranker:
+                try:
+                    multiplier = int(os.getenv("KB_FETCH_K_MULTIPLIER", "3"))
+                except ValueError:
+                    multiplier = 3
+                fetch_k = max(k, k * max(1, multiplier))
+
+            results = await self._memory_index.search(
+                expanded_query, k=k, fetch_k=fetch_k
+            )
+
+            # Filter by minimum score threshold
+            min_score = float(os.getenv("KB_MIN_SCORE", 0.30))
+            if min_score > 0 and results:
+                pre_filter_count = len(results)
+                results = [r for r in results if r.score >= min_score]
+                if len(results) < pre_filter_count:
+                    self._logger.debug(
+                        f"KB score filter: {pre_filter_count} -> {len(results)} "
+                        f"(min_score={min_score})"
+                    )
+
+            # Hybrid reranking (dense + lexical + intent)
+            if use_reranker and results:
+                from super.core.memory.search.reranker import hybrid_rerank
+
+                results = hybrid_rerank(query, results)
+
+            # Keep API contract: _search_documents(query, k) returns at most k docs.
+            if len(results) > k:
+                results = results[:k]
+
+            if results:
+                score_range = f"[{results[-1].score:.4f}..{results[0].score:.4f}]"
+                self._logger.debug(
+                    f"KB search: query={query!r}, k={k}, found={len(results)}, "
+                    f"scores={score_range}, top_ids={[r.document_id for r in results[:3]]}"
+                )
             self._logger.info(f"Found {len(results)} documents for query")
             return results
         except Exception as e:
@@ -252,7 +329,9 @@ class KnowledgeBaseManager:
         except Exception as e:
             self._logger.error(f"Failed to cache documents: {e}")
 
-    async def _fetch_remote_documents(self, query: str, kn_bases: List[str]) -> List[SearchDoc]:
+    async def _fetch_remote_documents(
+        self, query: str, kn_bases: List[str], page_size: Optional[int] = None
+    ) -> List[SearchDoc]:
         """
         Fetch documents from remote search service with retry mechanism.
 
@@ -263,21 +342,33 @@ class KnowledgeBaseManager:
         Returns:
             List of SearchDoc objects from remote search
         """
-        url_base = os.getenv("API_SERVICE_URL", "").rstrip("/")
+        url_base = os.getenv("SEARCH_SERVICE_URL", "").rstrip("/")
         if not url_base:
-            self._logger.error("API_SERVICE_URL not set")
+            self._logger.error("SEARCH_SERVICE_URL not set")
             return []
 
-        url = f"{url_base}/search/query/docs/"
+        url = f"{url_base}/api/v1/search/query/docs/"
         payload = {"query": query, "kn_token": kn_bases}
         max_retries = 3
         retry_delay = 0.5  # Initial delay in seconds
 
         for attempt in range(1, max_retries + 1):
             try:
-                params = {"page_size": os.getenv("REMOTE_KB_PAGE_SIZE", 200)}
+                try:
+                    resolved_page_size = page_size or int(
+                        os.getenv("REMOTE_KB_PAGE_SIZE", 200)
+                    )
+                except ValueError:
+                    resolved_page_size = 200
+                params = {"page_size": resolved_page_size}
                 self._logger.info(f"Fetching remote documents (attempt {attempt}/{max_retries})")
-                response = requests.post(url, json=payload, params=params, timeout=20)
+                response = await asyncio.to_thread(
+                    requests.post,
+                    url,
+                    json=payload,
+                    params=params,
+                    timeout=20,
+                )
 
                 if response.status_code == 200:
                     result = response.json()
@@ -285,19 +376,35 @@ class KnowledgeBaseManager:
                     # self._logger.info(f"Fetched {result} documents in FAISS index \n\n\n {payload}")
                     docs = result.get("data", {}).get("search_response_summary", {}).get("top_sections", [])
 
-                    self._logger.info(f"Fetched documents initializing reranking process ")
+                    is_corpus_fetch = query.strip().lower() == "file"
+                    if is_corpus_fetch:
+                        # Preload/index build should maximize KB coverage.
+                        # Remote search scores for synthetic "file" query are noisy and
+                        # can drop critical sections needed for later local retrieval.
+                        filtered_docs = [
+                            doc for doc in docs if len(doc.get("content", "")) > 0
+                        ]
+                        self._logger.debug(
+                            f"Remote corpus fetch bypassed score filter: "
+                            f"{len(docs)} -> {len(filtered_docs)} (query='file')"
+                        )
+                    else:
+                        self._logger.info("Fetched documents, applying score filter")
+                        min_remote_score = float(os.getenv("KB_MIN_REMOTE_SCORE", 0.50))
+                        filtered_docs = [
+                            doc
+                            for doc in docs
+                            if (
+                                doc.get("score", 0) >= min_remote_score
+                                and len(doc.get("content", "")) > 0
+                            )
+                        ]
+                        self._logger.debug(
+                            f"Remote score filter: {len(docs)} -> {len(filtered_docs)} "
+                            f"(min_score={min_remote_score})"
+                        )
 
-                    # doc_list = [
-                    #    doc
-                    #     for i, doc in enumerate(docs)
-                    #     if (
-                    #             doc["score"] >= 0.6
-                    #             and len(doc["content"]) > 0
-                    #             and doc["recency_bias"] > 0.8
-                    #     )
-                    # ]
-
-                    search_docs = [SearchDoc.from_dict(doc) for doc in docs]
+                    search_docs = [SearchDoc.from_dict(doc) for doc in (filtered_docs or docs)]
                     self._logger.info(f"Fetched {len(search_docs)} documents from remote service")
                     return search_docs
                 else:
@@ -341,10 +448,15 @@ class KnowledgeBaseManager:
             self._logger.warning("No user state available for preloading documents")
             return False
 
+        self._preload_in_progress = True
+        self._preload_complete.clear()
+
         try:
             await self._init_context_retrieval()
         except Exception as e:
             self._logger.error(f"Init context retrieval failed before preload: {e}")
+            self._preload_in_progress = False
+            self._preload_complete.set()
             return False
 
         # ✅ FIXED: Check if index should be refreshed before fetching documents
@@ -362,8 +474,10 @@ class KnowledgeBaseManager:
                 self._logger.info("No knowledge bases found, skipping document preload")
                 return True
 
-            # Collect all knowledge base tokens
-            kn_bases = [item.get("token") for item in kn_list if item.get("token")]
+            # Collect and deduplicate knowledge base tokens
+            kn_bases = list(dict.fromkeys(
+                item.get("token") for item in kn_list if item.get("token")
+            ))
 
             if not kn_bases:
                 self._logger.info("No valid knowledge base tokens found, skipping document preload")
@@ -386,6 +500,9 @@ class KnowledgeBaseManager:
         except Exception as e:
             self._logger.error(f"Error in document pre-loading: {e}")
             return False
+        finally:
+            self._preload_in_progress = False
+            self._preload_complete.set()
 
     async def _cache_transcript_entry(self, transcript_entry: Dict[str, Any]) -> None:
         """
@@ -498,15 +615,54 @@ class KnowledgeBaseManager:
 
             # Fallback to remote if no local results
             if not docs and kn_bases:
-                self._logger.info("No local results, fetching from remote service")
-                remote_docs = await self._fetch_remote_documents(query, kn_bases)
-                if remote_docs:
-                    # Cache for future use
-                    await self._cache_documents(remote_docs)
-                    docs = remote_docs
+                remote_docs: List[SearchDoc] = []
+                if self._preload_in_progress:
+                    wait_sec = float(os.getenv("KB_PRELOAD_WAIT_ON_QUERY_SEC", "1.5"))
+                    self._logger.info(
+                        f"KB preload in progress, waiting up to {wait_sec:.1f}s before remote fallback"
+                    )
+                    try:
+                        await asyncio.wait_for(self._preload_complete.wait(), timeout=wait_sec)
+                        docs = await self._search_documents(query, k=self.kb_page_size)
+                    except asyncio.TimeoutError:
+                        self._logger.info(
+                            "KB preload still running after wait window; continuing with remote fallback"
+                        )
+
+                if not docs:
+                    self._logger.info("No local results, fetching from remote service")
+                    try:
+                        remote_page_size = int(os.getenv("REMOTE_KB_QUERY_PAGE_SIZE", "50"))
+                    except ValueError:
+                        remote_page_size = 50
+                    remote_docs = await self._fetch_remote_documents(
+                        query, kn_bases, page_size=remote_page_size
+                    )
+                    if remote_docs:
+                        # Cache remote docs in local index, then re-search
+                        # so reranker + score filtering apply uniformly
+                        await self._cache_documents(remote_docs)
+                        docs = await self._search_documents(
+                            query, k=self.kb_page_size
+                        )
+                        if not docs:
+                            # Fallback: use raw remote docs if re-search yields nothing
+                            docs = remote_docs
 
             # Format response
-            result = docs[:2]
+            kb_max_return = int(os.getenv("KB_MAX_RETURN_DOCS", 3))
+            result = docs[:kb_max_return]
+            score_values: List[str] = []
+            for doc in result:
+                score = getattr(doc, "score", None)
+                if isinstance(score, (int, float)):
+                    score_values.append(f"{score:.4f}")
+                else:
+                    score_values.append("n/a")
+            self._logger.debug(
+                f"get_docs returning {len(result)} docs for query={query!r}, "
+                f"scores={score_values}"
+            )
 
             # Call callback if provided
             if params and hasattr(params, 'result_callback') and callable(params.result_callback):
@@ -544,3 +700,68 @@ class KnowledgeBaseManager:
             self._memory_index is not None
             and hasattr(self._memory_index, "search_sync")
         )
+
+    async def eval_search(
+        self,
+        query: str,
+        expected_doc_id: str,
+        k: int = 5,
+    ) -> Dict[str, Any]:
+        """
+        Evaluate search quality for a single query against an expected document.
+
+        Searches the local index and returns rank, score, and hit/miss for the
+        expected document. Useful for programmatic evaluation of KB quality.
+
+        Args:
+            query: User question to search for
+            expected_doc_id: The document_id that should appear in results
+            k: Number of results to retrieve
+
+        Returns:
+            Dict with keys: query, expected_doc_id, rank (1-based, 0=miss),
+            score (float or None), hit (bool), total_results
+        """
+        docs = await self._search_documents(query, k=k)
+
+        rank = 0
+        score = None
+        for i, doc in enumerate(docs):
+            if doc.document_id == expected_doc_id:
+                rank = i + 1
+                score = doc.score
+                break
+
+        return {
+            "query": query,
+            "expected_doc_id": expected_doc_id,
+            "rank": rank,
+            "score": score,
+            "hit": rank > 0,
+            "total_results": len(docs),
+        }
+
+    async def eval_search_batch(
+        self,
+        test_cases: List[Dict[str, str]],
+        k: int = 5,
+    ) -> List[Dict[str, Any]]:
+        """
+        Evaluate search quality for multiple query/expected_doc_id pairs.
+
+        Args:
+            test_cases: List of dicts with 'query' and 'expected_doc_id' keys
+            k: Number of results to retrieve per query
+
+        Returns:
+            List of eval_search results, one per test case
+        """
+        results = []
+        for case in test_cases:
+            result = await self.eval_search(
+                query=case["query"],
+                expected_doc_id=case["expected_doc_id"],
+                k=k,
+            )
+            results.append(result)
+        return results

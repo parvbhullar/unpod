@@ -182,7 +182,7 @@ def _create_chroma_index(
     )
     embedding_model = kwargs.get(
         "embedding_model_name",
-        "all-MiniLM-L6-v2",
+        os.getenv("EMBEDDING_MODEL", "paraphrase-multilingual-MiniLM-L12-v2"),
     )
 
     # Try to get preloaded resources from ServiceCache

@@ -1,4 +1,5 @@
 import ast
+import codecs
 import json
 import os
 from typing import Any, Dict, Optional
@@ -234,6 +235,7 @@ class ModelConfig(BaseModelConfig):
                 tts_inference_enabled = bool(tts_provider.get("inference"))
 
             model_config = {
+
                 "agent_id": agent_id,
                 "llm_provider": main_result["llm_provider"] or "openai",
                 "llm_model": safe_lower(main_result["llm_model"], "gpt-4o-mini"),

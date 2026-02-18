@@ -9,6 +9,7 @@ from typing import Dict, Optional, List
 # from dateutil import parser
 import json
 
+from super.app.providers import CallProviderFactory, VapiProvider
 from super.core.logging.logging import print_log
 from super_services.db.services.models.task import (
     RunModel,
@@ -79,7 +80,7 @@ class TaskService:
             (SELECT id FROM core_components_pilot WHERE handle = %(assignee)s LIMIT 1),
             (SELECT tvn.bridge_id
             FROM telephony_voicebridgenumber tvn
-            JOIN telephony_telephonynumber n ON tvn.number_id = n.id
+            JOIN core_components_telephony_number n ON tvn.number_id = n.id
             WHERE n.number = %(source)s OR n.number = %(destination)s
             LIMIT 1),
             (SELECT space_organization_id FROM space_space WHERE id = %(space_id)s LIMIT 1),
@@ -91,7 +92,7 @@ class TaskService:
                 SELECT b.product_id
                 FROM telephony_voicebridge b
                 JOIN telephony_voicebridgenumber tvn ON tvn.bridge_id = b.id
-                JOIN telephony_telephonynumber n ON tvn.number_id = n.id
+                JOIN core_components_telephony_number n ON tvn.number_id = n.id
                 WHERE n.number = %(source)s OR n.number = %(destination)s
                 LIMIT 1
             ), 'unpod.ai')
@@ -283,8 +284,6 @@ class TaskService:
         # Set provider based on execution_type or environment
         provider = "NA"
         if execution_type == "call":
-            from super.app.providers import CallProviderFactory
-
             provider = CallProviderFactory.get_provider_type(task_data)
 
         task_obj = {
@@ -1085,11 +1084,6 @@ class TaskService:
                     agent_id = task.assignee
                     # print(result)
                     # Fetch call status from provider
-                    from super.app.providers import (
-                        CallProviderFactory,
-                        VapiProvider,
-                    )
-
                     provider = CallProviderFactory.create_provider(task_input)
                     if isinstance(provider, VapiProvider):
                         result = asyncio.run(provider.update_call_data(task))

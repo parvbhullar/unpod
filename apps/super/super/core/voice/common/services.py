@@ -13,7 +13,6 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 from super.core.voice.schema import TaskData
-from super_services.orchestration.task.task_service import TaskService
 
 
 load_dotenv()
@@ -246,9 +245,9 @@ async def save_execution_log(
 
 
 async def create_collection_doc(user_state, payload):
-    API_SERVICE_URL = os.getenv("API_SERVICE_URL", "").rstrip("/")
+    STORE_SERVICE_URL = os.getenv("STORE_SERVICE_URL")
 
-    url = f"{API_SERVICE_URL}/store/collection-doc-data/{user_state.token}/"
+    url = f"{STORE_SERVICE_URL}/api/v1/store/collection-doc-data/{user_state.token}/"
     try:
         response = requests.post(url, json=payload)
 
@@ -261,9 +260,9 @@ async def create_collection_doc(user_state, payload):
 
 
 async def get_doc_id_from_number(number, token):
-    API_SERVICE_URL = os.getenv("API_SERVICE_URL", "").rstrip("/")
+    STORE_SERVICE_URL = os.getenv("STORE_SERVICE_URL")
 
-    url = f"{API_SERVICE_URL}/store/collection-connector-data/{token}/"
+    url = f"{STORE_SERVICE_URL}/api/v1/store/collection-connector-data/{token}/"
     try:
         response = requests.get(url)
 
@@ -289,11 +288,27 @@ async def create_scheduled_task(task_id, time):
     if not task_id:
         return
 
+
+    print(f"[TIMING] Creating scheduled task {task_id}")
+
     if isinstance(time, str):
         time = datetime.fromisoformat(time)
     try:
         task = TaskModel.get(task_id=task_id)
         task_id = f"T{uuid.uuid1().hex}"
+
+        followup_count = task.output.get("followup_count")
+
+        if followup_count:
+            followup_count = int(followup_count)
+            followup_count+=1
+        else:
+            followup_count = 1
+
+        if followup_count > 4:
+
+            print("skipping task creation due to multiple followups")
+            return
 
         data = {
             "task_id": task_id,
@@ -306,7 +321,7 @@ async def create_scheduled_task(task_id, time):
             "assignee": task.assignee,
             "status": TaskStatusEnum.scheduled,
             "execution_type": "call",
-            "output": {"scheduled_time": str(time)},
+            "output": {"scheduled_time": str(time),"followup_count":followup_count},
             "input": task.input,
             "retry_attempt": 0,
             "scheduled_timestamp": int(time.timestamp()),
@@ -398,6 +413,22 @@ def get_agent_number(user_state):
         print(f"unable to get agent number {str(e)}")
         return ""
 
+def get_brand_name(space_id):
+    query="""
+    select sporg.name as brand_name from space_spaceorganization as sporg 
+    Left join space_space as sp on sp.space_organization_id= sporg.id 
+    where sp.id = %(space_id)s
+    """
+
+    from super_services.libs.core.db import executeQuery
+    try:
+        res = executeQuery(query, {"space_id": space_id})
+
+        return res.get("brand_name")
+
+    except Exception as e:
+
+        return ""
 
 async def send_retry_sms(user_state, task_id, assignee):
     from super_services.prefect_setup.deployments.utils import (
@@ -409,14 +440,19 @@ async def send_retry_sms(user_state, task_id, assignee):
     TEMP_ID , is_default = get_temp_id(assignee)
 
     task = TaskModel.get(task_id=task_id)
+    redial_count = 0
+    task_input = task.input
 
     try:
-        retry_attempt = int(task.retry_attempt)
-    except Exception as e:
-        retry_attempt = 0
+        if task_input.get("redial_count"):
+            redial_count += task_input.get("redial_count")
 
-    if retry_attempt<2:
+    except Exception as e:
+        print(e)
+
+    if redial_count < 2:
         return
+
 
     try:
         contact_number = normalize_phone_number( user_state.contact_number)
@@ -431,12 +467,12 @@ async def send_retry_sms(user_state, task_id, assignee):
             agent_number = get_agent_number(user_state)
 
             kargs = {
-                "call_retry": retry_attempt + 1,
+                "call_retry": redial_count + 1,
                 "number": agent_number,
             }
 
             if is_default:
-                kargs['brand_name'] = "unpod"
+                kargs['brand_name'] = get_brand_name(task.space_id)
 
             parameters = {
                 "task_id": task_id,
@@ -480,9 +516,11 @@ async def send_retry_sms(user_state, task_id, assignee):
 
 
 async def test():
-    res = schedule_redial_task(
-        "Tefe4015f78de11f082ac156368e7acc4", datetime.utcnow(), []
-    )
+    # res = schedule_redial_task(
+    #     "Tefe4015f78de11f082ac156368e7acc4", datetime.utcnow(), []
+    # )
+
+    print(get_brand_name(521))
 
 
 if "__main__" == __name__:

@@ -27,6 +27,26 @@ def test_merge_executor_config_prioritizes_executor_values() -> None:
     assert merged["telephony"]["krisp"] is True
 
 
+def test_merge_executor_config_overrides_speaking_plan() -> None:
+    vah = _load_voice_agent_handler_module()
+    handler = vah.VoiceAgentHandler(session_id="t-2b")
+    handler.config = {
+        "speaking_plan": {"preemptive_generation": False},
+    }
+
+    merged = handler._merge_executor_config(
+        {
+            "speaking_plan": {
+                "preemptive_generation": True,
+                "min_interruption_words": 1,
+            }
+        }
+    )
+
+    assert merged["speaking_plan"]["preemptive_generation"] is False
+    assert merged["speaking_plan"]["min_interruption_words"] == 1
+
+
 @pytest.mark.asyncio
 async def test_resolve_space_id_background_sets_space_id_once(monkeypatch) -> None:
     vah = _load_voice_agent_handler_module()

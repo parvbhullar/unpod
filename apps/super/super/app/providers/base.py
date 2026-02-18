@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 class CallResult:
     """Standard call result structure across all providers"""
 
-    status: str 
+    status: str
     call_id: Optional[str] = None
     customer: Optional[str] = None
     contact_number: Optional[str] = None
@@ -41,7 +41,7 @@ class CallProvider(ABC):
         instructions: Optional[str] = None,
         model_config: Any = None,
         callback: Any = None,
-        call_type: str = 'outbound'
+        call_type: str = "outbound",
     ) -> CallResult:
         """Execute a call using the specific provider"""
         pass

@@ -435,7 +435,7 @@ Extract ALL details, preserving exact phrasing, examples, and context.
 # Falls back to gpt-4o if you need more complex reasoning
 conversation_plan_agent = Agent(
     'openai:gpt-5.2-mini',
-    result_type=ConversationPlan,
+    output_type=ConversationPlan,
     system_prompt=EXTRACTION_SYSTEM_PROMPT
 )
 

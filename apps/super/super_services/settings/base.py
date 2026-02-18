@@ -5,13 +5,8 @@ from pathlib import Path
 from .kafka import *
 from dotenv import load_dotenv
 
-_MONOREPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent  # settings/ → super_services/ → super/ → apps/ → root
-_root_env = _MONOREPO_ROOT / ".env"
-if _root_env.exists():
-    load_dotenv(str(_root_env))
-else:
-    load_dotenv()  # fallback to service-local .env
-# LiveKit vars now in root .env (removed separate .env.livekit load)
+load_dotenv()
+load_dotenv(".env.livekit")
 
 SETTINGS_FILE = os.environ.get("SETTINGS_FILE", "super_services.settings.qa")
 ENV = os.environ.get("ENV", SETTINGS_FILE.split('.')[1].upper())
@@ -38,7 +33,7 @@ TZ = "Asia/Kolkata"
 
 # Security
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 60
-DJANGO_SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "change-me-in-production")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "change-me-in-production")
 ssl._create_default_https_context = ssl._create_unverified_context
 
 KAFKA_TOPIC_BASE = f"{ENV}_messaging_service_"
@@ -51,4 +46,4 @@ KAFKA_TOPIC_BASE_SUPERBOOK = f"{SETTINGS_FILE.split('.')[1].upper()}_superbook_s
 AGENT_OUTBOUND_REQUEST_TOPIC = os.environ.get('AGENT_OUTBOUND_REQUEST_TOPIC', 'agent_outbound_requests')
 AGENT_OUTBOUND_REQUEST_GROUP = os.environ.get('AGENT_OUTBOUND_REQUEST_GROUP', 'agent_outbound_requests_group')
 
-API_SERVICE_URL = os.environ.get("API_SERVICE_URL", "http://0.0.0.0:9116/api/v1")
+STORE_SERVICE_URL = os.environ.get("STORE_SERVICE_URL", "http://localhost:9116")

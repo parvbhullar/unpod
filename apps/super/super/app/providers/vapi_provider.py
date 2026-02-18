@@ -6,12 +6,15 @@ import json
 import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
+from dotenv import load_dotenv
 from super.app.call_utils import fetch_with_manual_retry
 from super.core.logging.logging import print_log
-from super.core.voice.providers.base import CallProvider, CallResult
+from .base import CallProvider, CallResult
 from dateutil import parser
 from super.core.callback.base import BaseCallback
 from super.core.configuration import BaseModelConfig
+
+load_dotenv()
 
 
 class VapiProvider(CallProvider):
@@ -75,7 +78,7 @@ class VapiProvider(CallProvider):
                 }
             ]
         }
-        auth_token = os.getenv("VAPI_API_KEY")
+        auth_token = os.getenv("VAPI_AUTH_TOKEN")
         headers = {
             "Authorization": f"Bearer {auth_token}",
             "Content-Type": "application/json",
@@ -133,7 +136,15 @@ class VapiProvider(CallProvider):
 
         if not self.validate_data(data):
             return CallResult(
-                status="failed", error="No Contact Number Found", transcript=[]
+                status="failed",
+                error="No Contact Number Found",
+                transcript=[],
+                data={
+                    "call_type": "outbound",
+                    "cost": 0,
+                    "type": "outboundPhoneCall",
+                    "error": "No Contact Number Found",
+                },
             )
 
         contact_number = data["contact_number"]
@@ -267,7 +278,9 @@ class VapiProvider(CallProvider):
                 for i in range(3):
                     asyncio.sleep(2)
                     try:
-                        res = requests.post(control_url, json=payload, headers=headers,timeout=10)
+                        res = requests.post(
+                            control_url, json=payload, headers=headers, timeout=10
+                        )
                     except requests.Timeout:
                         print(f"timeout waiting for response retrying : {i+1}/3")
                         continue
@@ -684,7 +697,7 @@ class VapiProvider(CallProvider):
         return result
 
     async def update_call_data(self, task):
-        auth_token = os.getenv("VAPI_API_KEY")
+        auth_token = os.getenv("VAPI_AUTH_TOKEN")
         headers = {
             "Authorization": f"Bearer {auth_token}",
             "Content-Type": "application/json",

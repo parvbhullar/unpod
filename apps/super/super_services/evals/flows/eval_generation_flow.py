@@ -2,8 +2,9 @@
 Prefect Flow for Eval Generation
 Async flow that generates QA evaluation pairs for an agent.
 """
+
 import logging
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
 from typing import Optional
 
 from prefect import flow, task, get_run_logger
@@ -15,50 +16,45 @@ from super_services.evals.eval_generator import EvalGenerator
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class EvalGenerationJob:
+class EvalGenerationJob(BaseModel):
     """Job parameters for eval generation flow."""
-    agent_id: str
-    force_regenerate: bool = False
+
+    gen_type: str
+    pilot_handle: Optional[str] = Field(default=None)
+    kn_token: Optional[str] = Field(default=None)
+    force: Optional[bool] = Field(default=False)
 
 
 def generate_eval_flow_name() -> str:
     """Generate dynamic flow run name."""
     parameters = flow_run.parameters
     job = parameters.get("job", {})
-    if hasattr(job, "__dict__"):
-        agent_id = getattr(job, "agent_id", "unknown")
-    else:
-        agent_id = job.get("agent_id", "unknown")
-    return f"eval-generation-{agent_id}"
+    if hasattr(job, "model_dump"):
+        job = job.model_dump()
+    gen_type = job.get("gen_type")
+    pilot_handle = job.get("pilot_handle")
+    kn_token = job.get("kn_token")
+    return f"eval-generation-{gen_type}-{pilot_handle or kn_token}"
 
 
 @task(
     name="generate-agent-evals",
     description="Generate QA evaluation pairs for agent",
     log_prints=True,
-    retries=2,
-    retry_delay_seconds=30,
 )
-async def generate_agent_evals_task(agent_id: str, force_regenerate: bool = False) -> dict:
-    """
-    Task that performs the actual eval generation.
-
-    Args:
-        agent_id: Agent handle
-        force_regenerate: If True, regenerate even if QA pairs already exist
-
-    Returns:
-        Dict with generation results
-    """
+async def generate_agent_evals_task(
+    gen_type, agent_id, kn_token, force_regenerate: bool = False
+) -> dict:
     logger = get_run_logger()
-    logger.info(f"Starting eval generation for agent: {agent_id}")
+    logger.info(
+        f"Starting eval generation for config: gen_type={gen_type}, agent_id={agent_id}, kn_token={kn_token}"
+    )
     if force_regenerate:
         logger.info("Force regenerate: ON (will regenerate even if exists)")
 
     try:
         # Generate evals (duplicate check is built into generate_all_evals)
-        generator = EvalGenerator(agent_id)
+        generator = EvalGenerator(gen_type, agent_id, kn_token, logger)
         results = await generator.generate_all_evals(force_regenerate=force_regenerate)
 
         logger.info(f"Eval generation completed: {results}")
@@ -106,18 +102,22 @@ async def generate_agent_evals_flow(job: EvalGenerationJob) -> dict:
     """
     logger = get_run_logger()
 
-    agent_id = job.agent_id if hasattr(job, "agent_id") else job.get("agent_id")
-    force_regenerate = job.force_regenerate if hasattr(job, "force_regenerate") else job.get("force_regenerate", False)
+    gen_type = job.gen_type
+    agent_id = job.pilot_handle
+    kn_token = job.kn_token
+    force = job.force
 
-    if not agent_id:
-        raise ValueError("agent_id is required")
+    if not agent_id and not kn_token:
+        raise ValueError("Either pilot_handle or kn_token is required")
 
-    logger.info(f"Starting eval generation flow for agent: {agent_id}")
-
-    # Run the generation task
-    results = await generate_agent_evals_task(agent_id, force_regenerate)
+    logger.info(f"Starting eval generation flow for genType: {gen_type}")
+    results = await generate_agent_evals_task(
+        gen_type, agent_id, kn_token, force_regenerate=force
+    )
 
     return {
         "agent_id": agent_id,
+        "kn_token": kn_token,
+        "gen_type": gen_type,
         **results,
     }

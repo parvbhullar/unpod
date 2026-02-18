@@ -1,13 +1,13 @@
 """
-Language and accent management for Google Realtime models.
+Language and accent management for Google TTS models.
 
 This module contains specialized prompts for handling Hindi, Hinglish, and accent control
-specifically for Google Realtime voice models. It provides detailed instructions for
+specifically for Google TTS voice models. It provides detailed instructions for
 natural language adaptation and authentic Indian accent delivery.
 """
 
 LANGUAGE_ACCENT_PROMPT = """
-## Language & Accent Management (Google Realtime)
+## Language & Accent Management
 
 ### Language Adaptation Rules
 - **Default**: Respond in the user's preferred language

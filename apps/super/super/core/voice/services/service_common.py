@@ -1,8 +1,9 @@
 import logging
 import os
 import re
+import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Set
 
 # =============================================================================
 # Default TTS Configuration (Single Source of Truth)
@@ -88,6 +89,15 @@ INFERENCE_LLM_MODELS: Dict[str, list] = {
         "gpt-oss-120b",
     ],
     "moonshotai": ["kimi-k2-instruct"],
+    "google": [
+        "gemini-3-pro",
+        "gemini-3-flash",
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
+    ],
 }
 
 INFERENCE_STT_MODELS: Dict[str, list] = {
@@ -225,9 +235,6 @@ LLM_REALTIME_MODELS: list[str] = [
     "gpt-4o-realtime-preview",
     "gpt-4o-realtime-preview-2024-12-17",
     # Gemini Realtime / Live
-    "gemini-2.5-flash",
-    "gemini-2.0-flash-live-001",
-    "gemini-2.0-flash-exp",
     "gemini-2.5-flash-native-audio-latest",
     "gemini-2.5-flash-native-audio-preview-12-2025",
     "gemini-2.5-flash-native-audio-preview-09-2025",
@@ -261,6 +268,91 @@ def is_realtime_model(model: str) -> bool:
 
     return False
 
+
+# =============================================================================
+# Google Model Validation via ListModels API
+# =============================================================================
+_google_models_cache: Set[str] = set()
+_google_models_cache_time: float = 0.0
+_GOOGLE_MODELS_CACHE_TTL: float = 3600.0  # 1 hour
+
+_google_models_logger = logging.getLogger("service_common.google_models")
+
+
+def fetch_google_available_models() -> Set[str]:
+    """Fetch available models from Google Gemini API with TTL caching."""
+    global _google_models_cache, _google_models_cache_time
+
+    if _google_models_cache and (time.monotonic() - _google_models_cache_time) < _GOOGLE_MODELS_CACHE_TTL:
+        return _google_models_cache
+
+    try:
+        from google import genai
+
+        api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            _google_models_logger.warning(
+                "GOOGLE_API_KEY/GEMINI_API_KEY not set, "
+                "skipping model validation"
+            )
+            return set()
+
+        client = genai.Client(api_key=api_key)
+        models: Set[str] = set()
+        for model in client.models.list():
+            name = model.name or ""
+            # API returns "models/gemini-2.5-flash", strip prefix
+            short = name.removeprefix("models/")
+            models.add(short)
+            models.add(name)
+
+        _google_models_cache = models
+        _google_models_cache_time = time.monotonic()
+        _google_models_logger.info(
+            f"Fetched {len(models) // 2} Google models"
+        )
+        return models
+
+    except Exception as e:
+        _google_models_logger.warning(
+            f"Failed to fetch Google models list: {e}"
+        )
+        return _google_models_cache
+
+
+def validate_google_model(
+    model: str,
+    default: str = "gemini-3-flash",
+    logger: Optional[logging.Logger] = None,
+) -> str:
+    """Validate a Google model name against the ListModels API.
+
+    Returns the model if valid, or the default with a warning if not.
+    """
+    if not model:
+        return default
+
+    available = fetch_google_available_models()
+    if not available:
+        # API unreachable — let Google reject it downstream
+        return model
+
+    if model in available:
+        return model
+
+    log = logger or _google_models_logger
+    log.warning(
+        f"Google model '{model}' not found via ListModels API. "
+        f"Defaulting to '{default}'."
+    )
+    return default
+
+
+# Languages not supported by AssemblyAI streaming models
+# These languages will use auto-detection via the multilingual model
+ASSEMBLYAI_UNSUPPORTED_LANGUAGES: list[str] = [
+    "hi", "ta", "kn", "te", "ml", "pa", "mr", "bn", "gu",
+]
 
 # Language code mapping for Gemini
 GEMINI_LANGUAGE_MAP: Dict[str, str] = {
@@ -299,9 +391,15 @@ MODEL_CONTEXT_LIMITS: Dict[str, int] = {
     "gpt-4": 8192,
     "gpt-3.5-turbo": 16385,
     # Google models
+    "gemini-3-pro": 1000000,
+    "gemini-3-flash": 1000000,
+    "gemini-2.5-pro": 1000000,
+    "gemini-2.5-flash": 1000000,
+    "gemini-2.5-flash-lite": 1000000,
+    "gemini-2.0-flash": 1000000,
+    "gemini-2.0-flash-lite": 1000000,
     "gemini-1.5-pro": 1000000,
     "gemini-1.5-flash": 1000000,
-    "gemini-2.0-flash": 1000000,
     # Anthropic models
     "claude-3-opus": 200000,
     "claude-3-sonnet": 200000,
@@ -346,7 +444,7 @@ PROVIDER_API_KEYS: Dict[str, str] = {
     "assemblyai": "ASSEMBLYAI_API_KEY",
     "gladia": "GLADIA_API_KEY",
     "lmnt": "LMNT_API_KEY",
-    "elevenlabs": "ELEVENLABS_API_KEY",
+    "elevenlabs": "ELEVEN_API_KEY",
     "sarvam": "SARVAM_API_KEY",
     "playht": "PLAYHT_API_KEY",
     "soniox": "SONIOX_API_KEY",

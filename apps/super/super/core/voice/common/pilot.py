@@ -169,7 +169,7 @@ async def get_pilot_and_space_for_number(number: str) -> dict | None:
     FROM core_components_pilot AS cp
     JOIN core_components_pilot_numbers AS cpn
         ON cp.id = cpn.pilot_id
-    JOIN telephony_telephonynumber AS num
+    JOIN core_components_telephony_number AS num
         ON num.id = cpn.telephonynumber_id
     WHERE num.number = %(number)s;
     """

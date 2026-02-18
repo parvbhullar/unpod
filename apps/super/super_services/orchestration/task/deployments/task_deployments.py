@@ -78,7 +78,7 @@ DEPLOYMENT_CONFIGURATIONS = [
         "flow": test_agent_evals,
         "docker_image": DOCKER_IMAGES["call_task"],
         "work_pool_name": CALL_WORK_POOL,
-        "tags": ["eval", "agent_testing"],
+        "tags": ["evals", "agent_testing"],
         "concurrency": 10,
         "job_variables": {"env": CALL_ENVS},
     }

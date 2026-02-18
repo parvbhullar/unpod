@@ -2,6 +2,7 @@ from livekit.agents import AgentSession, inference
 from enum import Enum
 
 from super.core.voice.services.service_common import (
+    ASSEMBLYAI_UNSUPPORTED_LANGUAGES,
     DEFAULT_TTS_PROVIDER,
 )
 
@@ -43,6 +44,11 @@ class InferenceFactory:
                 f"Invalid STT provider '{provider}'. "
                 f"Valid providers: {[p.value for p in STTProviders]}"
             )
+
+        # AssemblyAI streaming doesn't support certain languages;
+        # omit language to let the multilingual model auto-detect
+        if provider == "assemblyai" and language in ASSEMBLYAI_UNSUPPORTED_LANGUAGES:
+            language = None
 
         stt = inference.STT(
             model=f"{provider}/{model}",

@@ -1510,7 +1510,7 @@ class ServiceFactory:
         cfg = self.stt_config
         session = aiohttp.ClientSession()
         return ElevenLabsSTTService(
-            api_key=os.getenv("ELEVENLABS_API_KEY"),
+            api_key=os.getenv("ELEVEN_API_KEY"),
             aiohttp_session=session,
             model=cfg.model or "scribe_v1",
             params=ElevenLabsSTTService.InputParams(language=user_language),
@@ -1924,7 +1924,7 @@ class ServiceFactory:
 
         cfg = self.tts_config
         return ElevenLabsTTSService(
-            api_key=os.getenv("ELEVENLABS_API_KEY"),
+            api_key=os.getenv("ELEVEN_API_KEY"),
             voice_id=cfg.voice,
             model=cfg.model or "eleven_multilingual_v2",
             params=ElevenLabsTTSService.InputParams(

@@ -33,4 +33,4 @@ class VanillaAgent(Agent):
         await super().on_enter()
         print(f"\n\n VanillaAgent enter Entered the chat \n\n ")
         first_msg = self.config.get("first_message", "Hello! How can I assist you today?")
-        await self.session.say(first_msg)
+        # await self.session.say(first_msg)

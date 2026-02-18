@@ -38,7 +38,9 @@ from super.core.voice.services.service_common import (
     GEMINI_REALTIME_VOICES,
     GEMINI_REALTIME_MODELS,
     GEMINI_LANGUAGE_MAP,
+    ASSEMBLYAI_UNSUPPORTED_LANGUAGES,
     is_realtime_model,
+    validate_google_model,
 )
 from super.core.voice.prompts.language_accent import LANGUAGE_ACCENT_PROMPT
 from time import perf_counter
@@ -75,6 +77,7 @@ __all__ = [
     "GEMINI_REALTIME_VOICES",
     "GEMINI_REALTIME_MODELS",
     "GEMINI_LANGUAGE_MAP",
+    "validate_google_model",
 ]
 
 # =============================================================================
@@ -91,6 +94,7 @@ groq = None
 cartesia = None
 google = None
 elevenlabs = None
+sarvam = None
 xai = None
 anthropic = None
 azure = None
@@ -130,7 +134,7 @@ except ImportError as e:
 
 def _ensure_livekit_plugins_loaded(logger: Optional[logging.Logger] = None) -> bool:
     """Load LiveKit plugins on the main thread to avoid plugin registration errors."""
-    global silero, deepgram, openai, cartesia, groq, google, elevenlabs, xai, anthropic, azure
+    global silero, deepgram, openai, cartesia, groq, google, elevenlabs, sarvam, xai, anthropic, azure
     global TurnDetection, MultilingualModel, BackgroundAudioPlayer, AudioConfig, BuiltinAudioClip
 
     if silero is not None:
@@ -178,6 +182,13 @@ def _ensure_livekit_plugins_loaded(logger: Optional[logging.Logger] = None) -> b
             from livekit.plugins import elevenlabs as _elevenlabs
 
             elevenlabs = _elevenlabs
+        except ImportError:
+            pass
+
+        try:
+            from livekit.plugins import sarvam as _sarvam
+
+            sarvam = _sarvam
         except ImportError:
             pass
 
@@ -349,23 +360,9 @@ class LiveKitServiceFactory:
         self.config = config  # Alias for backward compat
         self._logger = logger or logging.getLogger("livekit.services")
 
-        # Determine mode using priority chain:
-        # 1. Database flag (llm_realtime) - source of truth
-        # 2. Model name detection (LLM_REALTIME_MODELS list)
-        # 3. Config/env fallback for non-realtime modes
-        if config.get("llm_realtime"):
-            self.mode = LiveKitServiceMode.REALTIME
-            self._logger.info("Realtime mode enabled via database flag (llm_realtime=True)")
-        elif is_realtime_model(config.get("llm_model", "")):
-            self.mode = LiveKitServiceMode.REALTIME
-            self._logger.info(
-                f"Realtime mode enabled via model detection: {config.get('llm_model')}"
-            )
-        else:
-            self.mode = config.get(
-                "mode", os.getenv("AGENT_INFRA_MODE", LiveKitServiceMode.STANDARD)
-            )
-
+        # Determine mode using proper priority chain
+        self.mode = self._determine_service_mode()
+        self._logger.info(f"Service mode determined: {self.mode}")
         # Speaking plan settings
         self.speaking_plan = config.get("speaking_plan", {})
 
@@ -390,6 +387,38 @@ class LiveKitServiceFactory:
 
         self.service_modes = ServiceMode()
 
+    def _determine_service_mode(self) -> str:
+        """Main mode determination logic with proper priority"""
+        # 1. Environment check
+        env_mode = os.getenv("AGENT_INFRA_MODE", "").lower()
+        
+        # 2. Database flags check
+        db_flags = self._check_database_flags()
+        
+        # 3. Mode-specific logic
+        if env_mode == "inference":
+            return "inference" if db_flags["use_inference"] else "standard"
+        elif env_mode == "realtime":
+            return "realtime" if db_flags["use_realtime"] else "standard"
+        elif env_mode == "standard" or not env_mode:
+            return "inference" if db_flags["use_inference"] else "standard"
+        
+        # 4. Model registry fallback
+        if is_realtime_model(self.config.get("llm_model", "")):
+            return "realtime"
+        else:
+            return "standard"
+
+    def _check_database_flags(self) -> dict:
+        """Single function to check all database flags"""
+        return {
+            "use_inference": self.config.get("llm_inference", False),
+            "use_realtime": self.config.get("llm_realtime", False),
+            "use_stt_inference": self.config.get("stt_inference", False),
+            "use_tts_inference": self.config.get("tts_inference", False)
+        }
+
+        
     # =========================================================================
     # Unified Provider Validation
     # =========================================================================
@@ -644,56 +673,13 @@ class LiveKitServiceFactory:
         model_supported = self._model_supports_inference(service_type)
         config_flag = self._get_inference_flag(f"{service_type}_inference")
 
-        # Provider not in inference registry → always use plugin.
-        # Providers like Azure, Cerebras, Ollama, AWS need their own
-        # auth/endpoints that LiveKit Cloud inference doesn't support.
-        # The config flag should only promote to inference for providers
-        # that are actually in the registry.
-        if not model_supported and not config_flag:
-            return False
-
-        if not model_supported and config_flag:
-            # Config flag is set, but provider isn't in registry.
-            # Log and fall back to plugin — inference would fail.
-            if service_type == "llm":
-                provider = self.llm_config.provider
-            elif service_type == "stt":
-                provider = self.stt_config.provider
-            else:
-                provider = self.tts_config.provider
-
-            # For TTS, allow the flag to work (TTS inference supports
-            # broader providers via voice_inference flag).
-            if service_type == "tts":
-                self._logger.info(
-                    f"TTS inference flag is True in database. "
-                    f"Using {self.tts_config.model} despite not being in registry."
-                )
-            else:
-                self._logger.info(
-                    f"{service_type.upper()} provider '{provider}' not in inference "
-                    f"registry. Using plugin mode despite {service_type}_inference flag."
-                )
-                return False
-
-        inference_mode = True
-
-        # For TTS, also check voice compatibility
-        if service_type == "tts":
-            cfg = self.tts_config
-            if not self._is_voice_inference_compatible(cfg.provider, cfg.voice):
-                if self.config.get("voice_inference", False):
-                    self._logger.info(
-                        f"  TTS voice '{cfg.voice}' is instance compatible {cfg.provider}."
-                    )
-                    return True
-
-                self._logger.info(
-                    f"TTS voice '{cfg.voice}' not inference-compatible for {cfg.provider}. "
-                    "Using plugin mode instead."
-                )
-                return False
-        return inference_mode
+        # Database flag takes priority over registry
+        if config_flag is not None:
+            # If db flag is True → use inference, if False → use plugin
+            return config_flag
+        
+        # Only use registry if database flag is not set
+        return model_supported
 
     # =========================================================================
     # Unified Service Creation (Entry Points)
@@ -965,6 +951,7 @@ class LiveKitServiceFactory:
                 parallel_tool_calls=True,
             )
         elif provider in ("google", "gemini") and google:
+            model = validate_google_model(model, logger=self._logger)
             return google.LLM(model=model, temperature=temperature)
         else:
             return openai.LLM(model="gpt-4o-mini", temperature=0.4)
@@ -1090,8 +1077,17 @@ class LiveKitServiceFactory:
 
         self.service_modes.stt_type = "inference"
 
-        # Language is controlled by database config for all models
-        # No hardcoded overrides - respect the database setting
+        # AssemblyAI streaming doesn't support certain languages;
+        # omit language to let the multilingual model auto-detect
+        if (
+            cfg.provider == "assemblyai"
+            and language in ASSEMBLYAI_UNSUPPORTED_LANGUAGES
+        ):
+            self._logger.warning(
+                f"AssemblyAI does not support language '{language}'. "
+                "Using auto-detection instead."
+            )
+            language = None
 
         # Build provider-specific extra_kwargs
         extra_kwargs = self._build_inference_stt_extra_kwargs(cfg.provider, cfg)
@@ -1108,7 +1104,7 @@ class LiveKitServiceFactory:
         return inference.STT(
             model=model_ref,
             language=language,
-            extra_kwargs=extra_kwargs ,
+            extra_kwargs=extra_kwargs,
         )
 
     def _build_inference_stt_extra_kwargs(
@@ -1235,8 +1231,8 @@ class LiveKitServiceFactory:
         ):
             extra_kwargs["reasoning_effort"] = cfg.reasoning_effort
 
-        # Parallel tool calls (pass through to Chat Completions API)
-        if cfg.parallel_tool_calls is not None:
+        # Parallel tool calls — OpenAI-specific, not supported by Gemini
+        if cfg.parallel_tool_calls is not None and cfg.provider != "google":
             extra_kwargs["parallel_tool_calls"] = cfg.parallel_tool_calls
 
         model_ref = f"{cfg.provider}/{cfg.model}"
@@ -1338,7 +1334,7 @@ class LiveKitServiceFactory:
         if provider == "cartesia":
             # Cartesia: speed (0.6-2.0), volume (multiplier), emotion
             if cfg.speed != 1.0:
-                extra_kwargs["speed"] = cfg.speed
+                extra_kwargs["speed"] = max(0.6, min(1.5, cfg.speed))
             if cfg.volume != 1.0:
                 extra_kwargs["volume"] = cfg.volume
             if cfg.emotion:
@@ -1502,9 +1498,9 @@ class LiveKitServiceFactory:
                     punctuate=True,  # Add punctuation for better turn detection
                     smart_format=cfg.smart_format,
                     filler_words=cfg.filler_words,
-                    endpointing_ms=cfg.endpointing_ms,
-                    interim_results=not cfg.use_finals_only,
-                    profanity_filter=cfg.profanity_filter,
+                    # endpointing_ms=cfg.endpointing_ms,
+                    # interim_results=not cfg.use_finals_only,
+                    # profanity_filter=cfg.profanity_filter,
                 )
 
             elif provider == "cartesia":
@@ -1688,6 +1684,7 @@ class LiveKitServiceFactory:
                     parallel_tool_calls=parallel_tool_calls,
                 )
             elif provider in ("gemini", "google") and google:
+                model = validate_google_model(model, logger=self._logger)
                 self._logger.info(f"Creating Google LLM with model={model}")
                 return google.LLM(model=model, temperature=temperature)
             elif provider == "anthropic":
@@ -1990,13 +1987,13 @@ class LiveKitServiceFactory:
             kwargs["voice_settings"] = elevenlabs.VoiceSettings(**vs_kwargs)
 
         # DIAGNOSTIC: Log exact parameters for debugging TTS creation
-        api_key_set = bool(os.getenv("ELEVENLABS_API_KEY"))
+        api_key_set = bool(os.getenv("ELEVEN_API_KEY"))
         self._logger.info(
             f"[ELEVENLABS_DIAG] Creating TTS with: "
             f"voice_id={cfg.voice!r}, model={kwargs['model']!r}, "
             f"language={cfg.language!r}, "
             f"has_voice_settings={has_settings}, "
-            f"ELEVENLABS_API_KEY={'SET' if api_key_set else 'MISSING'}, "
+            f"ELEVEN_API_KEY={'SET' if api_key_set else 'MISSING'}, "
             f"stability={cfg.stability}, similarity_boost={cfg.similarity_boost}, "
             f"style={cfg.style}, speed={cfg.speed}"
         )
@@ -2064,8 +2061,31 @@ class LiveKitServiceFactory:
             "voice_name": voice,
         }
 
+        # Note: LANGUAGE_ACCENT_PROMPT should NOT be used for TTS instructions
+        # TTS models should only convert text to speech, not receive phonetic instructions
+        # The accent handling should be done at the LLM level, not TTS level
         if cfg.voice_instructions:
-            kwargs["instructions"] = cfg.voice_instructions
+            # Filter out LANGUAGE_ACCENT_PROMPT if present - it belongs to LLM, not TTS
+            # Check for distinctive markers from the language accent prompt
+            accent_prompt_markers = [
+                "LANGUAGE_ACCENT_PROMPT",
+                "Language & Accent Management",
+                "Language Adaptation Rules",
+                "DIRECTOR'S NOTES (Voice & Accent Control)",
+                "Voice Profile",
+                "Natural Indian English accent",
+                "Core Speech Rules"
+            ]
+            
+            if any(marker in cfg.voice_instructions for marker in accent_prompt_markers):
+                self._logger.warning(
+                    "Filtering out LANGUAGE_ACCENT_PROMPT from TTS instructions - this should only be used for LLM"
+                )
+                # Don't pass instructions to TTS if they contain accent prompt
+                pass
+            else:
+                # Only use simple TTS guidance, not complex phonetic instructions
+                kwargs["instructions"] = cfg.voice_instructions
 
         self._logger.info(
             f"Creating Gemini TTS: model={model}, voice={voice}"
@@ -2315,7 +2335,16 @@ class LiveKitServiceFactory:
         vad = self._create_vad()
 
         # Realtime mode uses different classes (OpenAI/Gemini realtime)
-        if effective_mode == LiveKitServiceMode.REALTIME or self.config.get("llm_realtime"):
+        # Database flag takes highest priority
+        db_flag = self.config.get("llm_realtime")
+        if db_flag is True:
+            self._logger.info("Realtime mode forced via database flag (llm_realtime=True)")
+            return await self._create_realtime_session(userdata, vad)
+        elif db_flag is False:
+            self._logger.info("Realtime mode blocked via database flag (llm_realtime=False)")
+        
+        # Only check effective mode if database flag is not set
+        if effective_mode == LiveKitServiceMode.REALTIME:
             return await self._create_realtime_session(userdata, vad)
 
         self._logger.info(
@@ -2381,20 +2410,19 @@ class LiveKitServiceFactory:
                 "min_interruption_duration", 0.3
             ),
             "min_interruption_words": self.speaking_plan.get(
-                "min_interruption_words", 3
+                "min_interruption_words", 1
             ),
             # Endpointing delay: time after last speech before declaring turn complete
-            # Default 0.5s is conservative; 0.3s gives faster response at slight accuracy cost
             # Turn detector model dynamically adjusts between min and max
-            "min_endpointing_delay": self.speaking_plan.get("min_endpointing_delay", 0.3),
-            "max_endpointing_delay": self.speaking_plan.get("max_endpointing_delay", 2.0),
+            "min_endpointing_delay": self.speaking_plan.get("min_endpointing_delay", 0.2),
+            "max_endpointing_delay": self.speaking_plan.get("max_endpointing_delay", 3),
             # IMPORTANT: preemptive_generation=False to prevent duplicate LLM requests/TTS
             # See: https://github.com/livekit/agents/issues/4219
             # When True, causes duplicate audio output and doubled token costs
             "preemptive_generation": self.speaking_plan.get("preemptive_generation", True),
             # Resume after false interruptions for better conversation flow
             "resume_false_interruption": self.speaking_plan.get("resume_false_interruption", True),
-            "false_interruption_timeout": self.speaking_plan.get("false_interruption_timeout", 0.3),
+            "false_interruption_timeout": self.speaking_plan.get("false_interruption_timeout", 1),
         }
 
         # MultilingualModel requires downloaded model files
@@ -2490,11 +2518,11 @@ class LiveKitServiceFactory:
             )
 
         return silero.VAD.load(
-            min_silence_duration=self.speaking_plan.get("min_silence_duration", 0.10),  # Reduced from 1.5 for faster EOU detection
-            prefix_padding_duration=self.speaking_plan.get("prefix_padding_duration", 0.05),  # Reduced from 0.08 to reduce audio buffering delay
-            activation_threshold=self.speaking_plan.get("vad_activation_threshold", 0.60),  # Higher threshold = less sensitive to background noise
+            min_silence_duration=self.speaking_plan.get("min_silence_duration", 0.55),
+            prefix_padding_duration=self.speaking_plan.get("prefix_padding_duration", 0.10),
+            activation_threshold=self.speaking_plan.get("vad_activation_threshold", 0.60),
             deactivation_threshold=self.speaking_plan.get("vad_deactivation_threshold", 0.25),
-            sample_rate=self.speaking_plan.get("vad_sample_rate", 8000),
+            # sample_rate=self.speaking_plan.get("vad_sample_rate", 8000),
         )
 
     def create_background_audio(self) -> Optional[Any]:
@@ -2633,8 +2661,10 @@ class LiveKitServiceFactory:
         # Auto-detect realtime mode from model name using the imported function
         model_is_realtime = is_realtime_model(llm_model)
 
-        if not model_is_realtime:
-            model_is_realtime = self.config.get("llm_realtime", False)
+        # Database flag takes highest priority over model detection
+        db_flag = self.config.get("llm_realtime")
+        if db_flag is not None:
+            model_is_realtime = db_flag  # Force or block based on DB flag
 
         # Check for mixed realtime mode
         mixed_realtime_mode = self.config.get(
@@ -3073,9 +3103,12 @@ class LiveKitServiceFactory:
             # Append language and accent management for Google Realtime models
             combined_instructions = f"{instructions}\n\n{LANGUAGE_ACCENT_PROMPT}"
             realtime_kwargs["instructions"] = combined_instructions
+
+
         else:
             # Add language and accent management even without base instructions
             realtime_kwargs["instructions"] = LANGUAGE_ACCENT_PROMPT
+
 
         # Vertex AI configuration
         if use_vertex_ai:

@@ -3,6 +3,7 @@ import asyncio
 import requests
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
+from dotenv import load_dotenv
 
 from super.core.logging.logging import print_log
 from super_services.db.services.models.task import TaskModel
@@ -10,7 +11,9 @@ from super_services.db.services.models.task import TaskModel
 from super_services.libs.core.jsondecoder import convertFromMongo
 from super_services.libs.core.db import executeQuery
 
-API_SERVICE_URL = os.getenv("API_SERVICE_URL", "http://0.0.0.0:9116/api/v1").rstrip("/")
+load_dotenv(override=True)
+
+STORE_SERVICE_URL = os.getenv("STORE_SERVICE_URL", "http://127.0.0.1:9118")
 
 
 def get_token_from_space_id(space_id: str) -> Optional[str]:
@@ -39,7 +42,7 @@ class ProfileUpdateService:
         self.document_id = document_id
         self.token = token
         self.collection_ref = collection_ref
-        self.api_url = f"{API_SERVICE_URL}/store/collection-doc-data/{token}/{document_id}"
+        self.api_url = f"{STORE_SERVICE_URL}/api/v1/store/collection-doc-data/{token}/{document_id}"
 
     def fetch_tasks_by_document(self) -> List:
         try:

@@ -29,8 +29,8 @@ class VapiCallUpdater:
     def __init__(self):
         self.region = os.environ.get("AWS_DEFAULT_REGION")
         self.s3 = boto3.client("s3")
-        self.auth_token = os.environ.get("VAPI_API_KEY")
-        self.base_url = os.environ.get("VAPI_URL", "https://api.vapi.ai")
+        self.auth_token = os.environ.get("VAPI_AUTH_TOKEN")
+        self.base_url = os.environ.get("VAPI_BASE", "https://api.vapi.ai")
         self.webhook_handler = WebhookHandler()
         self.recordings_bucket = "cdr-storage-recs"
         self.recordings_prefix = "media/private/high-call-recordings"
@@ -122,10 +122,16 @@ class VapiCallUpdater:
         call_status = self.get_call_status(call.get("endedReason", ""))
         # print_log("contact_number -", task.get("task").get("contact_number"), task.get("input").get("contact_number"))
         # print_log("customer - ", task.get("task").get("name"), task.get("input").get("name"))
+
+        contact_number = task.get("input").get("contact_number")
+
+        if isinstance(contact_number,str) and contact_number.startswith("0"):
+            contact_number = contact_number[1:]
+
         output_data = {
             "call_id": call_id,
             "customer": task.get("input").get("name"),
-            "contact_number": task.get("input").get("contact_number"),
+            "contact_number": contact_number,
             "call_end_reason": call.get("endedReason"),
             "recording_url": call.get("recordingUrl"),
             "transcript": transcript,

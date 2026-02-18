@@ -2,6 +2,7 @@ import random
 import time
 import requests
 import os
+from dotenv import load_dotenv
 import traceback
 
 
@@ -22,8 +23,8 @@ from super_services.voice.common.threads import (
 from super.core.voice.schema import UserState
 from super.core.voice.workflows.pre_call import PreCallWorkFlow
 
-API_SERVICE_URL = os.environ.get("API_SERVICE_URL", "http://0.0.0.0:9116/api/v1").rstrip("/")
-BULK_UPDATE_API = API_SERVICE_URL + "/store/collection-doc-bulk-update/"
+STORE_SERVICE_URL = os.environ.get("STORE_SERVICE_URL", "http://127.0.0.1:9118")
+BULK_UPDATE_API = STORE_SERVICE_URL + "/api/v1/store/collection-doc-bulk-update/"
 
 # Setup logger
 logger = logging.get_logger(__name__)
@@ -60,6 +61,8 @@ def fetch_script(agent, data):
     return prompt
 
 
+load_dotenv()
+
 
 def format_number(phone_number: str) -> str | None:
     return normalize_phone_number(phone_number)
@@ -70,7 +73,7 @@ def create_general_call(agent, data):
     try:
         if not all([agent, data]):
             return "Please provide all required information."
-        auth_token = os.getenv("VAPI_API_KEY")
+        auth_token = os.getenv("VAPI_AUTH_TOKEN")
         vapi_phone_number_id = os.getenv("VAPI_PHONE_NUMBER_ID")
         if not auth_token or not vapi_phone_number_id:
             return "Missing VAPI credentials in environment variables."
@@ -159,7 +162,7 @@ def start_vapi_call(agent, data):
 
         print_log("start_vapi_call with agent_id", agent_id)
 
-        auth_token = os.getenv("VAPI_API_KEY")
+        auth_token = os.getenv("VAPI_AUTH_TOKEN")
         # vapi_phone_number_id = data.get("number_id", os.getenv("VAPI_PHONE_NUMBER_ID"))
 
         telephony_list = pilot_data.get("telephony", [])

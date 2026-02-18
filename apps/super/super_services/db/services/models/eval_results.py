@@ -8,6 +8,7 @@ from super_services.libs.core.mixin import CreateUpdateMixinModel
 
 class TestCaseResultModel(MongoDBModel):
     """Individual test case result."""
+
     test_case_index: int = Field(...)
     question: str = Field(...)
     expected_answer: str = Field(...)
@@ -21,6 +22,7 @@ class TestCaseResultModel(MongoDBModel):
 
 class EvalResultBaseModel(MongoDBModel, CreateUpdateMixinModel):
     """Evaluation results for an agent."""
+
     eval_id: str = Field(...)
     agent_id: str = Field(...)
     total_cases: int = Field(default=0)
@@ -34,6 +36,7 @@ class EvalResultBaseModel(MongoDBModel, CreateUpdateMixinModel):
 
 class EvalResultModel(BaseRepository):
     """Repository for evaluation results."""
+
     class Meta:
         model = EvalResultBaseModel
         collection = "eval_results"

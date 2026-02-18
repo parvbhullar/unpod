@@ -34,10 +34,33 @@ VOICE_AGENT_TESTS=(
   "tests/core/voice/livekit/test_lite_handler_parsing_response.py"
   "tests/core/voice/livekit/test_lite_handler_session_flow.py"
   "tests/core/voice/livekit/test_lite_handler_idle_goodbye.py"
+  "tests/core/voice/managers/test_knowledge_base_manager.py"
   "tests/core/voice/livekit/test_livekit_lite_agent_context.py"
   "tests/core/voice/livekit/test_livekit_lite_agent_tools.py"
+  "tests/core/voice/test_chroma_fetch_k.py"
+  "tests/core/voice/test_kb_chroma_kn_base_integration.py"
+  "tests/test_kb_search_quality.py"
   "tests/core/voice/test_voice_agent_suite_manifest.py"
+  # Eval suite — retrieval metrics + structural flow validation (no API key needed)
+  "tests/eval/test_retrieval_eval.py"
+  "tests/eval/test_conversation_flow.py"
 )
+
+COVERAGE_TARGETS=(
+  "super/core/voice/voice_agent_handler.py"
+  "super/core/voice/livekit/lite_handler.py"
+  "super/core/voice/livekit/livekit_lite_agent.py"
+  "super/core/voice/managers/knowledge_base.py"
+  "super/core/memory/index/chroma.py"
+  "super/core/memory/search/reranker.py"
+)
+
+echo "[coverage] Voice agent tests (${#VOICE_AGENT_TESTS[@]} files)" >&2
+echo "[coverage] Python binary: $PYTHON_BIN" >&2
+echo "[coverage] Coverage targets:" >&2
+for target in "${COVERAGE_TARGETS[@]}"; do
+  echo "  - $target" >&2
+done
 
 if [[ "${ENABLE_PYTEST_COV:-0}" == "1" ]] && "$PYTHON_BIN" -c "import pytest_cov" >/dev/null 2>&1; then
   echo "[coverage] Running pytest-cov mode (opt-in)." >&2
@@ -46,6 +69,8 @@ if [[ "${ENABLE_PYTEST_COV:-0}" == "1" ]] && "$PYTHON_BIN" -c "import pytest_cov
     --cov=super.core.voice.voice_agent_handler \
     --cov=super.core.voice.livekit.lite_handler \
     --cov=super.core.voice.livekit.livekit_lite_agent \
+    --cov=super.core.voice.managers.knowledge_base \
+    --cov=super.core.memory.index.chroma \
     --cov-report=term-missing \
     --cov-fail-under="${COV_FAIL_UNDER:-20}" \
     "$@"
@@ -55,10 +80,8 @@ fi
 echo "[coverage] Running stable coverage mode via coverage.py. Set ENABLE_PYTEST_COV=1 to force pytest-cov mode." >&2
 "$PYTHON_BIN" -m coverage erase
 "$PYTHON_BIN" -m coverage run \
-  -m pytest -q -p pytest_asyncio.plugin "${VOICE_AGENT_TESTS[@]}" "$@"
+  -m pytest -ra -p pytest_asyncio.plugin "${VOICE_AGENT_TESTS[@]}" "$@"
 
 "$PYTHON_BIN" -m coverage report -m \
   --fail-under="${COV_FAIL_UNDER:-20}" \
-  super/core/voice/voice_agent_handler.py \
-  super/core/voice/livekit/lite_handler.py \
-  super/core/voice/livekit/livekit_lite_agent.py
+  "${COVERAGE_TARGETS[@]}"

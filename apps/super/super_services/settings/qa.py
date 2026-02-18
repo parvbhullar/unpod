@@ -28,8 +28,8 @@ POSTGRES_CONFIG = {
 REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/1")
 
 # AWS Config
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+S3_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID", "")
+S3_SECRET_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "unpodbackend")
 AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "ap-south-1")
 

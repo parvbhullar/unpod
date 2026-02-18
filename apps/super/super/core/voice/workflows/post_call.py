@@ -114,6 +114,7 @@ class PostCallWorkflow(BaseWorkflow):
     async def create_follow_up_task(self, time):
         from super.core.voice.common.services import create_scheduled_task
 
+        print(f"[PostCallWorkflow] Creating follow_up task")
         try:
             res = await create_scheduled_task(self.data.get("task_id"), time)
 
@@ -135,8 +136,10 @@ class PostCallWorkflow(BaseWorkflow):
                     state=Scheduled(scheduled_time=res.get("time")),
                 )
 
+                print(f"[PostCallWorkflow] Created follow_up task")
                 return "call_scheduled"
 
+            print("[PostCallWorkflow] failed follow_up task")
             return "failed to schedule_call"
 
         except Exception as e:
@@ -145,6 +148,7 @@ class PostCallWorkflow(BaseWorkflow):
 
     async def follow_up(self):
         followup = None
+
         if self.follow_up_enabled:
             print("processing followup")
 
@@ -168,27 +172,29 @@ class PostCallWorkflow(BaseWorkflow):
                 available_slots=available_slots,
             )
 
-            from super.core.voice.common.common import send_web_notification
+            # from super.core.voice.common.common import send_web_notification
+            # from super.core.voice.common.services import send_retry_sms
 
-            if self.user_state:
-                if self.user_state.call_status in [
+            if (
+                self.user_state
+                and self.user_state.call_status
+                in [
                     CallStatusEnum.VOICEMAIL,
                     CallStatusEnum.BUSY,
                     CallStatusEnum.CANCELLED,
                     CallStatusEnum.NOT_CONNECTED,
-                ]:
+                ]
+                and res.followup_required == "true"
+            ):
+                followup_time = datetime.datetime.now() + datetime.timedelta(hours=1)
 
-                    from super.core.voice.common.services import send_retry_sms
-
-                    followup_time = datetime.datetime.now() + datetime.timedelta(
-                        hours=1
-                    )
-
-                    followup = await self.create_follow_up_task(followup_time)
-                    await self._Send_sms(followup_time)
+                followup = await self.create_follow_up_task(followup_time)
+                await self._Send_sms(followup_time)
 
             elif res.followup_required == "true":
                 followup = await self.create_follow_up_task(res.followup_time)
+
+                await self._Send_sms(res.followup_time)
 
             return {
                 "required": res.followup_required,
@@ -199,7 +205,7 @@ class PostCallWorkflow(BaseWorkflow):
 
         return {"required": "follow_up disabled"}
 
-    async def _Send_sms(self,followup_time):
+    async def _Send_sms(self, followup_time):
         from super.core.voice.common.common import send_web_notification
 
         if self.model_config.get("sms_enabled", False):
@@ -325,6 +331,7 @@ class PostCallWorkflow(BaseWorkflow):
                 success_result,
             )
             return result
+
         return None
 
     async def call_evaluation(self) -> Dict[str, Any]:
@@ -425,6 +432,97 @@ class PostCallWorkflow(BaseWorkflow):
                 "audio_file_path": None,
             }
 
+    def _extract_eval_records(self) -> Dict[str, Any]:
+        """Fetch runtime eval traces from call_result.data or user_state.extra_data."""
+        try:
+            output = self.data.get("output")
+            output_data = {}
+            if isinstance(output, dict):
+                output_data = output.get("data", {}) or {}
+            elif hasattr(output, "data") and isinstance(output.data, dict):
+                output_data = output.data
+
+            eval_records = output_data.get("eval_records")
+            if isinstance(eval_records, dict):
+                return eval_records
+
+            if self.user_state and isinstance(self.user_state.extra_data, dict):
+                extra_records = self.user_state.extra_data.get("eval_records")
+                if isinstance(extra_records, dict):
+                    return extra_records
+        except Exception as e:
+            logger.warning(f"Could not extract eval_records: {e}")
+        return {}
+
+    def _extract_ground_truth_qa_pairs(self) -> list:
+        """Collect QA pairs from post-call input/model config for realtime eval."""
+        qa_pairs = []
+        try:
+            from super.core.voice.common.common import get_qa_pairs
+
+            kn_list = self.model_config.get("knowledge_base", {})
+
+            tokens = [item["token"] for item in kn_list if item.get("token")]
+            print(f"{len(tokens)} tokens in knowledge_base")
+
+            qa_pairs = get_qa_pairs(tokens)
+
+        except Exception as e:
+            logger.warning(f"Could not extract QA pairs for realtime eval: {e}")
+
+        return qa_pairs
+
+    async def realtime_agent_evaluation(self) -> Dict[str, Any]:
+        """
+        Evaluate runtime tool calls and responses against QA ground truth.
+        """
+        try:
+            eval_records = self._extract_eval_records()
+            qa_pairs = self._extract_ground_truth_qa_pairs()
+
+            if not eval_records:
+                return {
+                    "status": "skipped",
+                    "reason": "No eval_records found in call data",
+                    "total_cases": 0,
+                    "passed_cases": 0,
+                    "failed_cases": 0,
+                    "pass_rate": 0.0,
+                    "test_results": [],
+                }
+
+            if not qa_pairs:
+                return {
+                    "status": "skipped",
+                    "reason": "No QA pairs found for ground truth",
+                    "total_cases": 0,
+                    "passed_cases": 0,
+                    "failed_cases": 0,
+                    "pass_rate": 0.0,
+                    "test_results": [],
+                }
+
+            from super.core.voice.eval_agent.eval_test_agent import EvalTestAgent
+
+            evaluator = EvalTestAgent(model_config=self.model_config or {})
+            result = await evaluator.evaluate_call_records(
+                eval_records=eval_records,
+                qa_pairs=qa_pairs,
+            )
+            result["status"] = "completed"
+            return result
+        except Exception as e:
+            logger.error(f"Realtime agent evaluation failed: {e}", exc_info=True)
+            return {
+                "status": "failed",
+                "reason": str(e),
+                "total_cases": 0,
+                "passed_cases": 0,
+                "failed_cases": 0,
+                "pass_rate": 0.0,
+                "test_results": [],
+            }
+
     def _calculate_similarity(self, text1: str, text2: str) -> float:
         """
         Calculate the similarity ratio between two strings.
@@ -513,6 +611,7 @@ class PostCallWorkflow(BaseWorkflow):
             self.follow_up(),
             self.call_evaluation(),
             self.profile_summary_generation(),
+            self.realtime_agent_evaluation(),
         )
 
         data = {
@@ -522,6 +621,7 @@ class PostCallWorkflow(BaseWorkflow):
             "follow_up": results[3],
             "call_evaluation": results[4],
             "profile_summary": results[5],
+            "realtime_agent_evaluation": results[6],
         }
 
         data["structured_data"] = await self.structured_data(

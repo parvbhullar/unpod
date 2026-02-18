@@ -1,4 +1,4 @@
-
+import os
 
 from super.core.voice.base import BaseVoiceHandler
 from typing import Optional,Any,Dict
@@ -14,6 +14,24 @@ from super.core.voice.services.livekit_services import (
 from super.core.voice.testing_agents.vanilla_agent import VanillaAgent
 
 import asyncio
+try:
+    from livekit.plugins import openai as _openai
+    from livekit.plugins import deepgram as _deepgram
+    from livekit.plugins import cartesia as _cartesia
+    from livekit.plugins import google as _google
+    from livekit.plugins import silero as _silero
+    from livekit.plugins import lmnt as _lmnt
+
+    lmnt = _lmnt
+    openai=_openai
+    deepgram=_deepgram
+    cartesia=_cartesia
+    google=_google
+    silero=_silero
+
+except Exception as e:
+    pass
+
 
 class VanillaAgenHandler(BaseVoiceHandler):
     def __init__(self,
@@ -78,13 +96,29 @@ class VanillaAgenHandler(BaseVoiceHandler):
         userdata: Optional[Dict[str, Any]] = None,
     ) -> AgentSession:
 
-        return await self.service_factory.create_session(
-            userdata=userdata, user_state=self.user_state
-        )
+        mode=os.environ.get("VANILLA_AGENT_MODE","normal")
+        if mode =="realtime":
+            return AgentSession(
+                llm=google.realtime.RealtimeModel(),
+                vad=silero.VAD.load(),
+                userdata=userdata
+            )
+        else:
+            return AgentSession(
+                llm=_openai.LLM(model="gpt-4o-mini"),
+                stt=_deepgram.STT(
+                      model="nova-3",
+                      language="en",
+                   ),
+                tts=_cartesia.TTS(
+                      model="sonic-3",
+                      voice="f786b574-daa5-4673-aa0c-cbe3e8534c02",
+                   ),
+                vad=_silero.VAD.load(),
+            )
 
-    def set_event_bridge(self, event_bridge: Any) -> None:
-        """Set LiveKit event bridge for compatibility with VoiceAgentHandler."""
-        self._event_bridge = event_bridge
+    # def set_event_bridge(self, event_bridge: Any) -> None:
+    #     self._event_bridge = event_bridge
 
     async def execute(self, *args, **kwargs) -> Any:
         self._logger.warning(
