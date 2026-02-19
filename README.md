@@ -7,7 +7,7 @@ https://unpod.ai | https://docs.unpod.dev
 
 # Unpod
 
-### Open-source platform for building AI voice agents
+### Open-source AI Native Communication Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-unpod.dev-blue)](https://docs.unpod.dev)
@@ -19,13 +19,13 @@ https://unpod.ai | https://docs.unpod.dev
 
 ---
 
-Unpod is an open-source platform for creating AI voice agents with dedicated phone numbers. Build agents that handle incoming calls and messages, filter communications intelligently, and deliver actionable insights — all while integrating with your existing business tools.
+Unpod is an open-source communication platform for creating AI  agents with dedicated phone numbers. Build agents that handle incoming calls and messages, filter communications intelligently, and deliver actionable insights — all while integrating with your existing business tools.
 
 ## Features
 
 - **AI Voice Agents** — Build conversational voice agents powered by LLMs with customizable personality, knowledge, and tools
 - **Multi-Channel** — Voice calls, WhatsApp, and email through a unified agent interface
-- **Real-Time Voice Pipeline** — WebRTC-based, provider-agnostic voice engine with support for multiple providers and streaming TTS/STT
+- **Real-Time Voice Pipeline** — Sub-second latency using LiveKit, Pipecat, and streaming TTS/STT
 - **Agent Studio** — Visual no-code builder for configuring agent behavior, prompts, and workflows
 - **Knowledge Base** — Upload documents and data sources for RAG-powered agent responses
 - **Multi-Tenant Workspaces** — Organizations, teams, RBAC, and shared spaces
