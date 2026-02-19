@@ -5,7 +5,7 @@ https://unpod.ai | https://docs.unpod.dev
 
 <div align="center">
 
-# Unpod
+<img src="https://unpod.ai/images/unpod/logo.svg" alt="Unpod" height="60">
 
 ### Open-source AI Native Communication Platform
 
