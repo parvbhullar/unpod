@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card, Col, Row, Skeleton } from 'antd';
+import {Card, Col, Row, Skeleton} from 'antd';
 import styled from 'styled-components';
 import SkeletonAvatar from './common/SkeletonAvatar';
-import { SkeletonInput } from './common/SkeletonInput';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
+import {SkeletonInput} from './common/SkeletonInput';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
 
 const CardsRow = styled(Row)`
   margin-bottom: 24px;
@@ -51,7 +51,7 @@ const ListRow = styled.div`
   gap: 24px;
   align-items: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     gap: 14px;
   }
 `;
@@ -70,7 +70,7 @@ const ListHeader = styled.div`
 `;
 
 const ActionButtonWrapper = styled.div`
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -84,21 +84,21 @@ const AnalyticsSkeleton: React.FC = () => {
     <div>
       {/* Top Metric Cards */}
       <CardsRow gutter={[16, 16]}>
-        {Array.from({ length: 4 }).map((_, i) => (
+        {Array.from({length: 4}).map((_, i) => (
           <Col key={i} xs={24} sm={12} md={12} lg={6}>
             <MetricCard>
-              <Skeleton active paragraph={false} title={{ width: '60%' }} />
+              <Skeleton active paragraph={false} title={{width: '60%'}}/>
               <MetricFooter>
-                <Skeleton.Button active style={{ width: 80, height: 28 }} />
-                <SkeletonAvatar size={20} />
+                <Skeleton.Button active style={{width: 80, height: 28}}/>
+                <SkeletonAvatar size={20}/>
               </MetricFooter>
             </MetricCard>
           </Col>
         ))}
       </CardsRow>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-        {Array.from({ length: 2 }).map((_, i) => (
+      <div style={{display: 'flex', flexDirection: 'column', gap: 24}}>
+        {Array.from({length: 2}).map((_, i) => (
           <MainCard
             title={
               <CardTitle>
@@ -121,14 +121,14 @@ const AnalyticsSkeleton: React.FC = () => {
               </CardTitle>
             }
           >
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({length: 5}).map((_, i) => (
               <ListItem key={i}>
                 <ListRow>
                   <SkeletonAvatar
                     active
                     size={mobileScreen ? 50 : 56}
                     shape="square"
-                    style={{ borderRadius: 10 }}
+                    style={{borderRadius: 10}}
                   />
 
                   <ListContent>

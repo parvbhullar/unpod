@@ -1,36 +1,38 @@
 import React from 'react';
-import type { FormListProps } from 'antd/es/form/FormList';
-import { Button, Form, Typography } from 'antd';
+import type {FormListProps} from 'antd/es/form/FormList';
+import {Button, Form, Typography} from 'antd';
 import AppInput from '../../AppInput';
-import { MdAdd, MdDelete } from 'react-icons/md';
-import { StyledItemRow } from '../index.styled';
-import { getMachineName } from '@unpod/helpers/StringHelper';
+import {MdAdd, MdDelete} from 'react-icons/md';
+import {StyledItemRow} from '../index.styled';
+import {getMachineName} from '@unpod/helpers/StringHelper';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 type FormListField = {
   title: string;
-  name: string;};
+  name: string;
+};
 
 export type FormListComponentProps = Omit<
   FormListProps,
   'children' | 'name'
 > & {
-  field: FormListField;};
+  field: FormListField;
+};
 
 const FormList: React.FC<FormListComponentProps> = ({
-  field,
-  ...restProps
-}) => {
+                                                      field,
+                                                      ...restProps
+                                                    }) => {
   const form = Form.useFormInstance();
   return (
     <>
       <Paragraph>{field.title}</Paragraph>
       <Form.List name={field.name} {...restProps}>
-        {(fields, { add, remove }) => {
+        {(fields, {add, remove}) => {
           return (
             <>
-              {fields.map(({ key, name, ...restField }) => (
+              {fields.map(({key, name, ...restField}) => (
                 <StyledItemRow key={key}>
                   <Form.Item
                     {...restField}
@@ -52,7 +54,7 @@ const FormList: React.FC<FormListComponentProps> = ({
                           const formattedKey = getMachineName(configKey);
                           const items = form.getFieldValue(field.name);
                           items[name].key = formattedKey;
-                          form.setFieldsValue({ [field.name]: items });
+                          form.setFieldsValue({[field.name]: items});
                         }
                       }}
                     />
@@ -67,13 +69,13 @@ const FormList: React.FC<FormListComponentProps> = ({
                       },
                     ]}
                   >
-                    <AppInput placeholder="Meta Value" asterisk />
+                    <AppInput placeholder="Meta Value" asterisk/>
                   </Form.Item>
                   <Form.Item>
                     <Button
                       type="primary"
                       onClick={() => remove(name)}
-                      icon={<MdDelete fontSize={18} />}
+                      icon={<MdDelete fontSize={18}/>}
                       danger
                       ghost
                     />
@@ -85,7 +87,7 @@ const FormList: React.FC<FormListComponentProps> = ({
                   type="dashed"
                   onClick={() => add()}
                   block
-                  icon={<MdAdd />}
+                  icon={<MdAdd/>}
                 >
                   Add field
                 </Button>

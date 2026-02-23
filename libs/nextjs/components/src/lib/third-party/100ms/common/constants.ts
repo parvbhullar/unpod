@@ -1,4 +1,4 @@
-import { parsedUserAgent } from '@100mslive/react-sdk';
+import {parsedUserAgent} from '@100mslive/react-sdk';
 
 export const defaultAudioList = [
   {

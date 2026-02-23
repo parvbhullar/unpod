@@ -2,14 +2,9 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import {
-  MessageBubbleContainer,
-  MessageContent,
-  MessageMeta,
-  MessageWrapper,
-} from './index.styled';
-import { getMarkdownComponents } from './MarkdownComponents';
-import { getFormattedDate } from '@unpod/helpers/DateHelper';
+import {MessageBubbleContainer, MessageContent, MessageMeta, MessageWrapper,} from './index.styled';
+import {getMarkdownComponents} from './MarkdownComponents';
+import {getFormattedDate} from '@unpod/helpers/DateHelper';
 import ProviderCards from './ProviderCards';
 import WebCards from './WebCards';
 import BookingCards from './BookingCards';
@@ -51,13 +46,13 @@ type MessageBubbleProps = {
 };
 
 const MessageBubble = ({
-  message,
-  isUser,
-  isFirstInGroup,
-  isLastInGroup,
-  onLocationResponse,
-}: MessageBubbleProps) => {
-  const { data, created } = message;
+                         message,
+                         isUser,
+                         isFirstInGroup,
+                         isLastInGroup,
+                         onLocationResponse,
+                       }: MessageBubbleProps) => {
+  const {data, created} = message;
   const content = data?.content || '';
   const files = data?.files || [];
   const blockType = data?.block_type || message.block_type;
@@ -82,17 +77,17 @@ const MessageBubble = ({
 
     switch (data?.cards?.type) {
       case 'provider':
-        return <ProviderCards data={data?.cards as any} />;
+        return <ProviderCards data={data?.cards as any}/>;
       case 'web':
-        return <WebCards data={data?.cards as any} />;
+        return <WebCards data={data?.cards as any}/>;
       case 'booking':
-        return <BookingCards data={data?.cards as any} />;
+        return <BookingCards data={data?.cards as any}/>;
       case 'call':
-        return <CallCards data={data?.cards as any} />;
+        return <CallCards data={data?.cards as any}/>;
       case 'event':
-        return <EventCards data={data?.cards as any} />;
+        return <EventCards data={data?.cards as any}/>;
       case 'person':
-        return <PersonCards data={data?.cards as any} />;
+        return <PersonCards data={data?.cards as any}/>;
       default: {
         const hasFiles = files.length > 0;
         const hasContent = content.trim().length > 0;

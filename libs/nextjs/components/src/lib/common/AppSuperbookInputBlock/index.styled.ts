@@ -1,19 +1,9 @@
 import styled from 'styled-components';
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  Input,
-  InputNumber,
-  Select,
-  TimePicker,
-  Typography,
-  Upload,
-} from 'antd';
-import { rgba } from 'polished';
+import {Button, Checkbox, DatePicker, Input, InputNumber, Select, TimePicker, Typography, Upload,} from 'antd';
+import {rgba} from 'polished';
 
-const { Paragraph } = Typography;
-const { TextArea } = Input;
+const {Paragraph} = Typography;
+const {TextArea} = Input;
 
 export const StyledTopBar = styled.div`
   display: flex;
@@ -31,7 +21,7 @@ export const StylesLogoWrapper = styled.div`
   position: relative;
   width: 30px;
   height: 30px;
-  border: 1px solid ${({ theme }) => theme.palette.primary}33;
+  border: 1px solid ${({theme}) => theme.palette.primary}33;
   border-radius: 5px;
   overflow: hidden;
 `;
@@ -41,10 +31,10 @@ export const StyledIconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   padding: 5px;
-  background-color: ${({ theme }) => theme.palette.primary}33;
-  border: 1px solid ${({ theme }) => theme.palette.primary}33;
+  background-color: ${({theme}) => theme.palette.primary}33;
+  border: 1px solid ${({theme}) => theme.palette.primary}33;
   border-radius: 5px;
-  color: ${({ theme }) => theme.palette.primary}99 !important;
+  color: ${({theme}) => theme.palette.primary}99 !important;
 `;
 
 export const StyledSelect = styled(Select)`
@@ -96,16 +86,16 @@ export const StyledBlockActions = styled.div`
   right: 20px;
   top: -15px;
   height: 36px;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
   padding: 10px;
   z-index: 100;
   transition: all 0.3s ease;
 
   &:hover {
-    color: ${({ theme }) => rgba(theme.palette.primary, 0.77)};
-    border-color: ${({ theme }) => rgba(theme.palette.primary, 0.77)};
+    color: ${({theme}) => rgba(theme.palette.primary, 0.77)};
+    border-color: ${({theme}) => rgba(theme.palette.primary, 0.77)};
   }
 `;
 
@@ -120,12 +110,12 @@ export const StyledBlock = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 16px;
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
 
   &:hover ${StyledBlockActions} {
     opacity: 1;

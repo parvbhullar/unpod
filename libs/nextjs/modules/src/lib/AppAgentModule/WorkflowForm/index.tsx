@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import type { RadioChangeEvent } from 'antd';
-import { Button, Col, Radio, Row } from 'antd';
-import { AppInput, AppTextArea } from '@unpod/components/antd';
+import React, {useState} from 'react';
+import type {RadioChangeEvent} from 'antd';
+import {Button, Col, Radio, Row} from 'antd';
+import {AppInput, AppTextArea} from '@unpod/components/antd';
 import SharedFields from '../SharedFields';
 
-const { Button: RadioButton, Group } = Radio;
+const {Button: RadioButton, Group} = Radio;
 
 type SharedField = {
   email: string;
@@ -22,17 +22,17 @@ const WorkflowForm = () => {
   void workflowData;
 
   const handleWorkflowTypeChange = (event: RadioChangeEvent) => {
-    const { target } = event;
+    const {target} = event;
     setWorkflowType(target.value ?? 'public');
   };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { target } = event;
-    const { name, value } = target ?? {};
+    const {target} = event;
+    const {name, value} = target ?? {};
     if (name && value) {
-      setWorkflowData((prevData) => ({ ...prevData, [name]: value }));
+      setWorkflowData((prevData) => ({...prevData, [name]: value}));
     }
   };
   return (

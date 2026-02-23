@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Card, Typography } from 'antd';
+import {Card, Typography} from 'antd';
 
 export const StyledSection = styled.div`
   margin-bottom: 24px;

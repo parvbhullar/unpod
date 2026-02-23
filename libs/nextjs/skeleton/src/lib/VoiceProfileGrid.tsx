@@ -1,9 +1,9 @@
 'use client';
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import styled from 'styled-components';
-import { Card } from 'antd';
+import {Card} from 'antd';
 import SkeletonAvatar from './common/SkeletonAvatar';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from './common/SkeletonButton';
 
 export const StyledGrid = styled.div`
@@ -14,16 +14,17 @@ export const StyledGrid = styled.div`
 
 type VoiceProfileGridSkeletonProps = {
   count?: number;
-  hideSelect?: boolean;};
+  hideSelect?: boolean;
+};
 
 const VoiceProfileGridSkeleton: React.FC<VoiceProfileGridSkeletonProps> = ({
-  count = 6,
-  hideSelect,
-}) => {
+                                                                             count = 6,
+                                                                             hideSelect,
+                                                                           }) => {
   return (
     <StyledGrid>
       <Fragment>
-        {Array.from({ length: count }).map((_, idx) => (
+        {Array.from({length: count}).map((_, idx) => (
           <Card
             key={idx + 1}
             style={{
@@ -48,24 +49,24 @@ const VoiceProfileGridSkeleton: React.FC<VoiceProfileGridSkeletonProps> = ({
               }}
             >
               <SkeletonInput
-                style={{ width: 100, height: 18, minWidth: 100 }}
+                style={{width: 100, height: 18, minWidth: 100}}
                 block={false}
               />
-              <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{display: 'flex', gap: 10}}>
                 <SkeletonInput
-                  style={{ width: 70, height: 13, minWidth: 70 }}
+                  style={{width: 70, height: 13, minWidth: 70}}
                   block={false}
                 />
                 <SkeletonInput
-                  style={{ width: 70, height: 13, minWidth: 70 }}
+                  style={{width: 70, height: 13, minWidth: 70}}
                   block={false}
                 />
               </div>
-              <SkeletonAvatar size={40} />
+              <SkeletonAvatar size={40}/>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {Array.from({ length: 3 }).map((_, idx) => (
-                <SkeletonButton style={{ width: 60, height: 18 }} />
+            <div style={{display: 'flex', gap: 8}}>
+              {Array.from({length: 3}).map((_, idx) => (
+                <SkeletonButton style={{width: 60, height: 18}}/>
               ))}
             </div>
           </Card>
@@ -75,4 +76,4 @@ const VoiceProfileGridSkeleton: React.FC<VoiceProfileGridSkeletonProps> = ({
   );
 };
 
-export { VoiceProfileGridSkeleton };
+export {VoiceProfileGridSkeleton};

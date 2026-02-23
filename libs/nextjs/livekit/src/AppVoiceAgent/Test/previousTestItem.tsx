@@ -1,31 +1,25 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { Flex, Typography } from 'antd';
-import { RiMessage2Line } from 'react-icons/ri';
-import { SlCalender } from 'react-icons/sl';
-import {
-  StyledFlex,
-  TestCard,
-  TestInfo,
-  TestMeta,
-  TestResultContent,
-} from './PreviousTests.styled';
-import { getTimeFromNow } from '@unpod/helpers';
-import { TestItem, TestResultProps } from '@unpod/constants';
-import { StatusColor, TestStatus } from './PreviousTests';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
-import { IoEyeOutline } from 'react-icons/io5';
+import React, {Fragment, useEffect, useMemo, useState} from 'react';
+import {Flex, Typography} from 'antd';
+import {RiMessage2Line} from 'react-icons/ri';
+import {SlCalender} from 'react-icons/sl';
+import {StyledFlex, TestCard, TestInfo, TestMeta, TestResultContent,} from './PreviousTests.styled';
+import {getTimeFromNow} from '@unpod/helpers';
+import {TestItem, TestResultProps} from '@unpod/constants';
+import {StatusColor, TestStatus} from './PreviousTests';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
+import {IoEyeOutline} from 'react-icons/io5';
 import AppDrawer from '@unpod/components/antd/AppDrawer';
 import AppList from '@unpod/components/common/AppList';
 import TestResultItem from './TestResultItem';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type PreviousTestItemProps = {
   item: TestItem;
   statusColors: Record<TestStatus, StatusColor>;
 };
 
-const PreviousTestItem = ({ item, statusColors }: PreviousTestItemProps) => {
+const PreviousTestItem = ({item, statusColors}: PreviousTestItemProps) => {
   const [showOutputDrawer, setShowOutputDrawer] = useState<boolean>(false);
   const [visibleItems, setVisibleItems] = useState<TestResultProps[]>([]);
   const [page, setPage] = useState(1);
@@ -71,10 +65,10 @@ const PreviousTestItem = ({ item, statusColors }: PreviousTestItemProps) => {
             <Text strong>Test #{1}</Text>
             <Flex align="center" gap={12}>
               <div
-                style={{ cursor: 'pointer' }}
+                style={{cursor: 'pointer'}}
                 onClick={() => setShowOutputDrawer(true)}
               >
-                <IoEyeOutline size={16} />
+                <IoEyeOutline size={16}/>
               </div>
               <AppStatusBadge
                 status={item.status}
@@ -86,11 +80,11 @@ const PreviousTestItem = ({ item, statusColors }: PreviousTestItemProps) => {
           </StyledFlex>
           <TestMeta>
             <Flex align="center" gap={6}>
-              <RiMessage2Line />
+              <RiMessage2Line/>
               <Text type="secondary">{item.pass_rate} turns</Text>
             </Flex>
             <Flex align="center" gap={6}>
-              <SlCalender />
+              <SlCalender/>
               <Text type="secondary">{createdText}</Text>
             </Flex>
           </TestMeta>
@@ -110,7 +104,7 @@ const PreviousTestItem = ({ item, statusColors }: PreviousTestItemProps) => {
             <AppList
               data={visibleItems || []}
               renderItem={(item: TestResultProps) => (
-                <TestResultItem item={item}  />
+                <TestResultItem item={item}/>
               )}
               onEndReached={loadMoreItems}
               footerProps={{

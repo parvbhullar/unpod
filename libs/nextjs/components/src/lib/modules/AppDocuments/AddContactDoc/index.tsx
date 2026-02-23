@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
+import {Fragment, useEffect, useState} from 'react';
 
-import { Button, Col, Form, Progress, Space, Typography } from 'antd';
-import { MdArrowUpward } from 'react-icons/md';
-import { allowedFileTypes } from '@unpod/constants';
+import {Button, Col, Form, Progress, Space, Typography} from 'antd';
+import {MdArrowUpward} from 'react-icons/md';
+import {allowedFileTypes} from '@unpod/constants';
 import {
   getDataApi,
   postDataApi,
@@ -12,40 +12,32 @@ import {
   useInfoViewActionsContext,
   useInfoViewContext,
 } from '@unpod/providers';
-import {
-  capitalizedAllWords,
-  convertMachineNameToName,
-} from '@unpod/helpers/StringHelper';
-import { fileDownload, getFileExtension } from '@unpod/helpers/FileHelper';
+import {capitalizedAllWords, convertMachineNameToName,} from '@unpod/helpers/StringHelper';
+import {fileDownload, getFileExtension} from '@unpod/helpers/FileHelper';
 import AppInput from '../../../antd/AppInput';
 import AppGridContainer from '../../../antd/AppGridContainer';
-import {
-  StyledActions,
-  StyledContainer,
-  StyledDragger,
-  StyledRoot,
-  StyledTabs,
-} from './index.styled';
-import { AppPopover } from '../../../antd';
-import { useIntl } from 'react-intl';
+import {StyledActions, StyledContainer, StyledDragger, StyledRoot, StyledTabs,} from './index.styled';
+import {AppPopover} from '../../../antd';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
-const { Text } = Typography;
+const {Item, useForm} = Form;
+const {Text} = Typography;
 
 type AddContactDocProps = {
   selectedDoc?: any;
   onCancel: () => void;
-  onDocumentAdded?: (data: any) => void;};
+  onDocumentAdded?: (data: any) => void;
+};
 
 const AddContactDoc = ({
-  selectedDoc,
-  onCancel,
-  onDocumentAdded,
-}: AddContactDocProps) => {
-  const { currentSpace, spaceSchema } = useAppSpaceContext();
+                         selectedDoc,
+                         onCancel,
+                         onDocumentAdded,
+                       }: AddContactDocProps) => {
+  const {currentSpace, spaceSchema} = useAppSpaceContext();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { loading } = useInfoViewContext();
-  const { formatMessage } = useIntl();
+  const {loading} = useInfoViewContext();
+  const {formatMessage} = useIntl();
   const [form] = useForm();
   const [downloadLoading, setDownloadLoading] = useState({
     csv: false,
@@ -60,7 +52,7 @@ const AddContactDoc = ({
   const schema = (spaceSchema as {
     properties?: Record<string, { title?: string }>;
     required?: string[];
-  }) || { properties: {}, required: [] };
+  }) || {properties: {}, required: []};
 
   const acceptMediaTypes =
     allowedFileTypes[currentSpace?.content_type || 'table'] ||
@@ -163,7 +155,7 @@ const AddContactDoc = ({
   };
 
   const onSchemaDownload = (type: 'csv' | 'xlsx') => {
-    setDownloadLoading((prev) => ({ ...prev, [type]: true }));
+    setDownloadLoading((prev) => ({...prev, [type]: true}));
     getDataApi(
       `spaces/${currentSpace?.slug}/schema-download/?type=${type}`,
       infoViewActionsContext,
@@ -180,7 +172,7 @@ const AddContactDoc = ({
 
         fileDownload(
           res,
-          `${formatMessage({ id: 'schema.schema' })}.${type}`,
+          `${formatMessage({id: 'schema.schema'})}.${type}`,
           mime,
         );
       })
@@ -188,7 +180,7 @@ const AddContactDoc = ({
         infoViewActionsContext.showError(err.message);
       })
       .finally(() => {
-        setDownloadLoading((prev) => ({ ...prev, [type]: false }));
+        setDownloadLoading((prev) => ({...prev, [type]: false}));
       });
   };
 
@@ -203,11 +195,11 @@ const AddContactDoc = ({
         onChange={setActiveTab}
         items={[
           {
-            label: formatMessage({ id: 'addContactDoc.import' }),
+            label: formatMessage({id: 'addContactDoc.import'}),
             key: 'import',
           },
           {
-            label: formatMessage({ id: 'addContactDoc.addManually' }),
+            label: formatMessage({id: 'addContactDoc.addManually'}),
             key: 'add-manually',
           },
         ]}
@@ -217,8 +209,8 @@ const AddContactDoc = ({
         {activeTab === 'import' ? (
           <Form onFinish={onSubmitSuccess} layout="vertical">
             {uploadPercent > 0 && uploadPercent < 100 ? (
-              <Item label={formatMessage({ id: 'addContactDoc.uploading' })}>
-                <Progress percent={uploadPercent} />
+              <Item label={formatMessage({id: 'addContactDoc.uploading'})}>
+                <Progress percent={uploadPercent}/>
               </Item>
             ) : (
               <Fragment>
@@ -245,12 +237,12 @@ const AddContactDoc = ({
                     <Space orientation="vertical" size={4}>
                       <Button
                         shape="circle"
-                        icon={<MdArrowUpward fontSize={21} />}
-                        style={{ marginBottom: 8 }}
+                        icon={<MdArrowUpward fontSize={21}/>}
+                        style={{marginBottom: 8}}
                       />
 
                       <Text>
-                        {formatMessage({ id: 'addContactDoc.dragDropOrClick' })}
+                        {formatMessage({id: 'addContactDoc.dragDropOrClick'})}
                       </Text>
 
                       <AppPopover
@@ -303,7 +295,7 @@ const AddContactDoc = ({
 
                 <StyledActions>
                   <Button onClick={onCancel} block>
-                    {formatMessage({ id: 'common.cancel' })}
+                    {formatMessage({id: 'common.cancel'})}
                   </Button>
 
                   <Button
@@ -312,7 +304,7 @@ const AddContactDoc = ({
                     loading={loading}
                     block
                   >
-                    {formatMessage({ id: 'common.save' })}
+                    {formatMessage({id: 'common.save'})}
                   </Button>
                 </StyledActions>
               </Fragment>
@@ -340,12 +332,12 @@ const AddContactDoc = ({
                               {
                                 id: 'validation.inputField',
                               },
-                              { field: field },
+                              {field: field},
                             ),
                           },
                         ]}
                       >
-                        <AppInput placeholder={placeholder} />
+                        <AppInput placeholder={placeholder}/>
                       </Item>
                     </Col>
                   );
@@ -358,7 +350,7 @@ const AddContactDoc = ({
               </Button>
 
               <Button type="primary" htmlType="submit" loading={loading} block>
-                {formatMessage({ id: 'common.save' })}
+                {formatMessage({id: 'common.save'})}
               </Button>
             </StyledActions>
           </Form>

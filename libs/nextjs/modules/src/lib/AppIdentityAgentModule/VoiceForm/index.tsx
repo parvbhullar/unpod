@@ -1,14 +1,5 @@
-import { type FocusEvent, Fragment, useEffect, useState } from 'react';
-import {
-  Button,
-  Divider,
-  Flex,
-  Form,
-  Radio,
-  Select,
-  Space,
-  Tooltip,
-} from 'antd';
+import {type FocusEvent, Fragment, useEffect, useState} from 'react';
+import {Button, Divider, Flex, Form, Radio, Select, Space, Tooltip,} from 'antd';
 import {
   MdAdd,
   MdDelete,
@@ -17,26 +8,20 @@ import {
   MdOutlineRecordVoiceOver,
   MdOutlineSettings,
 } from 'react-icons/md';
-import {
-  ApiOutlined,
-  AudioOutlined,
-  GlobalOutlined,
-  RobotOutlined,
-  SaveOutlined,
-} from '@ant-design/icons';
-import { useGetDataApi, useInfoViewContext } from '@unpod/providers';
-import { AppDrawer, AppInput, AppSelect } from '@unpod/components/antd';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { StyledItemRow, StyledMainContainer } from './index.styled';
+import {ApiOutlined, AudioOutlined, GlobalOutlined, RobotOutlined, SaveOutlined,} from '@ant-design/icons';
+import {useGetDataApi, useInfoViewContext} from '@unpod/providers';
+import {AppDrawer, AppInput, AppSelect} from '@unpod/components/antd';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {StyledItemRow, StyledMainContainer} from './index.styled';
 import VoiceProfiles from '../../AppAgentModule/VoiceForm/VoiceProfiles';
 import VoiceProfileCard from '../../AppAgentModule/VoiceForm/VoiceProfiles/VoiceProfileCard';
 import CardWrapper from '@unpod/components/common/CardWrapper';
-import { StickyFooter, StyledTabRoot } from '../index.styled';
-import type { ProviderModel, VoiceProfile } from '@unpod/constants/types';
+import {StickyFooter, StyledTabRoot} from '../index.styled';
+import type {ProviderModel, VoiceProfile} from '@unpod/constants/types';
 
-const { Item, List, useForm } = Form;
-const { Option } = Select;
-const { Group } = Radio;
+const {Item, List, useForm} = Form;
+const {Option} = Select;
+const {Group} = Radio;
 
 type TelephonyNumber = {
   number: string;
@@ -60,7 +45,7 @@ type VoiceFormProps = {
   updateAgentData?: (data: FormData) => void;
 };
 
-const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
+const VoiceForm = ({agentData, updateAgentData}: VoiceFormProps) => {
   const infoViewContext = useInfoViewContext();
   const [form] = useForm();
   const transcriberProviderId = Form.useWatch('transcriber_provider', form);
@@ -68,36 +53,36 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
   const transcriberModelId = Form.useWatch('transcriber_model', form);
   const voiceModelId = Form.useWatch('voice_model', form);
   const [openVoiceProfile, setOpenVoiceProfile] = useState(false);
-  const [{ apiData: telephonyNumbers }] = useGetDataApi(
+  const [{apiData: telephonyNumbers}] = useGetDataApi(
     `core/telephony-numbers/?type=agent`,
     {
       data: [],
     },
   );
   const [
-    { apiData: voiceProfile, loading: selectedVoiceLoading },
-    { setData },
+    {apiData: voiceProfile, loading: selectedVoiceLoading},
+    {setData},
   ] = useGetDataApi<VoiceProfile | null>(
     `/core/voice-profiles/${agentData?.telephony_config?.voice_profile_id}/`,
-    { data: null },
+    {data: null},
     {},
     !!agentData?.telephony_config?.voice_profile_id,
   );
 
-  const [{ apiData: providerTData, loading: providerTLoading }] = useGetDataApi<
+  const [{apiData: providerTData, loading: providerTLoading}] = useGetDataApi<
     Array<{ id: number; name: string }>
   >(`core/providers/models/?model_type=TRANSCRIBER`, {
     data: [],
   });
-  const [{ apiData: providerVData, loading: providerVLoading }] = useGetDataApi<
+  const [{apiData: providerVData, loading: providerVLoading}] = useGetDataApi<
     Array<{ id: number; name: string }>
   >(`core/providers/models/?model_type=VOICE`, {
     data: [],
   });
 
   const [
-    { apiData: transcriberModelData, loading: transcriberLoading },
-    { updateInitialUrl: updateTranscriberInitialUrl },
+    {apiData: transcriberModelData, loading: transcriberLoading},
+    {updateInitialUrl: updateTranscriberInitialUrl},
   ] = useGetDataApi<ProviderModel[]>(
     `core/providers/models/`,
     {
@@ -107,8 +92,8 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
     false,
   );
   const [
-    { apiData: voiceModelData, loading: voiceLoading },
-    { updateInitialUrl: updateVoiceInitialUrl },
+    {apiData: voiceModelData, loading: voiceLoading},
+    {updateInitialUrl: updateVoiceInitialUrl},
   ] = useGetDataApi<ProviderModel[]>(
     `core/providers/models/`,
     {
@@ -186,7 +171,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
       setOpenVoiceProfile(false);
       return;
     }
-    setData({ data: profile } as any);
+    setData({data: profile} as any);
     setOpenVoiceProfile(false);
 
     form.setFieldsValue({
@@ -251,7 +236,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
         <StyledMainContainer>
           <CardWrapper
             title="Voice Profile"
-            icon={<MdOutlineRecordVoiceOver />}
+            icon={<MdOutlineRecordVoiceOver/>}
             extra={
               ((voiceProfile as any)?.data as VoiceProfile | undefined) && (
                 <Button
@@ -316,7 +301,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
             >
               <AppSelect
                 placeholder="Transcription Provider"
-                suffixIcon={<ApiOutlined />}
+                suffixIcon={<ApiOutlined/>}
                 loading={providerTLoading}
               >
                 {((providerTData as any)?.data ?? []).map(
@@ -345,7 +330,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
             >
               <AppSelect
                 placeholder="Transcription model"
-                suffixIcon={<RobotOutlined />}
+                suffixIcon={<RobotOutlined/>}
                 loading={transcriberLoading}
                 disabled={transcriberModelData?.data?.length === 0}
                 // onChange={handleModelChange}
@@ -364,11 +349,11 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
               hidden
               name="transcriber_language"
               help="Language for speech recognition"
-              rules={[{ required: true, message: 'Please select a language' }]}
+              rules={[{required: true, message: 'Please select a language'}]}
             >
               <AppSelect
                 placeholder="Language for transcription"
-                suffixIcon={<GlobalOutlined />}
+                suffixIcon={<GlobalOutlined/>}
                 loading={transcriberLoading}
                 disabled={languageData?.length === 0}
               >
@@ -389,12 +374,12 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
               name="voice_provider"
               help="Voice service provider"
               rules={[
-                { required: true, message: 'Please select a voice provider' },
+                {required: true, message: 'Please select a voice provider'},
               ]}
             >
               <AppSelect
                 placeholder="Voice Provider"
-                suffixIcon={<ApiOutlined />}
+                suffixIcon={<ApiOutlined/>}
                 loading={providerVLoading}
               >
                 {((providerVData as any)?.data ?? []).map(
@@ -415,12 +400,12 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
               name="voice_model"
               help="Model that will process the audio"
               rules={[
-                { required: true, message: 'Please select a voice model' },
+                {required: true, message: 'Please select a voice model'},
               ]}
             >
               <AppSelect
                 placeholder="Voice model"
-                suffixIcon={<RobotOutlined />}
+                suffixIcon={<RobotOutlined/>}
                 loading={voiceLoading}
                 disabled={voiceModelData?.data?.length === 0}
               >
@@ -438,11 +423,11 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
               hidden
               name="voice"
               help="Voice that will be used for text-to-speech"
-              rules={[{ required: true, message: 'Please select a voice' }]}
+              rules={[{required: true, message: 'Please select a voice'}]}
             >
               <AppSelect
                 placeholder="Synthesized voice"
-                suffixIcon={<AudioOutlined />}
+                suffixIcon={<AudioOutlined/>}
                 disabled={voiceData?.length === 0}
               >
                 {(voiceData ?? []).map((item) => (
@@ -454,18 +439,18 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
             </Item>
           </>
 
-          <CardWrapper icon={<MdOutlinePhoneEnabled />} title="Telephony">
+          <CardWrapper icon={<MdOutlinePhoneEnabled/>} title="Telephony">
             <Item
               name="phone_numbers"
               help="Select a phone number for voice interactions"
               rules={[
-                { required: true, message: 'Please select a phone number' },
+                {required: true, message: 'Please select a phone number'},
               ]}
             >
               <AppSelect
                 placeholder="Phone number for this agent"
                 mode="multiple"
-                suffixIcon={<MdOutlinePhoneEnabled fontSize={16} />}
+                suffixIcon={<MdOutlinePhoneEnabled fontSize={16}/>}
               >
                 {(
                   ((telephonyNumbers as any)?.data ?? []) as TelephonyNumber[]
@@ -478,7 +463,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
             </Item>
           </CardWrapper>
 
-          <CardWrapper title="Config" icon={<MdOutlineSettings />}>
+          <CardWrapper title="Config" icon={<MdOutlineSettings/>}>
             {/*<StyledLabel>Config</StyledLabel>*/}
             <List name="config_items">
               {(
@@ -489,7 +474,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                 }: { add: () => void; remove: (index: number) => void },
               ) => (
                 <Fragment>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields.map(({key, name, ...restField}) => (
                     <StyledItemRow key={key}>
                       <Item
                         {...restField}
@@ -514,7 +499,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                               if (items[name]) {
                                 items[name].config_key = formattedKey;
                               }
-                              form.setFieldsValue({ config_items: items });
+                              form.setFieldsValue({config_items: items});
                             }
                           }}
                           asterisk
@@ -531,14 +516,14 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                           },
                         ]}
                       >
-                        <AppInput placeholder="Config Value" asterisk />
+                        <AppInput placeholder="Config Value" asterisk/>
                       </Item>
 
                       <Item>
                         <Button
                           type="primary"
                           onClick={() => remove(name)}
-                          icon={<MdDelete fontSize={18} />}
+                          icon={<MdDelete fontSize={18}/>}
                           danger
                           ghost
                         />
@@ -551,7 +536,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                       type="dashed"
                       onClick={() => add()}
                       block
-                      icon={<MdAdd />}
+                      icon={<MdAdd/>}
                     >
                       Add field
                     </Button>
@@ -564,12 +549,12 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
       </StyledTabRoot>
 
       <StickyFooter>
-        <Divider />
+        <Divider/>
         <Flex justify="end">
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext.loading}
           >
             Save
@@ -589,7 +574,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                 type="text"
                 size="small"
                 shape="circle"
-                icon={<MdOutlineClose fontSize={21} />}
+                icon={<MdOutlineClose fontSize={21}/>}
                 onClick={() => setOpenVoiceProfile(false)}
               />
             </Tooltip>

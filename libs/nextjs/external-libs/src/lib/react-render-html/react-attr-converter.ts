@@ -1,7 +1,8 @@
 'use strict';
 
 type AttributeMap = {
-  [key: string]: string;};
+  [key: string]: string;
+};
 
 // Copied from https://facebook.github.io/react/docs/dom-elements.html
 const map: AttributeMap = {

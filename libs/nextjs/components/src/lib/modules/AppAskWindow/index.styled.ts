@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Input, Select, Typography } from 'antd';
+import {Input, Select, Typography} from 'antd';
 
 export const StyledTopBar = styled.div`
   display: flex;
@@ -15,18 +15,18 @@ export const StyledIconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   padding: 5px;
-  background-color: ${({ theme }) => theme.palette.primary}33;
-  border: 1px solid ${({ theme }) => theme.palette.primary}33;
+  background-color: ${({theme}) => theme.palette.primary}33;
+  border: 1px solid ${({theme}) => theme.palette.primary}33;
   border-radius: 5px;
-  color: ${({ theme }) => theme.palette.primary}99 !important;
+  color: ${({theme}) => theme.palette.primary}99 !important;
 `;
 
 export const StylesPilotLogo = styled.div`
   position: relative;
   width: 30px;
   height: 30px;
-  // border: 1px solid ${({ theme }) => theme.border.color};
-  border: 1px solid ${({ theme }) => theme.palette.primary}33;
+  // border: 1px solid ${({theme}) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.palette.primary}33;
   border-radius: 5px;
   overflow: hidden;
 `;
@@ -44,7 +44,7 @@ export const StyledCloseButton = styled.div`
   margin-left: -5px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.background.colorPrimaryBg};
+    background-color: ${({theme}) => theme.palette.background.colorPrimaryBg};
   }
 `;
 
@@ -63,13 +63,13 @@ export const StyledBottomBar = styled.div`
 `;
 
 export const StyledRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  background-color: ${({theme}) => theme.palette.background.default};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 20px auto;
   position: relative;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
   padding: 16px;
   z-index: 101;
 
@@ -124,11 +124,11 @@ export const StyledOverlay = styled.div`
 
 export const StyledEscapeText = styled(Typography.Paragraph)`
   text-align: center;
-  /*background-color: ${({ theme }) => theme.palette.background.default};
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  /*background-color: ${({theme}) => theme.palette.background.default};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;*/
   margin: 0 auto -13px !important;
   // padding: 10px 18px;
-  /*border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};*/
+  /*border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};*/
 `;

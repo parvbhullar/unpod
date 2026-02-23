@@ -1,27 +1,23 @@
-import { Fragment, useEffect, useState } from 'react';
-import { Form, Space, Typography, Upload } from 'antd';
-import {
-  StyledInputWrapper,
-  StyledItemWrapper,
-  StylesImageWrapper,
-} from './index.styled';
-import { PRIVACY_TYPES } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { AppInput, AppSelect, AppTextArea } from '@unpod/components/antd';
-import { MdOutlinePrivacyTip } from 'react-icons/md';
+import {Fragment, useEffect, useState} from 'react';
+import {Form, Space, Typography, Upload} from 'antd';
+import {StyledInputWrapper, StyledItemWrapper, StylesImageWrapper,} from './index.styled';
+import {PRIVACY_TYPES} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {AppInput, AppSelect, AppTextArea} from '@unpod/components/antd';
+import {MdOutlinePrivacyTip} from 'react-icons/md';
 import AppSharedUserList from '@unpod/components/common/AppSharedUserList';
 import CardWrapper from '@unpod/components/common/CardWrapper';
 import AppImage from '@unpod/components/next/AppImage';
-import { IoInformationCircleOutline } from 'react-icons/io5';
-import { useIntl } from 'react-intl';
-import { useInfoViewActionsContext } from '@unpod/providers';
-import type { Pilot, InviteMember } from '@unpod/constants/types';
+import {IoInformationCircleOutline} from 'react-icons/io5';
+import {useIntl} from 'react-intl';
+import {useInfoViewActionsContext} from '@unpod/providers';
+import type {InviteMember, Pilot} from '@unpod/constants/types';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 const acceptTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-const { Item } = Form;
+const {Item} = Form;
 
 type IdentityFormProps = {
   setLogoFile: (file: File) => void;
@@ -33,15 +29,15 @@ type IdentityFormProps = {
 };
 
 const IdentityForm = ({
-  setLogoFile,
-  agentData,
-  privacyType,
-  setUserList,
-  userList,
-  hideNameField = false,
-}: IdentityFormProps) => {
+                        setLogoFile,
+                        agentData,
+                        privacyType,
+                        setUserList,
+                        userList,
+                        hideNameField = false,
+                      }: IdentityFormProps) => {
   const [logo, setLogo] = useState('');
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const infoViewActionsContext = useInfoViewActionsContext();
 
   useEffect(() => {
@@ -60,7 +56,7 @@ const IdentityForm = ({
 
     if (!isAllowedExtension && !isAllowedMime) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'upload.errorInvalidFileType' }),
+        formatMessage({id: 'upload.errorInvalidFileType'}),
       );
       return false;
     }
@@ -77,7 +73,7 @@ const IdentityForm = ({
           {!hideNameField && (
             <>
               <Paragraph strong>
-                {formatMessage({ id: 'identityOnboarding.identityName' })}
+                {formatMessage({id: 'identityOnboarding.identityName'})}
               </Paragraph>
               <Item
                 name="name"
@@ -107,8 +103,8 @@ const IdentityForm = ({
           )}
 
           <CardWrapper
-            title={formatMessage({ id: 'identityOnboarding.description' })}
-            icon={<IoInformationCircleOutline size={17} />}
+            title={formatMessage({id: 'identityOnboarding.description'})}
+            icon={<IoInformationCircleOutline size={17}/>}
           >
             <Item
               name="description"
@@ -127,7 +123,7 @@ const IdentityForm = ({
                 })}
                 asterisk
                 rows={4}
-                autosize={{ minRows: 4, maxRows: 6 }}
+                autosize={{minRows: 4, maxRows: 6}}
               />
             </Item>
           </CardWrapper>
@@ -151,8 +147,8 @@ const IdentityForm = ({
       </StyledItemWrapper>
 
       <CardWrapper
-        title={formatMessage({ id: 'identityOnboarding.privacy' })}
-        icon={<MdOutlinePrivacyTip />}
+        title={formatMessage({id: 'identityOnboarding.privacy'})}
+        icon={<MdOutlinePrivacyTip/>}
       >
         <Item
           name="privacy_type"
@@ -174,7 +170,7 @@ const IdentityForm = ({
               label: (
                 <Space>
                   {item.icon}
-                  {formatMessage({ id: item.label })}
+                  {formatMessage({id: item.label})}
                 </Space>
               ),
             }))}
@@ -184,7 +180,7 @@ const IdentityForm = ({
 
         {privacyType === 'shared' && (
           <Form.Item name="sharedFields">
-            <AppSharedUserList users={userList} onChangeUsers={setUserList} />
+            <AppSharedUserList users={userList} onChangeUsers={setUserList}/>
           </Form.Item>
         )}
       </CardWrapper>

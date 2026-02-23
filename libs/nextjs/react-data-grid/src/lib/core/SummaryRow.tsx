@@ -1,15 +1,11 @@
-import { memo } from 'react';
+import {memo} from 'react';
 import styled from 'styled-components';
 import clsx from 'clsx';
 
-import { getColSpan, getRowStyle } from './utils';
-import type { RenderRowProps } from './models/data-grid';
-import { CellFrozen, StyledCellWrapper } from './style/cell';
-import {
-  rowClassname,
-  rowSelectedClassname,
-  StyledRowWrapper,
-} from './style/row';
+import {getColSpan, getRowStyle} from './utils';
+import type {RenderRowProps} from './models/data-grid';
+import {CellFrozen, StyledCellWrapper} from './style/cell';
+import {rowClassname, rowSelectedClassname, StyledRowWrapper,} from './style/row';
 import SummaryCell from './SummaryCell';
 
 type SharedRenderRowProps<R, SR> = Pick<
@@ -26,7 +22,8 @@ type SummaryRowProps<R, SR> = SharedRenderRowProps<R, SR> & {
   selectedCellIdx: number | undefined;
   isTop: boolean;
   showBorder: boolean;
-  rowKeyId: string;};
+  rowKeyId: string;
+};
 
 const StyledSummaryRow = styled(StyledRowWrapper)`
   &.rdg-summary-row {
@@ -49,32 +46,32 @@ const StyledSummaryRow = styled(StyledRowWrapper)`
   &.top-summary-row-border {
     > ${StyledCellWrapper} {
       border-block-end: 2px solid
-        ${({ theme }: { theme: any }) => theme.table.borderColor};
+        ${({theme}: { theme: any }) => theme.table.borderColor};
     }
   }
   &.bottom-summary-row-border {
     > ${StyledCellWrapper} {
       border-block-start: 2px solid
-        ${({ theme }: { theme: any }) => theme.table.borderColor};
+        ${({theme}: { theme: any }) => theme.table.borderColor};
     }
   }
 `;
 
 function SummaryRow<R, SR>({
-  rowIdx,
-  gridRowStart,
-  row,
-  viewportColumns,
-  top,
-  bottom,
-  selectedCellIdx,
-  isTop,
-  selectCell,
-  'aria-rowindex': ariaRowIndex,
-  lastLeftFixedColumnIndex,
-  showBorder,
-  rowKeyId,
-}: SummaryRowProps<R, SR>) {
+                             rowIdx,
+                             gridRowStart,
+                             row,
+                             viewportColumns,
+                             top,
+                             bottom,
+                             selectedCellIdx,
+                             isTop,
+                             selectCell,
+                             'aria-rowindex': ariaRowIndex,
+                             lastLeftFixedColumnIndex,
+                             showBorder,
+                             rowKeyId,
+                           }: SummaryRowProps<R, SR>) {
   const cells = [];
   for (let index = 0; index < viewportColumns.length; index++) {
     const column = viewportColumns[index];

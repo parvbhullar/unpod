@@ -1,4 +1,4 @@
-import { lighten } from 'polished';
+import {lighten} from 'polished';
 
 // Breakpoint interfaces
 type ThemeBreakpoints = {
@@ -8,7 +8,8 @@ type ThemeBreakpoints = {
   md: number;
   lg: number;
   xl: number;
-  xxl: number;};
+  xxl: number;
+};
 
 // Font interfaces
 type ThemeFontWeight = {
@@ -16,37 +17,45 @@ type ThemeFontWeight = {
   regular: number;
   medium: number;
   semiBold: number;
-  bold: number;};
+  bold: number;
+};
 
 type ThemeFontSize = {
   base: string;
   lg: string;
-  sm: string;};
+  sm: string;
+};
 
 type ThemeFont = {
   family: string;
   weight: ThemeFontWeight;
-  size: ThemeFontSize;};
+  size: ThemeFontSize;
+};
 
 // Layout interfaces
 type ThemeLayoutHeader = {
-  height: number;};
+  height: number;
+};
 
 type ThemeLayoutSidebar = {
   width: number;
-  collapsedWidth: number;};
+  collapsedWidth: number;
+};
 
 type ThemeLayoutMain = {
   header: ThemeLayoutHeader;
-  sidebar: ThemeLayoutSidebar;};
+  sidebar: ThemeLayoutSidebar;
+};
 
 type ThemeLayout = {
-  main: ThemeLayoutMain;};
+  main: ThemeLayoutMain;
+};
 
 // Palette interfaces
 type ThemePaletteCommon = {
   black: string;
-  white: string;};
+  white: string;
+};
 
 type ThemePaletteText = {
   primary: string;
@@ -55,7 +64,8 @@ type ThemePaletteText = {
   dark: string;
   light: string;
   heading: string;
-  subheading: string;};
+  subheading: string;
+};
 
 type ThemePaletteBackground = {
   default: string;
@@ -63,7 +73,8 @@ type ThemePaletteBackground = {
   component: string;
   header: string;
   colorPrimaryBg: string;
-  disabled: string;};
+  disabled: string;
+};
 
 type ThemePalette = {
   common: ThemePaletteCommon;
@@ -80,7 +91,8 @@ type ThemePalette = {
   infoBorder: string;
   infoBg: string;
   text: ThemePaletteText;
-  background: ThemePaletteBackground;};
+  background: ThemePaletteBackground;
+};
 
 // Space interface
 type ThemeSpace = {
@@ -89,58 +101,69 @@ type ThemeSpace = {
   md: string;
   sm: string;
   xs: string;
-  xss: string;};
+  xss: string;
+};
 
 // Height rules interface
 type ThemeHeightRules = {
   base: string;
   lg: string;
-  sm: string;};
+  sm: string;
+};
 
 // Border interface
 type ThemeBorder = {
   color: string;
   style: string;
-  width: string;};
+  width: string;
+};
 
 // Radius interface
 type ThemeRadius = {
   base: number;
   sm: number;
   circle: string;
-  button: number;};
+  button: number;
+};
 
 // Component interfaces
 type ThemeComponentGrid = {
-  gutter: number;};
+  gutter: number;
+};
 
 type ThemeComponentTable = {
   headBackground: string;
-  rowHover: string;};
+  rowHover: string;
+};
 
 type ThemeComponentCard = {
   boxShadow: string;
   borderRadius: string;
-  headerBgColor: string;};
+  headerBgColor: string;
+};
 
 type ThemeComponentTabs = {
   bgColor: string;
-  hoverBgColor: string;};
+  hoverBgColor: string;
+};
 
 type ThemeComponentCheckbox = {
-  borderRadius: string;};
+  borderRadius: string;
+};
 
 type ThemeComponent = {
   grid: ThemeComponentGrid;
   table: ThemeComponentTable;
   card: ThemeComponentCard;
   tabs: ThemeComponentTabs;
-  checkbox: ThemeComponentCheckbox;};
+  checkbox: ThemeComponentCheckbox;
+};
 
 // Sizes interface
 type ThemeSizes = {
   mainContentWidth: string;
-  cardContentMaxWidth: number;};
+  cardContentMaxWidth: number;
+};
 
 // Main global theme interface
 export type GlobalTheme = {
@@ -153,7 +176,8 @@ export type GlobalTheme = {
   border: ThemeBorder;
   radius: ThemeRadius;
   component: ThemeComponent;
-  sizes: ThemeSizes;};
+  sizes: ThemeSizes;
+};
 
 const themeBreakpoints: ThemeBreakpoints = {
   xss: 360,

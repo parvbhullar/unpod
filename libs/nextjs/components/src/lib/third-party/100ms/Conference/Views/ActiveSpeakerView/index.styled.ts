@@ -6,7 +6,7 @@ export const StyledContainer = styled.div`
   width: 100%;
   height: 100%;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     flex-direction: column;
   }
 `;

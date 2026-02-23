@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import esMessages from '../locales/es_ES.json';
 import esES from 'antd/lib/locale/es_ES';
 

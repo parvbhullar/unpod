@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import {ReactNode} from 'react';
 import {
   MdChecklist,
   MdDataObject,
@@ -8,7 +8,7 @@ import {
   MdPhone,
   MdPublic,
 } from 'react-icons/md';
-import { RiUserSharedLine } from 'react-icons/ri';
+import {RiUserSharedLine} from 'react-icons/ri';
 import {
   AlignLeftOutlined,
   CalculatorOutlined,
@@ -17,7 +17,7 @@ import {
   MailOutlined,
   ProfileOutlined,
 } from '@ant-design/icons';
-import { BsTextareaResize } from 'react-icons/bs';
+import {BsTextareaResize} from 'react-icons/bs';
 
 export const TAG_BACKGROUND_COLORS = ['#FCFFD5', '#CEFCFF', '#CED3FF'] as const;
 
@@ -35,7 +35,7 @@ export const PRIVACY_TYPES: PrivacyType[] = [
     label: 'permission.public',
     icon: (
       <span className="anticon">
-        <MdPublic fontSize={21} />
+        <MdPublic fontSize={21}/>
       </span>
     ),
   },
@@ -45,7 +45,7 @@ export const PRIVACY_TYPES: PrivacyType[] = [
     label: 'permission.private',
     icon: (
       <span className="anticon">
-        <RiUserSharedLine fontSize={21} />
+        <RiUserSharedLine fontSize={21}/>
       </span>
     ),
   },
@@ -64,30 +64,30 @@ export const PERMISSION_TYPES: PermissionType[] = [
     label: 'permission.public',
     icon: (
       <span className="anticon">
-        <MdPublic fontSize={18} />
+        <MdPublic fontSize={18}/>
       </span>
     ),
-    iconOnly: <MdPublic fontSize={18} />,
+    iconOnly: <MdPublic fontSize={18}/>,
   },
   {
     key: 'shared',
     label: 'permission.shared',
     icon: (
       <span className="anticon">
-        <RiUserSharedLine fontSize={18} />
+        <RiUserSharedLine fontSize={18}/>
       </span>
     ),
-    iconOnly: <RiUserSharedLine fontSize={18} />,
+    iconOnly: <RiUserSharedLine fontSize={18}/>,
   },
   {
     key: 'private',
     label: 'permission.private',
     icon: (
       <span className="anticon">
-        <MdLockOutline fontSize={18} />
+        <MdLockOutline fontSize={18}/>
       </span>
     ),
-    iconOnly: <MdLockOutline fontSize={18} />,
+    iconOnly: <MdLockOutline fontSize={18}/>,
   },
 ];
 
@@ -113,23 +113,23 @@ export const CRETE_CONTENT_ITEMS: ContentItem[] = [
 ];
 
 export const INPUT_TYPE_ICONS: Record<string, ReactNode> = {
-  text: <AlignLeftOutlined />,
-  string: <AlignLeftOutlined />,
-  textarea: <BsTextareaResize />,
-  email: <MailOutlined />,
-  number: <CalculatorOutlined />,
-  integer: <CalculatorOutlined />,
-  file: <FileAddOutlined />,
-  phone: <MdPhone />,
-  url: <MdLink />,
-  json: <MdDataObject fontSize={20} style={{ marginLeft: -3 }} />,
-  form: <MdFormatListBulleted fontSize={20} style={{ marginLeft: -3 }} />,
-  date: <CalendarOutlined />,
-  time: <CalendarOutlined />,
-  datetime: <CalendarOutlined />,
-  checkboxes: <MdChecklist />,
-  select: <ProfileOutlined />,
-  'multi-select': <ProfileOutlined />,
+  text: <AlignLeftOutlined/>,
+  string: <AlignLeftOutlined/>,
+  textarea: <BsTextareaResize/>,
+  email: <MailOutlined/>,
+  number: <CalculatorOutlined/>,
+  integer: <CalculatorOutlined/>,
+  file: <FileAddOutlined/>,
+  phone: <MdPhone/>,
+  url: <MdLink/>,
+  json: <MdDataObject fontSize={20} style={{marginLeft: -3}}/>,
+  form: <MdFormatListBulleted fontSize={20} style={{marginLeft: -3}}/>,
+  date: <CalendarOutlined/>,
+  time: <CalendarOutlined/>,
+  datetime: <CalendarOutlined/>,
+  checkboxes: <MdChecklist/>,
+  select: <ProfileOutlined/>,
+  'multi-select': <ProfileOutlined/>,
 };
 
 export type InputTypeConfig = {
@@ -155,7 +155,7 @@ export const INPUT_TYPES: InputTypeConfig[] = [
     placeholder: 'input.file',
     required: true,
   },
-  { type: 'separator' },
+  {type: 'separator'},
 
   {
     type: 'json',
@@ -172,7 +172,7 @@ export const INPUT_TYPES: InputTypeConfig[] = [
     placeholder: 'input.number',
     required: true,
   },
-  { type: 'separator' },
+  {type: 'separator'},
 
   {
     type: 'email',
@@ -189,7 +189,7 @@ export const INPUT_TYPES: InputTypeConfig[] = [
     placeholder: 'input.url',
     required: true,
   },
-  { type: 'separator' },
+  {type: 'separator'},
 
   {
     type: 'date',
@@ -206,7 +206,7 @@ export const INPUT_TYPES: InputTypeConfig[] = [
     placeholder: 'input.datetime',
     required: true,
   },
-  { type: 'separator' },
+  {type: 'separator'},
 
   {
     type: 'checkboxes',

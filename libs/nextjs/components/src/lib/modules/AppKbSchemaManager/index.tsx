@@ -1,30 +1,25 @@
 'use client';
-import type { Dispatch, SetStateAction } from 'react';
-import { useCallback, useState } from 'react';
+import type {Dispatch, SetStateAction} from 'react';
+import {useCallback, useState} from 'react';
 
-import { Button, Form, Modal, Space, Tooltip } from 'antd';
-import { MdAdd } from 'react-icons/md';
-import { TbJson } from 'react-icons/tb';
+import {Button, Form, Modal, Space, Tooltip} from 'antd';
+import {MdAdd} from 'react-icons/md';
+import {TbJson} from 'react-icons/tb';
 import AppCopyToClipboard from '../../third-party/AppCopyToClipboard';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { putDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { randomId } from '@unpod/helpers/GlobalHelper';
-import { generateKbSchema } from '@unpod/helpers/AppKbHelper';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {putDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {randomId} from '@unpod/helpers/GlobalHelper';
+import {generateKbSchema} from '@unpod/helpers/AppKbHelper';
 import AppInputSelector from '../../antd/AppInputSelector';
 import AppCodeEditor from '../../third-party/AppCodeEditor';
 import ManageDetails from './ManageDetails';
 import InputRow from './InputRow';
-import {
-  StyledCopyWrapper,
-  StyledHeaderRow,
-  StyledList,
-  StyledSchemaBody,
-} from './index.styled';
-import { DrawerBody, DrawerFooter } from '../../antd';
-import { useIntl } from 'react-intl';
-import { Spaces } from '@unpod/constants/types';
+import {StyledCopyWrapper, StyledHeaderRow, StyledList, StyledSchemaBody,} from './index.styled';
+import {DrawerBody, DrawerFooter} from '../../antd';
+import {useIntl} from 'react-intl';
+import {Spaces} from '@unpod/constants/types';
 
-const { Item } = Form;
+const {Item} = Form;
 
 type SchemaInput = {
   id: string | number;
@@ -50,16 +45,16 @@ type AppKbSchemaManagerProps = {
 };
 
 const AppKbSchemaManager = ({
-  title,
-  currentKb,
-  $bodyHeight,
-  inputs,
-  setInputs,
-  onClose,
-  setSpaceSchema,
-}: AppKbSchemaManagerProps) => {
+                              title,
+                              currentKb,
+                              $bodyHeight,
+                              inputs,
+                              setInputs,
+                              onClose,
+                              setSpaceSchema,
+                            }: AppKbSchemaManagerProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
@@ -74,7 +69,7 @@ const AppKbSchemaManager = ({
       name: '',
       title: '',
       placeholder: input.placeholder
-        ? formatMessage({ id: input.placeholder })
+        ? formatMessage({id: input.placeholder})
         : '',
       defaultValue: '',
       description: '',
@@ -142,7 +137,7 @@ const AppKbSchemaManager = ({
     setInputs((fields) =>
       fields.map((data) => {
         if (selectedItem && selectedItem.id === data.id) {
-          data = { ...data, ...values };
+          data = {...data, ...values};
         }
 
         return data;
@@ -167,7 +162,7 @@ const AppKbSchemaManager = ({
     const schema = generateKbSchema(inputs);
     setSpaceSchema?.(schema);
 
-    putDataApi(`spaces/${currentKb?.slug}/`, infoViewActionsContext, { schema })
+    putDataApi(`spaces/${currentKb?.slug}/`, infoViewActionsContext, {schema})
       .then((data: any) => {
         infoViewActionsContext.showMessage(data.message);
         onClose?.();
@@ -205,15 +200,15 @@ const AppKbSchemaManager = ({
                 type="primary"
                 ghost
                 shape="round"
-                icon={<MdAdd fontSize={16} />}
+                icon={<MdAdd fontSize={16}/>}
                 onClick={() => setInputModalOpen(!inputModalOpen)}
               >
-                {formatMessage({ id: 'common.addField' })}
+                {formatMessage({id: 'common.addField'})}
               </Button>
             </AppInputSelector>
 
             <Tooltip
-              title={formatMessage({ id: 'appKbSchema.viewSchemaJson' })}
+              title={formatMessage({id: 'appKbSchema.viewSchemaJson'})}
             >
               <Button
                 size="small"
@@ -222,7 +217,7 @@ const AppKbSchemaManager = ({
                 ghost
                 onClick={onViewSchemaJson}
               >
-                <TbJson fontSize={21} />
+                <TbJson fontSize={21}/>
               </Button>
             </Tooltip>
           </Space>
@@ -253,10 +248,10 @@ const AppKbSchemaManager = ({
 
       <DrawerFooter>
         <Button onClick={onClose}>
-          {formatMessage({ id: 'common.close' })}
+          {formatMessage({id: 'common.close'})}
         </Button>
         <Button type="primary" onClick={onSaveClick}>
-          {formatMessage({ id: 'common.save' })}
+          {formatMessage({id: 'common.save'})}
         </Button>
       </DrawerFooter>
 
@@ -270,7 +265,7 @@ const AppKbSchemaManager = ({
       />
 
       <Modal
-        title={formatMessage({ id: 'appKbSchema.schemaTitle' })}
+        title={formatMessage({id: 'appKbSchema.schemaTitle'})}
         open={openSchema}
         onCancel={() => setOpenSchema(false)}
         footer={null}
@@ -279,11 +274,11 @@ const AppKbSchemaManager = ({
       >
         <StyledSchemaBody>
           <StyledCopyWrapper>
-            <AppCopyToClipboard text={schemaJson} title="" />
+            <AppCopyToClipboard text={schemaJson} title=""/>
           </StyledCopyWrapper>
 
           <AppCodeEditor
-            placeholder={formatMessage({ id: 'appKbSchema.schemaPlaceholder' })}
+            placeholder={formatMessage({id: 'appKbSchema.schemaPlaceholder'})}
             defaultValue={schemaJson}
             defaultLanguage="json"
             height={350}

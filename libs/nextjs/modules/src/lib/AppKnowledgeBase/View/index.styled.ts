@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Typography } from 'antd';
+import {Button, Typography} from 'antd';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 export const StyledTableRoot = styled.div`
   padding: 0;
@@ -25,8 +25,8 @@ export const StyledButton = styled(Button)`
 
 export const StyledUploadRoot = styled.div`
   padding: 16px;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
   min-height: 100%;
   display: flex;
   justify-content: center;
@@ -36,7 +36,7 @@ export const StyledUploadRoot = styled.div`
 
 export const StyledNoAccessContainer = styled.div`
   margin: 16px auto;
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   flex: 1;
   display: flex;

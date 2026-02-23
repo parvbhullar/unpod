@@ -1,4 +1,4 @@
-import type { LanguageData } from './types';
+import type {LanguageData} from './types';
 
 const languageData: LanguageData[] = [
   {

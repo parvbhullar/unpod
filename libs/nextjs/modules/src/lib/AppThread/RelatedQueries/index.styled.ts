@@ -12,9 +12,9 @@ export const StyledSourceList = styled.div`
   flex-direction: column;
   gap: 0;
   padding: 0;
-  /*background-color: ${({ theme }) => theme.palette.background.default};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};*/
+  /*background-color: ${({theme}) => theme.palette.background.default};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};*/
   overflow: hidden;
   margin: 0;
   list-style: none;
@@ -26,7 +26,7 @@ export const StyledContent = styled.div`
   // justify-content: space-between;
   gap: 16px;
   padding: 16px;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   cursor: pointer;
   transition: background-color 0.3s;
 `;
@@ -37,6 +37,6 @@ export const StyledListItem = styled.li`
   padding: 0;
 
   &:hover ${StyledContent} {
-    background-color: ${({ theme }) => theme.palette.background.component};
+    background-color: ${({theme}) => theme.palette.background.component};
   }
 `;

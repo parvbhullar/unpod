@@ -1,5 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
 import {
   StyledButton,
@@ -12,9 +12,9 @@ import {
   StyledTitleBlock,
 } from './index.styled';
 import AppToggleSidebar from '../../../../AppToggleSidebar';
-import { useAuthContext } from '@unpod/providers';
+import {useAuthContext} from '@unpod/providers';
 import ListingOptions from './ListingOptions';
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
 type PageBaseHeaderProps = {
   leftOptions?: ReactNode;
@@ -25,21 +25,22 @@ type PageBaseHeaderProps = {
   isListingPage?: boolean;
   hideToggleBtn?: boolean;
   hideAuthBtn?: boolean;
-  children?: ReactNode;};
+  children?: ReactNode;
+};
 
 const PageBaseHeader = ({
-  leftOptions,
-  rightOptions,
-  centerOptions,
-  pageTitle,
-  titleIcon,
-  isListingPage,
-  hideToggleBtn,
-  hideAuthBtn,
-  children,
-}: PageBaseHeaderProps) => {
+                          leftOptions,
+                          rightOptions,
+                          centerOptions,
+                          pageTitle,
+                          titleIcon,
+                          isListingPage,
+                          hideToggleBtn,
+                          hideAuthBtn,
+                          children,
+                        }: PageBaseHeaderProps) => {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const {isAuthenticated, isLoading} = useAuthContext();
   // const [isScrolled, setScrolled] = useState(false);
 
   /*useEffect(() => {
@@ -54,7 +55,7 @@ const PageBaseHeader = ({
       {children || (
         <StyledContainer $hasCenter={!!centerOptions}>
           <StyledLeftContainer>
-            {!hideToggleBtn && <AppToggleSidebar />}
+            {!hideToggleBtn && <AppToggleSidebar/>}
 
             {pageTitle &&
               (typeof pageTitle === 'string' ? (
@@ -63,7 +64,7 @@ const PageBaseHeader = ({
                   <StyledMainTitle
                     level={1}
                     className="mb-0"
-                    ellipsis={{ rows: 1 }}
+                    ellipsis={{rows: 1}}
                   >
                     {pageTitle}
                   </StyledMainTitle>
@@ -98,7 +99,7 @@ const PageBaseHeader = ({
           </StyledCenterContainer>*/}
 
           <StyledRightContainer>
-            {isListingPage && <ListingOptions />}
+            {isListingPage && <ListingOptions/>}
             {rightOptions}
             {!isAuthenticated && !isLoading && !hideAuthBtn && (
               <>

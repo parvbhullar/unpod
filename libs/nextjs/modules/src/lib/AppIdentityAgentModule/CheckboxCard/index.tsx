@@ -1,13 +1,9 @@
-import {
-  StyledCardIcon,
-  StyledCheckableTag,
-  StyledSubtitle,
-} from './index.styled';
-import { Flex, Typography } from 'antd';
-import type { ReactNode } from 'react';
-import { useIntl } from 'react-intl';
+import {StyledCardIcon, StyledCheckableTag, StyledSubtitle,} from './index.styled';
+import {Flex, Typography} from 'antd';
+import type {ReactNode} from 'react';
+import {useIntl} from 'react-intl';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type CheckboxItem = {
   key: string | number;
@@ -23,8 +19,8 @@ type CheckboxCardProps = {
   isChecked: (label: string) => boolean;
 };
 
-const CheckboxCard = ({ item, handleChange, isChecked }: CheckboxCardProps) => {
-  const { formatMessage } = useIntl();
+const CheckboxCard = ({item, handleChange, isChecked}: CheckboxCardProps) => {
+  const {formatMessage} = useIntl();
 
   return (
     <StyledCheckableTag
@@ -33,16 +29,16 @@ const CheckboxCard = ({ item, handleChange, isChecked }: CheckboxCardProps) => {
       onChange={(checked) => handleChange(item.label, checked)}
     >
       {item.icon && (
-        <StyledCardIcon style={{ color: item.color }}>
+        <StyledCardIcon style={{color: item.color}}>
           {item.icon}
         </StyledCardIcon>
       )}
       <Flex vertical justify="center" align="center">
-        <Text strong style={{ margin: 0 }}>
-          {formatMessage({ id: item.label })}
+        <Text strong style={{margin: 0}}>
+          {formatMessage({id: item.label})}
         </Text>
         <StyledSubtitle type="secondary">
-          {formatMessage({ id: item.desc })}
+          {formatMessage({id: item.desc})}
         </StyledSubtitle>
       </Flex>
     </StyledCheckableTag>

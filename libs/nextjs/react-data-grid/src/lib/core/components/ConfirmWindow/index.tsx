@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import type { PopoverProps } from 'antd';
-import { Popconfirm } from 'antd';
-import type { ConfirmWindowProps } from '../../models/data-grid';
+import {useState} from 'react';
+import type {PopoverProps} from 'antd';
+import {Popconfirm} from 'antd';
+import type {ConfirmWindowProps} from '../../models/data-grid';
 
 const ConfirmWindow = ({
-  title,
-  message = 'Are you sure to delete this record?',
-  onConfirm,
-  onCancel,
-  canBtnText = 'Cancel',
-  confBtnText = 'Yes',
-  ...restProps
-}: PopoverProps & ConfirmWindowProps) => {
+                         title,
+                         message = 'Are you sure to delete this record?',
+                         onConfirm,
+                         onCancel,
+                         canBtnText = 'Cancel',
+                         confBtnText = 'Yes',
+                         ...restProps
+                       }: PopoverProps & ConfirmWindowProps) => {
   const [open, setOpen] = useState(false);
   const handleVisibleChange = (open: boolean) => setOpen(open);
 

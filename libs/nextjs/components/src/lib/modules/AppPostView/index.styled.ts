@@ -1,21 +1,21 @@
 import styled from 'styled-components';
-import { Tag, Typography } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Tag, Typography} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 export const StyledPostTitle = styled(Text)`
   font-size: 16px !important;
   margin-bottom: 0 !important;
   padding: 0;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.md}px) {
     font-size: 14px !important;
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     font-size: 12px !important;
   }
 `;
@@ -39,7 +39,7 @@ export const StyledContent = styled.div`
   flex-direction: column;
   gap: 16px;
   border-bottom: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.border.color};
+    ${({theme}: { theme: GlobalTheme }) => theme.border.color};
 `;
 
 export const StyledContentWrapper = styled.div`
@@ -53,8 +53,8 @@ export const StyledTitleRow = styled.div`
   padding: 0 20px;
   margin-bottom: 1em;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     margin-bottom: 6px !important;
   }
 `;
@@ -62,8 +62,8 @@ export const StyledTitleRow = styled.div`
 export const StyledTitleContainer = styled.div`
   max-width: calc(100% - 88px);
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     max-width: 100%;
   }
 `;
@@ -78,7 +78,7 @@ export const StyledThumbnailsWrapper = styled.div`
   position: relative;
   width: 100%;
   padding-top: 33.3333%;
-  border-radius: ${({ theme }: { theme: GlobalTheme }) => theme.radius.base}px;
+  border-radius: ${({theme}: { theme: GlobalTheme }) => theme.radius.base}px;
   overflow: hidden;
   margin-bottom: 16px;
   cursor: pointer;
@@ -95,12 +95,12 @@ export const StyledActionsWrapper = styled.div`
     opacity: 0;
     transition: opacity 0.2s ease-in;
 
-    @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.breakpoints.md}px) {
+    @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.md}px) {
       position: absolute;
       right: 0;
-      background-color: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.palette.background.default};
+      background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
       padding-inline-start: 5px;
     }
   }
@@ -111,8 +111,8 @@ export const StyledContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
   transition: background-color 0.2s ease-in;
   max-width: calc(100% - 88px);
   padding: 0 20px;
@@ -122,8 +122,8 @@ export const StyledContainer = styled.div`
     opacity: 1;
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     padding: 0 10px;
     margin-left: 10px;
     max-width: 100%;
@@ -143,8 +143,8 @@ export const StyledDetailsItems = styled.div`
 `;
 
 export const StyledTimeText = styled(Text)`
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     font-size: 10px !important;
   }
 `;

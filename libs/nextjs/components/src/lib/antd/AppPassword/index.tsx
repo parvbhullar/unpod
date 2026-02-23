@@ -1,14 +1,8 @@
 'use client';
-import React, {
-  ChangeEvent,
-  CSSProperties,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {ChangeEvent, CSSProperties, useEffect, useRef, useState,} from 'react';
 import AppFloatingOutline from '../AppFloatingOutline';
-import type { InputRef } from 'antd';
-import { Input } from 'antd';
+import type {InputRef} from 'antd';
+import {Input} from 'antd';
 
 type AppPasswordProps = {
   placeholder: string;
@@ -19,19 +13,20 @@ type AppPasswordProps = {
   disabled?: boolean;
   value?: string;
   asterisk?: boolean;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppPassword: React.FC<AppPasswordProps> = ({
-  placeholder,
-  className = '',
-  style,
-  onChange,
-  defaultValue,
-  disabled = false,
-  value,
-  asterisk,
-  ...restProps
-}) => {
+                                                   placeholder,
+                                                   className = '',
+                                                   style,
+                                                   onChange,
+                                                   defaultValue,
+                                                   disabled = false,
+                                                   value,
+                                                   asterisk,
+                                                   ...restProps
+                                                 }) => {
   const [inputVal, setInputVal] = useState<string>('');
   const inputRef = useRef<InputRef>(null);
 

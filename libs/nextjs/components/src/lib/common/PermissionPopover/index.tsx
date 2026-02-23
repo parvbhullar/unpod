@@ -1,23 +1,18 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Row, Space, Typography } from 'antd';
-import type { MenuProps } from 'antd';
-import { RiArrowDownSFill } from 'react-icons/ri';
-import { useRouter } from 'next/navigation';
-import { useIntl } from 'react-intl';
+import {useEffect, useMemo, useState} from 'react';
+import type {MenuProps} from 'antd';
+import {Button, Dropdown, Row, Space, Typography} from 'antd';
+import {RiArrowDownSFill} from 'react-icons/ri';
+import {useRouter} from 'next/navigation';
+import {useIntl} from 'react-intl';
 
-import { StyledSpace } from './index.styled';
-import { getSharedOptions } from './data';
+import {StyledSpace} from './index.styled';
+import {getSharedOptions} from './data';
 import InviteUserSection from './InviteUserSection';
 import InvitedUsersList from './InvitedUsersList';
 import RequestedUsersList from './RequestedUsersList';
-import type {
-  PermissionEntity,
-  PermissionMember,
-  PermissionPopoverProps,
-  PermissionPopoverType,
-} from './types';
+import type {PermissionEntity, PermissionMember, PermissionPopoverProps, PermissionPopoverType,} from './types';
 
 import {
   getDataApi,
@@ -27,17 +22,13 @@ import {
   useAuthContext,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { SITE_URL } from '@unpod/constants';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import type { EntityWithOperations } from '@unpod/helpers/PermissionHelper';
-import {
-  isEditAccessAllowed,
-  isPrivacyUpdateAllow,
-  isShareAccessAllowed,
-} from '@unpod/helpers/PermissionHelper';
-import type { Organization } from '@unpod/constants/types';
+import {SITE_URL} from '@unpod/constants';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import type {EntityWithOperations} from '@unpod/helpers/PermissionHelper';
+import {isEditAccessAllowed, isPrivacyUpdateAllow, isShareAccessAllowed,} from '@unpod/helpers/PermissionHelper';
+import type {Organization} from '@unpod/constants/types';
 
-import { AppPopover } from '../../antd';
+import {AppPopover} from '../../antd';
 import AppCopyToClipboard from '../../third-party/AppCopyToClipboard';
 
 const toErrorMessage = (error: unknown): string => {
@@ -117,9 +108,9 @@ const getPermissionScope = (
   type: PermissionPopoverType,
   currentData?: PermissionEntity | null,
 ): [
-  EntityWithOperations | undefined,
-  EntityWithOperations | undefined,
-  EntityWithOperations | undefined,
+    EntityWithOperations | undefined,
+    EntityWithOperations | undefined,
+    EntityWithOperations | undefined,
 ] => {
   if (!currentData) return [undefined, undefined, undefined];
   if (type === 'org') return [currentData, undefined, undefined];
@@ -132,19 +123,19 @@ const getPopupContainer = (triggerNode: HTMLElement): HTMLElement => {
 };
 
 const PermissionPopover = ({
-  type = 'org',
-  title = 'modal.shareSpace',
-  placement = 'bottomRight',
-  linkShareable = false,
-  currentData,
-  setCurrentData,
-  userList: _userList,
-  setUserList: _setUserList,
-  ...restProps
-}: PermissionPopoverProps) => {
-  const { setActiveOrg, updateAuthUser } = useAuthActionsContext();
-  const { user } = useAuthContext();
-  const { formatMessage } = useIntl();
+                             type = 'org',
+                             title = 'modal.shareSpace',
+                             placement = 'bottomRight',
+                             linkShareable = false,
+                             currentData,
+                             setCurrentData,
+                             userList: _userList,
+                             setUserList: _setUserList,
+                             ...restProps
+                           }: PermissionPopoverProps) => {
+  const {setActiveOrg, updateAuthUser} = useAuthActionsContext();
+  const {user} = useAuthContext();
+  const {formatMessage} = useIntl();
   const router = useRouter();
   const infoViewActionsContext = useInfoViewActionsContext();
 
@@ -162,7 +153,7 @@ const PermissionPopover = ({
   const dropdownItems = useMemo<MenuProps['items']>(() => {
     return sharedOptions.map((item) => ({
       key: item.key,
-      label: formatMessage({ id: item.label }),
+      label: formatMessage({id: item.label}),
     }));
   }, [sharedOptions, formatMessage]);
 
@@ -211,10 +202,10 @@ const PermissionPopover = ({
       members = members.map((item) =>
         item.email === user?.email
           ? {
-              ...item,
-              role_code: ACCESS_ROLE.EDITOR,
-              role: ACCESS_ROLE.EDITOR,
-            }
+            ...item,
+            role_code: ACCESS_ROLE.EDITOR,
+            role: ACCESS_ROLE.EDITOR,
+          }
           : item,
       );
     }
@@ -285,7 +276,7 @@ const PermissionPopover = ({
   };
 
   const onUpdate = (data: Partial<PermissionEntity>): void => {
-    setCurrentData({ ...(currentData || {}), ...data });
+    setCurrentData({...(currentData || {}), ...data});
   };
 
   const onLeaveEntity = (): void => {
@@ -314,7 +305,7 @@ const PermissionPopover = ({
             organization_list: organizationList,
           });
         } else {
-          onUpdate({ ...(response.data || {}), final_role: ACCESS_ROLE.GUEST });
+          onUpdate({...(response.data || {}), final_role: ACCESS_ROLE.GUEST});
         }
 
         infoViewActionsContext.showMessage(response.message || 'Updated');
@@ -393,17 +384,17 @@ const PermissionPopover = ({
                     <Space>
                       <Typography.Text strong>
                         {selectedShareType
-                          ? formatMessage({ id: selectedShareType.label })
-                          : formatMessage({ id: 'permissionPopover.private' })}
+                          ? formatMessage({id: selectedShareType.label})
+                          : formatMessage({id: 'permissionPopover.private'})}
                       </Typography.Text>
-                      <RiArrowDownSFill fontSize={24} />
+                      <RiArrowDownSFill fontSize={24}/>
                     </Space>
                     <Typography.Paragraph className={'mb-0'}>
                       {selectedShareType
-                        ? formatMessage({ id: selectedShareType.description })
+                        ? formatMessage({id: selectedShareType.description})
                         : formatMessage({
-                            id: 'permissionPopover.privateDescription',
-                          })}
+                          id: 'permissionPopover.privateDescription',
+                        })}
                     </Typography.Paragraph>
                   </div>
                 </StyledSpace>
@@ -416,16 +407,16 @@ const PermissionPopover = ({
                 <Space>
                   <Typography.Text strong>
                     {selectedShareType
-                      ? formatMessage({ id: selectedShareType.label })
-                      : formatMessage({ id: 'permissionPopover.private' })}
+                      ? formatMessage({id: selectedShareType.label})
+                      : formatMessage({id: 'permissionPopover.private'})}
                   </Typography.Text>
                 </Space>
                 <Typography.Paragraph className={'mb-0'}>
                   {selectedShareType
-                    ? formatMessage({ id: selectedShareType.description })
+                    ? formatMessage({id: selectedShareType.description})
                     : formatMessage({
-                        id: 'permissionPopover.privateDescription',
-                      })}
+                      id: 'permissionPopover.privateDescription',
+                    })}
                 </Typography.Paragraph>
               </div>
             </StyledSpace>
@@ -436,10 +427,10 @@ const PermissionPopover = ({
               <Space size="large">
                 {isLeaveAccessAllowed(currentData) ? (
                   <Button danger size="small" onClick={onLeaveEntity}>
-                    {formatMessage({ id: 'permissionPopover.leave' })}
+                    {formatMessage({id: 'permissionPopover.leave'})}
                   </Button>
                 ) : null}
-                <AppCopyToClipboard text={getLinkText(type, currentData)} />
+                <AppCopyToClipboard text={getLinkText(type, currentData)}/>
               </Space>
             </Row>
           ) : null}
@@ -450,9 +441,9 @@ const PermissionPopover = ({
           <Typography.Text>
             {title
               ? title.includes('.')
-                ? formatMessage({ id: title })
+                ? formatMessage({id: title})
                 : title
-              : formatMessage({ id: getTitle(type) })}
+              : formatMessage({id: getTitle(type)})}
           </Typography.Text>
         </Row>
       }

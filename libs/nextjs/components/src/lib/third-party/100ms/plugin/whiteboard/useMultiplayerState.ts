@@ -1,19 +1,19 @@
 // @ts-check
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { selectDidIJoinWithin, useHMSStore } from '@100mslive/react-sdk';
-import { provider as room } from './PusherCommunicationProvider';
-import { WhiteboardEvents as Events } from './WhiteboardEvents';
-import { useWhiteboardMetadata } from './useWhiteboardMetadata';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {selectDidIJoinWithin, useHMSStore} from '@100mslive/react-sdk';
+import {provider as room} from './PusherCommunicationProvider';
+import {WhiteboardEvents as Events} from './WhiteboardEvents';
+import {useWhiteboardMetadata} from './useWhiteboardMetadata';
 
 const useWhiteboardState = () => {
-  const { amIWhiteboardOwner } = useWhiteboardMetadata();
+  const {amIWhiteboardOwner} = useWhiteboardMetadata();
   /*
    * LIVE-1470 state need to have some delay after join.
    * It will initialize pusher room and send request state.
    */
   const shouldRequestState = useHMSStore(selectDidIJoinWithin(2000));
 
-  return { shouldRequestState, amIWhiteboardOwner };
+  return {shouldRequestState, amIWhiteboardOwner};
 };
 
 /**
@@ -22,7 +22,7 @@ const useWhiteboardState = () => {
 export function useMultiplayerState(roomId) {
   const [app, setApp] = useState(null);
   const [isReady, setIsReady] = useState(false);
-  const { amIWhiteboardOwner, shouldRequestState } = useWhiteboardState();
+  const {amIWhiteboardOwner, shouldRequestState} = useWhiteboardState();
 
   /**
    * Stores current state(shapes, bindings, [assets]) of the whiteboard
@@ -47,7 +47,7 @@ export function useMultiplayerState(roomId) {
     }
   }, [amIWhiteboardOwner, isReady, getCurrentState]);
 
-  const updateLocalState = useCallback(({ shapes, bindings, merge = true }) => {
+  const updateLocalState = useCallback(({shapes, bindings, merge = true}) => {
     if (!(shapes && bindings)) return;
 
     if (merge) {
@@ -81,10 +81,10 @@ export function useMultiplayerState(roomId) {
       app === null || app === void 0
         ? void 0
         : app.replacePageContent(
-            state.shapes,
-            state.bindings,
-            {} // Object.fromEntries(lAssets.entries())
-          );
+          state.shapes,
+          state.bindings,
+          {} // Object.fromEntries(lAssets.entries())
+        );
     },
     [app]
   );
@@ -95,7 +95,7 @@ export function useMultiplayerState(roomId) {
         return;
       }
 
-      const { shapes, bindings, eventName } = state;
+      const {shapes, bindings, eventName} = state;
       updateLocalState({
         shapes,
         bindings,
@@ -146,8 +146,8 @@ export function useMultiplayerState(roomId) {
   // Update the live shapes when the app's shapes change.
   const onChangePage = useCallback(
     (_app, shapes, bindings, _assets) => {
-      updateLocalState({ shapes, bindings });
-      room.broadcastEvent(Events.STATE_CHANGE, { shapes, bindings });
+      updateLocalState({shapes, bindings});
+      room.broadcastEvent(Events.STATE_CHANGE, {shapes, bindings});
 
       /**
        * Tldraw thinks that the next update passed to replacePageContent after onChangePage is the own update triggered by onChangePage
@@ -210,5 +210,5 @@ export function useMultiplayerState(roomId) {
     return handleUnmount;
   }, [isReady, shouldRequestState, getCurrentState]);
 
-  return { onMount, onChangePage };
+  return {onMount, onChangePage};
 }

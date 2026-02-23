@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useGetDataApi } from '@unpod/providers';
+import {useEffect, useState} from 'react';
+import {useGetDataApi} from '@unpod/providers';
 import AppSelect from '../AppSelect';
-import type { SelectProps } from 'antd/es/select';
+import type {SelectProps} from 'antd/es/select';
 
 type SelectOption = { value: string | number; label: string };
 
@@ -22,17 +22,17 @@ const isSelectOption = (data: unknown): data is SelectOption => {
   );
 };
 
-const AppSelectApi = <T,>({
-  apiEndpoint,
-  params = {},
-  initialFetch = true,
-  transform = (data: T) => (isSelectOption(data) ? data : null),
-  ...restProps
-}: AppSelectApiProps<T>) => {
+const AppSelectApi = <T, >({
+                             apiEndpoint,
+                             params = {},
+                             initialFetch = true,
+                             transform = (data: T) => (isSelectOption(data) ? data : null),
+                             ...restProps
+                           }: AppSelectApiProps<T>) => {
   const [options, setOptions] = useState<SelectOption[]>([]);
-  const [{ loading, apiData }, { setQueryParams }] = useGetDataApi<T[]>(
+  const [{loading, apiData}, {setQueryParams}] = useGetDataApi<T[]>(
     apiEndpoint,
-    { data: [] },
+    {data: []},
     params,
     initialFetch,
   );

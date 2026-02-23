@@ -8,7 +8,7 @@ export const StyledAppDrawer = styled(AppDrawer as any)`
 
   .ant-drawer-header {
     padding: 8px 16px;
-    background: ${({ theme }) => theme.palette.background.colorPrimaryBg};
+    background: ${({theme}) => theme.palette.background.colorPrimaryBg};
     border-bottom: 1px solid transparent;
   }
 
@@ -47,5 +47,5 @@ export const StyledFooter = styled.div`
   min-height: 58px;
   padding: 12px 16px;
   position: relative;
-  border-top: 1px solid ${({ theme }) => theme.border.color};
+  border-top: 1px solid ${({theme}) => theme.border.color};
 `;

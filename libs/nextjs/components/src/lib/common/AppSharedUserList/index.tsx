@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import SharedUsersForm from './SharedUsersForm';
-import { allowedDefaultRoles } from './constants';
+import {allowedDefaultRoles} from './constants';
 import MemberItem from './MemberItem';
 import AppList from '../AppList';
-import { useIntl } from 'react-intl';
-import { InviteMember } from '@unpod/constants';
+import {useIntl} from 'react-intl';
+import {InviteMember} from '@unpod/constants';
 
 type RoleOption = {
   key: string;
@@ -19,13 +19,13 @@ type AppSharedUserListProps = {
 };
 
 const AppSharedUserList: React.FC<AppSharedUserListProps> = ({
-  users,
-  onChangeUsers,
-  allowedRoles = allowedDefaultRoles,
-  emptyText,
-}) => {
+                                                               users,
+                                                               onChangeUsers,
+                                                               allowedRoles = allowedDefaultRoles,
+                                                               emptyText,
+                                                             }) => {
   const [selectedUsers, setSelectUsers] = useState(users || []);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (onChangeUsers) {
@@ -64,9 +64,9 @@ const AppSharedUserList: React.FC<AppSharedUserListProps> = ({
       />
 
       <AppList
-        emptyContainerStyle={{ maxHeight: 100, minHeight: 100 }}
+        emptyContainerStyle={{maxHeight: 100, minHeight: 100}}
         data={selectedUsers}
-        noDataMessage={emptyText || formatMessage({ id: 'common.noUser' })}
+        noDataMessage={emptyText || formatMessage({id: 'common.noUser'})}
         renderItem={(member, index) => (
           <MemberItem
             key={index}

@@ -1,7 +1,7 @@
-import styled, { keyframes } from 'styled-components';
-import { Card, Typography } from 'antd';
+import styled, {keyframes} from 'styled-components';
+import {Card, Typography} from 'antd';
 
-const { Text, Title } = Typography;
+const {Text, Title} = Typography;
 
 const bounce = keyframes`
   0%, 80%, 100% {
@@ -19,11 +19,11 @@ export const StyledTypingLoader = styled.div`
   gap: 4px;
   height: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     height: 21px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     height: 18px;
   }
 `;
@@ -31,7 +31,7 @@ export const StyledTypingLoader = styled.div`
 export const StyledDot = styled.span`
   width: 6px;
   height: 6px;
-  background-color: ${({ theme }) => theme.palette.primary};
+  background-color: ${({theme}) => theme.palette.primary};
   border-radius: 50%;
   display: inline-block;
   animation: ${bounce} 1.4s infinite ease-in-out both;
@@ -50,30 +50,30 @@ export const StyledDot = styled.span`
 `;
 
 export const StyledRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   display: flex;
   flex-direction: column;
   height: calc(100vh - 76px);
 `;
 
 export const StyledMetricsContainer = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-bottom: ${({ theme }) => theme.border.width}
-    ${({ theme }) => theme.border.style} ${({ theme }) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-bottom: ${({theme}) => theme.border.width}
+    ${({theme}) => theme.border.style} ${({theme}) => theme.border.color};
   width: 100%;
 `;
 
 export const StyledAnalyticsCard = styled(Card)`
-  background-color: ${({ theme }) => theme.palette.background.default};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  background-color: ${({theme}) => theme.palette.background.default};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
 
   .ant-card-body {
     padding: 12px 24px !important;
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
       padding: 10px !important;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
       padding: 10px !important;
     }
   }
@@ -81,14 +81,14 @@ export const StyledAnalyticsCard = styled(Card)`
 
 export const StyledMetricsContent = styled.div`
   flex: 1;
-  max-width: calc(${({ theme }) => theme.sizes.mainContentWidth});
+  max-width: calc(${({theme}) => theme.sizes.mainContentWidth});
   display: flex;
   margin: 0 auto;
   justify-content: space-between;
   padding: 16px 32px;
   gap: 8px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding: 8px 10px;
   }
 `;
@@ -98,25 +98,25 @@ export const StyledText = styled(Text)`
   font-size: 12px;
   text-align: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     font-size: 11px !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 8px !important;
   }
 `;
 
 export const StyledTitle = styled(Title)`
   text-align: center;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 14px !important;
   }
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     font-size: 14px !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     font-size: 12px !important;
   }
 `;

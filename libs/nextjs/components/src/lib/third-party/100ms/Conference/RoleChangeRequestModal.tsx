@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  selectRoleChangeRequest,
-  useHMSActions,
-  useHMSStore,
-} from '@100mslive/react-sdk';
+import {selectRoleChangeRequest, useHMSActions, useHMSStore,} from '@100mslive/react-sdk';
 import AppConfirmModal from '../../../antd/AppConfirmModal';
 
 export const RoleChangeRequestModal = () => {

@@ -1,4 +1,4 @@
-import type { Locale } from 'antd/lib/locale';
+import type {Locale} from 'antd/lib/locale';
 
 export type Direction = 'ltr' | 'rtl';
 

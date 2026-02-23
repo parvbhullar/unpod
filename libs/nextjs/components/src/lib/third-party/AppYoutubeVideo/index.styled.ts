@@ -63,16 +63,16 @@ export const StyledIPlayBtnWrapper = styled.div`
     width: 30px;
     height: 30px;
     position: absolute;
-    background-color: ${({ theme }) => theme.palette.background.default};
+    background-color: ${({theme}) => theme.palette.background.default};
     z-index: 99;
   }
 
   &:hover .play-button {
-    color: ${({ theme }) => theme.palette.error};
+    color: ${({theme}) => theme.palette.error};
   }
 
   & .play-button {
-    color: ${({ theme }) => theme.palette.common.black};
+    color: ${({theme}) => theme.palette.common.black};
     height: 80px;
     width: 100px;
     z-index: 100;

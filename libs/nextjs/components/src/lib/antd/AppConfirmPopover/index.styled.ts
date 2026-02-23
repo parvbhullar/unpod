@@ -1,4 +1,4 @@
-import { Popover } from 'antd';
+import {Popover} from 'antd';
 import styled from 'styled-components';
 
 export const StyledAppConfirmPopover = styled(Popover)`

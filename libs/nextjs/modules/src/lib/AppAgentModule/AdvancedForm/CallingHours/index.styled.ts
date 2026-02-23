@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Button } from 'antd';
+import {Button} from 'antd';
 
 export const StyledContainer = styled.div``;
 
@@ -25,7 +25,7 @@ export const StyledDayButton = styled(Button)`
     transform: translateY(-2px);
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}) {
     width: 100%;
   }
 `;
@@ -64,12 +64,12 @@ export const StyledDeleteButton = styled(Button)`
 `;
 
 export const StyledAddRangeLink = styled(Button)`
-  color: ${({ theme }) => theme.palette.primary};
+  color: ${({theme}) => theme.palette.primary};
   display: flex;
   align-items: center;
   gap: 8px;
 
   &:hover {
-    color: ${({ theme }) => theme.palette.primaryHover};
+    color: ${({theme}) => theme.palette.primaryHover};
   }
 `;

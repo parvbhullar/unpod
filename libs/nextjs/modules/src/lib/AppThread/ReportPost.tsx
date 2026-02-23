@@ -1,15 +1,7 @@
-import { useState } from 'react';
-import { AppGridContainer, AppTextArea } from '@unpod/components/antd';
-import {
-  Button,
-  Col,
-  Form,
-  Radio,
-  type RadioChangeEvent,
-  Row,
-  Space,
-} from 'antd';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
+import {useState} from 'react';
+import {AppGridContainer, AppTextArea} from '@unpod/components/antd';
+import {Button, Col, Form, Radio, type RadioChangeEvent, Row, Space,} from 'antd';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
 
 type ReportPostProps = {
   post: any;
@@ -17,7 +9,7 @@ type ReportPostProps = {
   onClose: () => void;
 };
 
-const ReportPost = ({ post, onReportPost, onClose }: ReportPostProps) => {
+const ReportPost = ({post, onReportPost, onClose}: ReportPostProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
 
   const [value, setValue] = useState('spam');
@@ -70,7 +62,7 @@ const ReportPost = ({ post, onReportPost, onClose }: ReportPostProps) => {
                     },
                   ]}
                 >
-                  <AppTextArea placeholder="Description" />
+                  <AppTextArea placeholder="Description"/>
                 </Form.Item>
               </Col>
             ) : null}
@@ -84,7 +76,7 @@ const ReportPost = ({ post, onReportPost, onClose }: ReportPostProps) => {
                   },
                 ]}
               >
-                <AppTextArea placeholder="Message" />
+                <AppTextArea placeholder="Message"/>
               </Form.Item>
             </Col>
           </AppGridContainer>

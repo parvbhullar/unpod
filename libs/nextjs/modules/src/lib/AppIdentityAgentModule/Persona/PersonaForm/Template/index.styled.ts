@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Tag, Typography } from 'antd';
+import {Tag, Typography} from 'antd';
 
-const { CheckableTag } = Tag;
-const { Paragraph } = Typography;
+const {CheckableTag} = Tag;
+const {Paragraph} = Typography;
 
 export const StyledTemplatesSection = styled.div`
   margin-top: 24px;
@@ -12,7 +12,7 @@ export const StyledTemplatesSection = styled.div`
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 12px;
-    color: ${({ theme }) => theme.palette.text.primary};
+    color: ${({theme}) => theme.palette.text.primary};
   }
 `;
 
@@ -26,16 +26,16 @@ export const StyledTemplatesScroll = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: ${({ theme }) =>
-      (theme as any)?.palette?.border?.secondary ||
-      (theme as any)?.palette?.text?.light ||
-      '#e5e7eb'};
+    background: ${({theme}) =>
+  (theme as any)?.palette?.border?.secondary ||
+  (theme as any)?.palette?.text?.light ||
+  '#e5e7eb'};
     border-radius: 3px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) =>
-      (theme as any)?.palette?.text?.secondary || '#bbb'};
+    background: ${({theme}) =>
+  (theme as any)?.palette?.text?.secondary || '#bbb'};
     border-radius: 3px;
   }
 
@@ -58,22 +58,22 @@ export const StyledCheckableTag = styled(CheckableTag)`
   padding: 16px 16px;
   border-radius: 12px;
   cursor: pointer;
-  border: 1px solid ${({ theme }) => theme.palette.text.light};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow} !important;
-  background: ${({ theme }) => theme.palette.background.default};
-  color: ${({ theme }) => theme.palette.text.primary};
+  border: 1px solid ${({theme}) => theme.palette.text.light};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow} !important;
+  background: ${({theme}) => theme.palette.background.default};
+  color: ${({theme}) => theme.palette.text.primary};
   transition: all 0.2s ease;
   white-space: normal;
   text-align: center;
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.palette.primary};
-    background: ${({ theme }) => theme.palette.primaryHover} !important;
+    border: 1px solid ${({theme}) => theme.palette.primary};
+    background: ${({theme}) => theme.palette.primaryHover} !important;
   }
 
   &.ant-tag-checkable-checked {
-    border: 1px solid ${({ theme }) => theme.palette.primary};
-    background: ${({ theme }) => theme.palette.background.default};
+    border: 1px solid ${({theme}) => theme.palette.primary};
+    background: ${({theme}) => theme.palette.background.default};
   }
 `;
 

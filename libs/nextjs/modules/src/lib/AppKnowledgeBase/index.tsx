@@ -1,19 +1,17 @@
 'use client';
-import { Fragment, useState } from 'react';
-import AppPageHeader, {
-  AppHeaderButton,
-} from '@unpod/components/common/AppPageHeader';
+import {Fragment, useState} from 'react';
+import AppPageHeader, {AppHeaderButton,} from '@unpod/components/common/AppPageHeader';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
 import AppSpaceGrid from '@unpod/components/common/AppSpaceGrid';
 import HeaderDropdown from './View/HeaderDropdown';
-import { StyledContainer, StyledRoot } from './index.styled';
-import { FiPlus } from 'react-icons/fi';
-import { useIntl } from 'react-intl';
+import {StyledContainer, StyledRoot} from './index.styled';
+import {FiPlus} from 'react-icons/fi';
+import {useIntl} from 'react-intl';
 
 const AppKnowledgeBaseRoot = () => {
   const [addNew, setAddNew] = useState(false);
   const [currentKb, setCurrentKb] = useState<any>(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   return (
     <Fragment>
@@ -24,7 +22,7 @@ const AppKnowledgeBaseRoot = () => {
           isListingPage={false}
           pageTitle={
             <HeaderDropdown
-              pageTitle={formatMessage({ id: 'knowledgeBase.pageTitle' })}
+              pageTitle={formatMessage({id: 'knowledgeBase.pageTitle'})}
               currentKb={currentKb}
               setCurrentKb={setCurrentKb}
               addNew={addNew}
@@ -36,16 +34,16 @@ const AppKnowledgeBaseRoot = () => {
               type="primary"
               shape="round"
               onClick={() => setAddNew(true)}
-              icon={<FiPlus />}
+              icon={<FiPlus/>}
             >
-              {formatMessage({ id: 'common.add' })}
+              {formatMessage({id: 'common.add'})}
             </AppHeaderButton>
           }
         />
 
         <AppPageContainer>
           <StyledContainer>
-            <AppSpaceGrid type="kb" />
+            <AppSpaceGrid type="kb"/>
           </StyledContainer>
         </AppPageContainer>
       </StyledRoot>

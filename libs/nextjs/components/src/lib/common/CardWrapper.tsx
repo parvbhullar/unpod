@@ -1,8 +1,8 @@
-import React, { ReactNode, useState } from 'react';
-import { Button, Card, Flex, Space } from 'antd';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import React, {ReactNode, useState} from 'react';
+import {Button, Card, Flex, Space} from 'antd';
+import {DownOutlined, UpOutlined} from '@ant-design/icons';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const AnimatedContent = styled.div<{ $isVisible: boolean }>`
   max-height: ${(props) => (props.$isVisible ? '5000px' : '0')};
@@ -21,20 +21,21 @@ type CardWrapperProps = {
   children?: ReactNode;
   expandable?: boolean;
   collapsedContent?: ReactNode;
-  defaultExpanded?: boolean;};
+  defaultExpanded?: boolean;
+};
 
 const CardWrapper: React.FC<CardWrapperProps> = ({
-  icon,
-  title,
-  description,
-  extra,
-  children,
-  expandable = false,
-  collapsedContent,
-  defaultExpanded = false,
-}) => {
+                                                   icon,
+                                                   title,
+                                                   description,
+                                                   extra,
+                                                   children,
+                                                   expandable = false,
+                                                   collapsedContent,
+                                                   defaultExpanded = false,
+                                                 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -46,13 +47,13 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
         type="text"
         size="small"
         color="primary"
-        icon={isExpanded ? <UpOutlined /> : <DownOutlined />}
+        icon={isExpanded ? <UpOutlined/> : <DownOutlined/>}
         iconPlacement="end"
         onClick={toggleExpand}
       >
         {isExpanded
-          ? formatMessage({ id: 'identityStudio.hideDetails' })
-          : formatMessage({ id: 'identityStudio.showDetails' })}
+          ? formatMessage({id: 'identityStudio.hideDetails'})
+          : formatMessage({id: 'identityStudio.showDetails'})}
       </Button>
     </Flex>
   ) : null;
@@ -87,12 +88,12 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
           </span>
         </Flex>
       }
-      style={{ borderRadius: 8, marginBottom: 24 }}
+      style={{borderRadius: 8, marginBottom: 24}}
     >
       <Space
         orientation="vertical"
         size="middle"
-        style={{ width: '100%', paddingLeft: 8, paddingRight: 8 }}
+        style={{width: '100%', paddingLeft: 8, paddingRight: 8}}
       >
         {children}
         {extraContent}

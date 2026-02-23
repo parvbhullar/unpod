@@ -60,7 +60,7 @@ class PusherCommunicationProvider {
    * @param {any} message
    */
   storeEvent = (eventName, message) => {
-    this.lastMessage[eventName] = { eventName, ...message };
+    this.lastMessage[eventName] = {eventName, ...message};
   };
 
   /**
@@ -80,7 +80,7 @@ class PusherCommunicationProvider {
 
     this.channel?.trigger(
       `client-${eventName}`,
-      stringifyWithNull({ eventName, ...arg })
+      stringifyWithNull({eventName, ...arg})
     );
   };
 

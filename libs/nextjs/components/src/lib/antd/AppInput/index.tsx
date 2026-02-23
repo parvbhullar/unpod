@@ -1,16 +1,9 @@
 'use client';
-import React, {
-  ChangeEvent,
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {ChangeEvent, CSSProperties, ReactNode, useEffect, useRef, useState,} from 'react';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { Input } from 'antd';
+import {Input} from 'antd';
 import clsx from 'clsx';
-import { InputRef } from 'antd/es/input';
+import {InputRef} from 'antd/es/input';
 
 type AppInputProps = {
   placeholder: string;
@@ -23,19 +16,20 @@ type AppInputProps = {
   asterisk?: boolean;
   addonBefore?: boolean | ReactNode;
   id?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppInput: React.FC<AppInputProps> = ({
-  placeholder,
-  className = '',
-  style,
-  value,
-  disabled = false,
-  defaultValue,
-  onChange,
-  asterisk,
-  ...restProps
-}) => {
+                                             placeholder,
+                                             className = '',
+                                             style,
+                                             value,
+                                             disabled = false,
+                                             defaultValue,
+                                             onChange,
+                                             asterisk,
+                                             ...restProps
+                                           }) => {
   const [inputVal, setInputVal] = useState<string | number | undefined>('');
   const inputRef = useRef<InputRef>(null);
   const inputId = restProps?.id || inputRef?.current?.input?.id || '';

@@ -1,45 +1,45 @@
 import styled from 'styled-components';
-import { Segmented } from 'antd';
-import { rgba } from 'polished';
+import {Segmented} from 'antd';
+import {rgba} from 'polished';
 
 export const StyledSegmentedContainer = styled.div`
   padding: 6px 6px;
-  border-block-end: 1px solid ${({ theme }) => theme.border.color};
+  border-block-end: 1px solid ${({theme}) => theme.border.color};
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
 `;
 
 export const StyledSegmented = styled(Segmented)`
   &.ant-segmented {
     display: flex;
     width: 100%;
-    background: ${({ theme }) => theme.palette.background.component} !important;
-    border-radius: ${({ theme }) => theme.radius.base}px !important;
+    background: ${({theme}) => theme.palette.background.component} !important;
+    border-radius: ${({theme}) => theme.radius.base}px !important;
     padding: 4px !important;
     font-size: 13px;
-    gap: ${({ theme }) => theme.space.sm};
+    gap: ${({theme}) => theme.space.sm};
   }
 
   .ant-segmented-group {
     display: flex;
-    gap: ${({ theme }) => theme.space.xss};
+    gap: ${({theme}) => theme.space.xss};
     width: 100%;
   }
 
   .ant-segmented-item {
     padding: 4px 8px !important;
-    border-radius: ${({ theme }) => theme.radius.sm}px !important;
+    border-radius: ${({theme}) => theme.radius.sm}px !important;
     font-weight: 500;
     cursor: pointer;
     border: none !important;
     background: transparent !important;
-    color: ${({ theme }) => theme.palette.text.secondary} !important;
+    color: ${({theme}) => theme.palette.text.secondary} !important;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: ${({ theme }) => theme.space.xss};
+    gap: ${({theme}) => theme.space.xss};
     white-space: nowrap;
     position: relative;
     z-index: 1;
@@ -48,14 +48,14 @@ export const StyledSegmented = styled(Segmented)`
   }
 
   .ant-segmented-item-selected {
-    background: ${({ theme }) => theme.palette.background.default} !important;
-    color: ${({ theme }) => theme.palette.text.heading} !important;
+    background: ${({theme}) => theme.palette.background.default} !important;
+    color: ${({theme}) => theme.palette.text.heading} !important;
     box-shadow: none !important;
   }
 
   .ant-segmented-item:hover:not(.ant-segmented-item-selected) {
-    color: ${({ theme }) => theme.palette.text.secondary} !important;
-    background: ${({ theme }) => rgba(theme.palette.primary, 0.08)} !important;
+    color: ${({theme}) => theme.palette.text.secondary} !important;
+    background: ${({theme}) => rgba(theme.palette.primary, 0.08)} !important;
   }
 
   .ant-segmented-item-icon {
@@ -78,10 +78,10 @@ export const StyledSegmented = styled(Segmented)`
 `;
 
 export const StyledRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   width: 320px;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius}
-    ${({ theme }) => theme.component.card.borderRadius} 0 0;
+  border-radius: ${({theme}) => theme.component.card.borderRadius}
+    ${({theme}) => theme.component.card.borderRadius} 0 0;
   display: flex;
   overflow: hidden;
   flex-direction: column;
@@ -89,7 +89,7 @@ export const StyledRoot = styled.div`
 `;
 
 export const StyledStickyContainer = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   position: sticky;
   top: 0;
   z-index: 1;

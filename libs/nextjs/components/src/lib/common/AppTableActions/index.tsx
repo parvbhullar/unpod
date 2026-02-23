@@ -1,12 +1,12 @@
-import { Button, Space } from 'antd';
-import { type ReactNode, useState } from 'react';
-import { FiMoreVertical } from 'react-icons/fi';
-import { downloadFile } from '@unpod/helpers/FileHelper';
+import {Button, Space} from 'antd';
+import {type ReactNode, useState} from 'react';
+import {FiMoreVertical} from 'react-icons/fi';
+import {downloadFile} from '@unpod/helpers/FileHelper';
 import AppConfirmDeletePopover from '../../antd/AppConfirmDeletePopover';
 import AppIcon from '../AppIcon';
-import { StyledTableActions } from './index.styled';
-import { AppPopover } from '../../antd';
-import { useIntl } from 'react-intl';
+import {StyledTableActions} from './index.styled';
+import {AppPopover} from '../../antd';
+import {useIntl} from 'react-intl';
 
 type AppTableActionsProps = {
   onEdit?: () => void;
@@ -22,19 +22,19 @@ type AppTableActionsProps = {
 };
 
 export const AppTableActions = ({
-  onEdit,
-  onDelete,
-  showToolTip = false,
-  onPreview,
-  downloadUrl,
-  children,
-  endComponents,
-  deleteTitle = 'common.deleteMessage',
-  deleteMessage,
-  alignRight,
-}: AppTableActionsProps) => {
+                                  onEdit,
+                                  onDelete,
+                                  showToolTip = false,
+                                  onPreview,
+                                  downloadUrl,
+                                  children,
+                                  endComponents,
+                                  deleteTitle = 'common.deleteMessage',
+                                  deleteMessage,
+                                  alignRight,
+                                }: AppTableActionsProps) => {
   const [open, setOpen] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onHide = () => {
     setOpen(false);
@@ -52,8 +52,8 @@ export const AppTableActions = ({
         onClick={
           showToolTip
             ? () => {
-                console.log('onClick');
-              }
+              console.log('onClick');
+            }
             : onHide
         }
       >
@@ -61,7 +61,7 @@ export const AppTableActions = ({
 
         {downloadUrl && (
           <AppIcon
-            title={formatMessage({ id: 'common.download' })}
+            title={formatMessage({id: 'common.download'})}
             up-role="Download"
             icon="download"
             onClick={() => downloadFile(downloadUrl)}
@@ -69,7 +69,7 @@ export const AppTableActions = ({
         )}
         {onPreview ? (
           <AppIcon
-            title={formatMessage({ id: 'common.view' })}
+            title={formatMessage({id: 'common.view'})}
             up-role="View"
             icon="view"
             onClick={onPreview}
@@ -78,7 +78,7 @@ export const AppTableActions = ({
 
         {onEdit && (
           <AppIcon
-            title={formatMessage({ id: 'common.edit' })}
+            title={formatMessage({id: 'common.edit'})}
             icon="edit"
             onClick={onEdit}
             up-role={'Edit'}
@@ -87,7 +87,7 @@ export const AppTableActions = ({
 
         {onDelete && (
           <AppConfirmDeletePopover
-            title={formatMessage({ id: deleteTitle })}
+            title={formatMessage({id: deleteTitle})}
             message={deleteMessage}
             onConfirm={() => onDelete?.()}
           >

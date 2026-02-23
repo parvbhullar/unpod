@@ -1,17 +1,16 @@
-
-import { CopyToClipboard } from '@unpod/external-libs/react-copy-to-clipboard';
-import { useInfoViewActionsContext } from '@unpod/providers';
+import {CopyToClipboard} from '@unpod/external-libs/react-copy-to-clipboard';
+import {useInfoViewActionsContext} from '@unpod/providers';
 
 import styled from 'styled-components';
-import { Button, Tooltip } from 'antd';
-import { MdOutlineContentCopy } from 'react-icons/md';
+import {Button, Tooltip} from 'antd';
+import {MdOutlineContentCopy} from 'react-icons/md';
 
 type StyledTextProps = {
   $textColor?: string;
 };
 
 export const StyledText = styled.span<StyledTextProps>`
-  color: ${({ theme, $textColor }) =>
+  color: ${({theme, $textColor}) =>
     $textColor === 'black'
       ? 'rgba(58, 58, 58, 0.88)'
       : $textColor === 'white'
@@ -21,14 +20,15 @@ export const StyledText = styled.span<StyledTextProps>`
 `;
 
 type IconProps = {
-  iconFontSize?: number;};
+  iconFontSize?: number;
+};
 
-const Icon: React.FC<IconProps> = ({ iconFontSize }) => (
+const Icon: React.FC<IconProps> = ({iconFontSize}) => (
   <Button
     type="text"
     size="small"
     shape="circle"
-    icon={<MdOutlineContentCopy fontSize={iconFontSize} />}
+    icon={<MdOutlineContentCopy fontSize={iconFontSize}/>}
   />
 );
 
@@ -39,17 +39,18 @@ type AppCopyToClipboardProps = {
   text?: string;
   onCopy?: () => void;
   textColor?: 'black' | 'white' | string;
-  hideIcon?: boolean;};
+  hideIcon?: boolean;
+};
 
 const AppCopyToClipboard: React.FC<AppCopyToClipboardProps> = ({
-  title = 'Copy Link',
-  showToolTip,
-  iconFontSize = 16,
-  text = '',
-  onCopy,
-  textColor,
-  hideIcon = true,
-}) => {
+                                                                 title = 'Copy Link',
+                                                                 showToolTip,
+                                                                 iconFontSize = 16,
+                                                                 text = '',
+                                                                 onCopy,
+                                                                 textColor,
+                                                                 hideIcon = true,
+                                                               }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   return (
     <CopyToClipboard
@@ -65,10 +66,10 @@ const AppCopyToClipboard: React.FC<AppCopyToClipboardProps> = ({
         {hideIcon &&
           (showToolTip ? (
             <Tooltip title="Copy">
-              <Icon iconFontSize={iconFontSize} />
+              <Icon iconFontSize={iconFontSize}/>
             </Tooltip>
           ) : (
-            <Icon iconFontSize={iconFontSize} />
+            <Icon iconFontSize={iconFontSize}/>
           ))}
 
         {title && <StyledText $textColor={textColor}>{title}</StyledText>}

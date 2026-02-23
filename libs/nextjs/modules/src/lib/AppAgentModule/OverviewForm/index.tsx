@@ -1,36 +1,16 @@
-import { useEffect, useState } from 'react';
-import { Button, Flex, Form, Image, Radio, Select, Upload } from 'antd';
-import {
-  FileImageOutlined,
-  InfoCircleOutlined,
-  SaveOutlined,
-  TagsOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
-import {
-  useAuthContext,
-  useGetDataApi,
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import { AppSelect, AppTextArea } from '@unpod/components/antd';
+import {useEffect, useState} from 'react';
+import {Button, Flex, Form, Image, Radio, Select, Upload} from 'antd';
+import {FileImageOutlined, InfoCircleOutlined, SaveOutlined, TagsOutlined, UploadOutlined,} from '@ant-design/icons';
+import {useAuthContext, useGetDataApi, useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import {AppSelect, AppTextArea} from '@unpod/components/antd';
 import CardWrapper from '@unpod/components/common/CardWrapper';
 import AppSharedUserList from '@unpod/components/common/AppSharedUserList';
-import {
-  LogoContainer,
-  StyledUploadButton,
-  StyleFormItemPrivacy,
-  StylesImageWrapper,
-} from './index.styled';
-import { MdBusinessCenter } from 'react-icons/md';
-import { FaHeart, FaUser } from 'react-icons/fa';
-import { DiRequirejs } from 'react-icons/di';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-} from '../index.styled';
+import {LogoContainer, StyledUploadButton, StyleFormItemPrivacy, StylesImageWrapper,} from './index.styled';
+import {MdBusinessCenter} from 'react-icons/md';
+import {FaHeart, FaUser} from 'react-icons/fa';
+import {DiRequirejs} from 'react-icons/di';
+import {StickyFooter, StyledMainContainer, StyledTabRoot,} from '../index.styled';
 import PurposeList from './PurposeLIst';
 
 const purposeCategory = {
@@ -40,21 +20,21 @@ const purposeCategory = {
       key: 'Business',
       label: 'Business Functions',
       desc: 'Sales Assistant, Support Agent, Lead Qualifier',
-      icon: <MdBusinessCenter size={24} />,
+      icon: <MdBusinessCenter size={24}/>,
       color: '#9d5c06ff',
     },
     {
       key: 'Personal',
       label: 'Personal Functions',
       desc: 'Study Buddy, Fitness Coach, Personal Assistant',
-      icon: <FaUser size={24} />,
+      icon: <FaUser size={24}/>,
       color: '#979492ff',
     },
     {
       key: 'Service',
       label: 'Service Functions',
       desc: 'Booking Agent, Healthcare Assistant, Concierge',
-      icon: <FaHeart size={24} />,
+      icon: <FaHeart size={24}/>,
       color: '#e70000ff',
     },
   ],
@@ -96,22 +76,22 @@ type OverviewFormProps = {
 };
 
 const OverviewForm = ({
-  agentData,
-  updateAgentData,
-  headerForm,
-}: OverviewFormProps) => {
+                        agentData,
+                        updateAgentData,
+                        headerForm,
+                      }: OverviewFormProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { loading } = useInfoViewContext();
-  const { isAuthenticated } = useAuthContext();
+  const {loading} = useInfoViewContext();
+  const {isAuthenticated} = useAuthContext();
   const [form] = Form.useForm();
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logo, setLogo] = useState(agentData?.logo || '');
   const [userList, setUserList] = useState<any[]>([]);
   const privacyType = Form.useWatch('privacy_type', form);
 
-  const [{ apiData }, { reCallAPI }] = useGetDataApi(
+  const [{apiData}, {reCallAPI}] = useGetDataApi(
     'core/tags/',
-    { data: [] },
+    {data: []},
     {},
     false,
   ) as [
@@ -154,7 +134,7 @@ const OverviewForm = ({
   useEffect(() => {
     if (privacyType === 'public') {
       setUserList([]);
-      form.setFieldsValue({ sharedFields: [] });
+      form.setFieldsValue({sharedFields: []});
     }
   }, [privacyType]);
 
@@ -174,8 +154,8 @@ const OverviewForm = ({
     const filteredUsers =
       privacyType === 'shared'
         ? userList.filter(
-            (user: any) => user && user.role_code !== ACCESS_ROLE.OWNER,
-          )
+          (user: any) => user && user.role_code !== ACCESS_ROLE.OWNER,
+        )
         : [];
 
     formData.append('name', headerForm.getFieldValue('name'));
@@ -231,7 +211,7 @@ const OverviewForm = ({
     >
       <StyledTabRoot>
         <StyledMainContainer>
-          <CardWrapper icon={<InfoCircleOutlined />} title="Description">
+          <CardWrapper icon={<InfoCircleOutlined/>} title="Description">
             <Form.Item
               name="description"
               help="Provide a detailed description of what your agent can do"
@@ -242,7 +222,7 @@ const OverviewForm = ({
                 },
               ]}
             >
-              <MobileAwareTextArea rows={6} />
+              <MobileAwareTextArea rows={6}/>
             </Form.Item>
 
             <StyleFormItemPrivacy
@@ -270,11 +250,11 @@ const OverviewForm = ({
             )}
           </CardWrapper>
 
-          <CardWrapper icon={<DiRequirejs size={18} />} title="Purpose">
+          <CardWrapper icon={<DiRequirejs size={18}/>} title="Purpose">
             <Form.Item
               name="purpose"
               rules={[
-                { required: true, message: 'Please select at least one tone' },
+                {required: true, message: 'Please select at least one tone'},
               ]}
             >
               <PurposeList
@@ -285,7 +265,7 @@ const OverviewForm = ({
             </Form.Item>
           </CardWrapper>
 
-          <CardWrapper icon={<TagsOutlined />} title="Classification">
+          <CardWrapper icon={<TagsOutlined/>} title="Classification">
             <Form.Item
               help="Keywords to help users discover your agent"
               name="tags"
@@ -306,7 +286,7 @@ const OverviewForm = ({
             </Form.Item>
           </CardWrapper>
 
-          <CardWrapper icon={<FileImageOutlined />} title="Logo">
+          <CardWrapper icon={<FileImageOutlined/>} title="Logo">
             <Form.Item help="Upload a logo image for your agent (PNG, JPG up to 5MB)">
               <LogoContainer align="center">
                 <StylesImageWrapper>
@@ -325,7 +305,7 @@ const OverviewForm = ({
                   beforeUpload={onLogoUpload}
                   maxCount={1}
                 >
-                  <StyledUploadButton icon={<UploadOutlined />} type="primary">
+                  <StyledUploadButton icon={<UploadOutlined/>} type="primary">
                     {logo ? 'Change Logo' : 'Upload Logo'}
                   </StyledUploadButton>
                 </Upload>
@@ -340,7 +320,7 @@ const OverviewForm = ({
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={loading}
           >
             Save

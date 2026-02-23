@@ -1,17 +1,10 @@
 'use client';
-import React, {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {CSSProperties, ReactNode, useEffect, useMemo, useRef, useState,} from 'react';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { TreeSelect } from 'antd';
+import {TreeSelect} from 'antd';
 import clsx from 'clsx';
-import type { BaseSelectRef } from '@rc-component/select';
-import type { TreeSelectProps } from 'antd/es/tree-select';
+import type {BaseSelectRef} from '@rc-component/select';
+import type {TreeSelectProps} from 'antd/es/tree-select';
 
 type AppTreeSelectProps = {
   placeholder?: string;
@@ -24,20 +17,21 @@ type AppTreeSelectProps = {
   onChange?: (value: string | number | object | unknown[] | null) => void;
   asterisk?: boolean;
   id?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppTreeSelect: React.FC<AppTreeSelectProps> = ({
-  placeholder,
-  children,
-  defaultValue,
-  value,
-  className = '',
-  style,
-  disabled = false,
-  onChange,
-  asterisk,
-  ...restProps
-}) => {
+                                                       placeholder,
+                                                       children,
+                                                       defaultValue,
+                                                       value,
+                                                       className = '',
+                                                       style,
+                                                       disabled = false,
+                                                       onChange,
+                                                       asterisk,
+                                                       ...restProps
+                                                     }) => {
   const [inputVal, setInputVal] = useState<
     string | number | object | unknown[] | null
   >(value ?? defaultValue ?? null);

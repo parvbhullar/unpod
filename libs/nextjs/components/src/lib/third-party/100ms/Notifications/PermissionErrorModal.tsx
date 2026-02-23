@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import {
-  HMSNotificationTypes,
-  useHMSNotifications,
-} from '@100mslive/react-sdk';
-import { Modal } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {HMSNotificationTypes, useHMSNotifications,} from '@100mslive/react-sdk';
+import {Modal} from 'antd';
 
 export function PermissionErrorModal() {
   const notification = useHMSNotifications(HMSNotificationTypes.ERROR);

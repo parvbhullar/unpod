@@ -1,8 +1,8 @@
-import { AppSelect } from '@unpod/components/antd';
-import { Avatar, Button, Card, Divider, Flex, Select, Typography } from 'antd';
+import {AppSelect} from '@unpod/components/antd';
+import {Avatar, Button, Card, Divider, Flex, Select, Typography} from 'antd';
 import styled from 'styled-components';
-import { DeleteOutlined, UserOutlined } from '@ant-design/icons';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import {DeleteOutlined, UserOutlined} from '@ant-design/icons';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 
 const StyledUserList = styled.div`
   overflow: auto;
@@ -10,7 +10,7 @@ const StyledUserList = styled.div`
   max-width: 100%;
   width: 100%;
   border-radius: 8px;
-  background: ${({ theme }) => theme.palette.background.disabled};
+  background: ${({theme}) => theme.palette.background.disabled};
 `;
 
 const UserCard = styled(Flex)`
@@ -22,12 +22,12 @@ const StyledHeader = styled(Flex)`
   padding: 8px 16px;
   font-weight: 500;
   border-bottom: 1px solid;
-  border-color: ${({ theme }) => theme.palette.background.disabled};
+  border-color: ${({theme}) => theme.palette.background.disabled};
 `;
 
 const NoUserFoundCard = styled(Card)`
   border-radius: 8px;
-  background: ${({ theme }) => theme.palette.background.disabled};
+  background: ${({theme}) => theme.palette.background.disabled};
   text-align: center;
   padding: 24px;
 `;
@@ -43,13 +43,13 @@ type SharedUserListProps = {
 };
 
 const SharedUserList = ({
-  sharedFields,
-  handleDeleteField,
-}: SharedUserListProps) => {
+                          sharedFields,
+                          handleDeleteField,
+                        }: SharedUserListProps) => {
   if (!sharedFields.length) {
     return (
       <NoUserFoundCard>
-        <Typography.Paragraph type="secondary" style={{ margin: 0 }}>
+        <Typography.Paragraph type="secondary" style={{margin: 0}}>
           No users added yet. Please add users to share this workflow.
         </Typography.Paragraph>
       </NoUserFoundCard>
@@ -57,13 +57,13 @@ const SharedUserList = ({
   }
 
   return (
-    <Card styles={{ body: { padding: 0 } }}>
+    <Card styles={{body: {padding: 0}}}>
       <StyledHeader justify="space-between">
         <Flex flex="1">User</Flex>
         <Flex flex="0.6" justify="center">
           Role
         </Flex>
-        <Flex style={{ width: '48px' }} justify="center">
+        <Flex style={{width: '48px'}} justify="center">
           Action
         </Flex>
       </StyledHeader>
@@ -72,8 +72,8 @@ const SharedUserList = ({
           <div key={field.email}>
             <UserCard justify="space-between">
               <Flex flex="1" align="center" gap={12}>
-                <Avatar icon={<UserOutlined />} size="small" />
-                <Typography.Text ellipsis style={{ maxWidth: '300px' }}>
+                <Avatar icon={<UserOutlined/>} size="small"/>
+                <Typography.Text ellipsis style={{maxWidth: '300px'}}>
                   {field.email}
                 </Typography.Text>
               </Flex>
@@ -81,7 +81,7 @@ const SharedUserList = ({
                 <AppSelect
                   value={field.role_code}
                   placeholder="Role"
-                  style={{ width: '110px' }}
+                  style={{width: '110px'}}
                   popupMatchSelectWidth={false}
                   disabled={true}
                 >
@@ -93,17 +93,17 @@ const SharedUserList = ({
                   </Select.Option>
                 </AppSelect>
               </Flex>
-              <Flex style={{ width: '48px' }} justify="center">
+              <Flex style={{width: '48px'}} justify="center">
                 <Button
                   type="text"
-                  icon={<DeleteOutlined />}
+                  icon={<DeleteOutlined/>}
                   danger
                   onClick={() => handleDeleteField(index)}
                 />
               </Flex>
             </UserCard>
             {index < sharedFields.length - 1 && (
-              <Divider style={{ margin: 0 }} />
+              <Divider style={{margin: 0}}/>
             )}
           </div>
         ))}

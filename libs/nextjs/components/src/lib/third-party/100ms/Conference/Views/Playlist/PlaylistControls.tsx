@@ -9,18 +9,11 @@ import {
   useHMSActions,
   useHMSStore,
 } from '@100mslive/react-sdk';
-import {
-  NextIcon,
-  PauseIcon,
-  PlayIcon,
-  PlaylistIcon,
-  PrevIcon,
-  SpeakerIcon,
-} from '@100mslive/react-icons';
-import { Box, Flex, IconButton, Slider, Text } from '@100mslive/react-ui';
-import { usePlaylist } from '../hooks/usePlaylist';
+import {NextIcon, PauseIcon, PlayIcon, PlaylistIcon, PrevIcon, SpeakerIcon,} from '@100mslive/react-icons';
+import {Box, Flex, IconButton, Slider, Text} from '@100mslive/react-ui';
+import {usePlaylist} from '../hooks/usePlaylist';
 
-const Progress = ({ type, duration }) => {
+const Progress = ({type, duration}) => {
   const selectPlaylist =
     type === HMSPlaylistType.audio ? selectAudioPlaylist : selectVideoPlaylist;
   const progress = useHMSStore(selectPlaylist.progress);
@@ -45,7 +38,7 @@ const Progress = ({ type, duration }) => {
   );
 };
 
-export const PlaylistActive = ({ type, onToggle }) => {
+export const PlaylistActive = ({type, onToggle}) => {
   const isAudioPlaylist = type === HMSPlaylistType.audio;
   const selector = isAudioPlaylist ? selectAudioPlaylist : selectVideoPlaylist;
   const active = useHMSStore(selector.selectedItem);
@@ -53,8 +46,8 @@ export const PlaylistActive = ({ type, onToggle }) => {
     return null;
   }
   return (
-    <Box css={{ mt: '$8' }}>
-      <Flex justify="between" css={{ w: '100%' }}>
+    <Box css={{mt: '$8'}}>
+      <Flex justify="between" css={{w: '100%'}}>
         <Box>
           <Text variant="md">{active.name}</Text>
           {active.metadata?.description && (
@@ -63,18 +56,18 @@ export const PlaylistActive = ({ type, onToggle }) => {
         </Box>
         <IconButton
           onClick={onToggle}
-          css={{ alignSelf: 'center' }}
+          css={{alignSelf: 'center'}}
           data-testid="playlist_collapse_btn"
         >
-          <PlaylistIcon />
+          <PlaylistIcon/>
         </IconButton>
       </Flex>
     </Box>
   );
 };
 
-const Controls = ({ type, css = {} }) => {
-  const { active, hasNext, hasPrevious, actions } = usePlaylist(type);
+const Controls = ({type, css = {}}) => {
+  const {active, hasNext, hasPrevious, actions} = usePlaylist(type);
   if (!active) {
     return null;
   }
@@ -87,7 +80,7 @@ const Controls = ({ type, css = {} }) => {
         }}
         data-testid="playlist_prev_btn"
       >
-        <PrevIcon />
+        <PrevIcon/>
       </IconButton>
       <IconButton
         onClick={() => {
@@ -96,9 +89,9 @@ const Controls = ({ type, css = {} }) => {
         data-testid="playlist_play_pause_btn"
       >
         {active.playing ? (
-          <PauseIcon width={32} height={32} />
+          <PauseIcon width={32} height={32}/>
         ) : (
-          <PlayIcon width={32} height={32} />
+          <PlayIcon width={32} height={32}/>
         )}
       </IconButton>
       <IconButton
@@ -108,7 +101,7 @@ const Controls = ({ type, css = {} }) => {
         }}
         data-testid="playlist_next_btn"
       >
-        <NextIcon />
+        <NextIcon/>
       </IconButton>
     </Flex>
   );
@@ -126,10 +119,10 @@ const VolumeControl = () => {
   const sliderVolume = active ? volume : audioTrackVolume;
 
   return (
-    <Flex align="center" css={{ color: '$white' }}>
-      <SpeakerIcon />
+    <Flex align="center" css={{color: '$white'}}>
+      <SpeakerIcon/>
       <Slider
-        css={{ mx: '$4', w: '$20' }}
+        css={{mx: '$4', w: '$20'}}
         min={0}
         max={100}
         step={1}
@@ -142,14 +135,14 @@ const VolumeControl = () => {
             hmsActions.setVolume(value, audioTrack.id);
           }
         }}
-        thumbStyles={{ w: '$6', h: '$6' }}
+        thumbStyles={{w: '$6', h: '$6'}}
       />
     </Flex>
   );
 };
 
-export const AudioPlaylistControls = ({ onToggle }) => {
-  const { active } = usePlaylist(HMSPlaylistType.audio);
+export const AudioPlaylistControls = ({onToggle}) => {
+  const {active} = usePlaylist(HMSPlaylistType.audio);
   if (!active) {
     return null;
   }
@@ -161,15 +154,15 @@ export const AudioPlaylistControls = ({ onToggle }) => {
         bg: '$menuBg',
       }}
     >
-      <Controls type={HMSPlaylistType.audio} />
-      <Progress type={HMSPlaylistType.audio} duration={active.duration} />
-      <PlaylistActive type={HMSPlaylistType.audio} onToggle={onToggle} />
+      <Controls type={HMSPlaylistType.audio}/>
+      <Progress type={HMSPlaylistType.audio} duration={active.duration}/>
+      <PlaylistActive type={HMSPlaylistType.audio} onToggle={onToggle}/>
     </Box>
   );
 };
 
-export const VideoPlaylistControls = ({ children }) => {
-  const { active } = usePlaylist(HMSPlaylistType.video);
+export const VideoPlaylistControls = ({children}) => {
+  const {active} = usePlaylist(HMSPlaylistType.video);
 
   return (
     <Box
@@ -185,11 +178,11 @@ export const VideoPlaylistControls = ({ children }) => {
       }}
     >
       {active && (
-        <Progress type={HMSPlaylistType.video} duration={active.duration} />
+        <Progress type={HMSPlaylistType.video} duration={active.duration}/>
       )}
       <Flex align="center" justify="between">
-        <VolumeControl />
-        {active && <Controls css={{ flex: '1 1 0' }} />}
+        <VolumeControl/>
+        {active && <Controls css={{flex: '1 1 0'}}/>}
         {children}
       </Flex>
     </Box>

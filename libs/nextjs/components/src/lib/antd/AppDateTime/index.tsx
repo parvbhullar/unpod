@@ -1,15 +1,9 @@
 'use client';
-import React, {
-  CSSProperties,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {CSSProperties, useEffect, useMemo, useRef, useState,} from 'react';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { DatePicker } from 'antd';
-import { Dayjs } from 'dayjs';
-import type { PickerRef } from '@rc-component/picker/es/interface';
+import {DatePicker} from 'antd';
+import {Dayjs} from 'dayjs';
+import type {PickerRef} from '@rc-component/picker/es/interface';
 
 type AppDateTimeProps = {
   placeholder: string;
@@ -21,19 +15,20 @@ type AppDateTimeProps = {
   onChange?: (date: Dayjs | null, dateString: string | string[] | null) => void;
   asterisk?: boolean;
   id?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppDateTime: React.FC<AppDateTimeProps> = ({
-  placeholder,
-  className = '',
-  style,
-  defaultValue,
-  value,
-  disabled = false,
-  onChange,
-  asterisk,
-  ...restProps
-}) => {
+                                                   placeholder,
+                                                   className = '',
+                                                   style,
+                                                   defaultValue,
+                                                   value,
+                                                   disabled = false,
+                                                   onChange,
+                                                   asterisk,
+                                                   ...restProps
+                                                 }) => {
   const [inputVal, setInputVal] = useState<Dayjs | null | undefined>(
     defaultValue || value || null,
   );
@@ -71,7 +66,7 @@ const AppDateTime: React.FC<AppDateTimeProps> = ({
     >
       <DatePicker
         placeholder=""
-        showTime={{ format: 'HH:mm' }}
+        showTime={{format: 'HH:mm'}}
         format="DD-MM-YYYY HH:mm"
         value={inputVal}
         autoComplete="off"

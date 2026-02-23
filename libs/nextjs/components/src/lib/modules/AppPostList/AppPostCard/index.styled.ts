@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
 export const StyledRoot = styled.div`
   display: flex;
@@ -9,10 +9,10 @@ export const StyledRoot = styled.div`
   min-width: 0;
   cursor: pointer;
   padding: 16px;
-  // border-bottom: 1px solid ${({ theme }) => theme.border.color};
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  // border-bottom: 1px solid ${({theme}) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
 `;
 
 export const StyledMeta = styled(Typography.Paragraph)`
@@ -48,7 +48,7 @@ export const StyledItem = styled.div`
 
 export const StyledHubSpaceTitle = styled(Typography.Paragraph)`
   font-size: 14px;
-  color: ${({ theme }) => theme.palette.primary};
+  color: ${({theme}) => theme.palette.primary};
   margin-bottom: 0 !important;
 
   .ant-typography {
@@ -64,7 +64,7 @@ export const StyledPostMedia = styled.div`
 
 export const StyledThumbnailWrapper = styled.div`
   position: relative;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
   max-width: 260px;
   min-width: 210px;
   overflow: hidden;

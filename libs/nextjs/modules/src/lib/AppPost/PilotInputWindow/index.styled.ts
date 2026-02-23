@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Divider, Input, Typography } from 'antd';
+import {Button, Divider, Input, Typography} from 'antd';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 export const StyledBottomBar = styled.div`
   display: flex;
@@ -19,18 +19,18 @@ export const StyledBottomBar = styled.div`
     margin-top: 8px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     justify-content: space-between;
   }
 `;
 
 export const StyledPilotRoot = styled.div`
-  background-color: ${({ theme }) =>
-    theme.palette.background.default} !important;
+  background-color: ${({theme}) =>
+  theme.palette.background.default} !important;
   width: 95%;
-  max-width: ${({ theme }) => theme.sizes.mainContentWidth};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  max-width: ${({theme}) => theme.sizes.mainContentWidth};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
   margin: auto auto 0;
   position: sticky;
   //padding-bottom: 10px;
@@ -38,11 +38,11 @@ export const StyledPilotRoot = styled.div`
   top: auto;
   z-index: 101;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     margin-bottom: 5px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     bottom: 0;
     //padding-bottom: 22px;
     margin-bottom: 0;
@@ -55,9 +55,9 @@ export const StyledPilotContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
   border-radius: 1.5rem;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   padding: 6px 6px;
   position: relative;
 
@@ -70,8 +70,8 @@ export const StyledPilotContainer = styled.div`
   }
 
   &:focus-within {
-    border-color: ${({ theme }) => theme.palette.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.palette.primary}15;
+    border-color: ${({theme}) => theme.palette.primary};
+    box-shadow: 0 0 0 3px ${({theme}) => theme.palette.primary}15;
   }
 `;
 
@@ -80,7 +80,7 @@ export const StyledContentWrapper = styled.div`
   //align-items: flex-end;
   justify-content: center;
   width: 100%;
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
   border-radius: 1.5rem;
   position: relative;
 
@@ -92,7 +92,7 @@ export const StyledContentWrapper = styled.div`
     align-items: stretch;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
     gap: 12px;
   }

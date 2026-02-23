@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Fragment } from 'react';
+import type {ReactNode} from 'react';
+import {Fragment} from 'react';
 import clsx from 'clsx';
 import {
   StyledActions,
@@ -14,22 +14,11 @@ import {
   StyledTime,
   StyledUserQuestion,
 } from '../index.styled';
-import {
-  Button,
-  Divider,
-  Dropdown,
-  Grid,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd';
+import {Button, Divider, Dropdown, Grid, Space, Tooltip, Typography,} from 'antd';
 import UserAvatar from '../../../common/UserAvatar';
-import { BsArrowReturnLeft } from 'react-icons/bs';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
+import {BsArrowReturnLeft} from 'react-icons/bs';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
 import ReactHtmlParser from '@unpod/external-libs/react-render-html';
 import ContentWithSource from './ContentWithSource';
 import AppMarkdownViewer from '../../../third-party/AppMarkdownViewer';
@@ -37,37 +26,33 @@ import AppJsonViewer from '../../../third-party/AppJsonViewer';
 import ImageGallery from '../../../common/ImageGallery';
 import AppAttachments from '../../../common/AppAttachments';
 import AppMediaPlayer from '../../../common/AppMediaPlayer';
-import {
-  MdMoreVert,
-  MdOutlineAccessTime,
-  MdOutlineNoteAdd,
-} from 'react-icons/md';
+import {MdMoreVert, MdOutlineAccessTime, MdOutlineNoteAdd,} from 'react-icons/md';
 import AppPostFooter from '../../AppPostFooter';
-import { getAvatarIconSize, getAvatarSize, getIconSize } from '../IconSize';
+import {getAvatarIconSize, getAvatarSize, getIconSize} from '../IconSize';
 
-const { useBreakpoint } = Grid;
+const {useBreakpoint} = Grid;
 
-const { Paragraph, Text } = Typography;
+const {Paragraph, Text} = Typography;
 const SystemMessage = ({
-  reply,
-  replyParent,
-  onClapClick,
-  onReplyClick,
-  onMenuClick,
-  items,
-  isAuthenticated,
-  user,
-  attachmentImages,
-  attachmentFiles,
-  onDownloadClick,
-  onSaveNote,
-  noteTitle,
-  actionsStyle,
-  children,
-  onClickName,
-  hideReply = false,
-  hideDelete = false,
-}: {
+                         reply,
+                         replyParent,
+                         onClapClick,
+                         onReplyClick,
+                         onMenuClick,
+                         items,
+                         isAuthenticated,
+                         user,
+                         attachmentImages,
+                         attachmentFiles,
+                         onDownloadClick,
+                         onSaveNote,
+                         noteTitle,
+                         actionsStyle,
+                         children,
+                         onClickName,
+                         hideReply = false,
+                         hideDelete = false,
+                       }: {
   reply: any;
   replyParent?: any;
   onClapClick?: (
@@ -99,7 +84,7 @@ const SystemMessage = ({
 
   return (
     <StyledReplyContainer
-      className={clsx({ 'user-question': reply.user.user_token })}
+      className={clsx({'user-question': reply.user.user_token})}
     >
       <StyledAvatar>
         <UserAvatar
@@ -186,7 +171,7 @@ const SystemMessage = ({
           {reply.parent?.block_id && (
             <StyledReplyParent>
               <StyledParent>
-                <BsArrowReturnLeft fontSize={16} />
+                <BsArrowReturnLeft fontSize={16}/>
                 <Paragraph type="secondary" ellipsis>
                   {reply.parent.title
                     ? reply.parent.title
@@ -198,7 +183,7 @@ const SystemMessage = ({
                 <UserAvatar
                   user={reply.parent.user}
                   size={24}
-                  style={{ fontSize: 10 }}
+                  style={{fontSize: 10}}
                 />
                 <Text>{reply.parent.user.full_name}</Text>
                 <StyledTime type="secondary">
@@ -216,19 +201,19 @@ const SystemMessage = ({
                     {ReactHtmlParser(reply.data.content)}
                   </StyledUserQuestion>
                 ) : reply.data.metadata ? (
-                  <ContentWithSource reply={reply} />
+                  <ContentWithSource reply={reply}/>
                 ) : (
                   <StyledContentWrapper>
-                    <AppMarkdownViewer markdown={reply.data.content} />
+                    <AppMarkdownViewer markdown={reply.data.content}/>
                   </StyledContentWrapper>
                 ))}
 
               {reply.data?.json && (
-                <AppJsonViewer json={reply.data.json} showCopyClipboard />
+                <AppJsonViewer json={reply.data.json} showCopyClipboard/>
               )}
 
               {attachmentImages && attachmentImages?.length > 0 && (
-                <div style={{ marginTop: 12 }}>
+                <div style={{marginTop: 12}}>
                   <ImageGallery
                     images={(attachmentImages || []) as { media_url: string }[]}
                     onDownload={
@@ -242,7 +227,7 @@ const SystemMessage = ({
 
               {attachmentFiles && attachmentFiles.length > 0 && (
                 <Fragment>
-                  <Divider type="horizontal" style={{ marginBlock: 12 }} />
+                  <Divider type="horizontal" style={{marginBlock: 12}}/>
                   <AppAttachments
                     attachments={(attachmentFiles || []) as any}
                     onDownload={onDownloadClick}
@@ -253,7 +238,7 @@ const SystemMessage = ({
           ) : (
             reply.block === 'media' && (
               <div className="app-post-viewer">
-                <AppMediaPlayer title={reply.title} media={reply.media} />
+                <AppMediaPlayer title={reply.title} media={reply.media}/>
               </div>
             )
           )}
@@ -262,7 +247,7 @@ const SystemMessage = ({
         </StyledMeta>
 
         <StyledActions style={actionsStyle}>
-          <Space split={<Divider type="vertical" />}>
+          <Space split={<Divider type="vertical"/>}>
             <Tooltip
               title={changeDateStringFormat(
                 reply.created,
@@ -271,7 +256,7 @@ const SystemMessage = ({
               )}
             >
               <StyledTime type="secondary">
-                <MdOutlineAccessTime fontSize={iconSize} />
+                <MdOutlineAccessTime fontSize={iconSize}/>
                 {getTimeFromNow(reply.created)}
               </StyledTime>
             </Tooltip>
@@ -298,9 +283,9 @@ const SystemMessage = ({
                 type="default"
                 shape="round"
                 size="small"
-                icon={<MdOutlineNoteAdd fontSize={iconSize} />}
+                icon={<MdOutlineNoteAdd fontSize={iconSize}/>}
                 onClick={() =>
-                  onSaveNote({ ...reply, context: reply.context || noteTitle })
+                  onSaveNote({...reply, context: reply.context || noteTitle})
                 }
               >
                 Save as Note
@@ -326,7 +311,7 @@ const SystemMessage = ({
                     size="small"
                     type={'link'}
                     shape="circle"
-                    icon={<MdMoreVert fontSize={avatarIconSize} />}
+                    icon={<MdMoreVert fontSize={avatarIconSize}/>}
                   />
                 </Dropdown>
               )}

@@ -7,7 +7,7 @@ export const StyledRoot = styled.div`
   flex-direction: column;
   gap: 16px;
   height: calc(100vh - 74px);
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding: 12px;
   }
 `;
@@ -17,8 +17,8 @@ export const StyledItemRoot = styled('div')`
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border: 1px solid ${({ theme }) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 16px;
   cursor: pointer;
   max-width: 400px;
@@ -26,7 +26,7 @@ export const StyledItemRoot = styled('div')`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.background.component};
+    background-color: ${({theme}) => theme.palette.background.component};
   }
 `;
 

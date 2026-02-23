@@ -1,39 +1,39 @@
 'use client';
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { Col, Form, Row, Select } from 'antd';
+import {Col, Form, Row, Select} from 'antd';
 import dayjs from 'dayjs';
 import AppSelect from '../../antd/AppSelect';
 import AppDate from '../../antd/AppDate';
 import AppTime from '../../antd/AppTime';
-import { getScheduleOptions } from '@unpod/helpers/DateHelper';
-import { useIntl } from 'react-intl';
+import {getScheduleOptions} from '@unpod/helpers/DateHelper';
+import {useIntl} from 'react-intl';
 
-const { Option } = Select;
-const { Item } = Form;
+const {Option} = Select;
+const {Item} = Form;
 const customScheduleOptions = getScheduleOptions();
 
-const AppScheduleInputs = ({ form }: { form: any }) => {
-  const { formatMessage } = useIntl();
+const AppScheduleInputs = ({form}: { form: any }) => {
+  const {formatMessage} = useIntl();
   const [repeatType, setRepeatType] = useState('not-repeat');
 
   const repeatOptions = [
-    { label: 'schedule.notRepeat', value: 'not-repeat', mode: 'date' },
-    { label: 'schedule.daily', value: 'daily', mode: 'date' },
-    { label: 'schedule.weekly', value: 'weekly', mode: 'date' },
-    { label: 'schedule.monthly', value: 'monthly', mode: 'date' },
-    { label: 'schedule.annually', value: 'annually', mode: 'month' },
-    { label: 'schedule.custom', value: 'custom', mode: 'date' },
+    {label: 'schedule.notRepeat', value: 'not-repeat', mode: 'date'},
+    {label: 'schedule.daily', value: 'daily', mode: 'date'},
+    {label: 'schedule.weekly', value: 'weekly', mode: 'date'},
+    {label: 'schedule.monthly', value: 'monthly', mode: 'date'},
+    {label: 'schedule.annually', value: 'annually', mode: 'month'},
+    {label: 'schedule.custom', value: 'custom', mode: 'date'},
   ];
 
   const weekDays = [
-    { label: 'week.sunday', value: 'sunday' },
-    { label: 'week.monday', value: 'monday' },
-    { label: 'week.tuesday', value: 'tuesday' },
-    { label: 'week.wednesday', value: 'wednesday' },
-    { label: 'week.thursday', value: 'thursday' },
-    { label: 'week.friday', value: 'friday' },
-    { label: 'week.saturday', value: 'saturday' },
+    {label: 'week.sunday', value: 'sunday'},
+    {label: 'week.monday', value: 'monday'},
+    {label: 'week.tuesday', value: 'tuesday'},
+    {label: 'week.wednesday', value: 'wednesday'},
+    {label: 'week.thursday', value: 'thursday'},
+    {label: 'week.friday', value: 'friday'},
+    {label: 'week.saturday', value: 'saturday'},
   ];
 
   const onRepeatTypeChange = (
@@ -72,17 +72,17 @@ const AppScheduleInputs = ({ form }: { form: any }) => {
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'schedule.selectOption' }),
+              message: formatMessage({id: 'schedule.selectOption'}),
             },
           ]}
         >
           <AppSelect
-            placeholder={formatMessage({ id: 'schedule.repeatType' })}
+            placeholder={formatMessage({id: 'schedule.repeatType'})}
             onChange={onRepeatTypeChange}
           >
             {repeatOptions.map((option) => (
               <Option key={option.value} value={option.value}>
-                {formatMessage({ id: option.label })}
+                {formatMessage({id: option.label})}
               </Option>
             ))}
           </AppSelect>
@@ -95,7 +95,7 @@ const AppScheduleInputs = ({ form }: { form: any }) => {
             <Col sm={24} md={18}>
               <Item>
                 <AppSelect
-                  placeholder={formatMessage({ id: 'schedule.customDateTime' })}
+                  placeholder={formatMessage({id: 'schedule.customDateTime'})}
                   onChange={onChangeCustom}
                   allowClear
                 >
@@ -118,14 +118,14 @@ const AppScheduleInputs = ({ form }: { form: any }) => {
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'schedule.selectDay' }),
+                message: formatMessage({id: 'schedule.selectDay'}),
               },
             ]}
           >
-            <AppSelect placeholder={formatMessage({ id: 'schedule.day' })}>
+            <AppSelect placeholder={formatMessage({id: 'schedule.day'})}>
               {weekDays.map((option) => (
                 <Option key={option.value} value={option.value}>
-                  {formatMessage({ id: option.label })}
+                  {formatMessage({id: option.label})}
                 </Option>
               ))}
             </AppSelect>
@@ -142,12 +142,12 @@ const AppScheduleInputs = ({ form }: { form: any }) => {
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'schedule.selectDate' }),
+                message: formatMessage({id: 'schedule.selectDate'}),
               },
             ]}
           >
             <AppDate
-              placeholder={formatMessage({ id: 'schedule.date' })}
+              placeholder={formatMessage({id: 'schedule.date'})}
               picker={repeatOptions.find((r) => r.value === repeatType)?.mode}
             />
           </Item>
@@ -161,12 +161,12 @@ const AppScheduleInputs = ({ form }: { form: any }) => {
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'schedule.selectTime' }),
+                message: formatMessage({id: 'schedule.selectTime'}),
               },
             ]}
           >
             <AppTime
-              placeholder={formatMessage({ id: 'schedule.time' })}
+              placeholder={formatMessage({id: 'schedule.time'})}
               format="HH:mm"
               defaultOpenValue={dayjs('09:00:00', 'HH:mm:ss')}
             />

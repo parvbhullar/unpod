@@ -1,9 +1,9 @@
-import { Input } from 'antd';
+import {Input} from 'antd';
 import styled from 'styled-components';
 
 export const StyledFormulaInput = styled(Input)`
   width: 100%;
-  border-radius: ${({ theme }) => theme.border.radius};
+  border-radius: ${({theme}) => theme.border.radius};
   margin-bottom: 10px;
 
   &.ant-input-affix-wrapper {
@@ -11,7 +11,7 @@ export const StyledFormulaInput = styled(Input)`
   }
 
   & .ant-input-number-handler-wrap {
-    border-start-end-radius: ${({ theme }) => theme.border.radius};
-    border-end-end-radius: ${({ theme }) => theme.border.radius};
+    border-start-end-radius: ${({theme}) => theme.border.radius};
+    border-end-end-radius: ${({theme}) => theme.border.radius};
   }
 `;

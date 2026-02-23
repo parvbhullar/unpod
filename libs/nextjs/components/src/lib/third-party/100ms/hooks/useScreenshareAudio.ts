@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import {useCallback} from 'react';
 import {
   selectPeerSharingAudio,
   selectScreenShareAudioByPeerID,
@@ -24,5 +24,5 @@ export const useScreenshareAudio = () => {
     muted = peer.isLocal ? !track.enabled : track.volume === 0;
   }
 
-  return { peer, track, muted, onToggle: handleMute };
+  return {peer, track, muted, onToggle: handleMute};
 };

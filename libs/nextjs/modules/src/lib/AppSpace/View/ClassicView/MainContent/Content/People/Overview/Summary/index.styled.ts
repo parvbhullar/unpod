@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { Card, Typography } from 'antd';
+import {Card, Typography} from 'antd';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 export const StyledRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   padding: 32px;
 `;
 
@@ -20,7 +20,7 @@ export const StyledDateHeader = styled(Text)`
 `;
 
 export const StyledCard = styled(Card)`
-  background-color: ${({ theme }) => theme.palette.background.component};
+  background-color: ${({theme}) => theme.palette.background.component};
 
   .ant-card-body {
     padding: 12px !important;
@@ -28,8 +28,8 @@ export const StyledCard = styled(Card)`
 `;
 
 export const StyledAnalyticsCard = styled(Card)`
-  background-color: ${({ theme }) => theme.palette.background.default};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  background-color: ${({theme}) => theme.palette.background.default};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
 
   .ant-card-body {
     padding: 12px !important;

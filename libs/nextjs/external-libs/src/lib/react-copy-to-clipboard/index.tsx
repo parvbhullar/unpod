@@ -1,15 +1,16 @@
-import React, { ReactElement } from 'react';
-import { CopyOptions, copyToClipboard } from './copy-to-clipboard';
+import React, {ReactElement} from 'react';
+import {CopyOptions, copyToClipboard} from './copy-to-clipboard';
 
 export type CopyToClipboardProps = {
   text: string;
   children: ReactElement<any>;
   onCopy?: (text: string, result: boolean) => void;
-  options?: CopyOptions;};
+  options?: CopyOptions;
+};
 
 export class CopyToClipboard extends React.PureComponent<CopyToClipboardProps> {
   handleClick = (event: React.MouseEvent): void => {
-    const { text, onCopy, children, options } = this.props;
+    const {text, onCopy, children, options} = this.props;
 
     const elem = React.Children.only(children);
 
@@ -35,6 +36,6 @@ export class CopyToClipboard extends React.PureComponent<CopyToClipboardProps> {
     } = this.props;
     const elem = React.Children.only(children);
 
-    return React.cloneElement(elem, { ...props, onClick: this.handleClick });
+    return React.cloneElement(elem, {...props, onClick: this.handleClick});
   }
 }

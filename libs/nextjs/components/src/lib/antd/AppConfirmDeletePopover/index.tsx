@@ -1,12 +1,8 @@
 'use client';
-import React, { Fragment, ReactNode, useState } from 'react';
-import { Button } from 'antd';
-import {
-  StyledAppDeletePopoverWrapper,
-  StyledConfirmDeleteActions,
-  StyledMessageBody,
-} from './index.styled';
-import { useIntl } from 'react-intl';
+import React, {Fragment, ReactNode, useState} from 'react';
+import {Button} from 'antd';
+import {StyledAppDeletePopoverWrapper, StyledConfirmDeleteActions, StyledMessageBody,} from './index.styled';
+import {useIntl} from 'react-intl';
 
 type AppConfirmDeletePopoverProps = {
   title?: string;
@@ -15,16 +11,17 @@ type AppConfirmDeletePopoverProps = {
   onConfirm?: () => void;
   onCancel?: () => void;
   children?: ReactNode;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppConfirmDeletePopover: React.FC<AppConfirmDeletePopoverProps> = ({
-  title,
-  message,
-  okBtnText,
-  onConfirm,
-  onCancel,
-  ...restProps
-}) => {
+                                                                           title,
+                                                                           message,
+                                                                           okBtnText,
+                                                                           onConfirm,
+                                                                           onCancel,
+                                                                           ...restProps
+                                                                         }) => {
   const [openPopover, setOpenPopover] = useState<boolean>(false);
   const handleVisibleChange = (open: boolean) => setOpenPopover(open);
 
@@ -62,15 +59,16 @@ type DeleteMessageProps = {
   message?: string;
   okBtnText?: string;
   onConfirm?: () => void;
-  onCancel?: () => void;};
+  onCancel?: () => void;
+};
 
 export const DeleteMessage: React.FC<DeleteMessageProps> = ({
-  message = 'Are you sure to delete this record?',
-  okBtnText = 'Delete',
-  onConfirm,
-  onCancel,
-}) => {
-  const { formatMessage } = useIntl();
+                                                              message = 'Are you sure to delete this record?',
+                                                              okBtnText = 'Delete',
+                                                              onConfirm,
+                                                              onCancel,
+                                                            }) => {
+  const {formatMessage} = useIntl();
   return (
     <Fragment>
       <StyledMessageBody>{message}</StyledMessageBody>
@@ -82,7 +80,7 @@ export const DeleteMessage: React.FC<DeleteMessageProps> = ({
           shape="round"
           onClick={onCancel}
         >
-          {formatMessage({ id: 'common.cancel' })}
+          {formatMessage({id: 'common.cancel'})}
         </Button>
         <Button
           type="primary"
@@ -91,7 +89,7 @@ export const DeleteMessage: React.FC<DeleteMessageProps> = ({
           onClick={onConfirm}
           danger
         >
-          {okBtnText || formatMessage({ id: 'common.delete' })}
+          {okBtnText || formatMessage({id: 'common.delete'})}
         </Button>
       </StyledConfirmDeleteActions>
     </Fragment>

@@ -2,7 +2,7 @@
 import {useEffect, useState} from 'react';
 import {MdHistory, MdKey, MdLockOpen, MdOutlineWorkspaces,} from 'react-icons/md';
 import {Popover, Tooltip} from 'antd';
-import {useAuthActionsContext, useAuthContext} from '@unpod/providers';
+import {useAuthContext} from '@unpod/providers';
 import {useParams, usePathname, useRouter} from 'next/navigation';
 import AppLink from '@unpod/components/next/AppLink';
 import clsx from 'clsx';

@@ -1,27 +1,23 @@
 'use client';
-import { useState } from 'react';
-import {
-  uploadDataApi,
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
-import { allowedFileTypes } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { Button, Form, Progress, Space, Typography } from 'antd';
-import { MdArrowUpward } from 'react-icons/md';
-import { StyledActions, StyledButton, StyledDragger } from './index.style';
-import { DrawerForm } from '@unpod/components/antd';
-import { useIntl } from 'react-intl';
+import {useState} from 'react';
+import {uploadDataApi, useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
+import {allowedFileTypes} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {Button, Form, Progress, Space, Typography} from 'antd';
+import {MdArrowUpward} from 'react-icons/md';
+import {StyledActions, StyledButton, StyledDragger} from './index.style';
+import {DrawerForm} from '@unpod/components/antd';
+import {useIntl} from 'react-intl';
 
 type UploadDocumentsProps = {
   currentKb: any;
   onSaved?: () => void;
 };
 
-const UploadDocuments = ({ currentKb, onSaved }: UploadDocumentsProps) => {
+const UploadDocuments = ({currentKb, onSaved}: UploadDocumentsProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { loading } = useInfoViewContext();
-  const { formatMessage } = useIntl();
+  const {loading} = useInfoViewContext();
+  const {formatMessage} = useIntl();
 
   const [uploadPercent, setUploadPercent] = useState(0);
   const [mediaList, setMediaList] = useState<any[]>([]);
@@ -65,7 +61,7 @@ const UploadDocuments = ({ currentKb, onSaved }: UploadDocumentsProps) => {
           !acceptMediaTypes?.includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setMediaList((prevState) => [...prevState, file]);
@@ -84,8 +80,8 @@ const UploadDocuments = ({ currentKb, onSaved }: UploadDocumentsProps) => {
   return (
     <DrawerForm onFinish={onSubmitSuccess} layout="vertical">
       {uploadPercent > 0 && uploadPercent < 100 ? (
-        <Form.Item label={formatMessage({ id: 'common.uploading' })}>
-          <Progress percent={uploadPercent} />
+        <Form.Item label={formatMessage({id: 'common.uploading'})}>
+          <Progress percent={uploadPercent}/>
         </Form.Item>
       ) : (
         <StyledDragger
@@ -98,10 +94,10 @@ const UploadDocuments = ({ currentKb, onSaved }: UploadDocumentsProps) => {
           multiple
         >
           <Space orientation="vertical" size={4}>
-            <Button shape="circle" icon={<MdArrowUpward fontSize={21} />} />
+            <Button shape="circle" icon={<MdArrowUpward fontSize={21}/>}/>
 
             <Typography.Text>
-              {formatMessage({ id: 'knowledgeBase.dragFileToUpload' })}
+              {formatMessage({id: 'knowledgeBase.dragFileToUpload'})}
             </Typography.Text>
           </Space>
         </StyledDragger>
@@ -116,7 +112,7 @@ const UploadDocuments = ({ currentKb, onSaved }: UploadDocumentsProps) => {
           loading={loading}
           disabled={!mediaList.length}
         >
-          {formatMessage({ id: 'common.upload' })}
+          {formatMessage({id: 'common.upload'})}
         </StyledButton>
       </StyledActions>
     </DrawerForm>

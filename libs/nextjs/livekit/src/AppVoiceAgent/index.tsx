@@ -1,5 +1,5 @@
 import React from 'react';
-import { AgentConnectionProvider } from '../hooks/useAgentConnection';
+import {AgentConnectionProvider} from '../hooks/useAgentConnection';
 import AgentView from './AgentView';
 
 type AppVoiceAgentProps = {

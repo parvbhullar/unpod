@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Slider, Typography } from 'antd';
+import {Slider, Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledTitle = styled(Paragraph)`
   margin-bottom: 0 !important;
@@ -12,7 +12,7 @@ export const StyledSlider = styled(Slider)`
   margin-right: 24px;
 
   .ant-slider-track {
-    background-color: ${({ theme }) => theme.palette.primary} !important;
+    background-color: ${({theme}) => theme.palette.primary} !important;
   }
 
   .ant-slider-rail {
@@ -20,7 +20,7 @@ export const StyledSlider = styled(Slider)`
   }
 
   .ant-slider-dot-active {
-    border-color: ${({ theme }) => theme.palette.primary} !important;
+    border-color: ${({theme}) => theme.palette.primary} !important;
   }
 `;
 
@@ -38,10 +38,10 @@ export const StyledList = styled.div`
   row-gap: 12px;
   padding: 12px;
   margin-bottom: 20px;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   border-radius: 10px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     row-gap: 24px;
   }
 `;

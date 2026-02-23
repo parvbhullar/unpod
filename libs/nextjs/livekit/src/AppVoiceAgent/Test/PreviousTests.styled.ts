@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { GlobalTheme } from '@unpod/constants';
-import { Flex } from 'antd';
+import {GlobalTheme} from '@unpod/constants';
+import {Flex} from 'antd';
 
 type StyledFlexProps = {
   $mb?: number;
@@ -15,8 +15,8 @@ export const TestsWrapper = styled.div`
 
 export const TestsContent = styled.div<{ $startCall?: boolean | undefined }>`
   display: flex;
-  max-height: ${({ $startCall }) =>
-    $startCall ? '370px' : 'calc(100vh - 196px)'};
+  max-height: ${({$startCall}) =>
+  $startCall ? '370px' : 'calc(100vh - 196px)'};
   overflow-y: auto;
 `;
 
@@ -35,8 +35,8 @@ export const TestCard = styled.div`
   padding: 12px 16px;
   border-radius: 12px;
   margin: 6px 16px;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.component};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.component};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
@@ -52,10 +52,10 @@ export const TestMeta = styled.div`
   align-items: center;
   gap: 12px;
   font-size: 12px;
-  color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.text.secondary};
+  color: ${({theme}: { theme: GlobalTheme }) => theme.palette.text.secondary};
 `;
 
 export const StyledFlex = styled(Flex)<StyledFlexProps>`
-  margin-bottom: ${({ $mb = 0 }) => `${$mb}px`};
+  margin-bottom: ${({$mb = 0}) => `${$mb}px`};
   width: 100%;
 `;

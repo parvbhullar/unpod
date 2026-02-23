@@ -1,17 +1,17 @@
-import { ToastConfig } from './ToastConfig';
-import { ToastManager } from './ToastManager';
+import {ToastConfig} from './ToastConfig';
+import {ToastManager} from './ToastManager';
 
 export const ToastBatcher = {
   toastsType: new Map(),
-  showToastInternal({ notification, duration, type }) {
+  showToastInternal({notification, duration, type}) {
     let notificationType = type;
     if (!type) {
       notificationType = notification.type;
     }
     const toastType = this.toastsType.has(notificationType);
     if (toastType) {
-      let { notifications } = this.toastsType.get(notificationType);
-      const { id } = this.toastsType.get(notificationType);
+      let {notifications} = this.toastsType.get(notificationType);
+      const {id} = this.toastsType.get(notificationType);
       notifications.push(notification);
       const toastObject = ToastConfig[notificationType].multiple(notifications);
       const toastId = ToastManager.replaceToast(id, {
@@ -38,9 +38,9 @@ export const ToastBatcher = {
       });
     }
   },
-  showToast({ notification, duration = 3000, type }) {
+  showToast({notification, duration = 3000, type}) {
     try {
-      this.showToastInternal({ notification, duration, type });
+      this.showToastInternal({notification, duration, type});
     } catch (err) {
       console.debug('Notifications', err);
     }

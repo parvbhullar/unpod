@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Empty } from 'antd';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {Empty} from 'antd';
 import type {
   AppTableProps,
   CellKeyboardEvent,
@@ -11,17 +11,14 @@ import type {
   SortColumn,
 } from './core/models/data-grid';
 
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { PAGINATION_SIZE } from './core/constants/AppConst';
-import {
-  DraggableHeaderRenderer,
-  DraggableRowRenderer,
-} from './core/components';
+import {DndProvider} from 'react-dnd';
+import {HTML5Backend} from 'react-dnd-html5-backend';
+import {PAGINATION_SIZE} from './core/constants/AppConst';
+import {DraggableHeaderRenderer, DraggableRowRenderer,} from './core/components';
 import DataGrid from './core/DataGrid';
 import TablePagination from './core/TablePagination';
 import LoadingView from './core/components/LoadingView';
-import { StyledTableEmptyWrapper } from './index.styled';
+import {StyledTableEmptyWrapper} from './index.styled';
 
 type DraggableTableProps = AppTableProps & {
   sortedRows: any[];
@@ -35,35 +32,36 @@ type DraggableTableProps = AppTableProps & {
   rowKeyGetter: Maybe<(row: any, rowKey: string) => number>;
   setFilter: React.Dispatch<React.SetStateAction<FilterType>>;
 
-  handleCellKeyDown(args: CellKeyDownArgs<any>, event: CellKeyboardEvent): void;};
+  handleCellKeyDown(args: CellKeyDownArgs<any>, event: CellKeyboardEvent): void;
+};
 
 const AppDraggableDataGrid = <R, SR>({
-  columns,
-  sortedRows,
-  dataSource,
-  loading,
-  id,
-  onChange,
-  rowKey,
-  rowSelection,
-  pagination,
-  blockSize,
-  wrapperRef,
-  rowHeight,
-  filters,
-  customGridTempleteRows,
-  sortColumns,
-  selectedRows,
-  size = 'large',
-  bordered = false,
-  onRowDragEnd,
-  rowKeyGetter,
-  setSortColumns,
-  setFilter,
-  onSetSelectedRows,
-  handleCellKeyDown,
-  ...restProps
-}: DraggableTableProps) => {
+                                       columns,
+                                       sortedRows,
+                                       dataSource,
+                                       loading,
+                                       id,
+                                       onChange,
+                                       rowKey,
+                                       rowSelection,
+                                       pagination,
+                                       blockSize,
+                                       wrapperRef,
+                                       rowHeight,
+                                       filters,
+                                       customGridTempleteRows,
+                                       sortColumns,
+                                       selectedRows,
+                                       size = 'large',
+                                       bordered = false,
+                                       onRowDragEnd,
+                                       rowKeyGetter,
+                                       setSortColumns,
+                                       setFilter,
+                                       onSetSelectedRows,
+                                       handleCellKeyDown,
+                                       ...restProps
+                                     }: DraggableTableProps) => {
   const [updatedColumns, setUpdatedColumns] = useState(columns || []);
   const [updatedRows, setUpdatedRows] = useState<any[]>([]);
 
@@ -109,7 +107,7 @@ const AppDraggableDataGrid = <R, SR>({
 
     return updatedColumns.map((c) => {
       if (c.dataIndex === 'id') return c;
-      return { ...c, renderHeaderCell };
+      return {...c, renderHeaderCell};
     });
   }, [updatedColumns]);
 
@@ -124,7 +122,7 @@ const AppDraggableDataGrid = <R, SR>({
     }
 
     return (
-      <DraggableRowRenderer key={key} {...props} onRowReorder={onRowReorder} />
+      <DraggableRowRenderer key={key} {...props} onRowReorder={onRowReorder}/>
     );
   }, []);
 
@@ -217,7 +215,7 @@ const AppDraggableDataGrid = <R, SR>({
       {loading ? (
         <LoadingView
           position="absolute"
-          style={{ backgroundColor: 'transparent' }}
+          style={{backgroundColor: 'transparent'}}
         />
       ) : null}
     </React.Fragment>

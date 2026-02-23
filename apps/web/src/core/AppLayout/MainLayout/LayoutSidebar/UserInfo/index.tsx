@@ -1,20 +1,15 @@
 'use client';
-import { memo, useMemo } from 'react';
-import {
-  useAuthActionsContext,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
+import {memo, useMemo} from 'react';
+import {useAuthActionsContext, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
 import AppLink from '@unpod/components/next/AppLink';
-import { MdLogout, MdOutlineAccountBalanceWallet } from 'react-icons/md';
-import { StyledUserAvatar, UserInfoWrapper } from './index.styled';
-import { usePathname } from 'next/navigation';
-import { Dropdown, type MenuProps } from 'antd';
+import {MdLogout} from 'react-icons/md';
+import {StyledUserAvatar, UserInfoWrapper} from './index.styled';
+import {usePathname} from 'next/navigation';
+import {Dropdown, type MenuProps} from 'antd';
 import UserAvatar from '@unpod/components/common/UserAvatar';
-import { TbCalendarDollar } from 'react-icons/tb';
 import useIsDesktop from '@unpod/custom-hooks/useIsDesktop';
-import { useIntl } from 'react-intl';
-import type { User } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {User} from '@unpod/constants/types';
 
 function getItem(
   label: string | undefined,

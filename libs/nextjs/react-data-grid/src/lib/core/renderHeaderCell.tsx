@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Button, Popover, Select } from 'antd';
+import {useEffect, useState} from 'react';
+import {Button, Popover, Select} from 'antd';
 import styled from 'styled-components';
 // import './index.css';
-import type { FilterDataType, RenderHeaderCellProps } from './models/data-grid';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
-import { useDataGridConfiguration } from './DataGridContext';
+import type {FilterDataType, RenderHeaderCellProps} from './models/data-grid';
+import {FilterFilled, SearchOutlined} from '@ant-design/icons';
+import {useDataGridConfiguration} from './DataGridContext';
 
 const StyledHeaderRoot = styled.span`
   display: flex;
@@ -17,10 +17,10 @@ const StyledHeaderRoot = styled.span`
 
 const StyledFilterIcon = styled.span<{ fillColor: string }>`
   cursor: pointer;
-  color: ${({ fillColor }: { fillColor: string }) =>
-    fillColor !== ''
-      ? fillColor
-      : ({ theme }: { theme: any }) => theme.table.headerIconColor};
+  color: ${({fillColor}: { fillColor: string }) =>
+  fillColor !== ''
+    ? fillColor
+    : ({theme}: { theme: any }) => theme.table.headerIconColor};
 `;
 
 const StyledHeaderName = styled.span`
@@ -45,15 +45,15 @@ const StyledActionContainer = styled.div`
 `;
 
 export default function renderHeaderCell<R, SR>({
-  column,
-  sortDirection,
-  priority,
-  onFilter,
-  filterValue,
-  headerColumnOptions,
-  onSort,
-  onClick,
-}: RenderHeaderCellProps<R, SR>) {
+                                                  column,
+                                                  sortDirection,
+                                                  priority,
+                                                  onFilter,
+                                                  filterValue,
+                                                  headerColumnOptions,
+                                                  onSort,
+                                                  onClick,
+                                                }: RenderHeaderCellProps<R, SR>) {
   const gridConfig = useDataGridConfiguration();
 
   return (
@@ -89,7 +89,7 @@ export default function renderHeaderCell<R, SR>({
       )}*/}
 
       <StyledHeaderName
-        style={{ textAlign: column.align ?? 'left' }}
+        style={{textAlign: column.align ?? 'left'}}
         className="rdg-header-name"
         onClick={onClick}
       >
@@ -118,10 +118,10 @@ type SharedFilterHeaderCellProps<R, SR> = Pick<
 >;
 
 function FilterHeaderCell<R, SR>({
-  filterValue,
-  column,
-  onFilter,
-}: SharedFilterHeaderCellProps<R, SR>) {
+                                   filterValue,
+                                   column,
+                                   onFilter,
+                                 }: SharedFilterHeaderCellProps<R, SR>) {
   const [open, onOpen] = useState(false);
   const [hasFilter, onSetFilter] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<FilterDataType>([]);
@@ -189,7 +189,7 @@ function FilterHeaderCell<R, SR>({
               <Button
                 type="primary"
                 onClick={onConfirm}
-                icon={<SearchOutlined />}
+                icon={<SearchOutlined/>}
                 size="small"
               >
                 Search
@@ -213,7 +213,7 @@ function FilterHeaderCell<R, SR>({
         column.filterIcon(hasFilter)
       ) : (
         <StyledFilterIcon fillColor={hasFilter ? '#1890ff' : ''}>
-          <FilterFilled />
+          <FilterFilled/>
         </StyledFilterIcon>
       )}
     </Popover>

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Card, Col, Row, Skeleton } from 'antd';
+import {Card, Col, Row, Skeleton} from 'antd';
 import styled from 'styled-components';
 
 const StyledSkeleton = styled(Skeleton)`
@@ -29,13 +29,13 @@ const StyledSkeleton = styled(Skeleton)`
 const TemplateSkeleton: React.FC = () => {
   return (
     <Row gutter={[12, 12]}>
-      {Array.from({ length: 8 }).map((_, index) => (
+      {Array.from({length: 8}).map((_, index) => (
         <Col span={12} key={index}>
-          <Card bordered styles={{ body: { padding: 12 } }}>
+          <Card bordered styles={{body: {padding: 12}}}>
             <StyledSkeleton
               active
-              avatar={{ shape: 'circle', size: 40 }}
-              title={{ width: '60%' }}
+              avatar={{shape: 'circle', size: 40}}
+              title={{width: '60%'}}
               paragraph={{
                 rows: 5,
                 width: ['100%', '100%', '100%', '100%', '50%'],
@@ -48,4 +48,4 @@ const TemplateSkeleton: React.FC = () => {
   );
 };
 
-export { TemplateSkeleton };
+export {TemplateSkeleton};

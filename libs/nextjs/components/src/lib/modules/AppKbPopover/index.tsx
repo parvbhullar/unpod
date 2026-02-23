@@ -1,13 +1,13 @@
-import type { ChangeEvent, Dispatch, ReactNode, SetStateAction } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import type {ChangeEvent, Dispatch, ReactNode, SetStateAction} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 
-import { Badge, Tooltip } from 'antd';
-import { isArray } from 'lodash';
-import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
-import { BsDatabase } from 'react-icons/bs';
+import {Badge, Tooltip} from 'antd';
+import {isArray} from 'lodash';
+import {MdCheckBox, MdCheckBoxOutlineBlank} from 'react-icons/md';
+import {BsDatabase} from 'react-icons/bs';
 import clsx from 'clsx';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import { useAuthContext, useGetDataApi } from '@unpod/providers';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {useAuthContext, useGetDataApi} from '@unpod/providers';
 import {
   StyledIconButton,
   StyledInputWrapper,
@@ -16,8 +16,8 @@ import {
   StyledMenus,
   StyledSearchInput,
 } from './index.styled';
-import { AppPopover } from '../../antd';
-import { useIntl } from 'react-intl';
+import {AppPopover} from '../../antd';
+import {useIntl} from 'react-intl';
 
 type KnowledgeBaseItem = {
   slug: string;
@@ -34,19 +34,20 @@ type KbMenuItem = {
 
 type AppKbPopoverProps = {
   knowledgeBases: string[];
-  setKnowledgeBases: Dispatch<SetStateAction<string[]>>;};
+  setKnowledgeBases: Dispatch<SetStateAction<string[]>>;
+};
 
 const AppKbPopover = ({
-  knowledgeBases,
-  setKnowledgeBases,
-}: AppKbPopoverProps) => {
-  const { isAuthenticated } = useAuthContext();
+                        knowledgeBases,
+                        setKnowledgeBases,
+                      }: AppKbPopoverProps) => {
+  const {isAuthenticated} = useAuthContext();
   const [search, setSearch] = useState('');
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
-  const [{ apiData }, { reCallAPI }] = useGetDataApi(
+  const [{apiData}, {reCallAPI}] = useGetDataApi(
     `core/knowledgebase/`,
-    { data: [] },
+    {data: []},
     {},
     false,
   );
@@ -117,7 +118,7 @@ const AppKbPopover = ({
         <StyledKbMenus>
           <StyledInputWrapper>
             <StyledSearchInput
-              placeholder={formatMessage({ id: 'common.searchHere' })}
+              placeholder={formatMessage({id: 'common.searchHere'})}
               value={search}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setSearch(event.target.value)
@@ -131,26 +132,26 @@ const AppKbPopover = ({
           />
 
           <StyledKbActions
-            className={clsx({ 'all-selected': allSelected })}
+            className={clsx({'all-selected': allSelected})}
             onClick={toggleSelectAll}
           >
             {allSelected ? (
-              <MdCheckBox fontSize={18} />
+              <MdCheckBox fontSize={18}/>
             ) : (
-              <MdCheckBoxOutlineBlank fontSize={18} />
+              <MdCheckBoxOutlineBlank fontSize={18}/>
             )}
             {allSelected
-              ? formatMessage({ id: 'common.unselectAll' })
-              : formatMessage({ id: 'common.selectAll' })}
+              ? formatMessage({id: 'common.unselectAll'})
+              : formatMessage({id: 'common.selectAll'})}
           </StyledKbActions>
         </StyledKbMenus>
       }
       arrow
     >
       <Badge count={knowledgeBases?.length} offset={[-5, 2]}>
-        <Tooltip title={formatMessage({ id: 'knowledgeBase.pageTitle' })}>
+        <Tooltip title={formatMessage({id: 'knowledgeBase.pageTitle'})}>
           <StyledIconButton type="text" shape="round">
-            <BsDatabase fontSize={18} />
+            <BsDatabase fontSize={18}/>
           </StyledIconButton>
         </Tooltip>
       </Badge>

@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import jaMessages from '../locales/ja_JP.json';
 import jaJP from 'antd/lib/locale/ja_JP';
 

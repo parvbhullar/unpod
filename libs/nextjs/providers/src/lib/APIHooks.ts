@@ -1,19 +1,12 @@
 'use client';
 
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { httpClient, httpLocalClient } from '@unpod/services';
-import { isRequestSuccessful, sanitizeData } from '@unpod/helpers/ApiHelper';
-import { useInfoViewActionsContext } from './context-provider/AppInfoViewProvider';
-import { tablePageSize } from '@unpod/constants';
-import { consoleLog, isEmptyObject } from '@unpod/helpers/GlobalHelper';
-import { AxiosProgressEvent, AxiosResponse, ResponseType } from 'axios';
+import {Dispatch, SetStateAction, useCallback, useEffect, useRef, useState,} from 'react';
+import {httpClient, httpLocalClient} from '@unpod/services';
+import {isRequestSuccessful, sanitizeData} from '@unpod/helpers/ApiHelper';
+import {useInfoViewActionsContext} from './context-provider/AppInfoViewProvider';
+import {tablePageSize} from '@unpod/constants';
+import {consoleLog, isEmptyObject} from '@unpod/helpers/GlobalHelper';
+import {AxiosProgressEvent, AxiosResponse, ResponseType} from 'axios';
 import type {
   ApiResponse,
   InfoViewActionsContextType,
@@ -35,7 +28,7 @@ export const useGetDataApi = <T>(
   }
 
   const [skip, setSkip] = useState(0);
-  const { showError } = useInfoViewActionsContext();
+  const {showError} = useInfoViewActionsContext();
   const [initialUrl, setInitialUrl] = useState(url);
   const [allowApiCall, setAllowApiCall] = useState(initialCall);
   const [loading, setLoading] = useState(initialCall);
@@ -54,7 +47,7 @@ export const useGetDataApi = <T>(
   };
 
   const reCallAPI = (): void => {
-    setQueryParams({ ...queryParams });
+    setQueryParams({...queryParams});
   };
 
   const setQueryParams = (newQueryParams: QueryParams): void => {
@@ -95,7 +88,7 @@ export const useGetDataApi = <T>(
         };
       }
       httpClient
-        .get(initialUrl, { params: sanitizeData(requestParams) })
+        .get(initialUrl, {params: sanitizeData(requestParams)})
         .then((data: AxiosResponse<ApiResponse<T>>) => {
           consoleLog(initialUrl, data.data);
           responsePendingRef.current = false;
@@ -203,7 +196,7 @@ export const usePaginatedDataApi = <T extends unknown[] = unknown[]>(
   const [queryParams, updateQueryParams] = useState<QueryParams>(params);
   const [isResetRequired, setResetRequired] = useState(false);
   const [hasMoreRecord, setMoreRecordStatus] = useState(true);
-  const { showError } = useInfoViewActionsContext();
+  const {showError} = useInfoViewActionsContext();
   const responsePendingRef = useRef(false);
   const didCancelRef = useRef(false);
 
@@ -238,7 +231,7 @@ export const usePaginatedDataApi = <T extends unknown[] = unknown[]>(
 
   const reCallAPI = (): void => {
     setAllowApiCall(true);
-    setQueryParams({ ...queryParams });
+    setQueryParams({...queryParams});
   };
 
   useEffect(() => {
@@ -264,13 +257,13 @@ export const usePaginatedDataApi = <T extends unknown[] = unknown[]>(
         };
       }
       if (Array.isArray(apiData) && !noPagination) {
-        requestParams = { ...trimObjectValues(queryParams), page };
+        requestParams = {...trimObjectValues(queryParams), page};
       }
       if (!requestParams?.page_size) {
         requestParams.page_size = tablePageSize;
       }
       httpClient
-        .get(initialUrl, { params: requestParams })
+        .get(initialUrl, {params: requestParams})
         .then((data: AxiosResponse<{ data: unknown[]; count?: number }>) => {
           consoleLog(initialUrl, data.data);
 
@@ -298,7 +291,7 @@ export const usePaginatedDataApi = <T extends unknown[] = unknown[]>(
               setData(resData);
               setLoading(false);
 
-              const { data: _, ...restData } = data.data;
+              const {data: _, ...restData} = data.data;
               setExtraData(restData);
               if (callbackFun) callbackFun(resData);
             } else {
@@ -403,7 +396,7 @@ export const usePaginatedConnectorDataApi = <T extends unknown[] = unknown[]>(
   const [queryParams, updateQueryParams] = useState<QueryParams>(params);
   const [isResetRequired, setResetRequired] = useState(false);
   const [hasMoreRecord, setMoreRecordStatus] = useState(true);
-  const { showError } = useInfoViewActionsContext();
+  const {showError} = useInfoViewActionsContext();
   const responsePendingRef = useRef(false);
   const didCancelRef = useRef(false);
   const totalCount = useRef(0);
@@ -437,7 +430,7 @@ export const usePaginatedConnectorDataApi = <T extends unknown[] = unknown[]>(
   const reCallAPI = (): void => {
     setLoading(true);
     setPage(1);
-    setQueryParams({ ...queryParams });
+    setQueryParams({...queryParams});
   };
 
   useEffect(() => {
@@ -463,7 +456,7 @@ export const usePaginatedConnectorDataApi = <T extends unknown[] = unknown[]>(
         };
       }
       if (Array.isArray(apiData) && !noPagination) {
-        requestParams = { ...trimObjectValues(queryParams), page };
+        requestParams = {...trimObjectValues(queryParams), page};
       }
       console.log('Fetching data with params: ', requestParams, queryParams);
 
@@ -472,7 +465,7 @@ export const usePaginatedConnectorDataApi = <T extends unknown[] = unknown[]>(
       }
       console.log('Fetching data with params: ', requestParams, queryParams);
       httpClient
-        .get(initialUrl, { params: requestParams })
+        .get(initialUrl, {params: requestParams})
         .then(
           (
             data: AxiosResponse<{
@@ -609,7 +602,7 @@ export const useFetchDataApi = <T>(
 ): UseFetchDataResult<T> => {
   const [page, setPage] = useState(1);
   const [initialUrl, setInitialUrl] = useState(url);
-  const { showError } = useInfoViewActionsContext();
+  const {showError} = useInfoViewActionsContext();
   const [allowApiCall, setAllowApiCall] = useState(initialCall);
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
@@ -630,7 +623,7 @@ export const useFetchDataApi = <T>(
   const reCallAPI = (): void => {
     setLoading(true);
     setPage(1);
-    setQueryParams({ ...queryParams });
+    setQueryParams({...queryParams});
   };
 
   const checkHasMoreRecord = (data: unknown[]): void => {
@@ -643,7 +636,7 @@ export const useFetchDataApi = <T>(
 
   const setQueryParams = (newQueryParams: QueryParams): void => {
     setPage(1);
-    updateQueryParams({ ...newQueryParams });
+    updateQueryParams({...newQueryParams});
     setAllowApiCall(true);
     if (Array.isArray(initialData)) {
       if (!newQueryParams.skipReset) {
@@ -670,14 +663,14 @@ export const useFetchDataApi = <T>(
       }
       let requestParams: QueryParams = {};
       if (!isEmptyObject(queryParams)) {
-        requestParams = { ...queryParams };
+        requestParams = {...queryParams};
       }
       if (Array.isArray(apiData) && !noPagination) {
-        requestParams = { ...queryParams, page, page_size: tablePageSize };
+        requestParams = {...queryParams, page, page_size: tablePageSize};
       }
 
       httpClient
-        .get(initialUrl, { params: requestParams })
+        .get(initialUrl, {params: requestParams})
         .then((data: AxiosResponse<{ data: unknown[] }>) => {
           responsePendingRef.current = false;
           if (!didCancelRef.current) {
@@ -791,7 +784,8 @@ type ChecksumError = {
   message: string;
   originalError: string;
   isChecksumError?: boolean;
-  isTimestampError?: boolean;};
+  isTimestampError?: boolean;
+};
 
 const handleAPIError = (
   url: string,
@@ -844,12 +838,12 @@ export const postDataApi = <T>(
   isHideLoader = false,
   headers?: Record<string, string>,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewActionsContext;
+  const {fetchStart, fetchFinish} = infoViewActionsContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
 
     httpClient
-      .post(url, sanitizeData(payload), headers ? { headers } : {})
+      .post(url, sanitizeData(payload), headers ? {headers} : {})
       .then((data: AxiosResponse<T>) => {
         return handleApiResponse(url, fetchFinish, data, resolve, reject);
       })
@@ -866,12 +860,12 @@ export const localPostDataApi = <T = unknown>(
   isHideLoader = false,
   headers?: Record<string, string>,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewActionsContext;
+  const {fetchStart, fetchFinish} = infoViewActionsContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
 
     httpLocalClient
-      .post(url, sanitizeData(payload), headers ? { headers } : {})
+      .post(url, sanitizeData(payload), headers ? {headers} : {})
       .then((data: AxiosResponse<T>) => {
         return handleApiResponse(url, fetchFinish, data, resolve, reject);
       })
@@ -887,7 +881,7 @@ export const putDataApi = <T = unknown>(
   payload: unknown,
   isHideLoader = false,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewActionsContext;
+  const {fetchStart, fetchFinish} = infoViewActionsContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -907,7 +901,7 @@ export const patchDataApi = <T = unknown>(
   payload: unknown,
   isHideLoader = false,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewActionsContext;
+  const {fetchStart, fetchFinish} = infoViewActionsContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -929,7 +923,7 @@ export const getDataApi = <T = unknown>(
   headers?: Record<string, string>,
   responseType: ResponseType = 'json',
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewActionsContext;
+  const {fetchStart, fetchFinish} = infoViewActionsContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -954,14 +948,14 @@ export const deleteDataApi = <T = unknown>(
   payload: unknown = {},
   isHideLoader = false,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewContext;
+  const {fetchStart, fetchFinish} = infoViewContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
-      .delete(url, { params, data: payload })
+      .delete(url, {params, data: payload})
       .then((data: AxiosResponse<T>) => {
         if (data.status === 204) {
-          resolve({ message: 'Deleted Successfully' } as ApiResponse<T>);
+          resolve({message: 'Deleted Successfully'} as ApiResponse<T>);
         } else {
           handleApiResponse(url, fetchFinish, data, resolve, reject);
         }
@@ -986,7 +980,7 @@ export const uploadDataApi = <T = unknown>(
     );
   },
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewContext;
+  const {fetchStart, fetchFinish} = infoViewContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -1011,7 +1005,7 @@ export const uploadPutDataApi = <T = unknown>(
   payload: unknown,
   isHideLoader = false,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewContext;
+  const {fetchStart, fetchFinish} = infoViewContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -1035,7 +1029,7 @@ export const uploadPostDataApi = <T = unknown>(
   payload: unknown,
   isHideLoader = false,
 ): Promise<ApiResponse<T>> => {
-  const { fetchStart, fetchFinish } = infoViewContext;
+  const {fetchStart, fetchFinish} = infoViewContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -1059,7 +1053,7 @@ export const downloadDataApi = (
   params: Record<string, unknown> = {},
   isHideLoader = false,
 ): Promise<ArrayBuffer> => {
-  const { fetchStart, fetchFinish } = infoViewContext;
+  const {fetchStart, fetchFinish} = infoViewContext;
   return new Promise((resolve, reject) => {
     if (!isHideLoader) fetchStart();
     httpClient
@@ -1096,7 +1090,8 @@ export type UseDownloadDataResult = {
     params?: Record<string, unknown>,
     newFilename?: string | null,
     requestUrl?: string,
-  ) => void;};
+  ) => void;
+};
 
 export const useDownloadData = (
   url: string,

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Spin } from 'antd';
+import {Spin} from 'antd';
 
 const StyledLoadingContainer = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const AppLoadingMore = () => {
     <StyledLoadingRoot role="progress-loader">
       <StyledLoadingContainer>
         <span role="spin">
-          <Spin />
+          <Spin/>
         </span>
         Loading more...
       </StyledLoadingContainer>

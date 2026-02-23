@@ -1,43 +1,32 @@
-import { useRef, useState } from 'react';
-import { Button, Flex, Tooltip, Typography } from 'antd';
-import {
-  MdOutlineDownload,
-  MdOutlinePause,
-  MdOutlinePlayArrow,
-} from 'react-icons/md';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
+import {useRef, useState} from 'react';
+import {Button, Flex, Tooltip, Typography} from 'antd';
+import {MdOutlineDownload, MdOutlinePause, MdOutlinePlayArrow,} from 'react-icons/md';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
 import AppColumnZoomCell from '@unpod/components/common/AppColumnZoomView/AppColumnZoomCell';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
-import {
-  getColumnSearchProps,
-  getColumnSelectBoxProps,
-  onSortOrder,
-} from '@unpod/helpers/TableHelper';
-import type { IntlShape } from 'react-intl';
-import type { TaskItem } from '@unpod/constants/types';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
+import {getColumnSearchProps, getColumnSelectBoxProps, onSortOrder,} from '@unpod/helpers/TableHelper';
+import type {IntlShape} from 'react-intl';
+import type {TaskItem} from '@unpod/constants/types';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 const VIEW_DATA_STATUS = {
-  processing: { color: 'badge-primary', label: 'Processing' },
-  failed: { color: 'badge-error', label: 'Failed' },
-  pending: { color: 'badge-warning', label: 'Pending' },
-  completed: { color: 'badge-success', label: 'Completed' },
-  in_progress: { color: 'badge-info', label: 'In Progress' },
+  processing: {color: 'badge-primary', label: 'Processing'},
+  failed: {color: 'badge-error', label: 'Failed'},
+  pending: {color: 'badge-warning', label: 'Pending'},
+  completed: {color: 'badge-success', label: 'Completed'},
+  in_progress: {color: 'badge-info', label: 'In Progress'},
 };
 const STATUS_DATA_FILTER = [
-  { id: 'pending', name: 'Pending' },
-  { id: 'processing', name: 'Processing' },
-  { id: 'in_progress', name: 'In Progress' },
-  { id: 'completed', name: 'Completed' },
-  { id: 'failed', name: 'Failed' },
+  {id: 'pending', name: 'Pending'},
+  {id: 'processing', name: 'Processing'},
+  {id: 'in_progress', name: 'In Progress'},
+  {id: 'completed', name: 'Completed'},
+  {id: 'failed', name: 'Failed'},
 ];
 
-const PlayButton = ({ item }: { item: TaskItem }) => {
+const PlayButton = ({item}: { item: TaskItem }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -89,9 +78,9 @@ const PlayButton = ({ item }: { item: TaskItem }) => {
       <Button
         shape="circle"
         size="small"
-        icon={<MdOutlinePause fontSize={18} />}
+        icon={<MdOutlinePause fontSize={18}/>}
         onClick={onPlaySound}
-        style={{ color: 'red' }} // Change color to indicate pause state
+        style={{color: 'red'}} // Change color to indicate pause state
       />
     </Tooltip>
   ) : (
@@ -99,7 +88,7 @@ const PlayButton = ({ item }: { item: TaskItem }) => {
       <Button
         shape="circle"
         size="small"
-        icon={<MdOutlinePlayArrow fontSize={18} />}
+        icon={<MdOutlinePlayArrow fontSize={18}/>}
         onClick={onPlaySound}
         loading={loading}
       />
@@ -166,7 +155,7 @@ export const getColumns = (
         formatMessage,
       ),
       render: (text: string) => (
-        <AppStatusBadge status={text} statusColors={VIEW_DATA_STATUS} />
+        <AppStatusBadge status={text} statusColors={VIEW_DATA_STATUS}/>
       ),
     },
     {
@@ -181,11 +170,11 @@ export const getColumns = (
               <Button
                 shape="circle"
                 size="small"
-                icon={<MdOutlineDownload fontSize={18} />}
+                icon={<MdOutlineDownload fontSize={18}/>}
                 onClick={() => onDownload(item)}
               />
             </Tooltip>
-            <PlayButton item={item} />
+            <PlayButton item={item}/>
           </Flex>
         ) : (
           'No Recording'

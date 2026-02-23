@@ -1,12 +1,12 @@
-import type { Key, ReactNode } from 'react';
-import { useEffect, useMemo } from 'react';
+import type {Key, ReactNode} from 'react';
+import {useEffect, useMemo} from 'react';
 
-import { Form, Input, InputNumber, Tabs } from 'antd';
-import type { TableRowSelection } from 'antd/es/table/interface';
-import { useFetchDataApi } from '@unpod/providers';
+import {Form, Input, InputNumber, Tabs} from 'antd';
+import type {TableRowSelection} from 'antd/es/table/interface';
+import {useFetchDataApi} from '@unpod/providers';
 import AppLoader from '../../../common/AppLoader';
 import AppTable from '../../../third-party/AppTable';
-import { StyledRoot } from './index.styled';
+import {StyledRoot} from './index.styled';
 
 const items = [
   {
@@ -44,19 +44,20 @@ type EditableCellProps = {
   record: any;
   index: number;
   children: ReactNode;
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}: EditableCellProps) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+                        editing,
+                        dataIndex,
+                        title,
+                        inputType,
+                        record,
+                        index,
+                        children,
+                        ...restProps
+                      }: EditableCellProps) => {
+  const inputNode = inputType === 'number' ? <InputNumber/> : <Input/>;
   return (
     <td {...restProps}>
       {editing ? (
@@ -83,14 +84,15 @@ const EditableCell = ({
 
 type DataTableProps = {
   threadId?: string;
-  superbookHandle?: string;};
+  superbookHandle?: string;
+};
 
-const DataTable = ({ threadId, superbookHandle }: DataTableProps) => {
+const DataTable = ({threadId, superbookHandle}: DataTableProps) => {
   const [form] = Form.useForm();
   /*const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState('');*/
 
-  const [{ apiData, loading }, { updateInitialUrl }] = useFetchDataApi<any>(
+  const [{apiData, loading}, {updateInitialUrl}] = useFetchDataApi<any>(
     `core/pilots/${superbookHandle}/data/${threadId}/`,
     [],
     {},
@@ -232,7 +234,7 @@ const DataTable = ({ threadId, superbookHandle }: DataTableProps) => {
 
   return (
     <StyledRoot>
-      <Tabs defaultActiveKey="collection" items={items} />
+      <Tabs defaultActiveKey="collection" items={items}/>
 
       <Form form={form} component={false}>
         <AppTable
@@ -250,7 +252,7 @@ const DataTable = ({ threadId, superbookHandle }: DataTableProps) => {
         />
       </Form>
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </StyledRoot>
   );
 };

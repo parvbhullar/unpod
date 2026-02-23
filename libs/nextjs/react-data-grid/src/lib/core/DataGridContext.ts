@@ -1,5 +1,5 @@
-import { createContext, useContext } from 'react';
-import type { GridConfiguration } from './models/data-grid';
+import {createContext, useContext} from 'react';
+import type {GridConfiguration} from './models/data-grid';
 
 export const defaultConfigurations: GridConfiguration = {
   allowGridActions: false,

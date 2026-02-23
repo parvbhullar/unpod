@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Typography, Upload } from 'antd';
+import {Typography, Upload} from 'antd';
 
-const { Paragraph } = Typography;
-const { Dragger } = Upload;
+const {Paragraph} = Typography;
+const {Dragger} = Upload;
 
 export const StyledRoot = styled.div`
   flex: 1;

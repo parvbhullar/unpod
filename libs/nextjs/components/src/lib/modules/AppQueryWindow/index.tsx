@@ -1,53 +1,23 @@
-import type { Ref } from 'react';
-import {
-  Fragment,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import type {Ref} from 'react';
+import {Fragment, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
 
-import {
-  Badge,
-  Button,
-  Dropdown,
-  Form,
-  Row,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
-import { MdDelete, MdOutlineAttachment } from 'react-icons/md';
-import { RiVoiceprintLine } from 'react-icons/ri';
-import { SendOutlined } from '@ant-design/icons';
-import {
-  postDataApi,
-  uploadDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { useRouter } from 'next/navigation';
-import { AskAttachmentTypes } from '@unpod/constants';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
+import {Badge, Button, Dropdown, Form, Row, Space, Typography, Upload,} from 'antd';
+import {MdDelete, MdOutlineAttachment} from 'react-icons/md';
+import {RiVoiceprintLine} from 'react-icons/ri';
+import {SendOutlined} from '@ant-design/icons';
+import {postDataApi, uploadDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {useRouter} from 'next/navigation';
+import {AskAttachmentTypes} from '@unpod/constants';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
 import AppLoader from '../../common/AppLoader';
 import SendButton from './SendButton';
 import ContextView from './ContextView';
-import {
-  StyledBottomBar,
-  StyledContainer,
-  StyledInput,
-  StyledMainContent,
-} from './index.styled';
-import { useIntl } from 'react-intl';
+import {StyledBottomBar, StyledContainer, StyledInput, StyledMainContent,} from './index.styled';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
-const { Text } = Typography;
+const {Item, useForm} = Form;
+const {Text} = Typography;
 
 type AppQueryWindowProps = {
   scheduleBtn?: boolean;
@@ -57,21 +27,22 @@ type AppQueryWindowProps = {
   defaultKbs?: string[];
   executionType?: string;
   pilotPopover?: boolean;
-  ref?: Ref<any>;};
+  ref?: Ref<any>;
+};
 
 const AppQueryWindow = ({
-  scheduleBtn,
-  hideAttachment,
-  onDataSaved,
-  isMySpace,
-  defaultKbs,
-  executionType,
-  pilotPopover,
-  ref,
-}: AppQueryWindowProps) => {
+                          scheduleBtn,
+                          hideAttachment,
+                          onDataSaved,
+                          isMySpace,
+                          defaultKbs,
+                          executionType,
+                          pilotPopover,
+                          ref,
+                        }: AppQueryWindowProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { visitorId, isAuthenticated, user } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {visitorId, isAuthenticated, user} = useAuthContext();
+  const {formatMessage} = useIntl();
 
   const router = useRouter();
   const [form] = useForm();
@@ -187,7 +158,7 @@ const AppQueryWindow = ({
     };
 
     if (isAuthenticated) {
-      const { content, ...rest } = values;
+      const {content, ...rest} = values;
       payload = {
         // title: title,
         content: content || '',
@@ -239,7 +210,7 @@ const AppQueryWindow = ({
           !AskAttachmentTypes.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -272,7 +243,7 @@ const AppQueryWindow = ({
         if (content) {
           setQuery(content);
           form.setFieldValue('content', content);
-          inputRef.current?.focus?.({ preventScroll: true });
+          inputRef.current?.focus?.({preventScroll: true});
         }
 
         setContext(context);
@@ -285,7 +256,7 @@ const AppQueryWindow = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Text style={{ marginRight: 5 }}>{item.name}</Text>
+          <Text style={{marginRight: 5}}>{item.name}</Text>
           <MdDelete
             fontSize={18}
             onClick={(event) => onAttachmentRemove(event, item)}
@@ -306,19 +277,19 @@ const AppQueryWindow = ({
       <Form
         onFinish={onQuerySubmit}
         form={form}
-        style={{ maxWidth: '640px', width: '100%', margin: '0 auto' }}
+        style={{maxWidth: '640px', width: '100%', margin: '0 auto'}}
       >
         <StyledContainer>
           <StyledMainContent>
             {context && (
-              <ContextView context={context} onContextClose={onContextClose} />
+              <ContextView context={context} onContextClose={onContextClose}/>
             )}
 
             <Item name="content">
               <StyledInput
-                placeholder={formatMessage({ id: 'common.askAnything' })}
+                placeholder={formatMessage({id: 'common.askAnything'})}
                 variant="borderless"
-                autoSize={{ minRows: 1, maxRows: 8 }}
+                autoSize={{minRows: 1, maxRows: 8}}
                 onChange={(e) => setQuery(e.target.value)}
                 onPressEnter={(e) => {
                   if (!e.shiftKey) {
@@ -390,7 +361,7 @@ const AppQueryWindow = ({
               )}
             </Space>*/}
 
-            <Space size="small" align="center" style={{ marginLeft: 'auto' }}>
+            <Space size="small" align="center" style={{marginLeft: 'auto'}}>
               {!hideAttachment && (
                 <Upload
                   name="files"
@@ -418,7 +389,7 @@ const AppQueryWindow = ({
                           type={attachments?.length ? 'primary' : 'default'}
                           shape="circle"
                           size="small"
-                          icon={<MdOutlineAttachment fontSize={18} />}
+                          icon={<MdOutlineAttachment fontSize={18}/>}
                         />
                       </Badge>
                     </Dropdown>
@@ -427,7 +398,7 @@ const AppQueryWindow = ({
                       type={attachments?.length ? 'primary' : 'default'}
                       shape="circle"
                       size="small"
-                      icon={<MdOutlineAttachment fontSize={18} />}
+                      icon={<MdOutlineAttachment fontSize={18}/>}
                     />
                   )}
                 </Upload>
@@ -437,12 +408,12 @@ const AppQueryWindow = ({
                 shape="circle"
                 size="small"
                 onClick={() => {
-                  const payload = getPayload({ content: '' });
+                  const payload = getPayload({content: ''});
                   payload.content_type = POST_CONTENT_TYPE.VOICE;
                   payload.post_type = 'ask';
                   savePost(payload);
                 }}
-                icon={<RiVoiceprintLine fontSize={18} />}
+                icon={<RiVoiceprintLine fontSize={18}/>}
               />
 
               {scheduleBtn ? (
@@ -450,7 +421,7 @@ const AppQueryWindow = ({
                   attachments={attachments}
                   query={query}
                   onSchedule={(values) =>
-                    onQuerySubmit({ ...values, content: query })
+                    onQuerySubmit({...values, content: query})
                   }
                 />
               ) : (
@@ -462,7 +433,7 @@ const AppQueryWindow = ({
                     size="small"
                     htmlType="submit"
                     disabled={!query && !attachments?.length}
-                    icon={<SendOutlined />}
+                    icon={<SendOutlined/>}
                   />
                 )
               )}
@@ -471,7 +442,7 @@ const AppQueryWindow = ({
         </StyledContainer>
       </Form>
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </Fragment>
   );
 };

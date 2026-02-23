@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
-import type { Conversation, NotesHandle } from '@unpod/constants/types';
+import {forwardRef, useEffect, useImperativeHandle} from 'react';
+import type {Conversation, NotesHandle} from '@unpod/constants/types';
 import {
   getDataApi,
   useAppSpaceActionsContext,
@@ -7,23 +7,23 @@ import {
   useInfoViewActionsContext,
   usePaginatedDataApi,
 } from '@unpod/providers';
-import { POST_TYPE } from '@unpod/constants/AppEnums';
+import {POST_TYPE} from '@unpod/constants/AppEnums';
 import NoteItem from './NoteItem';
 import AppList from '@unpod/components/common/AppList';
-import { NotesSkeleton } from '@unpod/skeleton/Notes';
-import { useRouter } from 'next/navigation';
+import {NotesSkeleton} from '@unpod/skeleton/Notes';
+import {useRouter} from 'next/navigation';
 
 type NotesProps = Record<string, never>;
 
 const Notes = forwardRef<NotesHandle, NotesProps>((_props, ref) => {
-  const { setActiveNote } = useAppSpaceActionsContext();
-  const { activeNote, activeTab, currentSpace } = useAppSpaceContext();
+  const {setActiveNote} = useAppSpaceActionsContext();
+  const {activeNote, activeTab, currentSpace} = useAppSpaceContext();
   const infoViewActionsContext = useInfoViewActionsContext();
   const router = useRouter();
   const spaceToken = currentSpace?.token ?? '';
   const [
-    { apiData, loading, isLoadingMore, hasMoreRecord, page },
-    { setLoadingMore, setPage, setData, setQueryParams },
+    {apiData, loading, isLoadingMore, hasMoreRecord, page},
+    {setLoadingMore, setPage, setData, setQueryParams},
   ] = usePaginatedDataApi(`threads/${spaceToken}/`, [], {
     post_type: POST_TYPE.POST,
   }) as unknown as [
@@ -111,7 +111,7 @@ const Notes = forwardRef<NotesHandle, NotesProps>((_props, ref) => {
       }}
       data={apiData}
       loading={loading}
-      initialLoader={<NotesSkeleton />}
+      initialLoader={<NotesSkeleton/>}
       renderItem={(thread, index) => (
         <NoteItem
           key={index}

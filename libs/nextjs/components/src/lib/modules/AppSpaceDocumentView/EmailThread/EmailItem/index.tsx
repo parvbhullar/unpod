@@ -1,17 +1,14 @@
-import { Fragment, memo, useState } from 'react';
+import {Fragment, memo, useState} from 'react';
 
-import { Divider, Flex, Tooltip, Typography } from 'antd';
+import {Divider, Flex, Tooltip, Typography} from 'antd';
 import clsx from 'clsx';
-import { MdLink } from 'react-icons/md';
-import { AiOutlineTag } from 'react-icons/ai';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { TAG_COLORS } from '@unpod/constants/AppEnums';
-import { removeHtmlAndHeadTags } from '@unpod/helpers/GlobalHelper';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { downloadFile, getFileExtension } from '@unpod/helpers/FileHelper';
+import {MdLink} from 'react-icons/md';
+import {AiOutlineTag} from 'react-icons/ai';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {TAG_COLORS} from '@unpod/constants/AppEnums';
+import {removeHtmlAndHeadTags} from '@unpod/helpers/GlobalHelper';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {downloadFile, getFileExtension} from '@unpod/helpers/FileHelper';
 import AppMarkdownViewer from '../../../../third-party/AppMarkdownViewer';
 import UserAvatar from '../../../../common/UserAvatar';
 import AppAttachments from '../../../../common/AppAttachments';
@@ -27,7 +24,7 @@ import {
   StyledWrapper,
 } from './index.styled';
 
-const { Paragraph, Text, Title } = Typography;
+const {Paragraph, Text, Title} = Typography;
 
 type EmailAttachment = {
   url?: string;
@@ -58,7 +55,7 @@ type EmailItemProps = {
   setSummary?: (summary: string) => void;
 };
 
-const EmailItem = ({ email, isFirst, setSummary }: EmailItemProps) => {
+const EmailItem = ({email, isFirst, setSummary}: EmailItemProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -86,7 +83,7 @@ const EmailItem = ({ email, isFirst, setSummary }: EmailItemProps) => {
     <StyledDetailsItems className="email-item">
       <StyledListHeader onClick={() => setIsExpanded(!isExpanded)}>
         <StyledAvatarWrapper>
-          <UserAvatar user={{ full_name: email.meta?.user?.name }} />
+          <UserAvatar user={{full_name: email.meta?.user?.name}}/>
         </StyledAvatarWrapper>
         <StyledMeta>
           <StyledCollapsedMeta>
@@ -111,15 +108,15 @@ const EmailItem = ({ email, isFirst, setSummary }: EmailItemProps) => {
         </StyledHeaderExtra>
       </StyledListHeader>
 
-      <StyledWrapper className={clsx({ expanded: isFirst || isExpanded })}>
+      <StyledWrapper className={clsx({expanded: isFirst || isExpanded})}>
         <StyledContent>
           <AppMarkdownViewer
             markdown={removeHtmlAndHeadTags(email.body || '')}
             components={{
-              a: ({ children, ...props }: any) => {
+              a: ({children, ...props}: any) => {
                 return (
                   <a {...props} target="_blank" rel="noopener noreferrer">
-                    <MdLink />
+                    <MdLink/>
                   </a>
                 );
               },
@@ -135,7 +132,7 @@ const EmailItem = ({ email, isFirst, setSummary }: EmailItemProps) => {
               color={TAG_COLORS[index % 10]}
               icon={
                 <span role="img" aria-label={tagName} className="anticon">
-                  <AiOutlineTag />
+                  <AiOutlineTag/>
                 </span>
               }
             >
@@ -146,7 +143,7 @@ const EmailItem = ({ email, isFirst, setSummary }: EmailItemProps) => {
 
         {attachmentFiles.length > 0 && (
           <Fragment>
-            <Divider type="horizontal" />
+            <Divider type="horizontal"/>
 
             <AppAttachments
               attachments={attachmentFiles}

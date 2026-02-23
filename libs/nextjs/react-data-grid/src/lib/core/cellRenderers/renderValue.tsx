@@ -1,5 +1,5 @@
 import React from 'react';
-import type { RenderCellProps } from '../models/data-grid';
+import type {RenderCellProps} from '../models/data-grid';
 
 export function renderValue<R, SR>(props: RenderCellProps<R, SR>) {
   try {

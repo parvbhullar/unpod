@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 export type UseExpireTimeResult = {
   resetTimer: () => void;
@@ -8,7 +8,8 @@ export type UseExpireTimeResult = {
   remainingTime: number;
   setRemainingTime: Dispatch<SetStateAction<number>>;
   minutes: string;
-  seconds: string;};
+  seconds: string;
+};
 
 let timer: ReturnType<typeof setInterval> | undefined;
 

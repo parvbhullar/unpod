@@ -1,5 +1,5 @@
-import type { Organization } from '../organization';
-import type { Spaces } from '../space';
+import type {Organization} from '../organization';
+import type {Spaces} from '../space';
 import dayjs from 'dayjs';
 
 export type Pilot = {

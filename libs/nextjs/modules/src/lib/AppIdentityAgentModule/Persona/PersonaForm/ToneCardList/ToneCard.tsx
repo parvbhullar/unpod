@@ -1,8 +1,8 @@
-import { StyledCardIcon, StyledCheckableTag } from './index.styled';
-import { Flex, Typography } from 'antd';
-import { useIntl } from 'react-intl';
+import {StyledCardIcon, StyledCheckableTag} from './index.styled';
+import {Flex, Typography} from 'antd';
+import {useIntl} from 'react-intl';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type ToneItem = {
   key: string;
@@ -17,8 +17,8 @@ type ToneCardProps = {
   isChecked: (key: string) => boolean;
 };
 
-const ToneCard = ({ item, handleChange, isChecked }: ToneCardProps) => {
-  const { formatMessage } = useIntl();
+const ToneCard = ({item, handleChange, isChecked}: ToneCardProps) => {
+  const {formatMessage} = useIntl();
 
   return (
     <StyledCheckableTag
@@ -28,12 +28,12 @@ const ToneCard = ({ item, handleChange, isChecked }: ToneCardProps) => {
     >
       <Flex justify="center" align="center" gap={10}>
         {item.icon && (
-          <StyledCardIcon style={{ color: item.color }}>
+          <StyledCardIcon style={{color: item.color}}>
             {item.icon}
           </StyledCardIcon>
         )}
-        <Text strong style={{ margin: 0, whiteSpace: 'nowrap' }}>
-          {formatMessage({ id: item.label })}
+        <Text strong style={{margin: 0, whiteSpace: 'nowrap'}}>
+          {formatMessage({id: item.label})}
         </Text>
       </Flex>
     </StyledCheckableTag>

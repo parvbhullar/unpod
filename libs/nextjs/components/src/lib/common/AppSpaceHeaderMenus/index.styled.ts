@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Input, Tag, Typography } from 'antd';
-import { rgba } from 'polished';
+import {Input, Tag, Typography} from 'antd';
+import {rgba} from 'polished';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 export const StyledIconWrapper = styled.span`
   display: inline-flex;
@@ -25,7 +25,7 @@ export const StyledSubMenuItem = styled.span`
   align-items: center;
 
   &.add-new-title {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 
   & > svg {
@@ -50,7 +50,7 @@ export const StyledTitleBlock = styled.div`
 export const StyledAnchorTag = styled.a`
   display: inline-flex;
   align-items: center;
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
 `;
 
 export const StyledTitleWrapper = styled.div`
@@ -72,7 +72,7 @@ export const StyledMainTitle = styled(Title)`
 
   &.smart-heading {
     font-size: 24px !important;
-    font-weight: ${({ theme }) => theme.font.weight.medium} !important;
+    font-weight: ${({theme}) => theme.font.weight.medium} !important;
     margin: 0 !important;
     white-space: nowrap;
     overflow: hidden;
@@ -83,31 +83,31 @@ export const StyledMainTitle = styled(Title)`
       flex-shrink: 0;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
       font-size: 20px !important;
       width: 70%;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
       font-size: 20px !important;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.lg - 150}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.lg - 150}px) {
       font-size: 20px !important;
       width: 50%;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
       font-size: 18px !important;
       width: 80%;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
       font-size: 16px !important;
       width: 80%;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
       font-size: 16px !important;
       width: 60%;
     }
@@ -137,15 +137,15 @@ export const StyledAddButton = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: ${({ theme }) => theme.palette.text.heading};
+  color: ${({theme}) => theme.palette.text.heading};
   padding: 7px 11px;
   width: 100%;
   cursor: pointer;
-  background-color: ${({ theme }) => rgba(theme.palette.success, 0.2)};
+  background-color: ${({theme}) => rgba(theme.palette.success, 0.2)};
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => rgba(theme.palette.success, 0.4)};
+    background-color: ${({theme}) => rgba(theme.palette.success, 0.4)};
   }
 `;
 
@@ -154,7 +154,7 @@ export const StyledLabel = styled(Tag)`
   text-transform: capitalize;
   font-size: 10px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     display: none;
   }
 `;

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Typography} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 export const StyledRoot = styled.div`
   padding: 24px;
@@ -16,7 +16,7 @@ export const StyledRoot = styled.div`
 
 export const StyledConnector = styled.div`
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary};
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primary};
   border-radius: 40px;
   padding: 6px 14px;
   line-height: 1.5;

@@ -2,10 +2,10 @@
  * Request interceptor for adding checksum to outgoing HTTP requests
  */
 
-import { InternalAxiosRequestConfig } from 'axios';
-import { generateChecksum, getCurrentTimestamp } from '@unpod/helpers';
-import { getChecksumSecret, getRelativeUrl, isChecksumEnabled, shouldSkipChecksum } from '../utils/checksum';
-import { serializeRequestData } from '../utils/serialization';
+import {InternalAxiosRequestConfig} from 'axios';
+import {generateChecksum, getCurrentTimestamp} from '@unpod/helpers';
+import {getChecksumSecret, getRelativeUrl, isChecksumEnabled, shouldSkipChecksum} from '../utils/checksum';
+import {serializeRequestData} from '../utils/serialization';
 
 /**
  * Check if a value is an empty object {}
@@ -130,81 +130,81 @@ const cleanUrlParams = (url: string | undefined): string | undefined => {
  */
 export const createRequestInterceptor =
   (clientName: string) =>
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    try {
-      // Clean empty objects from params (prevents backend validation errors)
-      if (config.params) {
-        config.params = cleanParams(config.params as Record<string, unknown>);
-      }
-
-      // Clean empty objects from URL query string (e.g., ?sort={})
-      if (config.url) {
-        config.url = cleanUrlParams(config.url);
-      }
-
-      // Skip checksum for specific endpoints
-      if (shouldSkipChecksum(config.url)) {
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(`[${clientName}] Skipping checksum for:`, config.url);
+    (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+      try {
+        // Clean empty objects from params (prevents backend validation errors)
+        if (config.params) {
+          config.params = cleanParams(config.params as Record<string, unknown>);
         }
-        return config;
-      }
 
-      // Only add checksum if feature is enabled
-      if (isChecksumEnabled()) {
-        const timestamp = getCurrentTimestamp();
-        const { serializedData, dataType } = serializeRequestData(config);
+        // Clean empty objects from URL query string (e.g., ?sort={})
+        if (config.url) {
+          config.url = cleanUrlParams(config.url);
+        }
 
-        // Normalize URL to relative format (strip API prefix) to match backend
-        const relativeUrl = getRelativeUrl(config.url);
+        // Skip checksum for specific endpoints
+        if (shouldSkipChecksum(config.url)) {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(`[${clientName}] Skipping checksum for:`, config.url);
+          }
+          return config;
+        }
 
-        // Generate checksum including method and url
-        const checksum = generateChecksum(
-          config.method || 'get',
-          relativeUrl,
-          serializedData,
-          timestamp,
-          getChecksumSecret(),
+        // Only add checksum if feature is enabled
+        if (isChecksumEnabled()) {
+          const timestamp = getCurrentTimestamp();
+          const {serializedData, dataType} = serializeRequestData(config);
+
+          // Normalize URL to relative format (strip API prefix) to match backend
+          const relativeUrl = getRelativeUrl(config.url);
+
+          // Generate checksum including method and url
+          const checksum = generateChecksum(
+            config.method || 'get',
+            relativeUrl,
+            serializedData,
+            timestamp,
+            getChecksumSecret(),
+          );
+
+          // Add headers
+          config.headers['UP-Checksum'] = checksum;
+          config.headers['UP-Timestamp'] = timestamp;
+
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(
+              `[${clientName}] ==================== CHECKSUM CALCULATION ====================`,
+            );
+            console.log(`[${clientName}] Method:`, config.method?.toUpperCase());
+            console.log(`[${clientName}] Original URL:`, config.url);
+            console.log(`[${clientName}] Relative URL (used):`, relativeUrl);
+            console.log(`[${clientName}] Data Type:`, dataType);
+            console.log(
+              `[${clientName}] Serialized Data:`,
+              serializedData.length > 500
+                ? serializedData.substring(0, 500) + '... (truncated)'
+                : serializedData,
+            );
+            console.log(`[${clientName}] Timestamp:`, timestamp);
+            console.log(
+              `[${clientName}] Checksum Formula: ${config.method?.toUpperCase()} + "${relativeUrl}" + DATA + "${timestamp}" + SECRET`,
+            );
+            console.log(`[${clientName}] Generated Checksum:`, checksum);
+            console.log(
+              `[${clientName}] ==============================================================`,
+            );
+          }
+        }
+      } catch (error) {
+        // Log error but don't block request (graceful degradation)
+        console.error(
+          `[${clientName}] Error generating request checksum:`,
+          error,
         );
-
-        // Add headers
-        config.headers['UP-Checksum'] = checksum;
-        config.headers['UP-Timestamp'] = timestamp;
-
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(
-            `[${clientName}] ==================== CHECKSUM CALCULATION ====================`,
-          );
-          console.log(`[${clientName}] Method:`, config.method?.toUpperCase());
-          console.log(`[${clientName}] Original URL:`, config.url);
-          console.log(`[${clientName}] Relative URL (used):`, relativeUrl);
-          console.log(`[${clientName}] Data Type:`, dataType);
-          console.log(
-            `[${clientName}] Serialized Data:`,
-            serializedData.length > 500
-              ? serializedData.substring(0, 500) + '... (truncated)'
-              : serializedData,
-          );
-          console.log(`[${clientName}] Timestamp:`, timestamp);
-          console.log(
-            `[${clientName}] Checksum Formula: ${config.method?.toUpperCase()} + "${relativeUrl}" + DATA + "${timestamp}" + SECRET`,
-          );
-          console.log(`[${clientName}] Generated Checksum:`, checksum);
-          console.log(
-            `[${clientName}] ==============================================================`,
-          );
-        }
       }
-    } catch (error) {
-      // Log error but don't block request (graceful degradation)
-      console.error(
-        `[${clientName}] Error generating request checksum:`,
-        error,
-      );
-    }
 
-    return config;
-  };
+      return config;
+    };
 
 /**
  * Request interceptor error handler

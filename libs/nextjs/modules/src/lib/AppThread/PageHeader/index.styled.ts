@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Typography } from 'antd';
+import {Button, Typography} from 'antd';
 
 export const StyledButton = styled(Button)`
   display: flex;

@@ -1,7 +1,7 @@
 'use client';
 import '@livekit/components-styles';
-import { AudioInputTile } from '@unpod/livekit/components/config/AudioInputTile';
-import { ConfigurationPanelItem } from '@unpod/livekit/components/config/ConfigurationPanelItem';
+import {AudioInputTile} from '@unpod/livekit/components/config/AudioInputTile';
+import {ConfigurationPanelItem} from '@unpod/livekit/components/config/ConfigurationPanelItem';
 import {
   RoomAudioRenderer,
   StartAudio,
@@ -12,24 +12,21 @@ import {
   useTracks,
   useVoiceAssistant,
 } from '@livekit/components-react';
-import { ConnectionState, LocalParticipant, Track } from 'livekit-client';
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  StyledAgentContainer,
-  StyledVisualizerContainer,
-} from '@unpod/livekit/components/playground/Playground.styled';
+import {ConnectionState, LocalParticipant, Track} from 'livekit-client';
+import React, {useCallback, useEffect, useState} from 'react';
+import {StyledAgentContainer, StyledVisualizerContainer,} from '@unpod/livekit/components/playground/Playground.styled';
 import AudioOutputTile from '@unpod/livekit/components/config/AudioOutputTile';
-import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
-import { useIntl } from 'react-intl';
+import {useKrispNoiseFilter} from '@livekit/components-react/krisp';
+import {useIntl} from 'react-intl';
 
-const VoiceAgent = ({ onConnect, config }) => {
+const VoiceAgent = ({onConnect, config}) => {
   const [transcripts, setTranscripts] = useState([]);
-  const { localParticipant } = useLocalParticipant();
+  const {localParticipant} = useLocalParticipant();
   const voiceAssistant = useVoiceAssistant();
   const roomState = useConnectionState();
   const tracks = useTracks();
   const room = useRoomContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const krisp = useKrispNoiseFilter();
 
@@ -45,10 +42,10 @@ const VoiceAgent = ({ onConnect, config }) => {
   }, [localParticipant, roomState]);
 
   const localTracks = tracks.filter(
-    ({ participant }) => participant instanceof LocalParticipant,
+    ({participant}) => participant instanceof LocalParticipant,
   );
   const localMicTrack = localTracks.find(
-    ({ source }) => source === Track.Source.Microphone,
+    ({source}) => source === Track.Source.Microphone,
   );
 
   const onDataReceived = useCallback(
@@ -95,7 +92,7 @@ const VoiceAgent = ({ onConnect, config }) => {
             }
           >
             {localMicTrack && (
-              <AudioInputTile config={config} trackRef={localMicTrack} />
+              <AudioInputTile config={config} trackRef={localMicTrack}/>
             )}
           </ConfigurationPanelItem>
         )}
@@ -103,9 +100,9 @@ const VoiceAgent = ({ onConnect, config }) => {
 
       {roomState === ConnectionState.Connected && (
         <>
-          <RoomAudioRenderer />
+          <RoomAudioRenderer/>
           <StartAudio
-            label={formatMessage({ id: 'talkToAgent.playbackMessage' })}
+            label={formatMessage({id: 'talkToAgent.playbackMessage'})}
           />
         </>
       )}

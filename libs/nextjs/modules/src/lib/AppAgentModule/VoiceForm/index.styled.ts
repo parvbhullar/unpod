@@ -8,7 +8,7 @@ export const StyledItemRow = styled.div`
 
 export const CollapseWrapper = styled.div`
   .ant-collapse {
-    background: ${({ theme }) => theme.palette.background.default} !important;
+    background: ${({theme}) => theme.palette.background.default} !important;
     border: none;
     overflow: hidden;
     border-radius: 8px;
@@ -21,7 +21,7 @@ export const CollapseWrapper = styled.div`
   .ant-collapse > .ant-collapse-item {
     margin-bottom: 16px;
     overflow: hidden;
-    border: 1px solid ${({ theme }) => theme.border.color};
+    border: 1px solid ${({theme}) => theme.border.color};
     border-radius: 8px;
   }
 

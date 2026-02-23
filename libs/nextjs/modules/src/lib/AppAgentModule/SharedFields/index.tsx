@@ -1,12 +1,12 @@
-import type { Dispatch, SetStateAction } from 'react';
-import { useState } from 'react';
-import { Button, Flex, Select, Space, Typography } from 'antd';
-import { AppSelect } from '@unpod/components/antd';
-import { useOrgContext } from '@unpod/providers';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import type {Dispatch, SetStateAction} from 'react';
+import {useState} from 'react';
+import {Button, Flex, Select, Space, Typography} from 'antd';
+import {AppSelect} from '@unpod/components/antd';
+import {useOrgContext} from '@unpod/providers';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import SharedUserList from './SharedUserList';
 
-const { Option } = Select;
+const {Option} = Select;
 
 type SharedField = {
   email: string;
@@ -18,11 +18,11 @@ type SharedFieldsProps = {
   setSharedFields: Dispatch<SetStateAction<SharedField[]>>;
 };
 
-const SharedFields = ({ sharedFields, setSharedFields }: SharedFieldsProps) => {
+const SharedFields = ({sharedFields, setSharedFields}: SharedFieldsProps) => {
   const [emails, setEmails] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState('viewer');
 
-  const { orgUsers } = useOrgContext();
+  const {orgUsers} = useOrgContext();
 
   const handleAddSharedField = () => {
     if (emails.length) {
@@ -78,7 +78,7 @@ const SharedFields = ({ sharedFields, setSharedFields }: SharedFieldsProps) => {
                   {orgUser?.full_name && (
                     <Typography.Text
                       type={'secondary'}
-                      style={{ marginBottom: -4, display: 'block' }}
+                      style={{marginBottom: -4, display: 'block'}}
                     >
                       {orgUser?.full_name}
                     </Typography.Text>

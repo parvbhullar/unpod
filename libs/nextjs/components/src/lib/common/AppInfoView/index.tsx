@@ -1,18 +1,16 @@
 'use client';
-import React, { useEffect } from 'react';
-import { message } from 'antd';
-import {
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
+import React, {useEffect} from 'react';
+import {message} from 'antd';
+import {useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
 import AppLoader from '../AppLoader';
 
 type AppInfoViewProps = {
-  hideLoader?: boolean;};
+  hideLoader?: boolean;
+};
 
-const AppInfoView: React.FC<AppInfoViewProps> = ({ hideLoader = false }) => {
-  const { loading, error, notification } = useInfoViewContext();
-  const { clearAll } = useInfoViewActionsContext();
+const AppInfoView: React.FC<AppInfoViewProps> = ({hideLoader = false}) => {
+  const {loading, error, notification} = useInfoViewContext();
+  const {clearAll} = useInfoViewActionsContext();
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
@@ -44,7 +42,7 @@ const AppInfoView: React.FC<AppInfoViewProps> = ({ hideLoader = false }) => {
   return (
     <>
       {contextHolder}
-      {loading && !hideLoader && <AppLoader />}
+      {loading && !hideLoader && <AppLoader/>}
     </>
   );
 };

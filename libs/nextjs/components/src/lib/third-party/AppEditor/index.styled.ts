@@ -15,6 +15,6 @@ export const StyledMailModalTextArea = styled.div`
 `;
 
 export const StyledAppScrollbar = styled(AppScrollbar)`
-  height: ${({ visible }) =>
-    visible ? 'calc(100% - 58px)' : 'calc(100% - 1px)'};
+  height: ${({visible}) =>
+  visible ? 'calc(100% - 58px)' : 'calc(100% - 1px)'};
 `;

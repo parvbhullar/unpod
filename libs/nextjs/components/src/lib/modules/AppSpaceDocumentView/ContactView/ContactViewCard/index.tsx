@@ -1,21 +1,17 @@
+import {Descriptions} from 'antd';
+import {StyledContainer} from './index.styled';
+import {capitalizedAllWords, convertMachineNameToName,} from '@unpod/helpers/StringHelper';
+import {useMediaQuery} from 'react-responsive';
+import {TabWidthQuery} from '@unpod/constants';
+import type {SpaceSchema} from '@unpod/constants/types';
 
-import { Descriptions } from 'antd';
-import { StyledContainer } from './index.styled';
-import {
-  capitalizedAllWords,
-  convertMachineNameToName,
-} from '@unpod/helpers/StringHelper';
-import { useMediaQuery } from 'react-responsive';
-import { TabWidthQuery } from '@unpod/constants';
-import type { SpaceSchema } from '@unpod/constants/types';
-
-const { Item } = Descriptions;
+const {Item} = Descriptions;
 
 type Contact = Record<string, any>;
 const ContactViewCard = ({
-  contact,
-  spaceSchema,
-}: {
+                           contact,
+                           spaceSchema,
+                         }: {
   contact: Contact;
   spaceSchema: SpaceSchema;
 }) => {

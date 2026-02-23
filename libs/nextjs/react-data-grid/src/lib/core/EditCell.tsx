@@ -1,13 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
-import { useLatestFunc } from './hooks';
-import {
-  createCellEvent,
-  getCellClassname,
-  getCellStyle,
-  onEditorNavigation,
-} from './utils';
+import {useLatestFunc} from './hooks';
+import {createCellEvent, getCellClassname, getCellStyle, onEditorNavigation,} from './utils';
 import type {
   CellKeyboardEvent,
   CellRendererProps,
@@ -16,7 +11,7 @@ import type {
   Omit,
   RenderEditCellProps,
 } from './models/data-grid';
-import { StyledCellWrapper } from './style/cell';
+import {StyledCellWrapper} from './style/cell';
 
 /*
  * To check for outside `mousedown` events, we listen to all `mousedown` events at their birth,
@@ -42,7 +37,10 @@ const CellEditing = styled(StyledCellWrapper)`
 
 type SharedCellRendererProps<R, SR> = Pick<CellRendererProps<R, SR>, 'colSpan'>;
 
-type EditCellProps<R, SR> = Omit<RenderEditCellProps<R, SR>, 'onRowChange' | 'onClose'> & SharedCellRendererProps<R, SR> & {
+type EditCellProps<R, SR> =
+  Omit<RenderEditCellProps<R, SR>, 'onRowChange' | 'onClose'>
+  & SharedCellRendererProps<R, SR>
+  & {
   rowIdx: number;
   onRowChange: (
     row: R,
@@ -58,23 +56,24 @@ type EditCellProps<R, SR> = Omit<RenderEditCellProps<R, SR>, 'onRowChange' | 'on
   showBorder: boolean;
   rowSelectionType: 'radio' | 'checkbox';
   autoRowHeight: boolean;
-  onCellEditFinish: (row: R, rowIdx: number) => void;};
+  onCellEditFinish: (row: R, rowIdx: number) => void;
+};
 
 export default function EditCell<R, SR>({
-  column,
-  colSpan,
-  row,
-  rowIdx,
-  onRowChange,
-  closeEditor,
-  onKeyDown,
-  navigate,
-  dataKey,
-  showBorder,
-  rowSelectionType,
-  autoRowHeight,
-  onCellEditFinish,
-}: EditCellProps<R, SR>) {
+                                          column,
+                                          colSpan,
+                                          row,
+                                          rowIdx,
+                                          onRowChange,
+                                          closeEditor,
+                                          onKeyDown,
+                                          navigate,
+                                          dataKey,
+                                          showBorder,
+                                          rowSelectionType,
+                                          autoRowHeight,
+                                          onCellEditFinish,
+                                        }: EditCellProps<R, SR>) {
   const frameRequestRef = useRef<number | undefined>(undefined);
   const currentEditedRef = useRef<R | undefined>(undefined);
   const commitOnOutsideClick =
@@ -102,7 +101,7 @@ export default function EditCell<R, SR>({
       frameRequestRef.current = requestAnimationFrame(commitOnOutsideMouseDown);
     }
 
-    addEventListener('mousedown', onWindowCaptureMouseDown, { capture: true });
+    addEventListener('mousedown', onWindowCaptureMouseDown, {capture: true});
 
     return () => {
       removeEventListener('mousedown', onWindowCaptureMouseDown, {
@@ -162,7 +161,7 @@ export default function EditCell<R, SR>({
     onRowChange(row, commitChangesAndFocus, commitChangesAndFocus);
   }
 
-  const { cellClass } = column;
+  const {cellClass} = column;
   const className = getCellClassname(
     column,
     'rdg-editor-container',
@@ -195,13 +194,13 @@ export default function EditCell<R, SR>({
             (column.render
               ? column.render(row[dataKey], row, rowIdx)
               : column.renderCell({
-                  column,
-                  row,
-                  isCellEditable: true,
-                  tabIndex: -1,
-                  onRowChange: onEditorRowChange,
-                  rowSelectionType,
-                }))}
+                column,
+                row,
+                isCellEditable: true,
+                tabIndex: -1,
+                onRowChange: onEditorRowChange,
+                rowSelectionType,
+              }))}
         </>
       )}
     </CellEditing>

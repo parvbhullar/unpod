@@ -1,18 +1,15 @@
-import type { ComponentType } from 'react';
-import { useRef, useState } from 'react';
-import { Tooltip } from 'antd';
-import { MdRefresh } from 'react-icons/md';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import type {ComponentType} from 'react';
+import {useRef, useState} from 'react';
+import {Tooltip} from 'antd';
+import {MdRefresh} from 'react-icons/md';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 import AppSpaceContactCall from '@unpod/components/modules/AppSpaceContactCall';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
 import Header from './Header';
 import Content from './Content';
 import AddNewTask from './Content/Tasks/AddNew';
-import { SpaceSkeleton } from '@unpod/skeleton';
-import { useIntl } from 'react-intl';
+import {SpaceSkeleton} from '@unpod/skeleton';
+import {useIntl} from 'react-intl';
 import People from '../Sidebar/People';
 
 const MainContent = () => {
@@ -23,8 +20,8 @@ const MainContent = () => {
     setActiveNote,
     setDocumentMode,
   } = useAppSpaceActionsContext();
-  const { activeTab, currentSpace } = useAppSpaceContext();
-  const { formatMessage } = useIntl();
+  const {activeTab, currentSpace} = useAppSpaceContext();
+  const {formatMessage} = useIntl();
   const [threadType, setThreadType] = useState('');
 
   const tasksRef = useRef<{ refreshData?: () => void } | null>(null);
@@ -76,7 +73,7 @@ const MainContent = () => {
                   tasksRef.current?.refreshData?.();
                 }}
                 onRefreshTasks={tasksRef.current?.refreshData}
-                drawerChildren={<People />}
+                drawerChildren={<People/>}
               />
             ) : (
               <AddNewTask
@@ -88,12 +85,12 @@ const MainContent = () => {
             )
           ) : (
             activeTab === 'analytics' && (
-              <Tooltip title={formatMessage({ id: 'common.refresh' })}>
+              <Tooltip title={formatMessage({id: 'common.refresh'})}>
                 <AppHeaderButton
                   type="default"
                   shape="circle"
                   size="small"
-                  icon={<MdRefresh fontSize={24} />}
+                  icon={<MdRefresh fontSize={24}/>}
                   onClick={() => {
                     dashboardRef.current?.refreshData?.();
                   }}
@@ -113,7 +110,7 @@ const MainContent = () => {
       />
     </>
   ) : (
-    <SpaceSkeleton />
+    <SpaceSkeleton/>
   );
 };
 

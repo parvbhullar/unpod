@@ -1,10 +1,10 @@
-import { StyledPageContainer } from '../index.styled';
+import {StyledPageContainer} from '../index.styled';
 import ClassicView from '../../View/ClassicView';
 
 const MianView = () => {
   return (
     <StyledPageContainer>
-      <ClassicView />
+      <ClassicView/>
     </StyledPageContainer>
   );
 };

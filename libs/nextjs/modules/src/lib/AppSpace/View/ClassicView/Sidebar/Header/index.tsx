@@ -1,32 +1,25 @@
-import { useMemo, useState } from 'react';
-import type { MenuProps } from 'antd';
-import { App, Dropdown, Modal, Space, Tooltip } from 'antd';
-import {
-  MdAdd,
-  MdCall,
-  MdMoreVert,
-  MdOutlineContentCopy,
-  MdOutlineDownload,
-} from 'react-icons/md';
-import { useRouter } from 'next/navigation';
+import {useMemo, useState} from 'react';
+import type {MenuProps} from 'antd';
+import {App, Dropdown, Modal, Space, Tooltip} from 'antd';
+import {MdAdd, MdCall, MdMoreVert, MdOutlineContentCopy, MdOutlineDownload,} from 'react-icons/md';
+import {useRouter} from 'next/navigation';
 import AppSpaceHeaderMenus from '@unpod/components/common/AppSpaceHeaderMenus';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import { isEditAccessAllowed } from '@unpod/helpers/PermissionHelper';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {isEditAccessAllowed} from '@unpod/helpers/PermissionHelper';
 import {
   deleteDataApi,
   useAppSpaceActionsContext,
   useAppSpaceContext,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { AppDrawer } from '@unpod/components/antd';
+import {AppDrawer} from '@unpod/components/antd';
 import EditSpace from './EditSpace';
 import DownloadLogs from './DownloadLogs';
-import { StyledHeader } from './index.styled';
-import Channels from './Channels';
-import { AiOutlineEdit } from 'react-icons/ai';
+import {StyledHeader} from './index.styled';
+import {AiOutlineEdit} from 'react-icons/ai';
 import ConfigureAgentModal from './ConfigureAgent';
 import AppCopyToClipboard from '@unpod/components/third-party/AppCopyToClipboard';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 import AppSpaceCallModal from '@unpod/components/modules/AppSpaceContactCall/AppSpaceCallModal';
 import DocSelector from '../../MainContent/Content/Calls/DocSelector';
 
@@ -34,20 +27,18 @@ const SidebarHeader = () => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const router = useRouter();
   const {
-    setCurrentSpace,
     setActiveTab,
     setActiveConversation,
     setActiveNote,
     setActiveDocument,
     setSelectedDocs,
   } = useAppSpaceActionsContext();
-  const { currentSpace, activeTab, connectorData } = useAppSpaceContext();
-  const { formatMessage } = useIntl();
-  const { modal } = App.useApp();
+  const {currentSpace, activeTab, connectorData} = useAppSpaceContext();
+  const {formatMessage} = useIntl();
+  const {modal} = App.useApp();
 
   const [addNew, setAddNew] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
-  const [isChannelOpen, setChannelOpen] = useState(false);
   const [downloadLog, setDownloadLog] = useState(false);
   const [isConfigureOpen, setIsConfigureOpen] = useState<boolean>(false);
   const [isCallModalOpen, setCallModalOpen] = useState(false);
@@ -60,10 +51,10 @@ const SidebarHeader = () => {
     const options = [
       {
         key: 'actions',
-        label: formatMessage({ id: 'space.edit' }),
+        label: formatMessage({id: 'space.edit'}),
         icon: (
           <span className="ant-icon">
-            <AiOutlineEdit fontSize={18} />
+            <AiOutlineEdit fontSize={18}/>
           </span>
         ),
       },
@@ -71,23 +62,23 @@ const SidebarHeader = () => {
         key: 'copy_slug',
         label: (
           <AppCopyToClipboard
-            title={formatMessage({ id: 'space.spaceToken' })}
+            title={formatMessage({id: 'space.spaceToken'})}
             text={currentSpace?.token}
             hideIcon={false}
           />
         ),
         icon: (
           <span className="ant-icon">
-            <MdOutlineContentCopy fontSize={16} />
+            <MdOutlineContentCopy fontSize={16}/>
           </span>
         ),
       },
       {
         key: 'download',
-        label: formatMessage({ id: 'space.callLogs' }),
+        label: formatMessage({id: 'space.callLogs'}),
         icon: (
           <span className="ant-icon">
-            <MdOutlineDownload fontSize={20} />
+            <MdOutlineDownload fontSize={20}/>
           </span>
         ),
       },
@@ -141,20 +132,20 @@ const SidebarHeader = () => {
   const getAddButtonTooltip = useMemo(() => {
     switch (activeTab) {
       case 'chat':
-        return formatMessage({ id: 'space.startNewThread' });
+        return formatMessage({id: 'space.startNewThread'});
       case 'note':
       case 'notes':
-        return formatMessage({ id: 'space.addNewNote' });
+        return formatMessage({id: 'space.addNewNote'});
       case 'doc':
-        return formatMessage({ id: 'peopleSidebarMenu.callAll' });
+        return formatMessage({id: 'peopleSidebarMenu.callAll'});
       case 'logs':
       case 'call':
-        return formatMessage({ id: 'space.addNewCall' });
+        return formatMessage({id: 'space.addNewCall'});
       case 'dashboard':
       case 'analytics':
-        return formatMessage({ id: 'space.addWidget' });
+        return formatMessage({id: 'space.addWidget'});
       default:
-        return formatMessage({ id: 'space.addChannel' });
+        return formatMessage({id: 'space.addChannel'});
     }
   }, [activeTab, formatMessage]);
 
@@ -177,11 +168,11 @@ const SidebarHeader = () => {
         break;
       case 'doc':
         modal.confirm({
-          title: formatMessage({ id: 'peopleHeader.title' }),
-          content: formatMessage({ id: 'peopleHeader.content' }),
-          okText: formatMessage({ id: 'peopleHeader.okButton' }),
-          cancelText: formatMessage({ id: 'common.cancel' }),
-          okButtonProps: { danger: true },
+          title: formatMessage({id: 'peopleHeader.title'}),
+          content: formatMessage({id: 'peopleHeader.content'}),
+          okText: formatMessage({id: 'peopleHeader.okButton'}),
+          cancelText: formatMessage({id: 'common.cancel'}),
+          okButtonProps: {danger: true},
           centered: true,
           onOk: () => {
             setCallModalOpen(true);
@@ -254,7 +245,7 @@ const SidebarHeader = () => {
               shape="circle"
               size="small"
               icon={
-                showCallIcon ? <MdCall size={22} /> : <MdAdd fontSize={22} />
+                showCallIcon ? <MdCall size={22}/> : <MdAdd fontSize={22}/>
               }
               onClick={handleAddButtonClick}
             />
@@ -272,7 +263,7 @@ const SidebarHeader = () => {
               type="text"
               shape="circle"
               size="small"
-              icon={<MdMoreVert fontSize={24} />}
+              icon={<MdMoreVert fontSize={24}/>}
             />
           </Dropdown>
         </Space>
@@ -281,28 +272,22 @@ const SidebarHeader = () => {
       <AppDrawer
         destroyOnClose
         isTabDrawer={true}
-        title={formatMessage({ id: 'space.edit' })}
+        title={formatMessage({id: 'space.edit'})}
         open={isEditOpen}
         destroyOnHidden={true}
         onClose={() => setEditOpen(false)}
         width={720}
         showLoader
       >
-        {isEditOpen && <EditSpace onClose={() => setEditOpen(false)} />}
+        {isEditOpen && <EditSpace onClose={() => setEditOpen(false)}/>}
       </AppDrawer>
 
-      <Channels
-        currentSpace={currentSpace}
-        setCurrentSpace={setCurrentSpace}
-        open={isChannelOpen}
-        onClose={() => setChannelOpen(false)}
-      />
 
       <AppDrawer
         open={isConfigureOpen}
         onClose={() => setIsConfigureOpen(false)}
         closable={false}
-        title={formatMessage({ id: 'space.linkAgent' })}
+        title={formatMessage({id: 'space.linkAgent'})}
       >
         <ConfigureAgentModal
           currentSpace={currentSpace}
@@ -312,36 +297,36 @@ const SidebarHeader = () => {
       </AppDrawer>
 
       <AppDrawer
-        title={formatMessage({ id: 'drawer.downloadCallLogs' })}
+        title={formatMessage({id: 'drawer.downloadCallLogs'})}
         open={downloadLog}
         onClose={() => setDownloadLog(false)}
         width={600}
       >
-        <DownloadLogs onClose={() => setDownloadLog(false)} />
+        <DownloadLogs onClose={() => setDownloadLog(false)}/>
       </AppDrawer>
 
       <AppDrawer
         open={visible}
         onClose={() => setVisible(false)}
         closable={false}
-        title={formatMessage({ id: 'call.landingViewDrawerTitle' })}
+        title={formatMessage({id: 'call.landingViewDrawerTitle'})}
         padding="0"
         extra={
           <AppHeaderButton
             type="primary"
             shape={!isMobile ? 'round' : 'circle'}
             icon={
-              <span className="anticon" style={{ verticalAlign: 'middle' }}>
-                <MdCall fontSize={!isMobile ? 16 : 22} />
+              <span className="anticon" style={{verticalAlign: 'middle'}}>
+                <MdCall fontSize={!isMobile ? 16 : 22}/>
               </span>
             }
             onClick={() => setCallModalOpen(true)}
           >
-            {!isMobile && formatMessage({ id: 'spaceHeader.callNow' })}
+            {!isMobile && formatMessage({id: 'spaceHeader.callNow'})}
           </AppHeaderButton>
         }
       >
-        <DocSelector allowSelection />
+        <DocSelector allowSelection/>
       </AppDrawer>
 
       <AppSpaceCallModal

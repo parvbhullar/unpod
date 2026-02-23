@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { ChatMessage } from './ChatMessage';
-import { ChatMessageInput } from './ChatMessageInput';
+import React, {useEffect, useRef} from 'react';
+import {ChatMessage} from './ChatMessage';
+import {ChatMessageInput} from './ChatMessageInput';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 
@@ -37,7 +37,7 @@ type ChatTileProps = {
   onSend?: (message: string) => void;
 };
 
-export const ChatTile: React.FC<ChatTileProps> = ({ messages, onSend }) => {
+export const ChatTile: React.FC<ChatTileProps> = ({messages, onSend}) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (scrollRef.current) {
@@ -47,7 +47,7 @@ export const ChatTile: React.FC<ChatTileProps> = ({ messages, onSend }) => {
 
   return (
     <Container>
-      <MessagesContainer scrollableNodeProps={{ ref: scrollRef }}>
+      <MessagesContainer scrollableNodeProps={{ref: scrollRef}}>
         <MessagesWrapper>
           {messages.map((message, index, allMsg) => {
             const hideName =

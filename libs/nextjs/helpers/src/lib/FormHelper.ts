@@ -1,4 +1,4 @@
-import { capitalizedString } from './StringHelper';
+import {capitalizedString} from './StringHelper';
 
 export const parseRegex = (
   regexString: string | null | undefined,
@@ -102,7 +102,7 @@ export const getFieldValidationRules = (field: FormField): ValidationRule[] => {
     });
   }
   if (field.type === 'number') {
-    rules.push({ pattern: /^\d+$/, message: `Please enter a valid number.` });
+    rules.push({pattern: /^\d+$/, message: `Please enter a valid number.`});
   }
   if (field.regex) {
     rules.push({
@@ -112,10 +112,10 @@ export const getFieldValidationRules = (field: FormField): ValidationRule[] => {
         return regex && regex.test(String(v))
           ? Promise.resolve()
           : Promise.reject(
-              new Error(
-                field.regexMessage || `Enter a valid ${label.toLowerCase()}`,
-              ),
-            );
+            new Error(
+              field.regexMessage || `Enter a valid ${label.toLowerCase()}`,
+            ),
+          );
       },
     });
   }

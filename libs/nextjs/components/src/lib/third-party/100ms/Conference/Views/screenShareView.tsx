@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo } from 'react';
+import React, {Fragment, useCallback, useMemo} from 'react';
 import {
   selectLocalPeerID,
   selectLocalPeerRoleName,
@@ -8,11 +8,11 @@ import {
   selectScreenShareByPeerID,
   useHMSStore,
 } from '@100mslive/react-sdk';
-import { ScreenshareDisplay } from './ScreenshareDisplay';
+import {ScreenshareDisplay} from './ScreenshareDisplay';
 import ScreenshareTile from './ScreenshareTile';
 import VideoList from './VideoList';
 import VideoTile from './VideoTile';
-import { VideoPlayer } from './Playlist/VideoPlayer';
+import {VideoPlayer} from './Playlist/VideoPlayer';
 
 const ScreenShareView = () => {
   const showSidebarInBottom = true;
@@ -74,12 +74,12 @@ const ScreenShareView = () => {
 // Sidepane will show the camera stream of the main peer who is screensharing
 // and both camera + screen(if applicable) of others
 export const SidePane = ({
-  isPresenterInSmallTiles,
-  peerScreenSharing, // the peer who is screensharing
-  smallTilePeers,
-  totalPeers,
-  showSidebarInBottom,
-}) => {
+                           isPresenterInSmallTiles,
+                           peerScreenSharing, // the peer who is screensharing
+                           smallTilePeers,
+                           totalPeers,
+                           showSidebarInBottom,
+                         }) => {
   // The main peer's screenshare is already being shown in center view
   const shouldShowScreenFn = useCallback(
     (peer) => peerScreenSharing && peer.id !== peerScreenSharing.id,
@@ -88,7 +88,7 @@ export const SidePane = ({
   return (
     <Fragment>
       {!isPresenterInSmallTiles && (
-        <LargeTilePeerView peerScreenSharing={peerScreenSharing} />
+        <LargeTilePeerView peerScreenSharing={peerScreenSharing}/>
       )}
       <SmallTilePeersView
         showSidebarInBottom={showSidebarInBottom}
@@ -100,10 +100,10 @@ export const SidePane = ({
 };
 
 const ScreenShareComponent = ({
-  amIPresenting,
-  peerPresenting,
-  peerSharingPlaylist,
-}) => {
+                                amIPresenting,
+                                peerPresenting,
+                                peerSharingPlaylist,
+                              }) => {
   const screenshareTrack = useHMSStore(
     selectScreenShareByPeerID(peerPresenting?.id)
   );
@@ -121,7 +121,7 @@ const ScreenShareComponent = ({
           },
         }}
       >
-        <VideoPlayer peerId={peerSharingPlaylist.id} />
+        <VideoPlayer peerId={peerSharingPlaylist.id}/>
       </div>
     );
   }
@@ -139,22 +139,22 @@ const ScreenShareComponent = ({
         !['browser', 'window', 'application'].includes(
           screenshareTrack?.displaySurface
         ) ? (
-          <div style={{ objectFit: 'contain', h: '100%' }}>
-            <ScreenshareDisplay />
+          <div style={{objectFit: 'contain', h: '100%'}}>
+            <ScreenshareDisplay/>
           </div>
         ) : (
-          <ScreenshareTile peerId={peerPresenting?.id} />
+          <ScreenshareTile peerId={peerPresenting?.id}/>
         ))}
     </div>
   );
 };
 
 const SmallTilePeersView = ({
-  smallTilePeers,
-  shouldShowScreenFn,
-  showStatsOnTiles,
-  showSidebarInBottom,
-}) => {
+                              smallTilePeers,
+                              shouldShowScreenFn,
+                              showStatsOnTiles,
+                              showSidebarInBottom,
+                            }) => {
   return (
     <div
       style={{
@@ -174,7 +174,7 @@ const SmallTilePeersView = ({
   );
 };
 
-const LargeTilePeerView = ({ peerScreenSharing, showStatsOnTiles }) => {
+const LargeTilePeerView = ({peerScreenSharing, showStatsOnTiles}) => {
   return peerScreenSharing ? (
     <div
       style={{

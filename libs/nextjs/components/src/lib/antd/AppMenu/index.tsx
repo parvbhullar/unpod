@@ -1,15 +1,11 @@
-import React, { ReactNode, useEffect } from 'react';
-import { Menu, Spin, Typography } from 'antd';
-import { useBottomScrollListener } from 'react-bottom-scroll-listener';
-import {
-  StyledMenuContainer,
-  StyledOverlayLoader,
-  StyledOverlayLoaderText,
-} from './index.styled';
-import { SidebarAgentList } from '@unpod/skeleton';
-import type { MenuProps } from 'antd/es/menu';
+import React, {ReactNode, useEffect} from 'react';
+import {Menu, Spin, Typography} from 'antd';
+import {useBottomScrollListener} from 'react-bottom-scroll-listener';
+import {StyledMenuContainer, StyledOverlayLoader, StyledOverlayLoaderText,} from './index.styled';
+import {SidebarAgentList} from '@unpod/skeleton';
+import type {MenuProps} from 'antd/es/menu';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type AppMenuProps = {
   loading?: boolean;
@@ -18,23 +14,24 @@ type AppMenuProps = {
   onSelect?: MenuProps['onSelect'];
   noDataMessage?: string;
   onEndReached?: () => void;
-  selectedKeys?: string[];};
+  selectedKeys?: string[];
+};
 
 const AppMenu: React.FC<AppMenuProps> = ({
-  loading = false,
-  initialLoader = <SidebarAgentList />,
-  items = [],
-  onSelect,
-  noDataMessage,
-  onEndReached,
-  selectedKeys,
-}) => {
+                                           loading = false,
+                                           initialLoader = <SidebarAgentList/>,
+                                           items = [],
+                                           onSelect,
+                                           noDataMessage,
+                                           onEndReached,
+                                           selectedKeys,
+                                         }) => {
   const containerRef = onEndReached
     ? useBottomScrollListener<HTMLDivElement>(onEndReached, {
-        offset: 200,
-        debounce: 200,
-        triggerOnNoScroll: false,
-      })
+      offset: 200,
+      debounce: 200,
+      triggerOnNoScroll: false,
+    })
     : null;
 
   useEffect(() => {
@@ -72,7 +69,7 @@ const AppMenu: React.FC<AppMenuProps> = ({
       {loading && items.length > 0 && (
         <StyledOverlayLoader>
           <StyledOverlayLoaderText>
-            <Spin size="small" />
+            <Spin size="small"/>
             <Text type="secondary">Loading...</Text>
           </StyledOverlayLoaderText>
         </StyledOverlayLoader>

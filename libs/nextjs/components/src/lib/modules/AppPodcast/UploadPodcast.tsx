@@ -1,29 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  getDataApi,
-  postDataApi,
-  uploadDataApi,
-  useGetDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { PERMISSION_TYPES } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import {
-  Button,
-  Dropdown,
-  Form,
-  Progress,
-  Row,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
+import {getDataApi, postDataApi, uploadDataApi, useGetDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {PERMISSION_TYPES} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {Button, Dropdown, Form, Progress, Row, Space, Typography, Upload,} from 'antd';
 import * as UpChunk from '@mux/upchunk';
-import {
-  AppMiniWindowBody,
-  AppMiniWindowFooter,
-} from '../../common/AppMiniWindow';
+import {AppMiniWindowBody, AppMiniWindowFooter,} from '../../common/AppMiniWindow';
 import {
   StyledButton,
   StyledCoverWrapper,
@@ -32,40 +14,30 @@ import {
   StyledFormItem,
   StyledInput,
 } from './index.styled';
-import {
-  MdArrowUpward,
-  MdClear,
-  MdFormatColorText,
-  MdOutlineImage,
-  MdOutlineWorkspaces,
-} from 'react-icons/md';
-import { useParams, useRouter } from 'next/navigation';
+import {MdArrowUpward, MdClear, MdFormatColorText, MdOutlineImage, MdOutlineWorkspaces,} from 'react-icons/md';
+import {useParams, useRouter} from 'next/navigation';
 import AppImage from '../../next/AppImage';
 import AppEditor from '../../third-party/AppEditor';
 import PostPermissionPopover from '../../common/PermissionPopover/PostPermissionPopover';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
 import _debounce from 'lodash/debounce';
-import { getDraftData, saveDraftData } from '@unpod/helpers/DraftHelper';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {getDraftData, saveDraftData} from '@unpod/helpers/DraftHelper';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
 const acceptTypes = '.png, .jpg, .jpeg';
 const acceptMediaTypes = 'audio/*,video/*';
 
 const UploadPodcast = ({
-  onSaved,
-  currentSpace,
-  currentPost,
-  setCreatingPost,
-  isEdit,
-}) => {
+                         onSaved,
+                         currentSpace,
+                         currentPost,
+                         setCreatingPost,
+                         isEdit,
+                       }) => {
   const router = useRouter();
   const [form] = Form.useForm();
-  const { spaceSlug, postSlug } = useParams();
+  const {spaceSlug, postSlug} = useParams();
   const infoViewActionsContext = useInfoViewActionsContext();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = React.useState(null);
@@ -83,15 +55,15 @@ const UploadPodcast = ({
   const [userList, setUserList] = useState([]);
   const [visible, setSetVisible] = useState(false);
   const uploadedMediaRef = useRef(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [dataFetched, setDataFetched] = useState(false);
   const debounceFn = useCallback(_debounce(saveDraftData, 2000), []);
 
-  const [{ apiData }] = useGetDataApi(
+  const [{apiData}] = useGetDataApi(
     'spaces/',
     {},
-    { case: 'all' },
+    {case: 'all'},
     !spaceSlug && !postSlug,
   );
 
@@ -226,7 +198,7 @@ const UploadPodcast = ({
           !acceptTypes?.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setCoverPreviewUrl(window.URL.createObjectURL(file));
@@ -251,7 +223,7 @@ const UploadPodcast = ({
           !acceptMediaTypes?.includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setMediaList([file]);
@@ -354,7 +326,7 @@ const UploadPodcast = ({
 
   const onSubmitSuccess = (postData) => {
     if (!selectedSpace) {
-      infoViewActionsContext.showError(formatMessage({id:'validation.selectSpace'}));
+      infoViewActionsContext.showError(formatMessage({id: 'validation.selectSpace'}));
     } else {
       setCreatingPost(true);
       uploadMuxMedia((uploadId) => {
@@ -377,7 +349,7 @@ const UploadPodcast = ({
         };
 
         if (coverImage) {
-          uploadCoverImage(({ media_id }) => {
+          uploadCoverImage(({media_id}) => {
             payload.cover_image = {
               media_id: media_id,
               file_name: coverImage.name,
@@ -416,12 +388,12 @@ const UploadPodcast = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'common.titleError' }),
+              message: formatMessage({id: 'common.titleError'}),
             },
           ]}
         >
           <StyledInput
-            placeholder={formatMessage({ id: 'form.title' })}
+            placeholder={formatMessage({id: 'form.title'})}
             variant="borderless"
             onChange={onTitleChange}
           />
@@ -429,19 +401,19 @@ const UploadPodcast = ({
 
         <AppEditor
           name="content"
-          placeholder={formatMessage({ id: 'post.content' })}
+          placeholder={formatMessage({id: 'post.content'})}
           visible={visible}
           value={isEdit ? currentPost.content : content}
           onChange={(newValue) => setContent(newValue)}
           isCoverImage={!!coverPreviewUrl}
         >
           <Form.Item
-            label={formatMessage({ id: 'common.uploadVideoAudio' })}
+            label={formatMessage({id: 'common.uploadVideoAudio'})}
             name="media"
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.chooseFile' }),
+                message: formatMessage({id: 'validation.chooseFile'}),
               },
             ]}
           >
@@ -467,14 +439,14 @@ const UploadPodcast = ({
                 <Space direction="vertical" size={4}>
                   <Button
                     shape="circle"
-                    icon={<MdArrowUpward fontSize={21} />}
+                    icon={<MdArrowUpward fontSize={21}/>}
                     css={`
                       margin-bottom: 8px;
                     `}
                   />
 
                   <Typography.Text>
-                    {formatMessage({ id: 'post.dragMediaToUpload' })}
+                    {formatMessage({id: 'post.dragMediaToUpload'})}
                   </Typography.Text>
                 </Space>
               </StyledDragger>
@@ -482,12 +454,12 @@ const UploadPodcast = ({
           </Form.Item>
 
           {coverUploadPercent > 0 && coverUploadPercent < 100 ? (
-            <Form.Item label={formatMessage({ id: 'post.coverImage' })}>
-              <Progress percent={coverUploadPercent} width={70} />
+            <Form.Item label={formatMessage({id: 'post.coverImage'})}>
+              <Progress percent={coverUploadPercent} width={70}/>
             </Form.Item>
           ) : (
             !!coverPreviewUrl && (
-              <Form.Item label={formatMessage({ id: 'post.coverImage' })}>
+              <Form.Item label={formatMessage({id: 'post.coverImage'})}>
                 <StyledCoverWrapper>
                   <AppImage
                     src={coverPreviewUrl}
@@ -525,12 +497,12 @@ const UploadPodcast = ({
               >
                 <Typography.Link>
                   <Space>
-                    <MdOutlineWorkspaces fontSize={21} />
+                    <MdOutlineWorkspaces fontSize={21}/>
 
                     <span>
                       {selectedSpace?.label
                         ? selectedSpace.label.slice(0, 20).trim()
-                        : formatMessage({ id: 'space.space' })}
+                        : formatMessage({id: 'space.space'})}
                     </span>
                   </Space>
                 </Typography.Link>
@@ -550,7 +522,7 @@ const UploadPodcast = ({
               <Typography.Link>
                 <Space>
                   {currentPrivacy?.icon}
-                  <span>{formatMessage({ id: currentPrivacy?.label })}</span>
+                  <span>{formatMessage({id: currentPrivacy?.label})}</span>
                 </Space>
               </Typography.Link>
             </Dropdown>
@@ -565,7 +537,7 @@ const UploadPodcast = ({
                 margin-bottom: 2px;
               `}
             >
-              <MdFormatColorText fontSize={20} />
+              <MdFormatColorText fontSize={20}/>
             </Typography.Link>
 
             <Upload
@@ -577,7 +549,7 @@ const UploadPodcast = ({
               showUploadList={false}
             >
               <Typography.Link>
-                <MdOutlineImage fontSize={24} />
+                <MdOutlineImage fontSize={24}/>
               </Typography.Link>
             </Upload>
 

@@ -8,13 +8,13 @@ export const getTabItems = (
   return [
     {
       key: 'overview',
-      label: formatMessage({ id: 'tab.overview' }),
-      children: activeTab === 'overview' && <PeopleOverview />,
+      label: formatMessage({id: 'tab.overview'}),
+      children: activeTab === 'overview' && <PeopleOverview/>,
     },
     {
       key: 'conversation',
-      label: formatMessage({ id: 'tab.conversation' }),
-      children: activeTab === 'conversation' && <Conversations />,
+      label: formatMessage({id: 'tab.conversation'}),
+      children: activeTab === 'conversation' && <Conversations/>,
     },
     /*{
       key: 'tasks',

@@ -13,7 +13,7 @@ const fetchWithRetry = async (url, options) => {
       error = err;
     }
   }
-  console.error('Fetch failed after max retries', { url, options });
+  console.error('Fetch failed after max retries', {url, options});
   throw error;
 };
 
@@ -35,7 +35,7 @@ export default async function getToken(tokenEndpoint, userId, role, roomId) {
     }
 
     const data = await response.json();
-    const { token } = data;
+    const {token} = data;
     // response will be sucess and token is null when url is valid but response
     // domain is not present in 100ms
     if (token === null) {

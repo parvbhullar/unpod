@@ -9,30 +9,15 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  Badge,
-  Button,
-  Dropdown,
-  Form,
-  Row,
-  Space,
-  Tooltip,
-  Typography,
-  Upload,
-} from 'antd';
-import {
-  MdArrowForward,
-  MdClose,
-  MdDelete,
-  MdOutlineAttachment,
-} from 'react-icons/md';
-import { BsArrowReturnLeft } from 'react-icons/bs';
-import { uploadDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { AskAttachmentTypes } from '@unpod/constants';
-import { POST_CONTENT_TYPE, POST_TYPE } from '@unpod/constants/AppEnums';
+import {Badge, Button, Dropdown, Form, Row, Space, Tooltip, Typography, Upload,} from 'antd';
+import {MdArrowForward, MdClose, MdDelete, MdOutlineAttachment,} from 'react-icons/md';
+import {BsArrowReturnLeft} from 'react-icons/bs';
+import {uploadDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {AskAttachmentTypes} from '@unpod/constants';
+import {POST_CONTENT_TYPE, POST_TYPE} from '@unpod/constants/AppEnums';
 import AppLoader from '@unpod/components/common/AppLoader';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import {
   StyledBottomBar,
   StyledContentWrapper,
@@ -44,11 +29,11 @@ import {
   StyledPilotRoot,
 } from './index.styled';
 import UserAvatar from '@unpod/components/common/UserAvatar';
-import { useOutsideClick } from '@unpod/custom-hooks';
-import { RiVoiceprintLine } from 'react-icons/ri';
+import {useOutsideClick} from '@unpod/custom-hooks';
+import {RiVoiceprintLine} from 'react-icons/ri';
 
-const { Item, useForm } = Form;
-const { Paragraph, Text } = Typography;
+const {Item, useForm} = Form;
+const {Paragraph, Text} = Typography;
 
 type PilotInputWindowProps = {
   currentPost: any;
@@ -61,14 +46,14 @@ type PilotInputWindowProps = {
 };
 
 const PilotInputWindow = ({
-  currentPost,
-  replyParent,
-  setReplyParent,
-  sendJsonMessage,
-  onStartVoice,
-  repliesRef,
-  children,
-}: PilotInputWindowProps) => {
+                            currentPost,
+                            replyParent,
+                            setReplyParent,
+                            sendJsonMessage,
+                            onStartVoice,
+                            repliesRef,
+                            children,
+                          }: PilotInputWindowProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [, setFocused] = useState(false);
   const [newQuery, setNewQuery] = useState<string | null>(null);
@@ -132,7 +117,7 @@ const PilotInputWindow = ({
       parentData.parent_id = replyParent.block_id;
     }
 
-    const { execution_type, focus } = currentPost?.related_data || {};
+    const {execution_type, focus} = currentPost?.related_data || {};
 
     const newMsg = {
       event: 'block',
@@ -150,7 +135,7 @@ const PilotInputWindow = ({
 
     sendJsonMessage(newMsg);
 
-    if (replyParent) setReplyParent({ ...replyParent, block_id: null });
+    if (replyParent) setReplyParent({...replyParent, block_id: null});
     setNewQuery(null);
     setFocused(false);
     setLoading(false);
@@ -161,7 +146,7 @@ const PilotInputWindow = ({
     if (values && Object.keys(values).length > 0) {
       setLoading(true);
 
-      const { focus } = currentPost?.related_data || {};
+      const {focus} = currentPost?.related_data || {};
 
       const data = {
         content: values.content,
@@ -212,7 +197,7 @@ const PilotInputWindow = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Text style={{ marginRight: 5 }}>{item.name}</Text>
+          <Text style={{marginRight: 5}}>{item.name}</Text>
           <MdDelete
             fontSize={18}
             onClick={(event) => onAttachmentRemove(event, item)}
@@ -256,14 +241,14 @@ const PilotInputWindow = ({
               <StyledParentContainer>
                 <Tooltip title={`Replying to ${replyParent.user.full_name}`}>
                   <StyledParent>
-                    <BsArrowReturnLeft fontSize={16} />
+                    <BsArrowReturnLeft fontSize={16}/>
                     <UserAvatar
                       user={replyParent.user}
                       size={24}
-                      style={{ fontSize: 10 }}
+                      style={{fontSize: 10}}
                     />
 
-                    <Paragraph type="secondary" ellipsis={{ rows: 2 }}>
+                    <Paragraph type="secondary" ellipsis={{rows: 2}}>
                       {replyParent.title
                         ? replyParent.title
                         : getStringFromHtml(replyParent?.data?.content)}
@@ -271,7 +256,7 @@ const PilotInputWindow = ({
 
                     <Button
                       type="text"
-                      icon={<MdClose fontSize={16} />}
+                      icon={<MdClose fontSize={16}/>}
                       size="small"
                       onClick={() => setReplyParent(null)}
                     />
@@ -282,7 +267,7 @@ const PilotInputWindow = ({
             )}
 
             <StyledContentWrapper className={hasNewline ? 'SetBottom' : ''}>
-              <Item name="content" style={{ flex: 1 }} noStyle>
+              <Item name="content" style={{flex: 1}} noStyle>
                 <StyledInputWrapper>
                   <StyledInput
                     bordered={false}
@@ -294,7 +279,7 @@ const PilotInputWindow = ({
                         ? 'Ask a followup...'
                         : 'Ask a question...'
                     }
-                    autoSize={{ minRows: 1, maxRows: 10 }}
+                    autoSize={{minRows: 1, maxRows: 10}}
                     value={newQuery ?? ''}
                     onChange={handleChange}
                     onPressEnter={(e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -335,7 +320,7 @@ const PilotInputWindow = ({
                             type={attachments?.length ? 'primary' : 'default'}
                             shape="circle"
                             size="small"
-                            icon={<MdOutlineAttachment fontSize={18} />}
+                            icon={<MdOutlineAttachment fontSize={18}/>}
                           />
                         </Badge>
                       </Dropdown>
@@ -344,7 +329,7 @@ const PilotInputWindow = ({
                         type={attachments?.length ? 'primary' : 'default'}
                         shape="circle"
                         size="small"
-                        icon={<MdOutlineAttachment fontSize={18} />}
+                        icon={<MdOutlineAttachment fontSize={18}/>}
                       />
                     )}
                   </Upload>
@@ -355,7 +340,7 @@ const PilotInputWindow = ({
                       shape="circle"
                       size="small"
                       onClick={() => onStartVoice?.(true as any)}
-                      icon={<RiVoiceprintLine fontSize={18} />}
+                      icon={<RiVoiceprintLine fontSize={18}/>}
                     />
                   )}
 
@@ -365,7 +350,7 @@ const PilotInputWindow = ({
                       shape="circle"
                       size="small"
                       htmlType="submit"
-                      icon={<MdArrowForward fontSize={18} />}
+                      icon={<MdArrowForward fontSize={18}/>}
                     />
                   )}
                 </Space>
@@ -375,7 +360,7 @@ const PilotInputWindow = ({
         </Form>
       </StyledPilotRoot>
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </Fragment>
   );
 };

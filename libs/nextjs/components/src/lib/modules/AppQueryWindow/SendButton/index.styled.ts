@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Dropdown } from 'antd';
+import {Button, Dropdown} from 'antd';
 
 export const StyledButton = styled(Button)`
   display: inline-flex;
@@ -46,7 +46,7 @@ export const StyledCalendarRoot = styled.div`
   margin: 6px 16px;
   overflow-y: auto;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.md}px) {
     flex-wrap: wrap;
   }
 `;
@@ -78,14 +78,14 @@ export const StyledMenuItem = styled.li`
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
   padding: 7px 16px;
   width: 100%;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &.disabled {
-    color: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({theme}) => theme.palette.text.secondary};
     pointer-events: none;
   }
 
@@ -97,11 +97,11 @@ export const StyledMenuItem = styled.li`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 
   &.active {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
-    color: ${({ theme }) => theme.palette.primary};
+    background-color: ${({theme}) => theme.palette.primaryHover};
+    color: ${({theme}) => theme.palette.primary};
   }
 `;

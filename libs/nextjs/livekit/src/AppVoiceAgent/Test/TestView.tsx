@@ -1,6 +1,6 @@
-import { StyledAgentContainer, WidgetContainer } from './TestView.styled';
-import { TestMetricsCard } from './TestMetricsCard';
-import { ResponseType } from './TestAgent';
+import {StyledAgentContainer, WidgetContainer} from './TestView.styled';
+import {TestMetricsCard} from './TestMetricsCard';
+import {ResponseType} from './TestAgent';
 
 type TestViewProps = {
   agentName: string;
@@ -8,7 +8,7 @@ type TestViewProps = {
   setStartCall: (start: boolean) => void;
 };
 
-const TestView = ({ agentName, response, setStartCall }: TestViewProps) => {
+const TestView = ({agentName, response, setStartCall}: TestViewProps) => {
   return (
     <WidgetContainer>
       <StyledAgentContainer direction="row">

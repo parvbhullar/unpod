@@ -1,26 +1,22 @@
-import type { ReactElement } from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Button, Flex, Form, InputNumber, Select, Switch } from 'antd';
-import { MdAdd, MdDelete } from 'react-icons/md';
+import type {ReactElement} from 'react';
+import {useCallback, useEffect, useState} from 'react';
+import {Button, Flex, Form, InputNumber, Select, Switch} from 'antd';
+import {MdAdd, MdDelete} from 'react-icons/md';
 
-import { randomId } from '@unpod/helpers/GlobalHelper';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import {
-  generateKbSchema,
-  getKbInputsStructure,
-  type KbInput,
-} from '@unpod/helpers/AppKbHelper';
+import {randomId} from '@unpod/helpers/GlobalHelper';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {generateKbSchema, getKbInputsStructure, type KbInput,} from '@unpod/helpers/AppKbHelper';
 
 import AppTextArea from '../../../../antd/AppTextArea';
 import AppInput from '../../../../antd/AppInput';
 import AppSelect from '../../../../antd/AppSelect';
-import { AppInputSelector } from '../../../../antd';
+import {AppInputSelector} from '../../../../antd';
 import AppInputRow from '../../../../common/AppInputRow';
 import AppRowOptions from '../../../../common/AppInputRow/AppRowOptions';
-import { StyledItemRow, StyledList, StyledSlider } from './index.styled';
+import {StyledItemRow, StyledList, StyledSlider} from './index.styled';
 
-const { Option } = Select;
-const { Item } = Form;
+const {Option} = Select;
+const {Item} = Form;
 
 type FieldConfig = {
   labels?: [string, string];
@@ -73,7 +69,7 @@ type InputRowItem = {
   defaultValue?: unknown;
 };
 
-export const InputText = ({ field, ...restProps }: InputComponentProps) => {
+export const InputText = ({field, ...restProps}: InputComponentProps) => {
   return (
     <AppInput
       placeholder={field.placeholder || field.title || ''}
@@ -82,9 +78,9 @@ export const InputText = ({ field, ...restProps }: InputComponentProps) => {
   );
 };
 
-const InputSwitch = ({ field, ...restProps }: InputComponentProps) => {
+const InputSwitch = ({field, ...restProps}: InputComponentProps) => {
   const [labelChecked = 'Yes', labelUnChecked = 'No'] =
-    field?.config?.labels || [];
+  field?.config?.labels || [];
   return (
     <Switch
       checkedChildren={labelChecked}
@@ -94,7 +90,7 @@ const InputSwitch = ({ field, ...restProps }: InputComponentProps) => {
   );
 };
 
-const InputSelect = ({ field, ...restProps }: InputComponentProps) => {
+const InputSelect = ({field, ...restProps}: InputComponentProps) => {
   const value_key: string = field?.config?.value_key || 'value';
   const label_key: string | { title: string; description: string } =
     field?.config?.label_key || 'label';
@@ -126,19 +122,19 @@ const InputSelect = ({ field, ...restProps }: InputComponentProps) => {
   );
 };
 
-const InputTextarea = ({ field, ...restProps }: InputComponentProps) => {
+const InputTextarea = ({field, ...restProps}: InputComponentProps) => {
   return (
     <AppTextArea
       placeholder={field.placeholder || field.title || ''}
       rows={4}
-      autoSize={{ minRows: 4, maxRows: 6 }}
+      autoSize={{minRows: 4, maxRows: 6}}
       {...restProps}
     />
   );
 };
 
-const InputSliderNumber = ({ field, value, onChange }: InputComponentProps) => {
-  const firstLabelStyle = { fontSize: 12, marginLeft: 16 };
+const InputSliderNumber = ({field, value, onChange}: InputComponentProps) => {
+  const firstLabelStyle = {fontSize: 12, marginLeft: 16};
   const lastLabelStyle = {
     fontSize: 12,
     minWidth: 60,
@@ -151,8 +147,8 @@ const InputSliderNumber = ({ field, value, onChange }: InputComponentProps) => {
     step = 0.01,
     marks_label = '',
     marks = {
-      [min]: { label: `${min} ${marks_label}`, style: firstLabelStyle },
-      [max]: { label: `${max} ${marks_label}`, style: lastLabelStyle },
+      [min]: {label: `${min} ${marks_label}`, style: firstLabelStyle},
+      [max]: {label: `${max} ${marks_label}`, style: lastLabelStyle},
     },
   } = field.config || {};
 
@@ -173,7 +169,7 @@ const InputSliderNumber = ({ field, value, onChange }: InputComponentProps) => {
         step={step}
         value={value}
         onChange={onChange}
-        style={{ width: 70 }}
+        style={{width: 70}}
         size="large"
       />
     </Flex>
@@ -181,10 +177,10 @@ const InputSliderNumber = ({ field, value, onChange }: InputComponentProps) => {
 };
 
 const InputRepeaterItem = ({
-  name,
-  column,
-  ...restField
-}: {
+                             name,
+                             column,
+                             ...restField
+                           }: {
   name: number;
   column: InputColumn;
   [key: string]: any;
@@ -192,7 +188,7 @@ const InputRepeaterItem = ({
   const InputComponent =
     (INPUT_COMPONENTS as Record<string, (props: any) => ReactElement>)[
       column.type
-    ] || InputText;
+      ] || InputText;
 
   return (
     <Item
@@ -205,16 +201,16 @@ const InputRepeaterItem = ({
         },
       ]}
     >
-      <InputComponent field={column} />
+      <InputComponent field={column}/>
     </Item>
   );
 };
 
 const InputRepeater = ({
-  field,
-  fields,
-  remove,
-}: {
+                         field,
+                         fields,
+                         remove,
+                       }: {
   field: InputField;
   fields: Array<{ key: number; name: number; [key: string]: any }>;
   remove: (index: number) => void;
@@ -226,7 +222,7 @@ const InputRepeater = ({
 
   return (
     <>
-      {fields.map(({ key, name, ...restField }) => (
+      {fields.map(({key, name, ...restField}) => (
         <StyledItemRow key={key} style={style}>
           {columns.map((column: InputColumn, index: number) => (
             <InputRepeaterItem
@@ -241,7 +237,7 @@ const InputRepeater = ({
             <Button
               type="primary"
               onClick={() => remove(name)}
-              icon={<MdDelete fontSize={18} />}
+              icon={<MdDelete fontSize={18}/>}
               danger
               ghost
             />
@@ -252,7 +248,7 @@ const InputRepeater = ({
   );
 };
 
-const InputJson = ({ field, value, onChange }: InputComponentProps) => {
+const InputJson = ({field, value, onChange}: InputComponentProps) => {
   const [formInputs, setFormInputs] = useState<KbInputExtended[]>([]);
   const [open, setOpen] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
@@ -304,7 +300,7 @@ const InputJson = ({ field, value, onChange }: InputComponentProps) => {
     setFormInputs((fields) =>
       fields.map((data) => {
         if (item.id === data.id) {
-          return { ...data, required: checked };
+          return {...data, required: checked};
         }
 
         return data;
@@ -317,7 +313,7 @@ const InputJson = ({ field, value, onChange }: InputComponentProps) => {
     setFormInputs((fields) =>
       fields.map((data) => {
         if (item.id === data.id) {
-          return { ...data, isEnum: checked };
+          return {...data, isEnum: checked};
         }
 
         return data;
@@ -330,7 +326,7 @@ const InputJson = ({ field, value, onChange }: InputComponentProps) => {
     setFormInputs((fields) =>
       fields.map((data) => {
         if (item.id === data.id) {
-          return { ...data, description: newValue };
+          return {...data, description: newValue};
         }
 
         return data;
@@ -363,7 +359,7 @@ const InputJson = ({ field, value, onChange }: InputComponentProps) => {
     setFormInputs((fields) =>
       fields.map((data) => {
         if (selectedItem.id === data.id) {
-          return { ...data, ...values };
+          return {...data, ...values};
         }
 
         return data;
@@ -438,7 +434,7 @@ const InputJson = ({ field, value, onChange }: InputComponentProps) => {
           type="primary"
           size="small"
           shape="round"
-          icon={<MdAdd size={18} />}
+          icon={<MdAdd size={18}/>}
           onClick={() => setOpen(!open)}
           ghost
         >
@@ -451,7 +447,7 @@ const InputJson = ({ field, value, onChange }: InputComponentProps) => {
         onCancel={() => setOpenDetail(false)}
         onFinish={onFinishDetails}
         selectedItem={selectedItem}
-        initialValues={selectedItem ? { ...selectedItem } : undefined}
+        initialValues={selectedItem ? {...selectedItem} : undefined}
       />
     </div>
   );

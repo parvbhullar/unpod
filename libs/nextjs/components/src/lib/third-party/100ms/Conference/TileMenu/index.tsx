@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, {Fragment, useState} from 'react';
 import {
   selectLocalPeerID,
   selectPermissions,
@@ -11,17 +11,12 @@ import {
   useHMSStore,
   useRemoteAVToggle,
 } from '@100mslive/react-sdk';
-import { useSetAppDataByKey } from '../../AppData/useUISettings';
-import { useDropdownList } from '../../hooks/useDropdownList';
-import { useIsFeatureEnabled } from '../../hooks/useFeatures';
-import {
-  APP_DATA,
-  FEATURE_LIST,
-  REMOTE_STOP_SCREENSHARE_TYPE,
-  SESSION_STORE_KEY,
-} from '../../common/constants';
-import { BsFillPinAngleFill } from 'react-icons/bs';
-import { VscDebugStart } from 'react-icons/vsc';
+import {useSetAppDataByKey} from '../../AppData/useUISettings';
+import {useDropdownList} from '../../hooks/useDropdownList';
+import {useIsFeatureEnabled} from '../../hooks/useFeatures';
+import {APP_DATA, FEATURE_LIST, REMOTE_STOP_SCREENSHARE_TYPE, SESSION_STORE_KEY,} from '../../common/constants';
+import {BsFillPinAngleFill} from 'react-icons/bs';
+import {VscDebugStart} from 'react-icons/vsc';
 import {
   MdMic,
   MdMicOff,
@@ -31,21 +26,16 @@ import {
   MdVideocam,
   MdVideocamOff,
 } from 'react-icons/md';
-import {
-  RemoveMenuItem,
-  StyledHeadingItem,
-  StyledListContainer,
-  StyledListItem,
-} from './index.styled';
-import { AppPopover } from '../../../../antd';
-import { useInfoViewActionsContext } from '@unpod/providers';
+import {RemoveMenuItem, StyledHeadingItem, StyledListContainer, StyledListItem,} from './index.styled';
+import {AppPopover} from '../../../../antd';
+import {useInfoViewActionsContext} from '@unpod/providers';
 
-const isSameTile = ({ trackId, videoTrackID, audioTrackID }) =>
+const isSameTile = ({trackId, videoTrackID, audioTrackID}) =>
   trackId &&
   ((videoTrackID && videoTrackID === trackId) ||
     (audioTrackID && audioTrackID === trackId));
 
-const SpotlightActions = ({ audioTrackID, videoTrackID }) => {
+const SpotlightActions = ({audioTrackID, videoTrackID}) => {
   const hmsActions = useHMSActions();
   const infoViewActionsContext = useInfoViewActionsContext();
 
@@ -71,7 +61,7 @@ const SpotlightActions = ({ audioTrackID, videoTrackID }) => {
           : setSpotlightTrackId(videoTrackID || audioTrackID)
       }
     >
-      <VscDebugStart fontSize={16} />
+      <VscDebugStart fontSize={16}/>
       <span>
         {isTileSpotlighted
           ? 'Remove from Spotlight'
@@ -81,7 +71,7 @@ const SpotlightActions = ({ audioTrackID, videoTrackID }) => {
   );
 };
 
-const PinActions = ({ audioTrackID, videoTrackID }) => {
+const PinActions = ({audioTrackID, videoTrackID}) => {
   const [pinnedTrackId, setPinnedTrackId] = useSetAppDataByKey(
     APP_DATA.pinnedTrackId,
   );
@@ -100,7 +90,7 @@ const PinActions = ({ audioTrackID, videoTrackID }) => {
           : setPinnedTrackId(videoTrackID || audioTrackID)
       }
     >
-      <BsFillPinAngleFill fontSize={16} />
+      <BsFillPinAngleFill fontSize={16}/>
       <span>{`${isTilePinned ? 'Unpin' : 'Pin'}`} Tile for</span>
       myself
     </StyledListItem>
@@ -113,17 +103,17 @@ const showSpotlight = process.env.REACT_APP_ENV === 'qa';
  * Taking peerID as peer won't necesarilly have tracks
  */
 const TileMenu = ({
-  audioTrackID,
-  videoTrackID,
-  peerID,
-  isScreenshare = false,
-  ...restProps
-}) => {
+                    audioTrackID,
+                    videoTrackID,
+                    peerID,
+                    isScreenshare = false,
+                    ...restProps
+                  }) => {
   const [open, setOpen] = useState(false);
   const actions = useHMSActions();
   const localPeerID = useHMSStore(selectLocalPeerID);
   const isLocal = localPeerID === peerID;
-  const { removeOthers } = useHMSStore(selectPermissions);
+  const {removeOthers} = useHMSStore(selectPermissions);
   const {
     isAudioEnabled,
     isVideoEnabled,
@@ -132,7 +122,7 @@ const TileMenu = ({
     toggleVideo,
     volume,
   } = useRemoteAVToggle(audioTrackID, videoTrackID);
-  const { sendEvent } = useCustomEvent({
+  const {sendEvent} = useCustomEvent({
     type: REMOTE_STOP_SCREENSHARE_TYPE,
   });
 
@@ -151,7 +141,7 @@ const TileMenu = ({
   const hideSimulcastLayers =
     !track?.layerDefinitions?.length || track.degraded || !track.enabled;
 
-  useDropdownList({ open, name: 'TileMenu' });
+  useDropdownList({open, name: 'TileMenu'});
 
   if (
     !(
@@ -200,9 +190,9 @@ const TileMenu = ({
                 }
               >
                 {isVideoEnabled ? (
-                  <MdVideocam fontSize={16} />
+                  <MdVideocam fontSize={16}/>
                 ) : (
-                  <MdVideocamOff fontSize={16} />
+                  <MdVideocamOff fontSize={16}/>
                 )}
                 <span>{`${isVideoEnabled ? 'Mute' : 'Request Unmute'}`}</span>
               </StyledListItem>
@@ -217,9 +207,9 @@ const TileMenu = ({
                 }
               >
                 {isAudioEnabled ? (
-                  <MdMic fontSize={16} />
+                  <MdMic fontSize={16}/>
                 ) : (
-                  <MdMicOff fontSize={16} />
+                  <MdMicOff fontSize={16}/>
                 )}
                 <span>{`${isAudioEnabled ? 'Mute' : 'Request Unmute'}`}</span>
               </StyledListItem>
@@ -238,7 +228,7 @@ const TileMenu = ({
                 )}
               </>
             )}
-            <SimulcastLayers trackId={videoTrackID} />
+            <SimulcastLayers trackId={videoTrackID}/>
             {removeOthers ? (
               <RemoveMenuItem
                 onClick={async () => {
@@ -250,14 +240,14 @@ const TileMenu = ({
                 }}
                 data-testid="remove_participant_btn"
               >
-                <MdPersonRemoveAlt1 fontSize={16} />
+                <MdPersonRemoveAlt1 fontSize={16}/>
                 <span>Remove Participant</span>
               </RemoveMenuItem>
             ) : null}
 
             {removeOthers && isScreenshare ? (
               <RemoveMenuItem onClick={() => sendEvent({})}>
-                <MdScreenShare fontSize={16} />
+                <MdScreenShare fontSize={16}/>
                 <span>Stop Screen share</span>
               </RemoveMenuItem>
             ) : null}
@@ -274,12 +264,12 @@ const TileMenu = ({
       onOpenChange={setOpen}
       {...restProps}
     >
-      <MdOutlineMoreVert fontSize={20} />
+      <MdOutlineMoreVert fontSize={20}/>
     </AppPopover>
   );
 };
 
-const SimulcastLayers = ({ trackId }) => {
+const SimulcastLayers = ({trackId}) => {
   const track = useHMSStore(selectTrackByID(trackId));
   const actions = useHMSActions();
   if (!track?.layerDefinitions?.length || track.degraded || !track.enabled) {
@@ -314,7 +304,7 @@ const SimulcastLayers = ({ trackId }) => {
             >
               {layer.layer}
             </span>
-            <span style={{ color: '$textMedEmp' }}>
+            <span style={{color: '$textMedEmp'}}>
               {layer.resolution.width}x{layer.resolution.height}
             </span>
           </StyledListItem>

@@ -1,22 +1,22 @@
-import { Card } from 'antd';
+import {Card} from 'antd';
 import styled from 'styled-components';
 
 export const StyledCard = styled(Card)`
   position: relative;
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow} !important;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow} !important;
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) => theme.palette.background.default};
-  color: ${({ theme }) => theme.palette.text.primary};
+  background: ${({theme}) => theme.palette.background.default};
+  color: ${({theme}) => theme.palette.text.primary};
 
   & .ant-card-head-title {
-    color: ${({ theme }) => theme.palette.text.primary};
+    color: ${({theme}) => theme.palette.text.primary};
   }
 
   & > .ant-card-head {
     min-height: 10px;
-    font-weight: ${({ theme }) => theme.font.weight.bold};
+    font-weight: ${({theme}) => theme.font.weight.bold};
     padding-left: 20px;
     padding-right: 20px;
     border-bottom: 0 none;
@@ -32,7 +32,7 @@ export const StyledCard = styled(Card)`
       padding-top: 16px !important;
 
       & a {
-        color: ${({ theme }) => theme.palette.secondary};
+        color: ${({theme}) => theme.palette.secondary};
       }
     }
   }

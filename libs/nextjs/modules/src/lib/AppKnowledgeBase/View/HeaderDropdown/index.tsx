@@ -1,29 +1,16 @@
 'use client';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import {Fragment, useCallback, useEffect, useMemo, useState} from 'react';
 import AppLink from '@unpod/components/next/AppLink';
-import { useParams, useRouter } from 'next/navigation';
-import { Button, Tooltip } from 'antd';
-import {
-  getDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import {
-  MdAddCircleOutline,
-  MdOutlineArrowDropDown,
-  MdOutlineArrowDropUp,
-  MdRefresh,
-} from 'react-icons/md';
-import { BsDatabase } from 'react-icons/bs';
+import {useParams, useRouter} from 'next/navigation';
+import {Button, Tooltip} from 'antd';
+import {getDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {MdAddCircleOutline, MdOutlineArrowDropDown, MdOutlineArrowDropUp, MdRefresh,} from 'react-icons/md';
+import {BsDatabase} from 'react-icons/bs';
 import AppCustomMenus from '@unpod/components/common/AppCustomMenus';
-import {
-  AppBreadCrumb,
-  AppBreadCrumbTitle,
-  AppPopover,
-} from '@unpod/components/antd';
-import { COLLECTION_TYPE_DATA } from '@unpod/constants';
-import { useTheme } from 'styled-components';
+import {AppBreadCrumb, AppBreadCrumbTitle, AppPopover,} from '@unpod/components/antd';
+import {COLLECTION_TYPE_DATA} from '@unpod/constants';
+import {useTheme} from 'styled-components';
 import AppNewKb from '@unpod/components/modules/AppCreateKb';
 import AppLoader from '@unpod/components/common/AppLoader';
 import {
@@ -40,8 +27,8 @@ import {
   StyledTitleContent,
   StyledTitleWrapper,
 } from './index.styled';
-import { useIntl } from 'react-intl';
-import { getStatusOptionsFromConfig } from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
+import {getStatusOptionsFromConfig} from '@unpod/helpers/LocalizationFormatHelper';
 
 type KnowledgeBaseItem = {
   name?: string;
@@ -60,19 +47,19 @@ type HeaderDropdownProps = {
 };
 
 const HeaderDropdown = ({
-  pageTitle,
-  currentKb,
-  setCurrentKb,
-  addNew,
-  setAddNew,
-}: HeaderDropdownProps) => {
+                          pageTitle,
+                          currentKb,
+                          setCurrentKb,
+                          addNew,
+                          setAddNew,
+                        }: HeaderDropdownProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated } = useAuthContext();
+  const {isAuthenticated} = useAuthContext();
   const router = useRouter();
-  const { kbSlug } = useParams() as { kbSlug?: string | string[] };
+  const {kbSlug} = useParams() as { kbSlug?: string | string[] };
   const kbSlugValue = Array.isArray(kbSlug) ? kbSlug[0] : kbSlug;
   const theme = useTheme();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<KnowledgeBaseItem[]>([]);
   const [search, setSearch] = useState('');
@@ -174,12 +161,12 @@ const HeaderDropdown = ({
     {
       title: (
         <AppLink href={`/knowledge-bases/`}>
-          {formatMessage({ id: 'common.home' })}
+          {formatMessage({id: 'common.home'})}
         </AppLink>
       ),
     },
     {
-      title: <AppBreadCrumbTitle title={currentKb?.name || pageTitle} />,
+      title: <AppBreadCrumbTitle title={currentKb?.name || pageTitle}/>,
     },
   ];
 
@@ -192,7 +179,7 @@ const HeaderDropdown = ({
     <Fragment>
       <StyledTitleBlock>
         <StyledIconWrapper>
-          <BsDatabase size={21} />
+          <BsDatabase size={21}/>
         </StyledIconWrapper>
         <StyledTitleWrapper>
           <AppPopover
@@ -201,16 +188,16 @@ const HeaderDropdown = ({
               <StyledMenusContainer>
                 <StyledInputWrapper>
                   <StyledInput
-                    placeholder={formatMessage({ id: 'common.searchHere' })}
+                    placeholder={formatMessage({id: 'common.searchHere'})}
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                   />
 
-                  <Tooltip title={formatMessage({ id: 'common.refresh' })}>
+                  <Tooltip title={formatMessage({id: 'common.refresh'})}>
                     <Button
                       type="text"
                       size="small"
-                      icon={<MdRefresh fontSize={24} />}
+                      icon={<MdRefresh fontSize={24}/>}
                       onClick={() => getKnowledgeBases()}
                       loading={loading}
                     />
@@ -226,45 +213,45 @@ const HeaderDropdown = ({
                   <StyledLoader>
                     <AppLoader
                       position="relative"
-                      style={{ backgroundColor: 'transparent' }}
+                      style={{backgroundColor: 'transparent'}}
                     />
                   </StyledLoader>
                 )}
 
                 <StyledAddButton onClick={() => onCreateClick()}>
-                  <MdAddCircleOutline fontSize={16} />
+                  <MdAddCircleOutline fontSize={16}/>
                   <span>
-                    {formatMessage({ id: 'knowledgeBase.addKnowledgeBase' })}
+                    {formatMessage({id: 'knowledgeBase.addKnowledgeBase'})}
                   </span>
                 </StyledAddButton>
               </StyledMenusContainer>
             }
-            style={{ zIndex: 1000 }}
+            style={{zIndex: 1000}}
             onOpenChange={setOpenPopover}
           >
             <StyledTitleContent>
-              <StyledMainTitle ellipsis={{ rows: 1 }}>
+              <StyledMainTitle ellipsis={{rows: 1}}>
                 {currentKb?.name || pageTitle}
               </StyledMainTitle>
               {document && (
                 <StyledLabel color={theme.palette.primary}>
-                  {formatMessage({ id: document?.name }) ||
-                    formatMessage({ id: 'space.general' })}
+                  {formatMessage({id: document?.name}) ||
+                    formatMessage({id: 'space.general'})}
                 </StyledLabel>
               )}
 
               <StyledDropdownArrow>
-                <MdOutlineArrowDropUp fontSize={18} />
-                <MdOutlineArrowDropDown fontSize={18} />
+                <MdOutlineArrowDropUp fontSize={18}/>
+                <MdOutlineArrowDropDown fontSize={18}/>
               </StyledDropdownArrow>
             </StyledTitleContent>
           </AppPopover>
 
-          {currentKb?.name && <AppBreadCrumb items={breadcrumbItems} />}
+          {currentKb?.name && <AppBreadCrumb items={breadcrumbItems}/>}
         </StyledTitleWrapper>
       </StyledTitleBlock>
 
-      <AppNewKb addNew={addNew} setAddNew={setAddNew} onCreated={onCreated} />
+      <AppNewKb addNew={addNew} setAddNew={setAddNew} onCreated={onCreated}/>
     </Fragment>
   );
 };

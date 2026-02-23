@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import {Select} from 'antd';
 
 import AppInput from '../../AppInput';
 import AppInputNumber from '../../AppInputNumber';
@@ -10,13 +10,14 @@ import AppTime from '../../AppTime';
 import AppPassword from '../../AppPassword';
 import AppSelectApi from '../../AppSelectApi';
 
-const { Option } = Select;
+const {Option} = Select;
 
 type FormApiOptions = {
   endpoint?: string;
   params?: Record<string, unknown>;
   value_key?: string;
-  label_key?: string;};
+  label_key?: string;
+};
 
 type FormField = {
   title?: string;
@@ -27,14 +28,16 @@ type FormField = {
   options?: Record<string, string | number>;
   options_type?: 'api' | string;
   options_api?: FormApiOptions;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 type FormControlProps = {
   field: FormField;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
-const FormControl = ({ field, ...rest }: FormControlProps) => {
-  const { type, options, title } = field;
+const FormControl = ({field, ...rest}: FormControlProps) => {
+  const {type, options, title} = field;
   if (field.required) {
     rest.asterisk = true;
   }

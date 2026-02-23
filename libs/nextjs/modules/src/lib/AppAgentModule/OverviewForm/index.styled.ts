@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { Button, Flex, Form } from 'antd';
+import {Button, Flex, Form} from 'antd';
 
 export const StylesImageWrapper = styled.div`
   position: relative;
   width: 90px;
   height: 90px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -51,23 +51,23 @@ export const TagWrapper = styled.div`
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md + 52}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md + 52}px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
 `;

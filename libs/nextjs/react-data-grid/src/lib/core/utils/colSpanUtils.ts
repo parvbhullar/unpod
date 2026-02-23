@@ -1,4 +1,4 @@
-import type { CalculatedColumn, ColSpanArgs } from '../models/data-grid';
+import type {CalculatedColumn, ColSpanArgs} from '../models/data-grid';
 
 export function getColSpan<R, SR>(
   column: CalculatedColumn<R, SR>,

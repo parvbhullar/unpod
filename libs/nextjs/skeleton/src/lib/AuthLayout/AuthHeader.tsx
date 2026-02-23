@@ -13,9 +13,9 @@ const HeaderSkeleton: React.FC = () => {
         left: 50,
       }}
     >
-      <SkeletonButton size="large" style={{ width: 140 }} />
+      <SkeletonButton size="large" style={{width: 140}}/>
     </div>
   );
 };
 
-export { HeaderSkeleton };
+export {HeaderSkeleton};

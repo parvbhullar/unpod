@@ -1,15 +1,8 @@
 'use client';
 
-import { getCookie, setCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
-import React, {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import {getCookie, setCookie} from 'cookies-next';
+import {useRouter} from 'next/navigation';
+import React, {createContext, type ReactNode, useCallback, useEffect, useMemo, useState,} from 'react';
 
 type AppSettings = {
   editable: boolean;
@@ -89,7 +82,7 @@ type ConfigContextValue = {
 
 const ConfigContext = createContext<ConfigContextValue | null>(null);
 
-export const ConfigProvider = ({ children }: { children: ReactNode }) => {
+export const ConfigProvider = ({children}: { children: ReactNode }) => {
   const appConfig = useAppConfig();
   const router = useRouter();
   const [localColorOverride, setLocalColorOverride] = useState<string | null>(
@@ -184,7 +177,7 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
       return appConfigFromSettings;
     }
     appConfigFromSettings.settings = newCookieSettings;
-    return { ...appConfigFromSettings };
+    return {...appConfigFromSettings};
   }, [
     appConfig,
     getSettingsFromCookies,
@@ -221,7 +214,7 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
   }, [getConfig]);
 
   return (
-    <ConfigContext.Provider value={{ config, setUserSettings }}>
+    <ConfigContext.Provider value={{config, setUserSettings}}>
       {children}
     </ConfigContext.Provider>
   );

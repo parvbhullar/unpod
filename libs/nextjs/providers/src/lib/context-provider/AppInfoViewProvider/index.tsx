@@ -1,20 +1,8 @@
 'use client';
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useReducer,
-} from 'react';
-import type {
-  AppInfoViewProviderProps,
-  InfoViewActionsContextType,
-  InfoViewState,
-} from '@unpod/constants/types';
-import {
-  contextReducer,
-  InfoViewActions,
-} from './NotificationReducer';
+import React, {createContext, useCallback, useContext, useReducer,} from 'react';
+import type {AppInfoViewProviderProps, InfoViewActionsContextType, InfoViewState,} from '@unpod/constants/types';
+import {contextReducer, InfoViewActions,} from './NotificationReducer';
 
 const ContextState: InfoViewState = {
   loading: false,
@@ -40,8 +28,8 @@ export const useInfoViewActionsContext = (): InfoViewActionsContextType => {
 };
 
 export const AppInfoViewProvider: React.FC<AppInfoViewProviderProps> = ({
-  children,
-}) => {
+                                                                          children,
+                                                                        }) => {
   const [state, dispatch] = useReducer(
     contextReducer,
     ContextState,
@@ -49,15 +37,15 @@ export const AppInfoViewProvider: React.FC<AppInfoViewProviderProps> = ({
   );
 
   const fetchStart = useCallback(() => {
-    dispatch({ type: InfoViewActions.FETCH_STARTS });
+    dispatch({type: InfoViewActions.FETCH_STARTS});
   }, []);
 
   const fetchFinish = useCallback(() => {
-    dispatch({ type: InfoViewActions.FETCH_SUCCESS });
+    dispatch({type: InfoViewActions.FETCH_SUCCESS});
   }, []);
 
   const showError = useCallback((error: string) => {
-    dispatch({ type: InfoViewActions.SET_ERROR, payload: error });
+    dispatch({type: InfoViewActions.SET_ERROR, payload: error});
   }, []);
 
   const showMessage = useCallback((notification: string) => {
@@ -68,7 +56,7 @@ export const AppInfoViewProvider: React.FC<AppInfoViewProviderProps> = ({
   }, []);
 
   const clearAll = useCallback(() => {
-    dispatch({ type: InfoViewActions.CLEAR_ALL });
+    dispatch({type: InfoViewActions.CLEAR_ALL});
   }, []);
 
   const infoViewActionsContext = React.useMemo<InfoViewActionsContextType>(

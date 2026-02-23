@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   selectLocalPeerID,
   selectLocalPeerRole,
@@ -7,12 +7,12 @@ import {
   selectRolesMap,
   useHMSStore,
 } from '@100mslive/react-sdk';
-import { GridCenterView, GridSidePaneView } from './GridView';
+import {GridCenterView, GridSidePaneView} from './GridView';
 import NonPublisherView from '../NonPublisherView';
-import { useAppLayout } from '../../../AppData/useAppLayout';
-import { useUISettings } from '../../../AppData/useUISettings';
-import { UI_SETTINGS } from '../../../common/constants';
-import { StyledContainer } from './index.styled';
+import {useAppLayout} from '../../../AppData/useAppLayout';
+import {useUISettings} from '../../../AppData/useUISettings';
+import {UI_SETTINGS} from '../../../common/constants';
+import {StyledContainer} from './index.styled';
 
 const MainGridView = () => {
   const centerRoles = useAppLayout('center') || [];
@@ -84,7 +84,7 @@ const MainGridView = () => {
   return (
     <StyledContainer>
       {placeholder ? (
-        <NonPublisherView message={placeholder} />
+        <NonPublisherView message={placeholder}/>
       ) : (
         <>
           <GridCenterView
@@ -95,7 +95,7 @@ const MainGridView = () => {
             totalPeers={peers.length}
           />
           {showSidePane && (
-            <GridSidePaneView peers={sidebarPeers} totalPeers={peers.length} />
+            <GridSidePaneView peers={sidebarPeers} totalPeers={peers.length}/>
           )}
         </>
       )}

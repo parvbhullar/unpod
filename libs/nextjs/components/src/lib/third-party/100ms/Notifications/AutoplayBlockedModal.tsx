@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAutoplayError } from '@100mslive/react-sdk';
-import { Button, Modal } from 'antd';
+import {useAutoplayError} from '@100mslive/react-sdk';
+import {Button, Modal} from 'antd';
 
 export function AutoplayBlockedModal() {
-  const { error, resetError, unblockAudio } = useAutoplayError();
+  const {error, resetError, unblockAudio} = useAutoplayError();
   return (
     <Modal
       open={!!error}

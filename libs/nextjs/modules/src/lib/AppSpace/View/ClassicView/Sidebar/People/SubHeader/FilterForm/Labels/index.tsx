@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
-import { Typography } from 'antd';
-import { StyledLabel, StyledRoot } from './index.styled';
+import type {ReactNode} from 'react';
+import {Typography} from 'antd';
+import {StyledLabel, StyledRoot} from './index.styled';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type LabelItem = {
   slug?: string;
@@ -16,7 +16,7 @@ type LabelsProps = {
   onChange: (value: string) => void;
 };
 
-const Labels = ({ data, value, onChange }: LabelsProps) => {
+const Labels = ({data, value, onChange}: LabelsProps) => {
   return (
     <StyledRoot>
       {data.map((label) => {

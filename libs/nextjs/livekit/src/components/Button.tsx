@@ -1,6 +1,6 @@
 // components/StyledButton.jsx
-import styled, { css, type RuleSet } from 'styled-components';
-import React, { ReactNode } from 'react';
+import styled, {css, type RuleSet} from 'styled-components';
+import React, {ReactNode} from 'react';
 
 type ButtonShape = 'default' | 'round' | 'circle';
 
@@ -37,9 +37,9 @@ const StyledButtonWrapper = styled.button.withConfig({
     prop !== 'color' &&
     prop !== 'variant',
 })<StyledButtonProps>`
-  background-color: ${({ danger, theme }) =>
+  background-color: ${({danger, theme}) =>
     danger ? '#ff4d4f' : theme?.palette?.primary};
-  color: ${({ color }) => color || '#fff'};
+  color: ${({color}) => color || '#fff'};
   border: none;
   font-weight: 500;
   font-size: 14px;
@@ -49,15 +49,15 @@ const StyledButtonWrapper = styled.button.withConfig({
   align-items: center;
   gap: 0.5em;
 
-  ${({ shape }) => shapeStyles[shape || 'default']};
+  ${({shape}) => shapeStyles[shape || 'default']};
 
   &:hover {
-    background-color: ${({ danger, theme }) =>
+    background-color: ${({danger, theme}) =>
       danger ? '#ff7875' : theme?.palette?.primaryHover};
   }
 
   &:active {
-    background-color: ${({ danger, theme }) =>
+    background-color: ${({danger, theme}) =>
       danger ? '#d9363e' : theme?.palette?.primaryActive};
   }
 `;
@@ -70,7 +70,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: string;
 };
 
-const Button: React.FC<ButtonProps> = ({ icon, children, ...rest }) => {
+const Button: React.FC<ButtonProps> = ({icon, children, ...rest}) => {
   return (
     <StyledButtonWrapper {...rest}>
       {icon && <span>{icon}</span>}

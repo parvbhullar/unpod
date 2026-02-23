@@ -1,33 +1,24 @@
-import { useEffect } from 'react';
-import { Button, Form } from 'antd';
-import {
-  AppInput,
-  AppTextArea,
-  DrawerForm,
-  DrawerFormFooter,
-} from '@unpod/components/antd';
-import {
-  postDataApi,
-  putDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { DrawerBody } from '@unpod/components/antd/AppDrawer/DrawerBody';
-import { useIntl } from 'react-intl';
+import {useEffect} from 'react';
+import {Button, Form} from 'antd';
+import {AppInput, AppTextArea, DrawerForm, DrawerFormFooter,} from '@unpod/components/antd';
+import {postDataApi, putDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {DrawerBody} from '@unpod/components/antd/AppDrawer/DrawerBody';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 const AddTagForm = ({
-  selectedTag,
-  currentSpace,
-  onTagSaved,
-}: {
+                      selectedTag,
+                      currentSpace,
+                      onTagSaved,
+                    }: {
   selectedTag?: any;
   currentSpace: any;
   onTagSaved: (data: any) => void;
 }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (selectedTag) {
@@ -75,22 +66,22 @@ const AddTagForm = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'manageLabels.nameError' }),
+              message: formatMessage({id: 'manageLabels.nameError'}),
             },
           ]}
         >
-          <AppInput placeholder={formatMessage({ id: 'form.name' })} />
+          <AppInput placeholder={formatMessage({id: 'form.name'})}/>
         </Item>
 
         <Item name="description">
           <AppTextArea
-            placeholder={formatMessage({ id: 'form.description' })}
+            placeholder={formatMessage({id: 'form.description'})}
           />
         </Item>
       </DrawerBody>
       <DrawerFormFooter>
         <Button type="primary" htmlType="submit">
-          {formatMessage({ id: 'manageLabels.save' })}
+          {formatMessage({id: 'manageLabels.save'})}
         </Button>
       </DrawerFormFooter>
     </DrawerForm>

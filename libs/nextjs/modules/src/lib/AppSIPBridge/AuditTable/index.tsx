@@ -2,26 +2,20 @@
 import AppTable from '@unpod/components/third-party/AppTable';
 import AppLoadingMore from '@unpod/components/common/AppLoadingMore';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
-import AppPageHeader, {
-  AppHeaderButton,
-} from '@unpod/components/common/AppPageHeader';
-import { MdHistory, MdRefresh } from 'react-icons/md';
-import {
-  useAuthContext,
-  useDownloadData,
-  usePaginatedDataApi,
-} from '@unpod/providers';
-import { getColumns } from './columns';
-import { PiExportBold } from 'react-icons/pi';
-import { useEffect, useState } from 'react';
-import { getTableFilterData } from '@unpod/helpers/TableHelper';
-import { Button } from 'antd';
-import { CallLogsTableSkeleton } from '@unpod/skeleton';
-import { useIntl } from 'react-intl';
+import AppPageHeader, {AppHeaderButton,} from '@unpod/components/common/AppPageHeader';
+import {MdHistory, MdRefresh} from 'react-icons/md';
+import {useAuthContext, useDownloadData, usePaginatedDataApi,} from '@unpod/providers';
+import {getColumns} from './columns';
+import {PiExportBold} from 'react-icons/pi';
+import {useEffect, useState} from 'react';
+import {getTableFilterData} from '@unpod/helpers/TableHelper';
+import {Button} from 'antd';
+import {CallLogsTableSkeleton} from '@unpod/skeleton';
+import {useIntl} from 'react-intl';
 
 const AuditTable = () => {
-  const { activeOrg, isAuthenticated } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {activeOrg, isAuthenticated} = useAuthContext();
+  const {formatMessage} = useIntl();
 
   const [filterSortValue, updateFilterSortValue] = useState({
     sortedInfo: {},
@@ -29,8 +23,8 @@ const AuditTable = () => {
   });
 
   const [
-    { apiData, loading, refreshing, isLoadingMore, hasMoreRecord, page },
-    { setLoadingMore, setQueryParams, setPage, setRefreshing },
+    {apiData, loading, refreshing, isLoadingMore, hasMoreRecord, page},
+    {setLoadingMore, setQueryParams, setPage, setRefreshing},
   ] = usePaginatedDataApi(
     `metrics/call-logs/`,
     [],
@@ -49,7 +43,7 @@ const AuditTable = () => {
     hasMoreRecord,
     page,
   });
-  const { downloading, downloadData } = useDownloadData(
+  const {downloading, downloadData} = useDownloadData(
     'metrics/call-logs/?download=true',
     'call-logs.csv',
   );
@@ -103,16 +97,16 @@ const AuditTable = () => {
     <>
       <AppPageHeader
         hideToggleBtn
-        pageTitle={formatMessage({ id: 'nav.callLogs' })}
-        leftOptions={formatMessage({ id: 'callLogs.description' })}
-        titleIcon={<MdHistory fontSize={21} />}
+        pageTitle={formatMessage({id: 'nav.callLogs'})}
+        leftOptions={formatMessage({id: 'callLogs.description'})}
+        titleIcon={<MdHistory fontSize={21}/>}
         rightOptions={
           <>
             <Button
               type="text"
               shape="circle"
               size="small"
-              icon={<MdRefresh fontSize={21} />}
+              icon={<MdRefresh fontSize={21}/>}
               loading={refreshing}
               onClick={() => {
                 setRefreshing(true);
@@ -125,11 +119,11 @@ const AuditTable = () => {
                 shape="round"
                 ghost
                 onClick={() => downloadData()}
-                icon={<PiExportBold />}
+                icon={<PiExportBold/>}
                 loading={downloading}
                 disabled={downloading}
               >
-                {formatMessage({ id: 'common.export' })}
+                {formatMessage({id: 'common.export'})}
               </AppHeaderButton>
             )}
           </>
@@ -137,7 +131,7 @@ const AuditTable = () => {
       />
       <AppPageContainer>
         {loading && apiData.length === 0 ? (
-          <CallLogsTableSkeleton />
+          <CallLogsTableSkeleton/>
         ) : (
           <AppTableAny
             rowKey="id"
@@ -150,7 +144,7 @@ const AuditTable = () => {
           />
         )}
 
-        {isLoadingMore && <AppLoadingMore />}
+        {isLoadingMore && <AppLoadingMore/>}
       </AppPageContainer>
     </>
   );

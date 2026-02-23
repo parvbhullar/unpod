@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react';
-import { Tooltip, Typography } from 'antd';
-import { AppClapsIcon } from '@unpod/icons';
+import {useCallback, useState} from 'react';
+import {Tooltip, Typography} from 'antd';
+import {AppClapsIcon} from '@unpod/icons';
 import _ from 'lodash';
 
 import styled from 'styled-components';
-import { GlobalTheme } from '@unpod/constants';
+import {GlobalTheme} from '@unpod/constants';
 
 const StyledItemWrapper = styled.div`
   cursor: pointer;
@@ -13,15 +13,16 @@ const StyledItemWrapper = styled.div`
   gap: 8px;
 
   &:hover .ant-typography {
-    color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary};
+    color: ${({theme}: { theme: GlobalTheme }) => theme.palette.primary};
   }
 `;
 
 type AppClapBtnProps = {
   clapCount?: number;
-  onClapClick?: (count: number) => void;};
+  onClapClick?: (count: number) => void;
+};
 
-const AppClapBtn = ({ clapCount, onClapClick }: AppClapBtnProps) => {
+const AppClapBtn = ({clapCount, onClapClick}: AppClapBtnProps) => {
   const [userClapCount, setUserClapCount] = useState(0);
 
   const debounceClapClick = useCallback(
@@ -51,8 +52,8 @@ const AppClapBtn = ({ clapCount, onClapClick }: AppClapBtnProps) => {
         }}
       >
         <Typography.Text type="secondary">
-          <span style={{ display: 'inline-flex', fontSize: 24 }}>
-            <AppClapsIcon />
+          <span style={{display: 'inline-flex', fontSize: 24}}>
+            <AppClapsIcon/>
           </span>
         </Typography.Text>
         <Typography.Text>{clapCount}</Typography.Text>

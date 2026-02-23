@@ -1,35 +1,23 @@
-import type { FormInstance } from 'antd';
-import { Button, Flex, Form, Switch, Typography } from 'antd';
-import { SaveOutlined } from '@ant-design/icons';
-import {
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
+import type {FormInstance} from 'antd';
+import {Button, Flex, Form, Switch, Typography} from 'antd';
+import {SaveOutlined} from '@ant-design/icons';
+import {useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
 import CardWrapper from '@unpod/components/common/CardWrapper';
 import dayjs from 'dayjs';
-import {
-  MdMemory,
-  MdOutlinePhoneEnabled,
-  MdOutlineVoiceOverOff,
-  MdPhoneCallback,
-} from 'react-icons/md';
-import { clsx } from 'clsx';
+import {MdMemory, MdOutlinePhoneEnabled, MdOutlineVoiceOverOff, MdPhoneCallback,} from 'react-icons/md';
+import {clsx} from 'clsx';
 import AppTextArea from '@unpod/components/antd/AppTextArea';
 import StopSpeakingPlan from './Speacking';
 import CallingHours from './CallingHours';
-import { StyledContent, StyledRowItem } from './index.styled';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-} from '../index.styled';
-import { useIntl } from 'react-intl';
-import { AppInput } from '@unpod/components/antd';
+import {StyledContent, StyledRowItem} from './index.styled';
+import {StickyFooter, StyledMainContainer, StyledTabRoot,} from '../index.styled';
+import {useIntl} from 'react-intl';
+import {AppInput} from '@unpod/components/antd';
 import AppPhoneTagSelect from '@unpod/components/antd/AppPhoneTagSelect';
-import type { CallingTimeRange, Pilot } from '@unpod/constants/types';
+import type {CallingTimeRange, Pilot} from '@unpod/constants/types';
 
-const { Item, useForm } = Form;
-const { Title, Text } = Typography;
+const {Item, useForm} = Form;
+const {Title, Text} = Typography;
 
 type AdvancedFormProps = {
   agentData: Pilot;
@@ -61,11 +49,11 @@ export type AgentFormValues = {
   back_off_seconds?: number;
 };
 
-const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
+const AdvancedForm = ({agentData, updateAgentData}: AdvancedFormProps) => {
   const infoViewContext = useInfoViewContext();
   const infoViewActionContext = useInfoViewActionsContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const enable_followup = Form.useWatch('enable_followup', form);
   const enable_handover = Form.useWatch('enable_handover', form);
 
@@ -142,7 +130,7 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
 
   const onFinishFailed = () => {
     infoViewActionContext.showError(
-      formatMessage({ id: 'advanced.saveError' }),
+      formatMessage({id: 'advanced.saveError'}),
     );
   };
 
@@ -177,8 +165,8 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
           region: agentData?.handover_number_cc || '+91',
           numbers: agentData?.handover_number
             ? agentData.handover_number
-                .split(',')
-                .map((num: string) => num.trim())
+              .split(',')
+              .map((num: string) => num.trim())
             : [],
         },
         handover_prompt: agentData?.handover_prompt || '',
@@ -195,53 +183,53 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
         calling_time_ranges:
           (agentData?.calling_time_ranges?.length ?? 0) > 0
             ? agentData.calling_time_ranges?.map((item: CallingTimeRange) => ({
-                start: dayjs(item.start, 'HH:mm'),
-                end: dayjs(item.end, 'HH:mm'),
-              }))
+              start: dayjs(item.start, 'HH:mm'),
+              end: dayjs(item.end, 'HH:mm'),
+            }))
             : [
-                {
-                  start: dayjs('08:00 AM', 'hh:mm A'),
-                  end: dayjs('08:00 PM', 'hh:mm A'),
-                },
-              ],
+              {
+                start: dayjs('08:00 AM', 'hh:mm A'),
+                end: dayjs('08:00 PM', 'hh:mm A'),
+              },
+            ],
       }}
     >
       <StyledTabRoot>
         <StyledMainContainer>
           <CardWrapper
-            icon={<MdMemory size={16} />}
-            title={formatMessage({ id: 'advanced.contextSettings' })}
+            icon={<MdMemory size={16}/>}
+            title={formatMessage({id: 'advanced.contextSettings'})}
           >
             <StyledRowItem className="borderless">
               <StyledContent>
                 <Title level={5}>
-                  {formatMessage({ id: 'advanced.enableMemory' })}
+                  {formatMessage({id: 'advanced.enableMemory'})}
                 </Title>
                 <Text type="secondary">
-                  {formatMessage({ id: 'advanced.enableDesc' })}
+                  {formatMessage({id: 'advanced.enableDesc'})}
                 </Text>
               </StyledContent>
               <Item name="enable_memory" noStyle>
-                <Switch />
+                <Switch/>
               </Item>
             </StyledRowItem>
           </CardWrapper>
 
           <CardWrapper
-            icon={<MdPhoneCallback />}
-            title={formatMessage({ id: 'advanced.autoReachout' })}
+            icon={<MdPhoneCallback/>}
+            title={formatMessage({id: 'advanced.autoReachout'})}
           >
-            <StyledRowItem className={clsx({ borderless: enable_followup })}>
+            <StyledRowItem className={clsx({borderless: enable_followup})}>
               <StyledContent>
                 <Title level={5}>
-                  {formatMessage({ id: 'advanced.enableFollowup' })}
+                  {formatMessage({id: 'advanced.enableFollowup'})}
                 </Title>
                 <Text type="secondary">
-                  {formatMessage({ id: 'advanced.enableFollowupDesc' })}
+                  {formatMessage({id: 'advanced.enableFollowupDesc'})}
                 </Text>
               </StyledContent>
               <Item name="enable_followup" noStyle>
-                <Switch />
+                <Switch/>
               </Item>
             </StyledRowItem>
 
@@ -254,7 +242,7 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
                         id: 'advanced.followupInstructions',
                       })}
                       rows={4}
-                      autoSize={{ minRows: 4, maxRows: 6 }}
+                      autoSize={{minRows: 4, maxRows: 6}}
                     />
                   </Form.Item>
                 </StyledContent>
@@ -264,43 +252,43 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
             <StyledRowItem>
               <StyledContent>
                 <Title level={5}>
-                  {formatMessage({ id: 'advanced.instantRedial' })}
+                  {formatMessage({id: 'advanced.instantRedial'})}
                 </Title>
                 <Text type="secondary">
-                  {formatMessage({ id: 'advanced.instantRedialDesc' })}
+                  {formatMessage({id: 'advanced.instantRedialDesc'})}
                 </Text>
               </StyledContent>
               <Item name="enable_callback" noStyle>
-                <Switch />
+                <Switch/>
               </Item>
             </StyledRowItem>
 
             <StyledRowItem>
               <StyledContent>
                 <Title level={5}>
-                  {formatMessage({ id: 'advanced.notifyViaSMS' })}
+                  {formatMessage({id: 'advanced.notifyViaSMS'})}
                 </Title>
                 <Text type="secondary">
-                  {formatMessage({ id: 'advanced.notifyViaSMSDesc' })}
+                  {formatMessage({id: 'advanced.notifyViaSMSDesc'})}
                 </Text>
               </StyledContent>
               <Item name="notify_via_sms" noStyle>
-                <Switch />
+                <Switch/>
               </Item>
             </StyledRowItem>
 
             <StyledRowItem className="borderless">
               <StyledContent>
                 <Title level={5}>
-                  {formatMessage({ id: 'advanced.handoverNumber' })}
+                  {formatMessage({id: 'advanced.handoverNumber'})}
                 </Title>
                 <Text type="secondary">
-                  {formatMessage({ id: 'advanced.handoverNumberDesc' })}
+                  {formatMessage({id: 'advanced.handoverNumberDesc'})}
                 </Text>
               </StyledContent>
 
               <Item name="enable_handover" noStyle>
-                <Switch />
+                <Switch/>
               </Item>
             </StyledRowItem>
 
@@ -309,20 +297,20 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
                 <StyledRowItem className="borderless">
                   <StyledContent>
                     <Title level={5}>
-                      {formatMessage({ id: 'advanced.instantHandover' })}
+                      {formatMessage({id: 'advanced.instantHandover'})}
                     </Title>
                     <Text type="secondary">
-                      {formatMessage({ id: 'advanced.instantHandoverDesc' })}
+                      {formatMessage({id: 'advanced.instantHandoverDesc'})}
                     </Text>
                   </StyledContent>
 
                   <Item name="instant_handover" noStyle>
-                    <Switch />
+                    <Switch/>
                   </Item>
                 </StyledRowItem>
 
                 <Item
-                  style={{ marginTop: 12 }}
+                  style={{marginTop: 12}}
                   name="handover_number"
                   rules={[
                     {
@@ -334,8 +322,8 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
                   ]}
                 >
                   <AppPhoneTagSelect
-                    placeholder={formatMessage({ id: 'form.phoneNumber' })}
-                    suffixIcon={<MdOutlinePhoneEnabled fontSize={16} />}
+                    placeholder={formatMessage({id: 'form.phoneNumber'})}
+                    suffixIcon={<MdOutlinePhoneEnabled fontSize={16}/>}
                   />
                 </Item>
 
@@ -345,35 +333,35 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
                       id: 'advanced.handoverInstructions',
                     })}
                     rows={4}
-                    autoSize={{ minRows: 4, maxRows: 6 }}
+                    autoSize={{minRows: 4, maxRows: 6}}
                   />
                 </Item>
 
                 <Item name="handover_person_role" noStyle>
-                  <AppInput placeholder={formatMessage({ id: 'form.role' })} />
+                  <AppInput placeholder={formatMessage({id: 'form.role'})}/>
                 </Item>
               </>
             )}
           </CardWrapper>
 
           <CardWrapper
-            title={formatMessage({ id: 'advanced.callingHours' })}
-            icon={<MdPhoneCallback size={16} />}
+            title={formatMessage({id: 'advanced.callingHours'})}
+            icon={<MdPhoneCallback size={16}/>}
           >
             <StyledRowItem className="borderless">
               <StyledContent>
-                <CallingHours />
+                <CallingHours/>
               </StyledContent>
             </StyledRowItem>
           </CardWrapper>
 
           <CardWrapper
-            title={formatMessage({ id: 'advanced.stopSpeakingPlan' })}
-            icon={<MdOutlineVoiceOverOff />}
+            title={formatMessage({id: 'advanced.stopSpeakingPlan'})}
+            icon={<MdOutlineVoiceOverOff/>}
           >
             <StyledRowItem className="borderless">
               <StyledContent>
-                <StopSpeakingPlan />
+                <StopSpeakingPlan/>
               </StyledContent>
             </StyledRowItem>
           </CardWrapper>
@@ -385,10 +373,10 @@ const AdvancedForm = ({ agentData, updateAgentData }: AdvancedFormProps) => {
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext.loading}
           >
-            {formatMessage({ id: 'common.save' })}
+            {formatMessage({id: 'common.save'})}
           </Button>
         </Flex>
       </StickyFooter>

@@ -1,14 +1,14 @@
-import type { ReactElement } from 'react';
-import { Fragment } from 'react';
+import type {ReactElement} from 'react';
+import {Fragment} from 'react';
 
-import { Button, Form, Typography } from 'antd';
-import { INPUT_COMPONENTS, InputText } from './components';
-import { StyledRow, StyledTitle } from './index.styled';
-import { MdAdd } from 'react-icons/md';
-import { useIntl } from 'react-intl';
+import {Button, Form, Typography} from 'antd';
+import {INPUT_COMPONENTS, InputText} from './components';
+import {StyledRow, StyledTitle} from './index.styled';
+import {MdAdd} from 'react-icons/md';
+import {useIntl} from 'react-intl';
 
-const { Item, List, ErrorList } = Form;
-const { Paragraph } = Typography;
+const {Item, List, ErrorList} = Form;
+const {Paragraph} = Typography;
 
 type InputField = {
   type: string;
@@ -21,11 +21,11 @@ type InputField = {
   [key: string]: any;
 };
 
-const FormItem = ({ name, field }: { name: string; field: InputField }) => {
+const FormItem = ({name, field}: { name: string; field: InputField }) => {
   const InputComponent =
     (INPUT_COMPONENTS as Record<string, (props: any) => ReactElement>)[
       field.type
-    ] || InputText;
+      ] || InputText;
   const attributes = field?.config?.attributes || {};
 
   return (
@@ -39,18 +39,18 @@ const FormItem = ({ name, field }: { name: string; field: InputField }) => {
       ]}
       {...attributes}
     >
-      <InputComponent field={field} />
+      <InputComponent field={field}/>
     </Item>
   );
 };
 
-const FormItemList = ({ name, field }: { name: string; field: InputField }) => {
-  const { formatMessage } = useIntl();
+const FormItemList = ({name, field}: { name: string; field: InputField }) => {
+  const {formatMessage} = useIntl();
 
   const InputComponent =
     (INPUT_COMPONENTS as Record<string, (props: any) => ReactElement>)[
       field.type
-    ] || InputText;
+      ] || InputText;
 
   return (
     <List
@@ -62,8 +62,8 @@ const FormItemList = ({ name, field }: { name: string; field: InputField }) => {
               return Promise.reject(
                 new Error(
                   formatMessage(
-                    { id: 'formItem.errorMessage' },
-                    { title: field.title },
+                    {id: 'formItem.errorMessage'},
+                    {title: field.title},
                   ),
                 ),
               );
@@ -73,17 +73,17 @@ const FormItemList = ({ name, field }: { name: string; field: InputField }) => {
         },
       ]}
     >
-      {(fields, { add, remove }, { errors }) => (
+      {(fields, {add, remove}, {errors}) => (
         <Fragment>
-          <InputComponent field={field} fields={fields} remove={remove} />
+          <InputComponent field={field} fields={fields} remove={remove}/>
 
           <Item>
-            <ErrorList errors={errors} />
+            <ErrorList errors={errors}/>
 
-            <Button type="dashed" onClick={() => add()} block icon={<MdAdd />}>
+            <Button type="dashed" onClick={() => add()} block icon={<MdAdd/>}>
               {field.placeholder
                 ? field.placeholder
-                : formatMessage({ id: 'common.addItem' })}
+                : formatMessage({id: 'common.addItem'})}
             </Button>
           </Item>
         </Fragment>
@@ -93,9 +93,9 @@ const FormItemList = ({ name, field }: { name: string; field: InputField }) => {
 };
 
 const FormInput = ({
-  component,
-  field,
-}: {
+                     component,
+                     field,
+                   }: {
   component: { slug?: string; name?: string };
   field: InputField;
 }) => {
@@ -112,14 +112,14 @@ const FormInput = ({
 
       {field.description && (
         <Paragraph type="secondary">
-          <div dangerouslySetInnerHTML={{ __html: field.description || '' }} />
+          <div dangerouslySetInnerHTML={{__html: field.description || ''}}/>
         </Paragraph>
       )}
 
       {field.type === 'repeater' ? (
-        <FormItemList name={name} field={field} />
+        <FormItemList name={name} field={field}/>
       ) : (
-        <FormItem name={name} field={field} />
+        <FormItem name={name} field={field}/>
       )}
     </Fragment>
   );

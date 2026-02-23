@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 
-import { floor, max, min } from '../utils';
+import {floor, max, min} from '../utils';
 
 type ViewportRowsArgs<R> = {
   rows: readonly R[];
@@ -8,16 +8,17 @@ type ViewportRowsArgs<R> = {
   clientHeight: number;
   scrollTop: number;
   enableVirtualization: boolean;
-  autoRowHeight: boolean;};
+  autoRowHeight: boolean;
+};
 
 export function useViewportRows<R>({
-  rows,
-  rowHeight,
-  clientHeight,
-  scrollTop,
-  enableVirtualization,
-  autoRowHeight,
-}: ViewportRowsArgs<R>) {
+                                     rows,
+                                     rowHeight,
+                                     clientHeight,
+                                     scrollTop,
+                                     enableVirtualization,
+                                     autoRowHeight,
+                                   }: ViewportRowsArgs<R>) {
   const {
     totalRowHeight,
     gridTemplateRows,
@@ -46,7 +47,7 @@ export function useViewportRows<R>({
     // https://github.com/bvaughn/react-window/blob/b0a470cc264e9100afcaa1b78ed59d88f7914ad4/src/VariableSizeList.js#L68
     const rowPositions = rows.map((row) => {
       const currentRowHeight = rowHeight(row);
-      const position = { top: totalRowHeight, height: currentRowHeight };
+      const position = {top: totalRowHeight, height: currentRowHeight};
       gridTemplateRows += `${currentRowHeight}px `;
       totalRowHeight += currentRowHeight;
       return position;

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Input, Tag, Typography } from 'antd';
-import { rgba } from 'polished';
+import {Input, Tag, Typography} from 'antd';
+import {rgba} from 'polished';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 export const StyledDropdownArrow = styled.span`
   display: inline-flex;
@@ -25,7 +25,7 @@ export const StyledSubMenuItem = styled.span`
   align-items: center;
 
   &.add-new-title {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 
   & > svg {
@@ -46,7 +46,7 @@ export const StyledIconWrapper = styled.div`
   align-items: center;
   gap: 16px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     display: none;
   }
 `;
@@ -75,7 +75,7 @@ export const StyledLabel = styled(Tag)`
   text-transform: capitalize;
   font-size: 10px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     display: none;
   }
 `;
@@ -108,15 +108,15 @@ export const StyledAddButton = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: ${({ theme }) => theme.palette.text.heading};
+  color: ${({theme}) => theme.palette.text.heading};
   padding: 7px 11px;
   width: 100%;
   cursor: pointer;
-  background-color: ${({ theme }) => rgba(theme.palette.success, 0.2)};
+  background-color: ${({theme}) => rgba(theme.palette.success, 0.2)};
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => rgba(theme.palette.success, 0.4)};
+    background-color: ${({theme}) => rgba(theme.palette.success, 0.4)};
   }
 `;
 

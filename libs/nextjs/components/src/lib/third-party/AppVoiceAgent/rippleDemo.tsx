@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 
 // Styled Components
@@ -106,7 +106,7 @@ const ChatInputComponent = () => {
 
   return (
     <ChatContainer>
-      <InputField type="text" placeholder="Ask me anything..." />
+      <InputField type="text" placeholder="Ask me anything..."/>
       <IconWrapper>hi</IconWrapper>
       <SubmitButton onClick={() => setShowOverlay(true)}>Talk →</SubmitButton>
 

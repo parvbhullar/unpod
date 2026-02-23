@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import ruMessages from '../locales/ru_RU.json';
 import ruRU from 'antd/lib/locale/ru_RU';
 

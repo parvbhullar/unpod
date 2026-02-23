@@ -1,23 +1,15 @@
 'use client';
-import { isValidElement, useEffect, useMemo } from 'react';
-import { Divider, Form } from 'antd';
-import { usePathname, useRouter } from 'next/navigation';
-import { StyledRoot, StyledTabsWrapper } from './index.styled';
-import {
-  uploadPostDataApi,
-  uploadPutDataApi,
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
+import {isValidElement, useEffect, useMemo} from 'react';
+import {Divider, Form} from 'antd';
+import {usePathname, useRouter} from 'next/navigation';
+import {StyledRoot, StyledTabsWrapper} from './index.styled';
+import {uploadPostDataApi, uploadPutDataApi, useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
 import AgentHeader from './AgentHeader';
-import { generateHandle } from '@unpod/helpers/StringHelper';
-import { AppTabs } from '@unpod/components/antd';
-import {
-  useAppModuleActionsContext,
-  useAppModuleContext,
-} from '@unpod/providers/AppModuleContextProvider';
-import { AgentStudioSkeleton } from '@unpod/skeleton';
-import { useSkeleton } from '@unpod/custom-hooks/useSkeleton';
+import {generateHandle} from '@unpod/helpers/StringHelper';
+import {AppTabs} from '@unpod/components/antd';
+import {useAppModuleActionsContext, useAppModuleContext,} from '@unpod/providers/AppModuleContextProvider';
+import {AgentStudioSkeleton} from '@unpod/skeleton';
+import {useSkeleton} from '@unpod/custom-hooks/useSkeleton';
 import ModelForm from './ModelForm';
 import VoiceForm from './VoiceForm';
 import AdvancedForm from './AdvancedForm';
@@ -25,8 +17,8 @@ import AnalysisForm from './AnalysisForm';
 import IntegrationForm from './IntegrationForm';
 import TelephonyForm from './TelephonyForm';
 import Identity from './Identity';
-import { useIntl } from 'react-intl';
-import type { Pilot, Spaces } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {Pilot, Spaces} from '@unpod/constants/types';
 
 type AppAgentModuleProps = {
   pilot: Pilot;
@@ -35,17 +27,17 @@ type AppAgentModuleProps = {
 };
 
 const AppAgentModule = ({
-  pilot,
-  isNew,
-  currentSpace,
-}: AppAgentModuleProps) => {
+                          pilot,
+                          isNew,
+                          currentSpace,
+                        }: AppAgentModuleProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { record, isNewRecord } = useAppModuleContext<Pilot>();
-  const { setRecord, updateRecord, addNewRecord, setIsNewRecord } =
+  const {record, isNewRecord} = useAppModuleContext<Pilot>();
+  const {setRecord, updateRecord, addNewRecord, setIsNewRecord} =
     useAppModuleActionsContext<Pilot>();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
-  const { isPageLoading, skeleton: Skeleton } = useSkeleton(
+  const {isPageLoading, skeleton: Skeleton} = useSkeleton(
     AgentStudioSkeleton as any,
     AgentStudioSkeleton as any,
   );
@@ -132,7 +124,7 @@ const AppAgentModule = ({
     const items = [
       {
         key: 'identity',
-        label: formatMessage({ id: 'aiStudio.identity' }),
+        label: formatMessage({id: 'aiStudio.identity'}),
         children: (
           <Identity
             agentData={record as Pilot}
@@ -144,7 +136,7 @@ const AppAgentModule = ({
       },
       {
         key: 'persona',
-        label: formatMessage({ id: 'aiStudio.persona' }),
+        label: formatMessage({id: 'aiStudio.persona'}),
         disabled: isNewRecord,
         children: (
           <ModelForm
@@ -160,7 +152,7 @@ const AppAgentModule = ({
       items.push(
         {
           key: 'voice',
-          label: formatMessage({ id: 'aiStudio.voiceProfile' }),
+          label: formatMessage({id: 'aiStudio.voiceProfile'}),
           disabled: isNewRecord,
           children: (
             <VoiceForm
@@ -172,7 +164,7 @@ const AppAgentModule = ({
         },
         {
           key: 'telephony',
-          label: formatMessage({ id: 'aiStudio.telephony' }),
+          label: formatMessage({id: 'aiStudio.telephony'}),
           disabled: isNewRecord,
           children: (
             <TelephonyForm
@@ -183,7 +175,7 @@ const AppAgentModule = ({
         },
         {
           key: 'advanced',
-          label: formatMessage({ id: 'aiStudio.advanced' }),
+          label: formatMessage({id: 'aiStudio.advanced'}),
           disabled: isNewRecord,
           children: (
             <AdvancedForm
@@ -205,7 +197,7 @@ const AppAgentModule = ({
     items.push(
       {
         key: 'analysis',
-        label: formatMessage({ id: 'aiStudio.analysis' }),
+        label: formatMessage({id: 'aiStudio.analysis'}),
         disabled: isNewRecord,
         children: (
           <AnalysisForm
@@ -217,7 +209,7 @@ const AppAgentModule = ({
       },
       {
         key: 'integration',
-        label: formatMessage({ id: 'aiStudio.integration' }),
+        label: formatMessage({id: 'aiStudio.integration'}),
         disabled: isNewRecord,
         children: (
           <IntegrationForm
@@ -231,7 +223,7 @@ const AppAgentModule = ({
     return items;
   }, [record, form, formatMessage, isNewRecord, updateAgentData]);
 
-  const SkeletonView = isValidElement(Skeleton) ? Skeleton : <Skeleton />;
+  const SkeletonView = isValidElement(Skeleton) ? Skeleton : <Skeleton/>;
 
   if ((!record && !isNew) || isPageLoading) {
     return SkeletonView;
@@ -245,9 +237,9 @@ const AppAgentModule = ({
         loading={infoViewContext.loading}
         form={form}
       />
-      <Divider style={{ margin: '0 0 5px 0' }} />
+      <Divider style={{margin: '0 0 5px 0'}}/>
       <StyledTabsWrapper>
-        <AppTabs items={tabs} routePath={getRouterPath} />
+        <AppTabs items={tabs} routePath={getRouterPath}/>
       </StyledTabsWrapper>
     </StyledRoot>
   );

@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
-import { renderWithWrapper } from '@mi/core';
+import {screen} from '@testing-library/react';
+import {renderWithWrapper} from '@mi/core';
 import AppInputNumber from './index';
 
 describe('AppInputNumber', () => {
   test('should render successfully', () => {
-    const { baseElement } = renderWithWrapper(
+    const {baseElement} = renderWithWrapper(
       <AppInputNumber
         placeholder="Enter Title"
         className="my-custom-input"
@@ -36,15 +36,15 @@ describe('AppInputNumber', () => {
     });
     expect(decreaseButton).toBeInTheDocument();
 
-    const upIcon = screen.getByRole('img', { name: 'up' });
-    const downIcon = screen.getByRole('img', { name: 'down' });
+    const upIcon = screen.getByRole('img', {name: 'up'});
+    const downIcon = screen.getByRole('img', {name: 'down'});
 
     expect(upIcon).toBeInTheDocument();
     expect(downIcon).toBeInTheDocument();
   });
 
   test('Should render disabled text input successfully', () => {
-    renderWithWrapper(<AppInputNumber placeholder="Enter Title" disabled />);
+    renderWithWrapper(<AppInputNumber placeholder="Enter Title" disabled/>);
 
     const dateInput = screen.getByRole('spinbutton', {});
     expect(dateInput).toBeInTheDocument();
@@ -52,14 +52,14 @@ describe('AppInputNumber', () => {
   });
 
   test('Should render asterisk text input successfully', () => {
-    renderWithWrapper(<AppInputNumber placeholder="Enter Title" asterisk />);
+    renderWithWrapper(<AppInputNumber placeholder="Enter Title" asterisk/>);
 
-    const dateInput = screen.getByRole('asterisk', { name: 'asterisk' });
+    const dateInput = screen.getByRole('asterisk', {name: 'asterisk'});
     expect(dateInput).toBeInTheDocument();
   });
 
   test('Placeholder should be present', () => {
-    renderWithWrapper(<AppInputNumber placeholder="Enter Title" asterisk />);
+    renderWithWrapper(<AppInputNumber placeholder="Enter Title" asterisk/>);
 
     const placeholder = screen.getByRole('label-placeholder', {});
     expect(placeholder).toBeInTheDocument();

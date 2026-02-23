@@ -1,24 +1,20 @@
 import AppImage from '@unpod/components/next/AppImage';
-import { Button, Space, Typography } from 'antd';
-import {
-  deleteDataApi,
-  getDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { StyledPlaceHolder, StyledPlaceHolderInner } from './index.styled';
-import { useIntl } from 'react-intl';
+import {Button, Space, Typography} from 'antd';
+import {deleteDataApi, getDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {StyledPlaceHolder, StyledPlaceHolderInner} from './index.styled';
+import {useIntl} from 'react-intl';
 
 const RequestWorkSpace = ({
-  currentData,
-  setCurrentData,
-  type = 'space',
-}: {
+                            currentData,
+                            setCurrentData,
+                            type = 'space',
+                          }: {
   currentData: any;
   setCurrentData: (data: any) => void;
   type?: 'space' | 'org' | 'post' | string;
 }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onAccessRequest = () => {
     const url =
@@ -99,11 +95,11 @@ const RequestWorkSpace = ({
 
   const getAccessText = () => {
     if (type === 'org') {
-      return formatMessage({ id: 'request.noAccessOrg' });
+      return formatMessage({id: 'request.noAccessOrg'});
     } else if (type === 'space') {
-      return formatMessage({ id: 'request.noAccessSpace' });
+      return formatMessage({id: 'request.noAccessSpace'});
     } else {
-      return formatMessage({ id: 'request.noAccessPost' });
+      return formatMessage({id: 'request.noAccessPost'});
     }
   };
 
@@ -116,7 +112,7 @@ const RequestWorkSpace = ({
           width={376}
           height={344}
         />
-        <Typography.Title level={3} style={{ marginTop: 32 }}>
+        <Typography.Title level={3} style={{marginTop: 32}}>
           {getAccessText()}
         </Typography.Title>
 
@@ -126,22 +122,22 @@ const RequestWorkSpace = ({
             {currentData?.is_requested ? (
               <>
                 <Button type="primary" danger onClick={onDeleteRequest}>
-                  {formatMessage({ id: 'request.resendDelete' })}
+                  {formatMessage({id: 'request.resendDelete'})}
                 </Button>
                 <Button type="primary" onClick={onResendRequest}>
-                  {formatMessage({ id: 'request.resendRequest' })}
+                  {formatMessage({id: 'request.resendRequest'})}
                 </Button>
               </>
             ) : (
               <Button type="primary" onClick={onAccessRequest}>
-                {formatMessage({ id: 'request.requestAccess' })}
+                {formatMessage({id: 'request.requestAccess'})}
               </Button>
             )}
           </Space>
         ) : currentData?.privacy_type === 'shared' &&
-          currentData?.final_role === 'guest' ? (
+        currentData?.final_role === 'guest' ? (
           <Button type="primary" onClick={onJoinRequest}>
-            {formatMessage({ id: 'common.join' })}
+            {formatMessage({id: 'common.join'})}
           </Button>
         ) : null}
       </StyledPlaceHolderInner>

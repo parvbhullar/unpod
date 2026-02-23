@@ -1,19 +1,11 @@
-import { forwardRef, memo, type RefAttributes } from 'react';
+import {forwardRef, memo, type RefAttributes} from 'react';
 import clsx from 'clsx';
 
-import { RowSelectionProvider, useLatestFunc } from './hooks';
-import { getColSpan, getMinMaxIdx, getRowStyle } from './utils';
-import type {
-  CalculatedColumn,
-  CopyClipboardProps,
-  RenderRowProps,
-} from './models/data-grid';
+import {RowSelectionProvider, useLatestFunc} from './hooks';
+import {getColSpan, getMinMaxIdx, getRowStyle} from './utils';
+import type {CalculatedColumn, CopyClipboardProps, RenderRowProps,} from './models/data-grid';
 import Cell from './Cell';
-import {
-  rowClassname,
-  rowSelectedClassname,
-  StyledRowWrapper,
-} from './style/row';
+import {rowClassname, rowSelectedClassname, StyledRowWrapper,} from './style/row';
 
 function Row<R, SR>(
   {
@@ -104,7 +96,7 @@ function Row<R, SR>(
 
   for (let index = 0; index < viewportColumns.length; index++) {
     const column = viewportColumns[index];
-    const { idx } = column;
+    const {idx} = column;
     const colSpan = getColSpan(column, lastLeftFixedColumnIndex, {
       type: 'ROW',
       row,

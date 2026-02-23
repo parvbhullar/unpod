@@ -1,27 +1,21 @@
-
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 import FormInput from './inputs/FormInput';
-import { StyledFieldList } from './index.styled';
+import {StyledFieldList} from './index.styled';
 import CardWrapper from '../../../common/CardWrapper';
-import {
-  MdBuild,
-  MdCheckCircleOutline,
-  MdDashboardCustomize,
-  MdDescription,
-} from 'react-icons/md';
+import {MdBuild, MdCheckCircleOutline, MdDashboardCustomize, MdDescription,} from 'react-icons/md';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 const getIcon = (name: string) => {
   switch (name) {
     case 'Structured Data':
-      return <MdDashboardCustomize size={18} />;
+      return <MdDashboardCustomize size={18}/>;
     case 'Success Evaluation':
-      return <MdCheckCircleOutline size={18} />;
+      return <MdCheckCircleOutline size={18}/>;
     case 'Summary':
-      return <MdDescription size={18} />;
+      return <MdDescription size={18}/>;
     default:
-      return <MdBuild size={18} />;
+      return <MdBuild size={18}/>;
   }
 };
 
@@ -37,7 +31,7 @@ type AppPilotSecComponentProps = {
   component: PilotComponent;
 };
 
-const AppPilotSecComponent = ({ component }: AppPilotSecComponentProps) => {
+const AppPilotSecComponent = ({component}: AppPilotSecComponentProps) => {
   return (
     <CardWrapper icon={getIcon(component.name)} title={component.name}>
       <Paragraph>
@@ -50,7 +44,7 @@ const AppPilotSecComponent = ({ component }: AppPilotSecComponentProps) => {
 
       <StyledFieldList>
         {component.form_fields.map((field: any, index: number) => (
-          <FormInput key={index} component={component} field={field} />
+          <FormInput key={index} component={component} field={field}/>
         ))}
       </StyledFieldList>
     </CardWrapper>

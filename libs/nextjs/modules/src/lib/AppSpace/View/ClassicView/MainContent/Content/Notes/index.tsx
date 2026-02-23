@@ -1,18 +1,15 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import { AgentConnectionProvider } from '@unpod/livekit/hooks/useAgentConnection';
+import {AgentConnectionProvider} from '@unpod/livekit/hooks/useAgentConnection';
 import AppPost from '../../../../../../AppPost';
 import AddEditThread from './AddEditThread';
 import AddNote from './AddNew';
-import { StyledContainer, StyledRoot, StyledRow } from '../../index.styled';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import {StyledContainer, StyledRoot, StyledRow} from '../../index.styled';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 
-const Notes = ({ threadType, setThreadType }) => {
-  const { setActiveNote, notesActions } = useAppSpaceActionsContext();
-  const { activeNote, currentSpace, token } = useAppSpaceContext();
+const Notes = ({threadType, setThreadType}) => {
+  const {setActiveNote, notesActions} = useAppSpaceActionsContext();
+  const {activeNote, currentSpace, token} = useAppSpaceContext();
   const onEditPost = () => {
     if (activeNote) {
       setThreadType(`${activeNote.post_type}_${activeNote.content_type}`);
@@ -61,7 +58,7 @@ const Notes = ({ threadType, setThreadType }) => {
           ) : (
             <StyledContainer>
               <StyledRow align="middle" justify="center">
-                <AddNote onAddClick={onAddClick} />
+                <AddNote onAddClick={onAddClick}/>
               </StyledRow>
             </StyledContainer>
           )}
@@ -73,7 +70,7 @@ const Notes = ({ threadType, setThreadType }) => {
 
 Notes.displayName = 'NoteDetail';
 
-const { func, object, string } = PropTypes;
+const {func, object, string} = PropTypes;
 
 Notes.propTypes = {
   currentSpace: object,

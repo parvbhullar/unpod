@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
-import { LiveKitRoom } from '@livekit/components-react';
+import React, {useCallback, useEffect} from 'react';
+import {LiveKitRoom} from '@livekit/components-react';
 import VoiceAgent from './VoiceAgent';
-import { useAgentConnection } from '../hooks/useAgentConnection';
-import { useTokenGeneration } from '../hooks/useTokenGeneration';
+import {useAgentConnection} from '../hooks/useAgentConnection';
+import {useTokenGeneration} from '../hooks/useTokenGeneration';
 import styled from 'styled-components';
-import { ChatWidget } from './ChatWidget';
-import { useAuthContext, useInfoViewActionsContext } from '@unpod/providers';
+import {ChatWidget} from './ChatWidget';
+import {useAuthContext, useInfoViewActionsContext} from '@unpod/providers';
 
 const CenteredContainer = styled.div`
   display: flex;
@@ -26,15 +26,15 @@ type AgentViewProps = {
 };
 
 const AgentView: React.FC<AgentViewProps> = ({
-  spaceToken,
-  name,
-  agentName,
-  agentId,
-  source,
-  metadata,
-  config,
-  ...rest
-}) => {
+                                               spaceToken,
+                                               name,
+                                               agentName,
+                                               agentId,
+                                               source,
+                                               metadata,
+                                               config,
+                                               ...rest
+                                             }) => {
   const {
     roomToken,
     updateRoomToken,
@@ -52,13 +52,13 @@ const AgentView: React.FC<AgentViewProps> = ({
     disconnect: () => void;
     setConnectionMode: (mode: string) => void;
   };
-  const { user } = useAuthContext();
+  const {user} = useAuthContext();
   const infoViewActionsContext = useInfoViewActionsContext();
   const roomRef = React.useRef<{ token?: string } | null>(null);
   const [startCall, setStartCall] = React.useState(false);
 
   // Use unified token generation hook
-  const { generateToken: generateAgentToken } = useTokenGeneration({
+  const {generateToken: generateAgentToken} = useTokenGeneration({
     endpoint: `core/voice/generate_room_token/public_token/`,
     method: 'POST',
     cacheToken: true,
@@ -89,7 +89,7 @@ const AgentView: React.FC<AgentViewProps> = ({
     }
   }, [generateAgentToken, spaceToken, name, agentName, agentId, user, source]);
 
-  console.log('rest in AgentView', { roomToken, updateRoomToken });
+  console.log('rest in AgentView', {roomToken, updateRoomToken});
 
   // Auto-generate token on mount
   useEffect(() => {
@@ -107,7 +107,7 @@ const AgentView: React.FC<AgentViewProps> = ({
 
   // Keep ref updated without causing re-renders
   useEffect(() => {
-    connectionFunctionsRef.current = { connect, disconnect, setConnectionMode };
+    connectionFunctionsRef.current = {connect, disconnect, setConnectionMode};
   }, [connect, disconnect, setConnectionMode]);
 
   // Auto-connect when token is available (runs only when token changes)

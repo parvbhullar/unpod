@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin } from 'antd';
+import {Spin} from 'antd';
 import styled from 'styled-components';
 
 const StyledAppLoader = styled.div`
@@ -19,16 +19,17 @@ const StyledAppLoader = styled.div`
 
 type AppLoaderProps = {
   style?: React.CSSProperties;
-  position?: 'fixed' | 'absolute' | 'relative' | 'static';};
+  position?: 'fixed' | 'absolute' | 'relative' | 'static';
+};
 
 const AppLoader: React.FC<AppLoaderProps> = ({
-  position = 'fixed',
-  style,
-  ...restProps
-}) => {
+                                               position = 'fixed',
+                                               style,
+                                               ...restProps
+                                             }) => {
   return (
-    <StyledAppLoader style={{ position, ...style }} {...restProps}>
-      <Spin />
+    <StyledAppLoader style={{position, ...style}} {...restProps}>
+      <Spin/>
     </StyledAppLoader>
   );
 };

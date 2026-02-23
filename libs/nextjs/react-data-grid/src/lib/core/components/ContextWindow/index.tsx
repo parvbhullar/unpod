@@ -1,27 +1,15 @@
-import { Fragment, useMemo, useState } from 'react';
-import { Typography } from 'antd';
-import type {
-  MenuItemProps,
-  TableCellItemProps,
-  UndoRedoProcessProps,
-} from '../../models/data-grid';
-import {
-  MdAdd,
-  MdContentCopy,
-  MdContentCut,
-  MdContentPaste,
-  MdDeleteOutline,
-  MdRedo,
-  MdUndo,
-} from 'react-icons/md';
+import {Fragment, useMemo, useState} from 'react';
+import {Typography} from 'antd';
+import type {MenuItemProps, TableCellItemProps, UndoRedoProcessProps,} from '../../models/data-grid';
+import {MdAdd, MdContentCopy, MdContentCut, MdContentPaste, MdDeleteOutline, MdRedo, MdUndo,} from 'react-icons/md';
 import ModalWindow from '../ModalWindow';
 import NewColumnWindow from '../NewColumnWindow';
-import { SelectCellState } from '../../DataGrid';
+import {SelectCellState} from '../../DataGrid';
 import Menus from '../Menus';
-import { getMinMaxIdx } from '../../utils';
-import { useDataGridConfiguration } from '../../DataGridContext';
+import {getMinMaxIdx} from '../../utils';
+import {useDataGridConfiguration} from '../../DataGridContext';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type Props = {
   onCloseModal: () => void;
@@ -61,31 +49,31 @@ type Props = {
 };
 
 const ContextWindow = ({
-  open,
-  onCloseModal,
-  selectedPosition,
-  draggedOverCellIdx,
-  draggedOverRowIdx,
-  rows,
-  columns,
-  onInsertRows,
-  onDeleteRows,
-  onInsertCell,
-  onDeleteCells,
-  saveVersionHistory,
-  canUndo,
-  onUndo,
-  canRedo,
-  onRedo,
-  onCut,
-  onCopy,
-  onPaste,
-  ...restProps
-}: Props) => {
-  const { contextMenu } = useDataGridConfiguration();
+                         open,
+                         onCloseModal,
+                         selectedPosition,
+                         draggedOverCellIdx,
+                         draggedOverRowIdx,
+                         rows,
+                         columns,
+                         onInsertRows,
+                         onDeleteRows,
+                         onInsertCell,
+                         onDeleteCells,
+                         saveVersionHistory,
+                         canUndo,
+                         onUndo,
+                         canRedo,
+                         onRedo,
+                         onCut,
+                         onCopy,
+                         onPaste,
+                         ...restProps
+                       }: Props) => {
+  const {contextMenu} = useDataGridConfiguration();
 
   const [openModal, setOpenModal] = useState(false);
-  const { idx, rowIdx } = selectedPosition;
+  const {idx, rowIdx} = selectedPosition;
   const [startIdx, endIdx] = getMinMaxIdx(idx, draggedOverCellIdx);
   const totalSelectedCells = endIdx - startIdx + 1;
   const [startRowIdx, endRowIdx] = getMinMaxIdx(rowIdx, draggedOverRowIdx);
@@ -162,7 +150,7 @@ const ContextWindow = ({
     if (totalSelectedCells > 0) {
       if (contextMenu.allowCut)
         menuItems.push({
-          icon: <MdContentCut fontSize={16} />,
+          icon: <MdContentCut fontSize={16}/>,
           label: (
             <Fragment>
               Cut <Text type="secondary">(Ctrl + X)</Text>
@@ -173,7 +161,7 @@ const ContextWindow = ({
 
       if (contextMenu.allowCopy)
         menuItems.push({
-          icon: <MdContentCopy fontSize={16} />,
+          icon: <MdContentCopy fontSize={16}/>,
           label: (
             <Fragment>
               Copy <Text type="secondary">(Ctrl + C)</Text>
@@ -184,7 +172,7 @@ const ContextWindow = ({
 
       if (contextMenu.allowPaste)
         menuItems.push({
-          icon: <MdContentPaste fontSize={16} />,
+          icon: <MdContentPaste fontSize={16}/>,
           label: (
             <Fragment>
               Paste <Text type="secondary">(Ctrl + V)</Text>
@@ -197,7 +185,7 @@ const ContextWindow = ({
 
     if (contextMenu.allowUndo && onUndo) {
       menuItems.push({
-        icon: <MdUndo fontSize={18} />,
+        icon: <MdUndo fontSize={18}/>,
         label: (
           <Fragment>
             Undo <Text type="secondary">(Ctrl + Z)</Text>
@@ -210,7 +198,7 @@ const ContextWindow = ({
 
     if (contextMenu.allowRedo && onRedo) {
       menuItems.push({
-        icon: <MdRedo fontSize={18} />,
+        icon: <MdRedo fontSize={18}/>,
         label: (
           <Fragment>
             Redo <Text type="secondary">(Ctrl + Alt + Z)</Text>
@@ -223,7 +211,7 @@ const ContextWindow = ({
 
     if (contextMenu.allowInsertRows && onInsertRows) {
       menuItems.push({
-        icon: <MdAdd fontSize={18} />,
+        icon: <MdAdd fontSize={18}/>,
         label:
           totalSelectedRows > 1
             ? `Insert ${totalSelectedRows} rows above`
@@ -232,7 +220,7 @@ const ContextWindow = ({
       });
 
       menuItems.push({
-        icon: <MdAdd fontSize={18} />,
+        icon: <MdAdd fontSize={18}/>,
         label:
           totalSelectedRows > 1
             ? `Insert ${totalSelectedRows} rows below`
@@ -243,7 +231,7 @@ const ContextWindow = ({
 
     if (contextMenu.allowDeleteRows && onDeleteRows && rows.length > 1) {
       menuItems.push({
-        icon: <MdDeleteOutline fontSize={20} />,
+        icon: <MdDeleteOutline fontSize={20}/>,
         label:
           totalSelectedRows > 1
             ? `Delete rows ${startRowIdx + 1} - ${endRowIdx + 1}`
@@ -260,7 +248,7 @@ const ContextWindow = ({
 
     if (contextMenu.allowAddColumns && onInsertCell && idx > 0) {
       menuItems.push({
-        icon: <MdAdd fontSize={18} />,
+        icon: <MdAdd fontSize={18}/>,
         label: `Add column`,
         onClick: onClickAddColumn,
       });
@@ -273,7 +261,7 @@ const ContextWindow = ({
       idx > 0
     ) {
       menuItems.push({
-        icon: <MdDeleteOutline fontSize={20} />,
+        icon: <MdDeleteOutline fontSize={20}/>,
         label:
           totalSelectedCells > 1
             ? `Delete columns ${startIdx} - ${endIdx}`
@@ -303,7 +291,7 @@ const ContextWindow = ({
       centered
       {...restProps}
     >
-      <Menus items={items} />
+      <Menus items={items}/>
 
       {idx >= 0 && (
         <NewColumnWindow

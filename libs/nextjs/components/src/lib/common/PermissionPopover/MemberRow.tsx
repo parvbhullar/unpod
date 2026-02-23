@@ -1,43 +1,20 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import {
-  Button,
-  Dropdown,
-  Popconfirm,
-  Row,
-  Space,
-  Typography,
-} from 'antd';
-import type { MenuProps } from 'antd';
-import { RiArrowDownSFill } from 'react-icons/ri';
-import { useIntl } from 'react-intl';
+import {useMemo, useState} from 'react';
+import type {MenuProps} from 'antd';
+import {Button, Dropdown, Popconfirm, Row, Space, Typography,} from 'antd';
+import {RiArrowDownSFill} from 'react-icons/ri';
+import {useIntl} from 'react-intl';
 
 import UserAvatar from '../UserAvatar';
-import type {
-  GlobalRoleMap,
-  MemberRowProps,
-  PermissionEntity,
-  PermissionPopoverType,
-  RoleRecord,
-} from './types';
+import type {GlobalRoleMap, MemberRowProps, PermissionEntity, PermissionPopoverType, RoleRecord,} from './types';
 
-import {
-  deleteDataApi,
-  getDataApi,
-  putDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import {
-  getSpaceAllowedRoles,
-  isEditAccessAllowed,
-  isTransferOwnershipAllowed,
-} from '@unpod/helpers/PermissionHelper';
-import type { EntityWithOperations } from '@unpod/helpers/PermissionHelper';
-import { maskEmail } from '@unpod/helpers/StringHelper';
-import { getRoleLabel } from '@unpod/helpers/LocalizationFormatHelper';
+import {deleteDataApi, getDataApi, putDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import type {EntityWithOperations} from '@unpod/helpers/PermissionHelper';
+import {getSpaceAllowedRoles, isEditAccessAllowed, isTransferOwnershipAllowed,} from '@unpod/helpers/PermissionHelper';
+import {maskEmail} from '@unpod/helpers/StringHelper';
+import {getRoleLabel} from '@unpod/helpers/LocalizationFormatHelper';
 
 const getRoleChangeURL = (
   type: PermissionPopoverType,
@@ -138,9 +115,9 @@ const getPermissionScope = (
   type: PermissionPopoverType,
   currentData: PermissionEntity | null | undefined,
 ): [
-  EntityWithOperations | undefined,
-  EntityWithOperations | undefined,
-  EntityWithOperations | undefined,
+    EntityWithOperations | undefined,
+    EntityWithOperations | undefined,
+    EntityWithOperations | undefined,
 ] => {
   if (!currentData) return [undefined, undefined, undefined];
   if (type === 'org') return [currentData, undefined, undefined];
@@ -149,15 +126,15 @@ const getPermissionScope = (
 };
 
 const MemberRow = ({
-  type,
-  member,
-  currentData,
-  onRemoveInvitedMember,
-  onUpdateInvitedMember,
-}: MemberRowProps) => {
+                     type,
+                     member,
+                     currentData,
+                     onRemoveInvitedMember,
+                     onUpdateInvitedMember,
+                   }: MemberRowProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { user, globalData } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {user, globalData} = useAuthContext();
+  const {formatMessage} = useIntl();
 
   const [roleCode, setRoleCode] = useState<string>('');
 
@@ -317,17 +294,17 @@ const MemberRow = ({
       });
 
     if (roleList.length > 1 || !member.joined) {
-      roleList.push({ type: 'divider' });
+      roleList.push({type: 'divider'});
     }
 
     if (!member.joined) {
       roleList.push({
         key: 'resend-invite',
-        label: formatMessage({ id: 'member.resendInvite' }),
+        label: formatMessage({id: 'member.resendInvite'}),
       });
       roleList.push({
         key: 'remove-invite',
-        label: formatMessage({ id: 'member.removeInvite' }),
+        label: formatMessage({id: 'member.removeInvite'}),
         danger: true,
       });
     }
@@ -335,7 +312,7 @@ const MemberRow = ({
     if (member.joined) {
       roleList.push({
         key: 'remove-access',
-        label: formatMessage({ id: 'member.removeAccess' }),
+        label: formatMessage({id: 'member.removeAccess'}),
         danger: true,
       });
     }
@@ -343,29 +320,29 @@ const MemberRow = ({
     return roleList;
   };
 
-  const { title, content, okText } = useMemo(() => {
+  const {title, content, okText} = useMemo(() => {
     const name = member.full_name || memberEmail;
     const entityName = getEntityName(type, currentData);
 
     const contentText =
       roleCode === ACCESS_ROLE.OWNER
         ? formatMessage(
-            { id: 'member.confirmOwnership' },
-            { name, entity: entityName },
-          )
+          {id: 'member.confirmOwnership'},
+          {name, entity: entityName},
+        )
         : member.joined
           ? formatMessage(
-              { id: 'member.confirmRemoveAccess' },
-              { name, entity: entityName },
-            )
-          : formatMessage({ id: 'member.confirmRemoveInvite' });
+            {id: 'member.confirmRemoveAccess'},
+            {name, entity: entityName},
+          )
+          : formatMessage({id: 'member.confirmRemoveInvite'});
 
     const titleText =
       roleCode === ACCESS_ROLE.OWNER
-        ? formatMessage({ id: 'member.transferOwnership' })
+        ? formatMessage({id: 'member.transferOwnership'})
         : member.joined
-          ? formatMessage({ id: 'member.removeAccessTitle' })
-          : formatMessage({ id: 'member.removeInviteTitle' });
+          ? formatMessage({id: 'member.removeAccessTitle'})
+          : formatMessage({id: 'member.removeInviteTitle'});
 
     return {
       title: titleText,
@@ -377,16 +354,16 @@ const MemberRow = ({
   return (
     <Row justify="space-between" align="middle">
       <Space>
-        <UserAvatar user={member} />
+        <UserAvatar user={member}/>
         <Space orientation="vertical" size={0}>
           {member.full_name ? (
             <Typography.Text
               type={member.joined ? undefined : 'secondary'}
-              style={{ marginBottom: -4, display: 'block' }}
+              style={{marginBottom: -4, display: 'block'}}
             >
               {member.full_name}{' '}
               {memberEmail === user?.email ? (
-                <strong>{formatMessage({ id: 'member.you' })}</strong>
+                <strong>{formatMessage({id: 'member.you'})}</strong>
               ) : null}
             </Typography.Text>
           ) : null}
@@ -396,14 +373,14 @@ const MemberRow = ({
           </Typography.Text>
 
           {member.joined ? null : (
-            <Typography.Text>{formatMessage({ id: 'member.invited' })}</Typography.Text>
+            <Typography.Text>{formatMessage({id: 'member.invited'})}</Typography.Text>
           )}
         </Space>
       </Space>
 
       {member.role === ACCESS_ROLE.OWNER ? (
-        <Typography.Text style={{ marginRight: 24 }}>
-          {formatMessage({ id: 'member.owner' })}
+        <Typography.Text style={{marginRight: 24}}>
+          {formatMessage({id: 'member.owner'})}
         </Typography.Text>
       ) : (
         <Popconfirm
@@ -414,7 +391,7 @@ const MemberRow = ({
           onCancel={() => setRoleCode('')}
           description={content}
           okText={okText}
-          cancelText={formatMessage({ id: 'common.cancel' })}
+          cancelText={formatMessage({id: 'common.cancel'})}
         >
           <Dropdown
             menu={{

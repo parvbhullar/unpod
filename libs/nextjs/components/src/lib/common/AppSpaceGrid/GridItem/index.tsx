@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Avatar, Flex, Typography } from 'antd';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import { getFirstLetter } from '@unpod/helpers/StringHelper';
-import { CONTENT_TYPE_ICONS } from '@unpod/constants';
+import {Avatar, Flex, Typography} from 'antd';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {getFirstLetter} from '@unpod/helpers/StringHelper';
+import {CONTENT_TYPE_ICONS} from '@unpod/constants';
 import {
   EvalButtonWrapper,
   StyledContent,
@@ -15,12 +15,12 @@ import {
   StyledRoot,
   StyledTitleWrapper,
 } from './index.styled';
-import { useIntl } from 'react-intl';
-import type { KnowledgeBase } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {KnowledgeBase} from '@unpod/constants/types';
 import GenerateEvalButton from '../../../modules/GenerateEvalButton/GenerateEvalButton';
-import { AppStatusBadge } from '../../AppStatusBadge';
+import {AppStatusBadge} from '../../AppStatusBadge';
 
-const { Text, Title } = Typography;
+const {Text, Title} = Typography;
 
 const TYPE_COLORS = {
   table: {
@@ -56,14 +56,14 @@ type GridItemProps = {
   reCallAPI: () => void;
 };
 
-const GridItem = ({ data, onCardClick, type, reCallAPI }: GridItemProps) => {
+const GridItem = ({data, onCardClick, type, reCallAPI}: GridItemProps) => {
   const iconComponent =
     CONTENT_TYPE_ICONS[data.content_type as keyof typeof CONTENT_TYPE_ICONS] ??
     CONTENT_TYPE_ICONS.document;
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const typeInfo = TYPE_COLORS[
     data.content_type as keyof typeof TYPE_COLORS
-  ] || {
+    ] || {
     color: '#6c4ad3',
     bg: 'rgba(138,119,255,0.12)',
     icon: '#6c4ad3',
@@ -76,11 +76,11 @@ const GridItem = ({ data, onCardClick, type, reCallAPI }: GridItemProps) => {
         <StyledIconCircle $bg={typeInfo.circle}>
           {React.isValidElement(iconComponent)
             ? React.cloneElement(
-                iconComponent as React.ReactElement<{ color?: string }>,
-                {
-                  color: typeInfo.icon,
-                },
-              )
+              iconComponent as React.ReactElement<{ color?: string }>,
+              {
+                color: typeInfo.icon,
+              },
+            )
             : null}
         </StyledIconCircle>
 
@@ -108,7 +108,7 @@ const GridItem = ({ data, onCardClick, type, reCallAPI }: GridItemProps) => {
 
       <StyledContent>
         <StyledTitleWrapper>
-          <Title level={5} className="title" ellipsis={{ tooltip: data.name }}>
+          <Title level={5} className="title" ellipsis={{tooltip: data.name}}>
             {data.name}
           </Title>
         </StyledTitleWrapper>
@@ -119,7 +119,7 @@ const GridItem = ({ data, onCardClick, type, reCallAPI }: GridItemProps) => {
 
         <StyledDescription>
           {data.description ||
-            formatMessage({ id: 'knowledgeBase.description' })}
+            formatMessage({id: 'knowledgeBase.description'})}
         </StyledDescription>
 
         {/* <StyledDivider /> */}
@@ -139,7 +139,7 @@ const GridItem = ({ data, onCardClick, type, reCallAPI }: GridItemProps) => {
           >
             {getFirstLetter(data.organization?.name ?? '')}
           </Avatar>
-          <Text style={{ fontSize: 13, marginTop: 2 }}>
+          <Text style={{fontSize: 13, marginTop: 2}}>
             {data.organization?.name}
           </Text>
         </StyledOrganizationContainer>

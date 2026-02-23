@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
   selectAppData,
   selectIsConnectedToRoom,
@@ -10,18 +10,17 @@ import {
 // import GoLiveButton from "../GoLiveButton";
 // import { ResolutionInput } from "../Streaming/ResolutionInput";
 // import { getResolution } from "../Streaming/RTMPStreaming";
-import { ToastManager } from '../Toast/ToastManager';
+import {ToastManager} from '../Toast/ToastManager';
 // import {
 //   AdditionalRoomState,
 //   getRecordingText,
 // } from './AdditionalRoomState';
-import { useSetAppDataByKey } from '../AppData/useUISettings';
-import { APP_DATA, RTMP_RECORD_DEFAULT_RESOLUTION } from '../common/constants';
-import { Button, Space, Tooltip } from 'antd';
-import { BsRecordCircle, BsRecordFill } from 'react-icons/bs';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { useStreamContext } from '../StreamContextProvider';
-import { useOrgActionContext } from '@unpod/providers';
+import {useSetAppDataByKey} from '../AppData/useUISettings';
+import {APP_DATA, RTMP_RECORD_DEFAULT_RESOLUTION} from '../common/constants';
+import {Button, Space, Tooltip} from 'antd';
+import {BsRecordCircle, BsRecordFill} from 'react-icons/bs';
+import {getDataApi, useInfoViewActionsContext, useOrgActionContext} from '@unpod/providers';
+import {useStreamContext} from '../StreamContextProvider';
 
 // export const LiveStatus = () => {
 //   const { isHLSRunning, isRTMPRunning } = useRecordingStreaming();
@@ -78,15 +77,15 @@ import { useOrgActionContext } from '@unpod/providers';
 
 export const StartRecording = () => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { post } = useStreamContext();
-  const { setCallRecording } = useOrgActionContext();
+  const {post} = useStreamContext();
+  const {setCallRecording} = useOrgActionContext();
   const permissions = useHMSStore(selectPermissions);
   const recordingUrl = useHMSStore(selectAppData(APP_DATA.recordingUrl));
   const [resolution] = useState(RTMP_RECORD_DEFAULT_RESOLUTION);
   const [recordingStarted, setRecordingState] = useSetAppDataByKey(
     APP_DATA.recordingStarted
   );
-  const { isBrowserRecordingOn, isStreamingOn, isHLSRunning } =
+  const {isBrowserRecordingOn, isStreamingOn, isHLSRunning} =
     useRecordingStreaming();
   const hmsActions = useHMSActions();
 
@@ -173,9 +172,9 @@ export const StartRecording = () => {
         shape="circle"
         icon={
           isBrowserRecordingOn ? (
-            <BsRecordFill fontSize={20} />
+            <BsRecordFill fontSize={20}/>
           ) : (
-            <BsRecordCircle fontSize={20} />
+            <BsRecordCircle fontSize={20}/>
           )
         }
         onClick={toggleRecording}
@@ -204,7 +203,7 @@ export const StreamActions = () => {
     <Space>
       {/*<AdditionalRoomState />*/}
       {/*<RecordingStatus />*/}
-      {isConnected ? <StartRecording /> : null}
+      {isConnected ? <StartRecording/> : null}
     </Space>
   );
 };

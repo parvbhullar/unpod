@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
   StyledActionIcon,
   StyledEditButton,
@@ -7,14 +7,14 @@ import {
   StyledTitleWrapper,
   TitleWrapper,
 } from './index.styled';
-import { Flex, Form, Input } from 'antd';
-import { MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
-import { EditOutlined } from '@ant-design/icons';
-import { RiRobot2Line } from 'react-icons/ri';
-import { useTheme } from 'styled-components';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
-import type { Pilot } from '@unpod/constants/types';
+import {Flex, Form, Input} from 'antd';
+import {MdOutlineCheck, MdOutlineClose} from 'react-icons/md';
+import {EditOutlined} from '@ant-design/icons';
+import {RiRobot2Line} from 'react-icons/ri';
+import {useTheme} from 'styled-components';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
+import type {Pilot} from '@unpod/constants/types';
 
 type AgentTitleProps = {
   agentData: Pilot;
@@ -22,7 +22,7 @@ type AgentTitleProps = {
   onClose?: () => void;
 };
 
-const AgentTitle = ({ agentData, onSave, onClose }: AgentTitleProps) => {
+const AgentTitle = ({agentData, onSave, onClose}: AgentTitleProps) => {
   const [title, setTitle] = useState(agentData?.name || '');
   const [editTitle, setEditTitle] = useState(!title);
   const theme = useTheme();
@@ -51,7 +51,7 @@ const AgentTitle = ({ agentData, onSave, onClose }: AgentTitleProps) => {
     <Flex align="start" gap={'small'}>
       {!editTitle && (
         <StyledIconWrapper>
-          <RiRobot2Line fontSize={mobileScreen ? 16 : 21} />
+          <RiRobot2Line fontSize={mobileScreen ? 16 : 21}/>
         </StyledIconWrapper>
       )}
       <StyledTitleWrapper>
@@ -82,10 +82,10 @@ const AgentTitle = ({ agentData, onSave, onClose }: AgentTitleProps) => {
             {agentData?.handle && (
               <>
                 <StyledActionIcon onClick={handleOnSaveTitle}>
-                  <MdOutlineCheck fontSize={21} />
+                  <MdOutlineCheck fontSize={21}/>
                 </StyledActionIcon>
                 <StyledActionIcon className="close-btn" onClick={handleOnClose}>
-                  <MdOutlineClose fontSize={21} />
+                  <MdOutlineClose fontSize={21}/>
                 </StyledActionIcon>
               </>
             )}
@@ -93,7 +93,7 @@ const AgentTitle = ({ agentData, onSave, onClose }: AgentTitleProps) => {
         ) : (
           <>
             <TitleWrapper>
-              <StyledTitle level={3} ellipsis={{ tooltip: true }}>
+              <StyledTitle level={3} ellipsis={{tooltip: true}}>
                 {title}
               </StyledTitle>
             </TitleWrapper>

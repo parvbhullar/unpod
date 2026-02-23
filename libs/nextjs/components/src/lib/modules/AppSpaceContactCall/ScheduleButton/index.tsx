@@ -1,24 +1,9 @@
-import React, { Fragment, useMemo, useState } from 'react';
+import React, {Fragment, useMemo, useState} from 'react';
 
-import {
-  Button,
-  Calendar,
-  type CalendarProps,
-  Form,
-  Modal,
-  Select,
-  Space,
-  theme,
-  Typography,
-} from 'antd';
-import {
-  MdArrowDropDown,
-  MdArrowDropUp,
-  MdCalendarMonth,
-  MdScheduleSend,
-} from 'react-icons/md';
-import { getDateObject } from '@unpod/helpers/DateHelper';
-import type { Dayjs } from 'dayjs';
+import {Button, Calendar, type CalendarProps, Form, Modal, Select, Space, theme, Typography,} from 'antd';
+import {MdArrowDropDown, MdArrowDropUp, MdCalendarMonth, MdScheduleSend,} from 'react-icons/md';
+import {getDateObject} from '@unpod/helpers/DateHelper';
+import type {Dayjs} from 'dayjs';
 import AppDate from '../../../antd/AppDate';
 import AppTime from '../../../antd/AppTime';
 import AppSelect from '../../../antd/AppSelect';
@@ -31,11 +16,11 @@ import {
   StyledMenuItem,
   StyledModalContainer,
 } from './index.styled';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Option } = Select;
-const { Text } = Typography;
-const { Item, useForm } = Form;
+const {Option} = Select;
+const {Text} = Typography;
+const {Item, useForm} = Form;
 
 const items: ScheduleItem[] = [
   {
@@ -59,8 +44,8 @@ const items: ScheduleItem[] = [
 ];
 
 const repeatOptions: RepeatOption[] = [
-  { label: 'schedule.once', value: 'once', mode: 'date', calendar: 'month' },
-  { label: 'schedule.daily', value: 'daily', mode: 'date', calendar: 'month' },
+  {label: 'schedule.once', value: 'once', mode: 'date', calendar: 'month'},
+  {label: 'schedule.daily', value: 'daily', mode: 'date', calendar: 'month'},
   {
     label: 'schedule.weekly',
     value: 'weekly',
@@ -124,14 +109,14 @@ type ScheduleButtonProps = {
 };
 
 const ScheduleButton = ({
-  pilot,
-  onSchedule,
-  loading,
-  ...restProps
-}: ScheduleButtonProps) => {
-  const { token } = theme.useToken();
+                          pilot,
+                          onSchedule,
+                          loading,
+                          ...restProps
+                        }: ScheduleButtonProps) => {
+  const {token} = theme.useToken();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const wrapperStyle = {
     border: `1px solid ${token.colorBorderSecondary}`,
@@ -240,11 +225,11 @@ const ScheduleButton = ({
         menu={{
           items: [
             {
-              label: formatMessage({ id: 'schedule.title' }),
+              label: formatMessage({id: 'schedule.title'}),
               key: 'schedule-ask',
               icon: (
                 <span className="anticon">
-                  <MdScheduleSend fontSize={16} />
+                  <MdScheduleSend fontSize={16}/>
                 </span>
               ),
             },
@@ -254,9 +239,9 @@ const ScheduleButton = ({
         onOpenChange={setOpenSchedule}
         icon={
           openSchedule ? (
-            <MdArrowDropUp fontSize={18} />
+            <MdArrowDropUp fontSize={18}/>
           ) : (
-            <MdArrowDropDown fontSize={18} />
+            <MdArrowDropDown fontSize={18}/>
           )
         }
         buttonsRender={([leftButton, rightButton]) => [
@@ -284,15 +269,15 @@ const ScheduleButton = ({
       <Modal
         title={
           openDateTime
-            ? formatMessage({ id: 'schedule.pickDateTime' })
-            : formatMessage({ id: 'schedule.title' })
+            ? formatMessage({id: 'schedule.pickDateTime'})
+            : formatMessage({id: 'schedule.title'})
         }
         open={isModalOpen}
         onCancel={handleCancel}
         width={openDateTime ? 650 : 350}
         styles={{
-          body: { padding: 0 },
-          header: { padding: '20px 16px 0 16px' },
+          body: {padding: 0},
+          header: {padding: '20px 16px 0 16px'},
         }}
         footer={null}
         centered
@@ -325,7 +310,7 @@ const ScheduleButton = ({
                     rules={[
                       {
                         required: true,
-                        message: formatMessage({ id: 'schedule.selectOption' }),
+                        message: formatMessage({id: 'schedule.selectOption'}),
                       },
                     ]}
                   >
@@ -338,7 +323,7 @@ const ScheduleButton = ({
                     >
                       {repeatOptions.map((option) => (
                         <Option key={option.value} value={option.value}>
-                          {formatMessage({ id: option.label })}
+                          {formatMessage({id: option.label})}
                         </Option>
                       ))}
                     </AppSelect>
@@ -397,15 +382,15 @@ const ScheduleButton = ({
                     key={item.key}
                     onClick={() => onScheduleItemClick(item)}
                   >
-                    <Text>{formatMessage({ id: item.label })}</Text>
+                    <Text>{formatMessage({id: item.label})}</Text>
                     <Text>{item.time}</Text>
                   </StyledMenuItem>
                 ))}
                 <StyledMenuItem onClick={() => setOpenDateTime(true)}>
                   <Space>
-                    <MdCalendarMonth fontSize={18} />
+                    <MdCalendarMonth fontSize={18}/>
                     <Text>
-                      {formatMessage({ id: 'schedule.pickDateTime' })}
+                      {formatMessage({id: 'schedule.pickDateTime'})}
                     </Text>
                   </Space>
                 </StyledMenuItem>

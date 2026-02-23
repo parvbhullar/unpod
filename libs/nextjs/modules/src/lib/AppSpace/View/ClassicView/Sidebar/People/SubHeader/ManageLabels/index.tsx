@@ -1,18 +1,14 @@
-import { useState } from 'react';
-import { Button, Space, Typography } from 'antd';
-import { MdAdd, MdDeleteOutline, MdEdit } from 'react-icons/md';
+import {useState} from 'react';
+import {Button, Space, Typography} from 'antd';
+import {MdAdd, MdDeleteOutline, MdEdit} from 'react-icons/md';
 import AddTagForm from './AddTagForm';
-import {
-  StyledContent,
-  StyledTagContainer,
-  StyledWrapper,
-} from './index.styled';
-import { AppConfirmDeletePopover } from '@unpod/components/antd';
-import { deleteDataApi, useInfoViewActionsContext } from '@unpod/providers';
+import {StyledContent, StyledTagContainer, StyledWrapper,} from './index.styled';
+import {AppConfirmDeletePopover} from '@unpod/components/antd';
+import {deleteDataApi, useInfoViewActionsContext} from '@unpod/providers';
 import AppTabs from '@unpod/components/antd/AppTabs';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 type LabelTag = {
   slug?: string;
@@ -26,12 +22,12 @@ type ManageLabelsProps = {
 };
 
 const ManageLabels = ({
-  labels,
-  currentSpace,
-  reCallAPI,
-}: ManageLabelsProps) => {
+                        labels,
+                        currentSpace,
+                        reCallAPI,
+                      }: ManageLabelsProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [activeTab, setActiveTab] = useState('list');
   const [selectedTag, setSelectedTag] = useState<LabelTag | null>(null);
@@ -88,7 +84,7 @@ const ManageLabels = ({
       items={[
         {
           key: 'list',
-          label: formatMessage({ id: 'tab.labels' }),
+          label: formatMessage({id: 'tab.labels'}),
           children: activeTab === 'list' && (
             <StyledWrapper>
               {(labels.default_tags || []).map((tag) => (
@@ -117,20 +113,20 @@ const ManageLabels = ({
                     <Button
                       type="text"
                       size="small"
-                      icon={<MdEdit fontSize={18} />}
+                      icon={<MdEdit fontSize={18}/>}
                       onClick={() => onEditTag(tag)}
                     />
 
                     <AppConfirmDeletePopover
-                      title={formatMessage({ id: 'manageLabels.delete' })}
-                      message={formatMessage({ id: 'manageLabels.message' })}
+                      title={formatMessage({id: 'manageLabels.delete'})}
+                      message={formatMessage({id: 'manageLabels.message'})}
                       onConfirm={() => onDeleteTag(tag)}
                     >
                       <Button
                         type="text"
                         size="small"
                         shape="circle"
-                        icon={<MdDeleteOutline fontSize={18} />}
+                        icon={<MdDeleteOutline fontSize={18}/>}
                       />
                     </AppConfirmDeletePopover>
                   </Space>
@@ -142,8 +138,8 @@ const ManageLabels = ({
         {
           key: 'form',
           label: selectedTag
-            ? formatMessage({ id: 'tab.editLabels' })
-            : formatMessage({ id: 'tab.newLabels' }),
+            ? formatMessage({id: 'tab.editLabels'})
+            : formatMessage({id: 'tab.newLabels'}),
           children: activeTab === 'form' && (
             <AddTagForm
               selectedTag={selectedTag}
@@ -155,7 +151,7 @@ const ManageLabels = ({
       ]}
       activeKey={activeTab}
       onChange={onTabChange}
-      style={{ marginTop: -16 }}
+      style={{marginTop: -16}}
       tabBarExtraContent={
         activeTab === 'list' && (
           <Button
@@ -163,10 +159,10 @@ const ManageLabels = ({
             type="primary"
             ghost
             shape="round"
-            icon={<MdAdd fontSize={16} />}
+            icon={<MdAdd fontSize={16}/>}
             onClick={onAddTag}
           >
-            {formatMessage({ id: 'manageLabels.add' })}
+            {formatMessage({id: 'manageLabels.add'})}
           </Button>
         )
       }

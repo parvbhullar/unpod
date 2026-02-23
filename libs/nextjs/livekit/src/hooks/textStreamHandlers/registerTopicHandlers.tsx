@@ -1,5 +1,5 @@
-import { processLiveKitTextStream } from '@unpod/helpers';
-import type { MutableRefObject } from 'react';
+import {processLiveKitTextStream} from '@unpod/helpers';
+import type {MutableRefObject} from 'react';
 
 type AnyMessage = {
   data: string;
@@ -47,14 +47,14 @@ type UnregisterTopicHandlersOptions = {
  * @returns {Function[]} Array of unregister functions for cleanup
  */
 export const registerTopicHandlers = ({
-  room,
-  topics,
-  registeredTopics,
-  didUnmount,
-  setLastMessage,
-  trackMessageSource,
-  MESSAGE_SOURCE,
-}: RegisterTopicHandlersOptions) => {
+                                        room,
+                                        topics,
+                                        registeredTopics,
+                                        didUnmount,
+                                        setLastMessage,
+                                        trackMessageSource,
+                                        MESSAGE_SOURCE,
+                                      }: RegisterTopicHandlersOptions) => {
   console.log(
     '🔧 Registering LiveKit text stream handlers for topics:',
     topics,
@@ -140,10 +140,10 @@ export const registerTopicHandlers = ({
  * @param {React.MutableRefObject<Set>} options.registeredTopics - Ref containing Set of registered topics
  */
 export const unregisterTopicHandlers = ({
-  unregisterFunctions,
-  topics,
-  registeredTopics,
-}: UnregisterTopicHandlersOptions) => {
+                                          unregisterFunctions,
+                                          topics,
+                                          registeredTopics,
+                                        }: UnregisterTopicHandlersOptions) => {
   console.log('🧹 Cleaning up topic handlers');
 
   // Remove text stream handlers

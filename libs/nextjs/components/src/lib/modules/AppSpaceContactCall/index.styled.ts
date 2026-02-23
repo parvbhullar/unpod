@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import { Input } from 'antd';
-import { AppHeaderButton } from '../../common/AppPageHeader';
-import { GlobalTheme } from '@unpod/constants';
+import {Input} from 'antd';
+import {AppHeaderButton} from '../../common/AppPageHeader';
+import {GlobalTheme} from '@unpod/constants';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 export const StyledContentRoot = styled.div`
   min-width: 500px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     min-width: 100%;
   }
 
@@ -19,22 +19,22 @@ export const StyledContentRoot = styled.div`
 `;
 
 export const StyledCallButton = styled(AppHeaderButton)`
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     height: 40px !important;
-    border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.radius.base + 20}px !important;
+    border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.radius.base + 20}px !important;
   }
 `;
 
 export const StyledEditButton = styled(AppHeaderButton)`
   width: 100px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     height: 40px !important;
-    border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.radius.base + 20}px !important;
+    border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.radius.base + 20}px !important;
   }
 `;
 
