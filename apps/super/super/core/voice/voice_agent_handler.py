@@ -46,6 +46,8 @@ from time import perf_counter
 import traceback
 from super.core.voice.observers.metrics import CustomMetricObserver
 from super_services.voice.models.config import MessageCallBack
+from super_services.voice.models.config import MessageCallBack
+from super.core.voice.observers.metrics import CustomMetricObserver
 from super.core.voice.livekit.lite_handler import LiveKitLiteHandler
 from super.core.voice.pipecat.handler import PipecatVoiceHandler
 from super.core.voice.pipecat.lite_handler import LiteVoiceHandler
@@ -54,7 +56,10 @@ from super.core.voice.common.prefect import trigger_post_call
 from super.core.voice.schema import CallStatusEnum
 from super.core.voice.workflows.pre_call import PreCallWorkFlow
 from super.core.voice.common.common import send_web_notification
-import random
+
+from super.core.voice.common.services import update_task_with_status
+from super.core.voice.common.services import save_execution_log
+from super_services.db.services.schemas.task import TaskStatusEnum
 
 STARTUP_STAGE_BUDGETS_MS = {
     "room_connect": 1200,
@@ -283,9 +288,7 @@ def _prewarm_embedding_model(cache: ServiceCache, logger: logging.Logger) -> Non
         _start = perf_counter()
 
         # Check embedding backend from env (default: onnx for faster init)
-        embedding_backend = os.getenv(
-            "EMBEDDING_BACKEND", "onnx"
-        ).lower()
+        embedding_backend = os.getenv("EMBEDDING_BACKEND", "onnx").lower()
         model_name = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
         if embedding_backend == "onnx" and "minilm" in model_name.lower():
@@ -381,10 +384,15 @@ def prewarm_process(proc) -> None:
     try:
         _pg_start = perf_counter()
         from super_services.libs.core.postgres import _get_pool
+
         _get_pool()
-        logger.info(f"[PREWARM] PostgreSQL pool created: {(perf_counter() - _pg_start) * 1000:.0f}ms")
+        logger.info(
+            f"[PREWARM] PostgreSQL pool created: {(perf_counter() - _pg_start) * 1000:.0f}ms"
+        )
     except Exception as e:
-        logger.warning(f"[PREWARM] PostgreSQL pool prewarm failed (will init lazily): {e}")
+        logger.warning(
+            f"[PREWARM] PostgreSQL pool prewarm failed (will init lazily): {e}"
+        )
 
     logger.info(
         f"[PREWARM] Process prewarm completed - "
@@ -721,10 +729,19 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             The S3 URL of the recording, or empty string if failed
         """
         try:
-            self._logger.info(f"[RECORDING] Starting session recording for room: {room_name}")
+            self._logger.info(
+                f"[RECORDING] Starting session recording for room: {room_name}"
+            )
 
             # Check if S3 credentials are configured
-            if not all([AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME, S3_ACCESS_KEY, S3_SECRET_KEY]):
+            if not all(
+                [
+                    AWS_STORAGE_BUCKET_NAME,
+                    AWS_S3_REGION_NAME,
+                    S3_ACCESS_KEY,
+                    S3_SECRET_KEY,
+                ]
+            ):
                 self._logger.warning(
                     "[RECORDING] S3 credentials not fully configured. "
                     "Set S3_ACCESS_KEY, S3_SECRET_KEY, AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME"
@@ -753,11 +770,15 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             await lkapi.aclose()
 
             recording_url = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/livekit/{room_name}.ogg"
-            self._logger.info(f"[RECORDING] Session recording started. URL: {recording_url}")
+            self._logger.info(
+                f"[RECORDING] Session recording started. URL: {recording_url}"
+            )
             return recording_url
 
         except Exception as e:
-            self._logger.error(f"[RECORDING] Failed to start session recording: {str(e)}")
+            self._logger.error(
+                f"[RECORDING] Failed to start session recording: {str(e)}"
+            )
             self._logger.error(traceback.format_exc())
             return ""
 
@@ -770,7 +791,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
     ):
         try:
             if _agent:
-                await self._start_session_recording(ctx,user_state)
+                await self._start_session_recording(ctx, user_state)
                 await self._init_event_bridge(ctx)
                 await self._signal_agent_joined(ctx, user_state)
                 if self._event_bridge:
@@ -778,9 +799,14 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
 
                 # Check if this is a LiveKit native handler
                 from super.core.voice.livekit.lite_handler import LiveKitLiteHandler
-                from super.core.voice.testing_agents.vanilla_handler import VanillaAgenHandler
 
-                if isinstance(_agent, LiveKitLiteHandler) or isinstance(_agent, VanillaAgenHandler):
+                from super.core.voice.testing_agents.vanilla_handler import (
+                    VanillaAgenHandler,
+                )
+
+                if isinstance(_agent, LiveKitLiteHandler) or isinstance(
+                    _agent, VanillaAgenHandler
+                ):
                     await _agent.execute_with_context(ctx)
                 else:
                     # Pipecat handlers - use standard execute
@@ -1290,13 +1316,15 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         # Use instance handler_type (set in __init__ with env var fallback)
         agent_provider = self.handler_type.lower()
 
-        agent_mode=os.getenv("RUN_TYPE")
+        agent_mode = os.getenv("RUN_TYPE")
 
         if agent_mode == "vanilla":
-
             print("\n\n\n\n creating vanilla handler \n\n\n")
 
-            from super.core.voice.testing_agents.vanilla_handler import VanillaAgenHandler
+            from super.core.voice.testing_agents.vanilla_handler import (
+                VanillaAgenHandler,
+            )
+
             handler_class = VanillaAgenHandler
             handler_name = "VanillaAgenHandler"
 
@@ -1500,6 +1528,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             except Exception as e:
                 self._logger.error(f"Error in SDK config resolution: {e}")
                 import traceback
+
                 self._logger.error(traceback.format_exc())
                 return None
 
@@ -1511,7 +1540,9 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 return_exceptions=False,
             )
         except asyncio.TimeoutError:
-            self._logger.error("[SDK] Timeout waiting for participant during config resolution")
+            self._logger.error(
+                "[SDK] Timeout waiting for participant during config resolution"
+            )
             return None
         except Exception as e:
             self._logger.error(f"[SDK] Error in parallel SDK setup: {e}")
@@ -1554,8 +1585,10 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         finally:
             await self._cleanup_session(user_state)
 
-    async def _start_session_recording(self,ctx,user_state):
-        recording_session_id = self._session_id or str(user_state.thread_id) or ctx.room.name
+    async def _start_session_recording(self, ctx, user_state):
+        recording_session_id = (
+            self._session_id or str(user_state.thread_id) or ctx.room.name
+        )
         self._track_task(
             asyncio.create_task(
                 self._start_recording_background(
@@ -1975,21 +2008,23 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         from super.core.voice.livekit.telephony import SIPManager
         return SIPManager.get_trunk_id(user_state.model_config or {})
 
-    async def _instant_handover(self,user_state: UserState,trunk_id,ctx:JobContext):
+    async def _instant_handover(self, user_state: UserState, trunk_id, ctx: JobContext):
         config = user_state.model_config
 
         if config.get("instant_handover", False):
-            from super.core.voice.prompts.guidelines import HANOVER_INSTRUCTIONS
             room_name = ctx.room.name
 
             handover_number = config.get("handover_number")
 
             if isinstance(handover_number, list):
                 import random
+
                 handover_number = random.choice(handover_number)
             handover_number = normalize_phone_number(handover_number)
 
-            print(f"\n instant handover call  {handover_number} handover {room_name} \n")
+            print(
+                f"\n instant handover call  {handover_number} handover {room_name} \n"
+            )
 
             try:
                 await ctx.api.sip.create_sip_participant(
@@ -2016,9 +2051,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                         self._logger.info(
                             f"Starting transcription for existing participant: {p.identity}"
                         )
-                        await self._agent._start_participant_transcription(
-                            p, room
-                        )
+                        await self._agent._start_participant_transcription(p, room)
 
                     self._logger.info(
                         f"Started multi-participant transcription after handover"
@@ -2032,91 +2065,99 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 self._logger.warning(
                     "Handover timeout: human_agent not joined within 30s"
                 )
-                user_state.transcript.append({
-                    "role": "system",
-                    "type": "instant_handover",
-                    "message": "human agent did not join in time"
-                })
+                user_state.transcript.append(
+                    {
+                        "role": "system",
+                        "type": "instant_handover",
+                        "message": "human agent did not join in time",
+                    }
+                )
                 return
 
             except Exception as e:
-                print(f"\n\n {'=' * 100} \n\n {e} \n\n failed transfer call \n\n {'=' * 100}")
+                print(
+                    f"\n\n {'=' * 100} \n\n {e} \n\n failed transfer call \n\n {'=' * 100}"
+                )
 
-                user_state.transcript.append({
-                    "role": "system",
-                    "type": "instant_handover",
-                    "message": "human agent busy"
-                })
+                user_state.transcript.append(
+                    {
+                        "role": "system",
+                        "type": "instant_handover",
+                        "message": "human agent busy",
+                    }
+                )
 
                 return
 
-            user_state.transcript.append({
-                "role": "system",
-                "type": "instant_handover",
-                "message": "call successfully handed over to human agent"
-            })
+            user_state.transcript.append(
+                {
+                    "role": "system",
+                    "type": "instant_handover",
+                    "message": "call successfully handed over to human agent",
+                }
+            )
 
     async def _create_sip_participant_in_room(
-            self, ctx: JobContext, data: Dict[str, Any], user_state: UserState
-        ) -> Optional[rtc.RemoteParticipant]:
-            """Create SIP participant inside the room - based on sip_lifecycle.py"""
-            try:
-                # trunk_id = data.get("trunk_id", os.getenv("SIP_OUTBOUND_TRUNK_ID"))
-                phone_number = normalize_phone_number(user_state.contact_number)
-                trunk_id = self.get_trunk_id(user_state)
-                room_name = ctx.room.name
-                identity = f"idt_{phone_number}"
+        self, ctx: JobContext, data: Dict[str, Any], user_state: UserState
+    ) -> Optional[rtc.RemoteParticipant]:
+        """Create SIP participant inside the room - based on sip_lifecycle.py"""
+        try:
+            # trunk_id = data.get("trunk_id", os.getenv("SIP_OUTBOUND_TRUNK_ID"))
+            phone_number = normalize_phone_number(user_state.contact_number)
+            trunk_id = self.get_trunk_id(user_state)
+            room_name = ctx.room.name
+            identity = f"idt_{phone_number}"
 
-                if not user_state.extra_data and not isinstance(
-                    user_state.extra_data, dict
-                ):
-                    user_state.extra_data = {}
+            if not user_state.extra_data and not isinstance(
+                user_state.extra_data, dict
+            ):
+                user_state.extra_data = {}
 
-                user_state.extra_data["trunk_id"] = trunk_id
-                user_state.extra_data["identity"] = identity
+            user_state.extra_data["trunk_id"] = trunk_id
+            user_state.extra_data["identity"] = identity
 
-                self._logger.info(
-                    f"Creating SIP participant: trunk={trunk_id}, phone={phone_number}, room={room_name}"
-                )
-                if not phone_number:
-                    return ctx.wait_for_participant()
+            self._logger.info(
+                f"Creating SIP participant: trunk={trunk_id}, phone={phone_number}, room={room_name}"
+            )
+            if not phone_number:
+                return ctx.wait_for_participant()
 
-                for i in range(2):
-                    try:
-                        await ctx.api.sip.create_sip_participant(
-                            api.CreateSIPParticipantRequest(
-                                sip_trunk_id=trunk_id,
-                                sip_call_to=phone_number,
-                                room_name=room_name,
-                                participant_identity=identity,
-                                participant_name=user_state.user_name,
-                                krisp_enabled=True,
-                            )
+            for i in range(2):
+                try:
+                    await ctx.api.sip.create_sip_participant(
+                        api.CreateSIPParticipantRequest(
+                            sip_trunk_id=trunk_id,
+                            sip_call_to=phone_number,
+                            room_name=room_name,
+                            participant_identity=identity,
+                            participant_name=user_state.user_name,
+                            krisp_enabled=True,
                         )
+                    )
 
-                        # Wait for participant to connect
-                        participant = await ctx.wait_for_participant(identity=identity)
-                        self._logger.info(
-                            f"SIP participant connected: {participant.identity}"
-                        )
+                    # Wait for participant to connect
+                    participant = await ctx.wait_for_participant(identity=identity)
+                    self._logger.info(
+                        f"SIP participant connected: {participant.identity}"
+                    )
 
-                        if participant:
-                            await self._instant_handover(user_state, trunk_id,ctx)
+                    if participant:
+                        await self._instant_handover(user_state, trunk_id, ctx)
 
-                        return participant
+                    return participant
 
-                    except Exception as e:
-                        self._logger.error(
-                            f"Failed to create SIP participant retrying {i+1}"
-                        )
-                        trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
+                except Exception as e:
+                    self._logger.error(
+                        f"Failed to create SIP participant retrying {i+1}"
+                    )
+                    trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
 
-            except Exception as e:
-                self._logger.error(f"Error creating SIP participant: {e}")
-                import traceback
+        except Exception as e:
+            self._logger.error(f"Error creating SIP participant: {e}")
+            import traceback
 
-                self._logger.error(traceback.format_exc())
-                return None
+            self._logger.error(traceback.format_exc())
+            return None
 
     async def _resolve_space_id_background(
         self, user_data: Dict[str, Any], space_token: Optional[str]
@@ -2132,15 +2173,17 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 asyncio.to_thread(get_space_id, space_token),
                 timeout=1.0,
             )
-            if space_id and isinstance(user_data, dict) and not user_data.get("space_id"):
+            if (
+                space_id
+                and isinstance(user_data, dict)
+                and not user_data.get("space_id")
+            ):
                 user_data["space_id"] = space_id
                 self._logger.info(
                     f"[SDK] Background space_id resolved from token: {space_id}"
                 )
         except asyncio.TimeoutError:
-            self._logger.warning(
-                "[SDK] Background space_id lookup timed out after 1s"
-            )
+            self._logger.warning("[SDK] Background space_id lookup timed out after 1s")
         except Exception as e:
             self._logger.warning(f"[SDK] Background space_id lookup failed: {e}")
 
@@ -2404,12 +2447,21 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             print(f"[TIMING] metadata: {metadata}")
 
             user_data = metadata.get("data", {})
-
+            update_task_with_status(user_data.get("task_id"),CallStatusEnum.InCall)
+            await save_execution_log(
+                user_data.get("task_id"),
+                "call-request-received",
+                TaskStatusEnum.completed,
+                {"status": "call-request-received by livekit"},
+            )
             # Determine call type early for optimization decisions
             call_type = (
                 "outbound" if metadata.get("call_type") == "outbound" else "inbound"
             )
 
+            print(
+                f"{'='*100} \n\n\n sending call to {user_data.get('contact_number')} \n\n\n {'='*100}"
+            )
             # Extract modality from metadata (multimodality -> modality)
             # Default to text_audio for full voice mode
             raw_modality = metadata.get("multimodality", "text_audio")
@@ -3136,11 +3188,8 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                         str(agent_text), role="assistant", user_state=user_state
                     )
 
-
         @session.on("user_input_transcribed")
         def on_user_input_transcribed(ev: UserInputTranscribedEvent):
-
-
             print(f"identity in {ev.identity} on_user_input_transcribed  ")
             if ev.is_final and ev.transcript:
                 transcript_entry = {
@@ -3151,7 +3200,9 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 user_state.transcript.append(transcript_entry)
                 self.message_callback(ev.transcript, role="user", user_state=user_state)
 
-    async def start_session_recording(self, room_name: str, session_id: Optional[str] = None) -> str:
+    async def start_session_recording(
+        self, room_name: str, session_id: Optional[str] = None
+    ) -> str:
         """Start room composite egress recording to S3.
 
         Args:
@@ -3235,6 +3286,31 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
 
             except Exception as e:
                 pass
+        try:
+            extra_data = (
+                user_state.extra_data
+                if isinstance(getattr(user_state, "extra_data", None), dict)
+                else {}
+            )
+            latency_metrics = extra_data.get("latency_metrics", [])
+            if isinstance(latency_metrics, list) and latency_metrics:
+                llm_values = []
+                for item in latency_metrics:
+                    if not isinstance(item, dict):
+                        continue
+                    for key in ("llm_latency", "realtime_latency"):
+                        value = item.get(key)
+                        if isinstance(value, (int, float)) and value > 0:
+                            llm_values.append(float(value))
+
+                if llm_values:
+                    usage_data["llm_latency_samples"] = len(llm_values)
+                    usage_data["llm_latency_avg_seconds"] = round(
+                        sum(llm_values) / len(llm_values), 4
+                    )
+                    usage_data["llm_latency_last_seconds"] = round(llm_values[-1], 4)
+        except Exception:
+            pass
 
         return usage_data
 

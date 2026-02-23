@@ -4,12 +4,33 @@ from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Any, Dict
 import pytest
 
-from livekit.agents import AgentSession, ChatContext, inference, llm
+from livekit.agents import ChatContext, inference, llm
+from super.core.voice.schema import UserState
 
 from super.core.voice.livekit.livekit_lite_agent import LiveKitLiteAgent
 from super.core.voice.schema import UserState
 from super.core.voice.services.livekit_services import LiveKitServiceFactory
 from super.core.voice.livekit.lite_handler import LiveKitLiteHandler
+# Embedding model for semantic similarity (cross-language support)
+_EMBEDDING_MODEL: Optional[Any] = None
+_EMBEDDING_AVAILABLE: bool = False
+
+
+def _get_embedding_model():
+    """Lazy-load OpenAI embedding model for semantic similarity."""
+    global _EMBEDDING_MODEL, _EMBEDDING_AVAILABLE
+    if _EMBEDDING_MODEL is not None:
+        return _EMBEDDING_MODEL
+    try:
+        from openai import OpenAI
+
+        client = OpenAI()
+        _EMBEDDING_MODEL = client
+        _EMBEDDING_AVAILABLE = True
+        return _EMBEDDING_MODEL
+    except Exception:
+        _EMBEDDING_AVAILABLE = False
+        return None
 
 
 @dataclass
@@ -96,7 +117,7 @@ class EvalResults:
 class EvalTestAgent:
     def __init__(self, model_config):
         self.config = model_config
-        self.service_factory = LiveKitServiceFactory(model_config)
+        self.service_factory = None
 
     async def evaluate_call_records(
         self,
@@ -114,9 +135,9 @@ class EvalTestAgent:
         agent_responses = eval_records.get("agent_responses", []) or []
         tool_calls = eval_records.get("tool_calls", []) or []
 
-        threshold = float(self.config.get("eval_answer_threshold", 2.0))
+        threshold = float(self.config.get("eval_answer_threshold", 35.0))
         question_match_threshold = float(
-            self.config.get("eval_question_match_threshold", 2.0)
+            self.config.get("eval_question_match_threshold", 35.0)
         )
         results: List[Dict[str, Any]] = []
         passed_cases = 0
@@ -145,6 +166,7 @@ class EvalTestAgent:
 
                 actual_response = (matched_response or {}).get("content", "")
                 actual_tool = (matched_tool or {}).get("tool_name", "")
+                llm_latency = (matched_response or {}).get("llm_latency")
                 user_text = str(user_record.get("content", "") or "")
 
                 if not user_text.strip():
@@ -254,6 +276,11 @@ class EvalTestAgent:
                         "expected_tool": expected_tool or None,
                         "expected_intent": expected_intent or None,
                         "actual_response": actual_response or None,
+                        "llm_latency": (
+                            round(float(llm_latency), 4)
+                            if isinstance(llm_latency, (int, float))
+                            else None
+                        ),
                         "actual_tool": actual_tool or None,
                         "answer_similarity_score": round(answer_score, 2),
                         "answer_pass": answer_pass,
@@ -294,7 +321,12 @@ class EvalTestAgent:
         actual_tool: str = "",
         question_match_threshold: float = 35.0,
     ) -> Optional[tuple[int, Dict[str, Any], float]]:
-        """Pick best QA reference for one user record; returns None if below threshold."""
+        """
+        Pick best QA reference for one user record; returns None if below threshold.
+
+        Uses semantic embeddings for cross-language matching when available,
+        falls back to text similarity otherwise.
+        """
         if not user_text or not qa_pairs:
             return None
 
@@ -303,6 +335,48 @@ class EvalTestAgent:
         best_qa: Optional[Dict[str, Any]] = None
         best_score = -1.0
 
+        # Try semantic similarity first (supports cross-language matching)
+        use_semantic = self.config.get("use_semantic_matching", True)
+        if use_semantic and _EMBEDDING_AVAILABLE:
+            try:
+                questions = [str(qa.get("question", "") or "") for qa in qa_pairs]
+                semantic_scores = self._calculate_semantic_similarity_batch(
+                    user_text, questions
+                )
+                if semantic_scores:
+                    for idx, (qa, sem_score) in enumerate(
+                        zip(qa_pairs, semantic_scores)
+                    ):
+                        question = str(qa.get("question", "") or "")
+                        if not question:
+                            continue
+
+                        # Semantic score is 0-1, convert to 0-100
+                        score = sem_score * 100
+
+                        # Tool match bonus
+                        expected_tool = str(
+                            qa.get("tool_name", qa.get("expected_tool", "")) or ""
+                        ).lower()
+                        if (
+                            expected_tool
+                            and actual_tool_l
+                            and expected_tool == actual_tool_l
+                        ):
+                            score += 10.0
+
+                        if score > best_score:
+                            best_score = score
+                            best_idx = idx
+                            best_qa = qa
+
+                    if best_qa is not None and best_score >= question_match_threshold:
+                        return best_idx, best_qa, best_score
+            except Exception as e:
+                # Fall through to text similarity
+                print(f"Semantic matching failed, using text similarity: {e}")
+
+        # Fallback: text-based similarity
         for idx, qa in enumerate(qa_pairs):
             question = str(qa.get("question", "") or "")
             if not question:
@@ -325,6 +399,52 @@ class EvalTestAgent:
             return None
 
         return best_idx, best_qa, best_score
+
+    def _calculate_semantic_similarity_batch(
+        self, query: str, candidates: List[str]
+    ) -> Optional[List[float]]:
+        try:
+            client = _get_embedding_model()
+            if client is None:
+                return None
+
+            valid_indices = [i for i, c in enumerate(candidates) if c.strip()]
+            if not valid_indices:
+                return None
+
+            valid_candidates = [candidates[i] for i in valid_indices]
+
+            all_texts = [query] + valid_candidates
+            response = client.embeddings.create(
+                model="text-embedding-3-small",
+                input=all_texts,
+            )
+
+            embeddings = [item.embedding for item in response.data]
+            query_embedding = embeddings[0]
+            candidate_embeddings = embeddings[1:]
+
+            import math
+
+            def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
+                dot_product = sum(a * b for a, b in zip(vec1, vec2))
+                norm1 = math.sqrt(sum(a * a for a in vec1))
+                norm2 = math.sqrt(sum(b * b for b in vec2))
+                if norm1 == 0 or norm2 == 0:
+                    return 0.0
+                return dot_product / (norm1 * norm2)
+
+            results = [0.0] * len(candidates)
+            for i, valid_idx in enumerate(valid_indices):
+                results[valid_idx] = cosine_similarity(
+                    query_embedding, candidate_embeddings[i]
+                )
+
+            return results
+
+        except Exception as e:
+            print(f"Embedding calculation failed: {e}")
+            return None
 
     def _best_qa_similarity_only(
         self,
@@ -620,6 +740,11 @@ class EvalTestAgent:
         )
 
     def _main_llm(self) -> llm.LLM | llm.RealtimeModel:
+        if self.service_factory is None:
+            from super.core.voice.services.livekit_services import LiveKitServiceFactory
+
+            self.service_factory = LiveKitServiceFactory(self.config)
+
         llm_model = self.service_factory.create_llm()
 
         if not llm_model:
@@ -648,6 +773,10 @@ class EvalTestAgent:
         userdata = await self.new_userdata()
         agent_id = self.config.get("agent_id", "unknown")
         eval_results = EvalResults(agent_id=agent_id)
+
+        from livekit.agents import AgentSession
+        from super.core.voice.livekit.livekit_lite_agent import LiveKitLiteAgent
+        from super.core.voice.livekit.lite_handler import LiveKitLiteHandler
 
         async with (
             self._main_llm() as main_llm_model,
@@ -1207,18 +1336,18 @@ class EvalTestAgent:
             return 0.0, f"Error calculating similarity: {str(e)}"
 
     def _calculate_text_similarity(self, text1: str, text2: str) -> float:
-        """
-        Calculate simple text similarity as a fallback.
-        Uses word overlap (Jaccard similarity).
-        """
+        import difflib
+        import re
+
         if not text1 or not text2:
             return 0.0
 
-        # Normalize texts
-        words1 = set(text1.lower().split())
-        words2 = set(text2.lower().split())
+        text1_n = re.sub(r"\s+", " ", str(text1).strip().lower())
+        text2_n = re.sub(r"\s+", " ", str(text2).strip().lower())
+        if not text1_n or not text2_n:
+            return 0.0
 
-        # Remove common stop words
+        # Keep compact stop words list focused on high-frequency function words.
         stop_words = {
             "the",
             "a",
@@ -1296,13 +1425,111 @@ class EvalTestAgent:
             "it",
         }
 
-        words1 = words1 - stop_words
-        words2 = words2 - stop_words
+        # Canonical mappings for frequent paraphrases in QA and conversational text.
+        synonym_groups = [
+            {"definition", "define", "meaning", "means", "explain", "description"},
+            {"question", "query", "ask", "asking"},
+            {"similar", "similarity", "same", "equivalent", "alike"},
+            {"price", "cost", "fee", "charge"},
+            {"buy", "purchase", "order"},
+            {"create", "make", "build", "generate"},
+            {"cancel", "stop", "terminate"},
+            {"start", "begin", "initiate"},
+            {"error", "issue", "problem", "bug"},
+            {"update", "change", "modify", "edit"},
+            {"tool", "function", "method"},
+            {"user", "customer", "client"},
+            {"agent", "assistant", "bot"},
+        ]
+        synonym_map: Dict[str, str] = {}
+        for group in synonym_groups:
+            canonical = sorted(group)[0]
+            for word in group:
+                synonym_map[word] = canonical
 
-        if not words1 or not words2:
-            return 0.0
+        def _light_stem(token: str) -> str:
+            # Very light stemming to keep behavior predictable and dependency-free.
+            for suffix in ("ingly", "edly", "ing", "ed", "ies", "s"):
+                if token.endswith(suffix) and len(token) > len(suffix) + 2:
+                    if suffix == "ies":
+                        return token[:-3] + "y"
+                    return token[: -len(suffix)]
+            return token
 
-        intersection = words1.intersection(words2)
-        union = words1.union(words2)
+        def _tokenize(text: str) -> List[str]:
+            raw = re.findall(r"[a-z0-9]+", text)
+            cooked: List[str] = []
+            for token in raw:
+                if token in stop_words:
+                    continue
+                token = _light_stem(token)
+                token = synonym_map.get(token, token)
+                if token and token not in stop_words:
+                    cooked.append(token)
+            return cooked
 
-        return (len(intersection) / len(union)) * 100
+        def _char_trigrams(text: str) -> set[str]:
+            compact = re.sub(r"\s+", " ", text).strip()
+            if len(compact) < 3:
+                return {compact} if compact else set()
+            return {compact[i : i + 3] for i in range(len(compact) - 2)}
+
+        tokens1 = _tokenize(text1_n)
+        tokens2 = _tokenize(text2_n)
+        set1 = set(tokens1)
+        set2 = set(tokens2)
+
+        # 1) Token Jaccard.
+        jaccard = 0.0
+        if set1 or set2:
+            union = set1.union(set2)
+            jaccard = (
+                (len(set1.intersection(set2)) / len(union)) * 100 if union else 0.0
+            )
+
+        # 2) Token F1 to reward partial containment (short question vs longer wording).
+        token_f1 = 0.0
+        if set1 and set2:
+            inter = len(set1.intersection(set2))
+            precision = inter / len(set1)
+            recall = inter / len(set2)
+            if precision + recall > 0:
+                token_f1 = (2 * precision * recall / (precision + recall)) * 100
+
+        # 3) Character trigram Dice score for flexible rewording/typos.
+        tri1 = _char_trigrams(text1_n)
+        tri2 = _char_trigrams(text2_n)
+        trigram_score = 0.0
+        if tri1 and tri2:
+            trigram_score = (
+                2 * len(tri1.intersection(tri2)) / (len(tri1) + len(tri2))
+            ) * 100
+
+        # 4) Fuzzy sequence ratio (order-aware).
+        sequence_score = difflib.SequenceMatcher(None, text1_n, text2_n).ratio() * 100
+
+        # Blend scores. Weights favor semantic token overlap over exact wording.
+        score = (
+            0.40 * token_f1
+            + 0.25 * jaccard
+            + 0.20 * trigram_score
+            + 0.15 * sequence_score
+        )
+
+        # Strong containment hint for short/long paraphrases.
+        shorter, longer = (
+            (text1_n, text2_n) if len(text1_n) <= len(text2_n) else (text2_n, text1_n)
+        )
+        if len(shorter) >= 12 and shorter in longer:
+            score = max(score, 78.0)
+
+        # Light numeric consistency: reward same numbers, penalize conflicting numbers.
+        nums1 = set(re.findall(r"\d+(?:\.\d+)?", text1_n))
+        nums2 = set(re.findall(r"\d+(?:\.\d+)?", text2_n))
+        if nums1 and nums2:
+            if nums1 == nums2:
+                score += 4.0
+            elif nums1.isdisjoint(nums2):
+                score -= 8.0
+
+        return max(0.0, min(100.0, score))

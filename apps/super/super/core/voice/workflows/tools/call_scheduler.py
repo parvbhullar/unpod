@@ -20,7 +20,7 @@ class CallFollowUpSignatures(dspy.Signature):
     )
     transcript = dspy.InputField(desc="transcript of current call")
     logs = dspy.InputField(
-        desc="past calls with the user along with datetime, status of the call and transcript of precious calls"
+        desc="past calls with the user along with datetime, status of the call and transcript of previous calls"
     )
     current_date = dspy.InputField(desc="current date and time", default=datetime.now())
     requires_followup = dspy.OutputField(
@@ -44,13 +44,23 @@ class FollowUpAnalyzer(dspy.Module):
         super().__init__()
         self.analyzer = ChainOfThought(CallFollowUpSignatures)
 
-    def _get_logs(self, token, document_id):
+    def _get_logs(self, token, document_id, task_id):
         try:
             from bson import ObjectId
             from pymongo import MongoClient
             from super_services.libs.config import settings
 
             client = MongoClient(settings.MONGO_DSN)
+
+            if not task_id:
+                return []
+
+            task = TaskModel.get(task_id=task_id)
+
+            if not task.output.get("followup_count"):
+                return []
+
+            task_limit = int(task.output.get("followup_count", 5))
 
             db = client[settings.MONGO_DB]
 
@@ -69,7 +79,7 @@ class FollowUpAnalyzer(dspy.Module):
                     },
                 )
                 .sort([("created", -1)])
-                .limit(10)
+                .limit(task_limit)
             )
 
             if not logs:
@@ -110,7 +120,7 @@ class FollowUpAnalyzer(dspy.Module):
                         },
                     )
                     .sort([("created", -1)])
-                    .limit(10)
+                    .limit(task_limit)
                 )
 
             client.close()
@@ -163,8 +173,9 @@ class FollowUpAnalyzer(dspy.Module):
         token: str,
         document_id: str,
         available_slots: dict = {},
+        task_id: str = None,
     ) -> dspy.Prediction:
-        logs = self._get_logs(token, document_id)
+        logs = self._get_logs(token, document_id, task_id)
         max_calls = self._extract_max_calls(prompt)
         current_followup_count = self._get_current_followup_count(logs)
 

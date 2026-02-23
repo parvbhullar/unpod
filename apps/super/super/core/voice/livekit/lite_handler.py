@@ -257,6 +257,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         # Multi-participant STT tracking
         self._participant_stt_tasks: Dict[str, asyncio.Task] = {}
         self._participant_stt_streams: Dict[str, Any] = {}
+        self._pending_eval_llm_latencies: List[float] = []
 
         # Idle timeout configuration (seconds)
         self._idle_timeout_seconds: float = float(
@@ -756,6 +757,8 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             eval_records["user_messages"] = []
         if not isinstance(eval_records.get("sequence_counter"), int):
             eval_records["sequence_counter"] = 0
+        if not isinstance(eval_records.get("llm_latency_samples"), list):
+            eval_records["llm_latency_samples"] = []
 
         return eval_records
 
@@ -782,19 +785,59 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         except Exception as e:
             self._logger.debug(f"Failed to record user eval message: {e}")
 
-    def _record_eval_agent_response(self, content: str) -> None:
+    def _record_eval_llm_latency(
+        self,
+        llm_latency: Optional[float],
+        source: str = "llm_metrics",
+    ) -> None:
+        """Store per-turn LLM latency for post-call analysis."""
+        try:
+            if llm_latency is None:
+                return
+            llm_latency = float(llm_latency)
+            if llm_latency <= 0:
+                return
+
+            eval_records = self._ensure_eval_records()
+            if not eval_records:
+                return
+
+            self._pending_eval_llm_latencies.append(llm_latency)
+            eval_records["llm_latency_samples"].append(
+                {
+                    "sequence_id": self._next_eval_sequence(),
+                    "llm_latency": llm_latency,
+                    "source": source,
+                    "timestamp": datetime.utcnow().isoformat(),
+                }
+            )
+        except Exception as e:
+            self._logger.debug(f"Failed to record eval llm latency: {e}")
+
+    def _consume_eval_llm_latency(self) -> Optional[float]:
+        """Consume the next queued LLM latency value for response-level alignment."""
+        if not self._pending_eval_llm_latencies:
+            return None
+        return self._pending_eval_llm_latencies.pop(0)
+
+    def _record_eval_agent_response(
+        self,
+        content: str,
+        llm_latency: Optional[float] = None,
+    ) -> None:
         """Capture assistant response for call-end QA evaluation."""
         try:
             eval_records = self._ensure_eval_records()
             if not eval_records:
                 return
-            eval_records["agent_responses"].append(
-                {
-                    "sequence_id": self._next_eval_sequence(),
-                    "content": content,
-                    "timestamp": datetime.utcnow().isoformat(),
-                }
-            )
+            payload = {
+                "sequence_id": self._next_eval_sequence(),
+                "content": content,
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+            if llm_latency is not None:
+                payload["llm_latency"] = float(llm_latency)
+            eval_records["agent_responses"].append(payload)
         except Exception as e:
             self._logger.debug(f"Failed to record assistant eval response: {e}")
 
@@ -1304,6 +1347,10 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                         "realtime_avg": realtime_total / turn_count,
                     }
                 )
+                self.user_state.extra_data["latency_metrics"] = latency_data
+                self._record_eval_llm_latency(
+                    real_time_model_met, source="realtime_metrics"
+                )
                 print(
                     f"\n\n real_time_model_met avg : {realtime_total / turn_count} \n\n "
                 )
@@ -1342,6 +1389,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     prompt_tokens,
                     completion_tokens,
                 )
+                self._record_eval_llm_latency(llm_latency, source="llm_metrics")
 
                 print(f"\n{'=' * 60}")
                 print(f"Turn #{turn_count} Metrics:")
@@ -1871,7 +1919,8 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
         # Record agent response for quality metrics (Gap #2 fix)
         await self._record_agent_response_for_quality(content)
-        self._record_eval_agent_response(content)
+        response_llm_latency = self._consume_eval_llm_latency()
+        self._record_eval_agent_response(content, llm_latency=response_llm_latency)
 
         # Notify plugins
         await self.plugins.broadcast_event("on_agent_speech", content)

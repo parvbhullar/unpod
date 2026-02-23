@@ -2,6 +2,8 @@ import uuid
 import asyncio
 import requests
 from typing import Optional, Dict, Any
+
+from humanfriendly.terminal import output
 from super_services.db.services.models.task import (
     RunModel,
     TaskModel,
@@ -288,7 +290,6 @@ async def create_scheduled_task(task_id, time):
     if not task_id:
         return
 
-
     print(f"[TIMING] Creating scheduled task {task_id}")
 
     if isinstance(time, str):
@@ -301,12 +302,11 @@ async def create_scheduled_task(task_id, time):
 
         if followup_count:
             followup_count = int(followup_count)
-            followup_count+=1
+            followup_count += 1
         else:
             followup_count = 1
 
         if followup_count > 4:
-
             print("skipping task creation due to multiple followups")
             return
 
@@ -321,7 +321,7 @@ async def create_scheduled_task(task_id, time):
             "assignee": task.assignee,
             "status": TaskStatusEnum.scheduled,
             "execution_type": "call",
-            "output": {"scheduled_time": str(time),"followup_count":followup_count},
+            "output": {"scheduled_time": str(time), "followup_count": followup_count,"referenced_task":task.task_id},
             "input": task.input,
             "retry_attempt": 0,
             "scheduled_timestamp": int(time.timestamp()),
@@ -375,17 +375,16 @@ def schedule_redial_task(task_id, time, transcript):
         print(f"error rescheduling call{str(e)}")
         return False
 
-def get_temp_id(assignee):
-    if assignee and (
-            assignee.startswith("bob-card") or assignee.startswith("bobcard")
-    ):
-        return os.environ.get("BOB_TEMP","695b6bb36ca4495d4463e8d6") , False
 
-    return os.getenv("DEFAULT_TEMP","697a1118081ed531e53d20ee") , True
+def get_temp_id(assignee):
+    if assignee and (assignee.startswith("bob-card") or assignee.startswith("bobcard")):
+        return os.environ.get("BOB_TEMP", "695b6bb36ca4495d4463e8d6"), False
+
+    return os.getenv("DEFAULT_TEMP", "697a1118081ed531e53d20ee"), True
 
 
 def get_agent_number(user_state):
-    config= user_state.model_config
+    config = user_state.model_config
     if not config:
         return ""
 
@@ -394,17 +393,17 @@ def get_agent_number(user_state):
 
     trunk_id = user_state.extra_data.get("trunk_id")
     try:
-        trunks=config.get("telephony",[])
+        trunks = config.get("telephony", [])
 
         if not isinstance(trunks, list):
             return ""
 
         for trunk in trunks:
-            ass_trunk=trunk.get("association",{}).get("trunk_id","")
+            ass_trunk = trunk.get("association", {}).get("trunk_id", "")
             if ass_trunk == trunk_id:
-                number = trunk.get("number","")
+                number = trunk.get("number", "")
                 if number.startswith("+91"):
-                    number.replace("+91","0")
+                    number.replace("+91", "0")
                     return number
 
         return ""
@@ -413,22 +412,24 @@ def get_agent_number(user_state):
         print(f"unable to get agent number {str(e)}")
         return ""
 
+
 def get_brand_name(space_id):
-    query="""
-    select sporg.name as brand_name from space_spaceorganization as sporg 
-    Left join space_space as sp on sp.space_organization_id= sporg.id 
+    query = """
+    select sporg.name as brand_name from space_spaceorganization as sporg
+    Left join space_space as sp on sp.space_organization_id= sporg.id
     where sp.id = %(space_id)s
     """
 
     from super_services.libs.core.db import executeQuery
+
     try:
         res = executeQuery(query, {"space_id": space_id})
 
         return res.get("brand_name")
 
     except Exception as e:
-
         return ""
+
 
 async def send_retry_sms(user_state, task_id, assignee):
     from super_services.prefect_setup.deployments.utils import (
@@ -436,16 +437,15 @@ async def send_retry_sms(user_state, task_id, assignee):
     )
     from super_services.libs.core.timezone_utils import normalize_phone_number
 
-
-    TEMP_ID , is_default = get_temp_id(assignee)
+    TEMP_ID, is_default = get_temp_id(assignee)
 
     task = TaskModel.get(task_id=task_id)
     redial_count = 0
     task_input = task.input
 
     try:
-        if task_input.get("redial_count"):
-            redial_count += task_input.get("redial_count")
+        if task_input.get("followup_count"):
+            redial_count += task_input.get("followup_count")
 
     except Exception as e:
         print(e)
@@ -453,9 +453,8 @@ async def send_retry_sms(user_state, task_id, assignee):
     if redial_count < 2:
         return
 
-
     try:
-        contact_number = normalize_phone_number( user_state.contact_number)
+        contact_number = normalize_phone_number(user_state.contact_number)
     except Exception as e:
         contact_number = ""
 
@@ -472,7 +471,7 @@ async def send_retry_sms(user_state, task_id, assignee):
             }
 
             if is_default:
-                kargs['brand_name'] = get_brand_name(task.space_id)
+                kargs["brand_name"] = get_brand_name(task.space_id)
 
             parameters = {
                 "task_id": task_id,
@@ -484,9 +483,7 @@ async def send_retry_sms(user_state, task_id, assignee):
             }
             flow_name = f"sent_retry_sms-{task_id}"
 
-            await (
-                trigger_deployment("Sent-Retry-SMS", parameters, name=flow_name)
-            )
+            await trigger_deployment("Sent-Retry-SMS", parameters, name=flow_name)
 
             call_details = {
                 "task_id": task_id,
@@ -513,6 +510,18 @@ async def send_retry_sms(user_state, task_id, assignee):
     else:
         print("Not a valid indian contact number")
         return False
+
+
+def update_task_with_status(task_id, status):
+    try:
+        task =TaskModel.get(task_id=task_id)
+        output=task.output
+        output["call_status"] = status
+
+        TaskModel.update_one({"task_id":task_id}, {"output":output})
+    except Exception as e:
+        print(e)
+        pass
 
 
 async def test():

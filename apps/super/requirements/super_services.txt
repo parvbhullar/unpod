@@ -13,8 +13,7 @@ inflection
 jinja2
 langchain>=0.3.0
 langchain-openai
-langchain-community
-confluent-kafka
+conflunt-kafka
 mysql-connector-python
 nameko
 pandas
@@ -27,7 +26,7 @@ PyYAML
 redis
 uvicorn[standard]==0.18.3
 wheel
-pymongo>=4.16.0
+pymongo
 fuzzywuzzy
 prefect
 python-Levenshtein
@@ -40,17 +39,3 @@ pytest-mock>=3.10.0
 
 git+https://github.com/masters-india/Mongomantic.git@2.0.0
 kafka-python
-psycopg2-binary
-pipecat-ai[google]
-livekit
-livekit-agents
-livekit-plugins-silero
-livekit-plugins-deepgram
-livekit-plugins-cartesia
-livekit-plugins-openai
-phonenumbers
-soundfile
-google-genai
-griffe>=1.3.2,<1.6
-pipecat-ai-flows
-chromadb

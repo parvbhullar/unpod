@@ -31,6 +31,10 @@ class EvalGenerationRequest(BaseModel):
     """Request body for generating evals."""
     agent_id: str = Field(..., description="Agent handle/ID")
     force_regenerate: bool = Field(default=False, description="Force regenerate even if QA pairs exist")
+    language: Optional[str] = Field(
+        default=None,
+        description="Language for QA pairs (default: English)",
+    )
 
 
 class EvalGenerationResponse(BaseModel):
@@ -81,6 +85,7 @@ async def generate_evals(request: EvalGenerationRequest) -> EvalGenerationRespon
     """
     agent_id = request.agent_id
     force_regenerate = request.force_regenerate
+    language = request.language
 
     # Validate agent exists
     try:
@@ -118,6 +123,7 @@ async def generate_evals(request: EvalGenerationRequest) -> EvalGenerationRespon
                 "job": {
                     "agent_id": agent_id,
                     "force_regenerate": force_regenerate,
+                    "language": language,
                 }
             }
         )
@@ -125,7 +131,13 @@ async def generate_evals(request: EvalGenerationRequest) -> EvalGenerationRespon
         # Deployment not found - run inline for development/testing
         logger.warning(f"Deployment not found, running inline: {e}")
         try:
-            generator = EvalGenerator(agent_id)
+            generator = EvalGenerator(
+                gen_type="pilot",
+                agent_id=agent_id,
+                kn_token="",
+                logger=logger,
+                language=language,
+            )
             results = await generator.generate_all_evals(force_regenerate=force_regenerate)
             return EvalGenerationResponse(
                 agent_id=agent_id,
@@ -290,6 +302,7 @@ async def generate_evals_inline(request: EvalGenerationRequest):
     """
     agent_id = request.agent_id
     force_regenerate = request.force_regenerate
+    language = request.language
 
     # Validate agent exists
     try:
@@ -307,7 +320,13 @@ async def generate_evals_inline(request: EvalGenerationRequest):
         )
 
     try:
-        generator = EvalGenerator(agent_id)
+        generator = EvalGenerator(
+            gen_type="pilot",
+            agent_id=agent_id,
+            kn_token="",
+            logger=logger,
+            language=language,
+        )
         results = await generator.generate_all_evals(force_regenerate=force_regenerate)
 
         return {

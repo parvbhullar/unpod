@@ -12,9 +12,11 @@ from super.core.configuration import BaseModelConfig
 from super.core.voice.schema import UserState
 from datetime import datetime
 import uuid
+from super.core.voice.common.services import save_execution_log
+from super_services.db.services.schemas.task import TaskStatusEnum
+
 
 logger = logging.getLogger("voice-agent")
-
 
 class LiveKitProvider(CallProvider):
     """LiveKit call provider implementation"""
@@ -107,6 +109,13 @@ class LiveKitProvider(CallProvider):
 
             start = user_state.start_time
             end = user_state.end_time
+
+            await save_execution_log(
+                task_id,
+                "call-dispatch",
+                TaskStatusEnum.completed,
+                {"status": "livekit call dispatched"},
+            )
 
             return CallResult(
                 status="in_progress",

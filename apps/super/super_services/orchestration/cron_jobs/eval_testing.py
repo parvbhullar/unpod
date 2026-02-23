@@ -4,16 +4,16 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 from prefect import task, flow
-# from super.core.voice.livekit.eval_test_agent import EvalTestAgent, EvalResults
-from super.core.voice.eval_agent.eval_test_agent import EvalTestAgent,EvalResults
+
+from super.core.voice.eval_agent.eval_test_agent import EvalTestAgent, EvalResults
 from super_services.voice.models.config import ModelConfig
+from super_services.db.services.schemas.task import TaskStatusEnum
 
 
 @task(
     name="eval_test",
 )
 async def eval_test(config: Dict[str, Any], test_cases: List[Dict]) -> EvalResults:
-
     agent = EvalTestAgent(config)
     results = await agent.test_llm_agent(test_cases)
     return results
@@ -34,7 +34,6 @@ def _convert_to_bool(value) -> bool:
 )
 def get_collection_pair(token):
     try:
-        from bson import ObjectId
         from pymongo import MongoClient
         from super_services.libs.config import settings
 
@@ -46,7 +45,9 @@ def get_collection_pair(token):
         # Convert string booleans to actual booleans
         for item in result:
             item["is_tool_call"] = _convert_to_bool(item.get("is_tool_call", False))
-            item["is_first_message"] = _convert_to_bool(item.get("is_first_message", False))
+            item["is_first_message"] = _convert_to_bool(
+                item.get("is_first_message", False)
+            )
 
         client.close()
         print(f"Fetched {len(result)} QA pairs from collection_data_{token}")
@@ -77,7 +78,8 @@ def get_pairs(kn_bases: List[str]) -> List[Dict[str, Any]]:
 def save_eval_results(
     results_dict: Dict[str, Any],
     agent_id: str,
-    metadata: Dict[str, Any] = None
+    metadata: Dict[str, Any] = None,
+    eval_id: str = None,
 ) -> str:
     """
     Save evaluation results to MongoDB.
@@ -91,14 +93,12 @@ def save_eval_results(
         The eval_id of the saved document
     """
     try:
-        # Import here to avoid circular imports and ensure connection is established
-        from super_services.db.services import connect
         from super_services.db.services.models.eval_results import EvalResultModel
 
-        eval_id = str(uuid.uuid4())
+        if not eval_id:
+            eval_id = str(uuid.uuid4())
 
         eval_doc = {
-            "eval_id": eval_id,
             "agent_id": agent_id,
             "total_cases": results_dict.get("total_cases", 0),
             "passed_cases": results_dict.get("passed_cases", 0),
@@ -107,15 +107,34 @@ def save_eval_results(
             "test_results": results_dict.get("test_results", []),
             "eval_timestamp": datetime.utcnow(),
             "metadata": metadata or {},
+            "status": TaskStatusEnum.completed,
         }
 
-        EvalResultModel.save_single_to_db(eval_doc)
+        EvalResultModel.update_one({"eval_id": eval_id}, eval_doc)
         print(f"Saved evaluation results with eval_id: {eval_id}")
         return eval_id
 
     except Exception as e:
         print(f"Failed to save evaluation results: {str(e)}")
-        raise
+        pass
+
+
+def create_eval_task(eval_id, agent_id, metadata: dict = {}, results_dict: dict = {}):
+    eval_doc = {
+        "eval_id": eval_id,
+        "agent_id": agent_id,
+        "total_cases": results_dict.get("total_cases", 0),
+        "passed_cases": results_dict.get("passed_cases", 0),
+        "failed_cases": results_dict.get("failed_cases", 0),
+        "pass_rate": results_dict.get("pass_rate", "0.0%"),
+        "test_results": results_dict.get("test_results", []),
+        "eval_timestamp": datetime.utcnow(),
+        "metadata": metadata or {},
+        "status": TaskStatusEnum.in_progress,
+    }
+    from super_services.db.services.models.eval_results import EvalResultModel
+
+    EvalResultModel.save_single_to_db(eval_doc)
 
 
 @flow(
@@ -138,6 +157,14 @@ async def test_agent_evals(
         Dictionary with evaluation results including eval_id if saved
     """
     test_cases = get_pairs(kn_bases)
+    eval_id = f"EV{str(uuid.uuid4())}"
+
+    metadata = {
+        "knowledge_bases": kn_bases,
+        "test_case_count": len(test_cases),
+    }
+
+    create_eval_task(eval_id, agent_id, metadata=metadata, results_dict={})
 
     print(f"test cases: {len(test_cases)}")
 
@@ -147,11 +174,8 @@ async def test_agent_evals(
 
     results_dict = results.to_dict()
 
-    metadata = {
-        "knowledge_bases": kn_bases,
-        "test_case_count": len(test_cases),
-    }
-    eval_id = save_eval_results(results_dict, agent_id, metadata)
+    eval_id = save_eval_results(results_dict, agent_id, metadata, eval_id)
+
     results_dict["eval_id"] = eval_id
 
     # Print JSON output for easy parsing
@@ -169,8 +193,5 @@ if __name__ == "__main__":
     kn_bases = ["6OWZ88K5K9Q37LJ6CEUDLNQE"]
 
     results = asyncio.run(
-        test_agent_evals(
-            agent_id='testing-good-qua-xkc0gsvr7ns7',
-            kn_bases=kn_bases
-        )
+        test_agent_evals(agent_id="testing-good-qua-xkc0gsvr7ns7", kn_bases=kn_bases)
     )

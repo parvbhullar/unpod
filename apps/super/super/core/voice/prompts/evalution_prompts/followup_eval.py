@@ -6,7 +6,7 @@ You are evaluating whether a follow-up call is required based on a call transcri
 ### Decision Framework:
 1. Analyze the CURRENT call transcript for indicators that warrant a follow-up.
 2. Consider the CONTEXT from past conversation logs with this user.
-3. Evaluate the COMPLETENESS of the interaction — was everything resolved?
+3. Evaluate the COMPLETENESS of the interaction - was everything resolved?
 4. Assess any COMMITMENTS or PROMISES made that require follow-through.
 5. If No Transcript is available it means call was not connected for this particular step.
 6. If call not connected make decision based on the prompt provided and data provided to chek weather a followup is required.
@@ -36,12 +36,23 @@ You are evaluating whether a follow-up call is required based on a call transcri
 
 
 ### Follow-Up Timing Guidelines:
-- Urgent matters: within 24 hours  
-- User-requested specific time: use that exact time  
-- Standard follow-up: 2–3 business days  
-- Long-term nurture: 1–2 weeks  
-- Consider business hours (9 AM – 6 PM local time preferred)
-- Prompt defines a time range :use that Exact timing Conventions
+- Urgent matters: within 24 hours
+- User-requested specific time: use that exact time
+- Standard follow-up: 2-3 business days
+- Long-term nurture: 1-2 weeks
+- Consider business hours (9 AM - 6 PM local time preferred)
+- Prompt defines a time range: use that exact timing convention
+- `current_date` is the source of truth for "now"; always compute follow-up time from it.
+- For relative instructions like "after 3 minutes" or "in 10 minutes", add exactly that duration.
+- Do NOT convert minute-based instructions into hours or days.
+- Do NOT apply business-hour/day defaults when explicit timing is provided.
+- If both relative and exact time exist, prefer exact user-requested time.
+- Preserve timezone context from `current_date`.
+- Return `followup_time` as a precise datetime, never a vague window.
+- Timing sanity examples:
+  - "after 3 minutes" -> `current_date + 3 minutes`
+  - "after 10 minutes" -> `current_date + 10 minutes`
+  - "after 1 hour" -> `current_date + 60 minutes`
 
 ### Evaluation Principles:
 - Base decisions on EXPLICIT indicators in the transcript, not assumptions.
@@ -50,21 +61,21 @@ You are evaluating whether a follow-up call is required based on a call transcri
 - Timing should be reasonable, neither too soon nor too delayed.
 - Evaluation Should be made totally based on the prompt additional criteria.
 - If Past Conversations and prompt interacts with each other or aligns make decision based upn that.
-- For Past Conversation always Prioritise the most recent call first and moving forward reducing their priority scale. 
+- For Past Conversation always Prioritise the most recent call first and moving forward reducing their priority scale.
 
 ### Output Requirements:
-- `requires_followup`: true or false  
-- `followup_time`: specific datetime IF follow-up is required  
+- `requires_followup`: true or false
+- `followup_time`: specific datetime IF follow-up is required
 - Provide a short explanation for the decision
 
 ---
 
 ## Additional Criteria (Dynamic)
-Any content in this section MUST override all rules above.  
+Any content in this section MUST override all rules above.
 These dynamic instructions take **highest priority** in determining:
 
-- whether follow-up is required  
-- when the follow-up should occur  
+- whether follow-up is required
+- when the follow-up should occur
 - any special conditions or override behaviors
 
 If there is ANY conflict, the rules in "Additional Criteria" win.

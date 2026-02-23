@@ -116,6 +116,9 @@ class CallStatusEnum(str, Enum):
     BUSY = "busy"
     VOICEMAIL = "voicemail"
     DROPPED = "droped"
+    CallDispatched = "callDispatched"
+    InCall = "incall"
+    OutCall = "outcall"
 
 
 @dataclass

@@ -13,6 +13,13 @@ class AgentQAPairBaseModel(MongoDBModel, CreateUpdateMixinModel):
     question: str = Field(...)
     answer: str = Field(...)
     keywords: List[str] = Field(default_factory=list)
+    eval_type: Optional[str] = Field(default=None)
+    intent: Optional[str] = Field(default=None)
+    is_first_message: bool = Field(default=False)
+    is_tool_call: bool = Field(default=False)
+    tool_name: Optional[str] = Field(default=None)
+    source: Optional[str] = Field(default=None)
+    language: Optional[str] = Field(default=None)
     status: str = Field(default="active")  # "active" or "inactive"
     batch_id: Optional[str] = Field(default=None)
 
@@ -24,6 +31,7 @@ class AgentQAPairModel(BaseRepository):
         indexes = [
             Index(fields=["status"]),
             Index(fields=["batch_id"]),
+            Index(fields=["eval_type"]),
         ]
 
     def __init__(self, token):
@@ -39,6 +47,13 @@ class KBQAPairBaseModel(MongoDBModel, CreateUpdateMixinModel):
     question: str = Field(...)
     answer: str = Field(...)
     keywords: List[str] = Field(default_factory=list)
+    eval_type: Optional[str] = Field(default=None)
+    intent: Optional[str] = Field(default=None)
+    is_first_message: bool = Field(default=False)
+    is_tool_call: bool = Field(default=False)
+    tool_name: Optional[str] = Field(default=None)
+    source: Optional[str] = Field(default=None)
+    language: Optional[str] = Field(default=None)
     status: str = Field(default="active")  # "active" or "inactive"
     batch_id: Optional[str] = Field(default=None)
 
@@ -50,6 +65,7 @@ class KBQAPairModel(BaseRepository):
         indexes = [
             Index(fields=["status"]),
             Index(fields=["batch_id"]),
+            Index(fields=["eval_type"]),
         ]
 
     def __init__(self, token):
