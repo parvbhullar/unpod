@@ -31,6 +31,7 @@ class EvalResultBaseModel(MongoDBModel, CreateUpdateMixinModel):
     pass_rate: str = Field(default="0.0%")
     test_results: List[Dict] = Field(default_factory=list)
     eval_timestamp: datetime = Field(default_factory=datetime.utcnow)
+    status: str = Field(default="pending")
     metadata: Dict = Field(default_factory=dict)
 
 

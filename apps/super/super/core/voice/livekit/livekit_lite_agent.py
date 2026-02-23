@@ -151,6 +151,8 @@ class LiveKitLiteAgent(Agent):
             eval_records["agent_responses"] = []
         if not isinstance(eval_records.get("user_messages"), list):
             eval_records["user_messages"] = []
+        if not isinstance(eval_records.get("llm_latency_samples"), list):
+            eval_records["llm_latency_samples"] = []
         if not isinstance(eval_records.get("sequence_counter"), int):
             eval_records["sequence_counter"] = 0
 
@@ -715,7 +717,7 @@ class LiveKitLiteAgent(Agent):
             self.user_state.extra_data["conversation_summary"] = call_summary
 
         if self.user_state.extra_data.get("call_type") != "sdk":
-            self.user_state.call_status = CallStatusEnum.CONNECTED
+            self.user_state.call_status = CallStatusEnum.COMPLETED
             self.user_state.end_time = datetime.utcnow()
 
             res = await build_call_result(self.user_state)

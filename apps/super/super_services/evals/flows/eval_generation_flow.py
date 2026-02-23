@@ -23,6 +23,7 @@ class EvalGenerationJob(BaseModel):
     pilot_handle: Optional[str] = Field(default=None)
     kn_token: Optional[str] = Field(default=None)
     force: Optional[bool] = Field(default=False)
+    language: Optional[str] = Field(default=None)
 
 
 def generate_eval_flow_name() -> str:
@@ -43,7 +44,7 @@ def generate_eval_flow_name() -> str:
     log_prints=True,
 )
 async def generate_agent_evals_task(
-    gen_type, agent_id, kn_token, force_regenerate: bool = False
+    gen_type, agent_id, kn_token, force_regenerate: bool = False, language: Optional[str] = None
 ) -> dict:
     logger = get_run_logger()
     logger.info(
@@ -54,7 +55,7 @@ async def generate_agent_evals_task(
 
     try:
         # Generate evals (duplicate check is built into generate_all_evals)
-        generator = EvalGenerator(gen_type, agent_id, kn_token, logger)
+        generator = EvalGenerator(gen_type, agent_id, kn_token, logger, language=language)
         results = await generator.generate_all_evals(force_regenerate=force_regenerate)
 
         logger.info(f"Eval generation completed: {results}")
@@ -106,18 +107,20 @@ async def generate_agent_evals_flow(job: EvalGenerationJob) -> dict:
     agent_id = job.pilot_handle
     kn_token = job.kn_token
     force = job.force
+    language = job.language
 
     if not agent_id and not kn_token:
         raise ValueError("Either pilot_handle or kn_token is required")
 
     logger.info(f"Starting eval generation flow for genType: {gen_type}")
     results = await generate_agent_evals_task(
-        gen_type, agent_id, kn_token, force_regenerate=force
+        gen_type, agent_id, kn_token, force_regenerate=force, language=language
     )
 
     return {
         "agent_id": agent_id,
         "kn_token": kn_token,
         "gen_type": gen_type,
+        "language": language,
         **results,
     }
