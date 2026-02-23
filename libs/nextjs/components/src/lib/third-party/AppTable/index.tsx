@@ -1,7 +1,7 @@
-import { Empty } from 'antd';
-import { useIntl } from 'react-intl';
-import { TableProps } from 'antd/es/table';
-import { AppDataGrid } from '@unpod/react-data-grid';
+import {Empty} from 'antd';
+import {useIntl} from 'react-intl';
+import {TableProps} from 'antd/es/table';
+import {AppDataGrid} from '@unpod/react-data-grid';
 
 type AppTableProps<T> = TableProps<T> & {
   image?: string;
@@ -10,17 +10,17 @@ type AppTableProps<T> = TableProps<T> & {
 };
 
 const AppTable = <T extends object>(props: AppTableProps<T>) => {
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   return (
     <AppDataGrid
       bordered
       rowKey="id"
-      scroll={{ x: 'auto' }}
+      scroll={{x: 'auto'}}
       locale={{
         emptyText: (
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={formatMessage({ id: 'peopleSummary.noDataFound' })}
+            description={formatMessage({id: 'peopleSummary.noDataFound'})}
           />
         ),
       }}

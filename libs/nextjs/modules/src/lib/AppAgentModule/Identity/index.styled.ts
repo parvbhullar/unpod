@@ -1,11 +1,11 @@
-import { Button, Flex, Form } from 'antd';
+import {Button, Flex, Form} from 'antd';
 import styled from 'styled-components';
 
 export const StylesImageWrapper = styled.div`
   position: relative;
   width: 90px;
   height: 90px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -18,11 +18,11 @@ export const StyleFormItemPrivacy = styled(Form.Item)`
 `;
 
 export const StyledMainContainer = styled.div`
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto !important;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     width: 100%;
   }
 `;

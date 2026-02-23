@@ -1,5 +1,5 @@
 // @ts-check
-import { useCallback } from 'react';
+import {useCallback} from 'react';
 import {
   selectPeerNameByID,
   selectSessionMetadata,
@@ -7,8 +7,8 @@ import {
   useHMSStore,
   useHMSVanillaStore
 } from '@100mslive/react-sdk';
-import { SESSION_STORE_KEY } from '../common/constants';
-import { message } from 'antd';
+import {SESSION_STORE_KEY} from '../common/constants';
+import {message} from 'antd';
 
 /**
  * set pinned chat message by updating the session store
@@ -40,5 +40,5 @@ export const useSetPinnedMessage = () => {
     [hmsActions, vanillaStore, pinnedMessage]
   );
 
-  return { setPinnedMessage };
+  return {setPinnedMessage};
 };

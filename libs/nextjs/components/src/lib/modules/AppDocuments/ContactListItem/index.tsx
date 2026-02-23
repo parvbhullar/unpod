@@ -1,23 +1,12 @@
-
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 import clsx from 'clsx';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 import UserAvatar from '../../../common/UserAvatar';
-import {
-  StyledInnerRoot,
-  StyledItem,
-  StyledListHeader,
-  StyledMeta,
-  StyledParagraph,
-  StyledRoot,
-} from './index.styled';
-import { useRouter } from 'next/navigation';
-import { IoCallOutline } from 'react-icons/io5';
+import {StyledInnerRoot, StyledItem, StyledListHeader, StyledMeta, StyledParagraph, StyledRoot,} from './index.styled';
+import {useRouter} from 'next/navigation';
+import {IoCallOutline} from 'react-icons/io5';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 type ContactDocument = {
   document_id: string;
@@ -28,12 +17,13 @@ type ContactDocument = {
 
 type ContactListItemProps = {
   data: ContactDocument;
-  showTimeFrom?: boolean;};
+  showTimeFrom?: boolean;
+};
 
-const ContactListItem = ({ data }: ContactListItemProps) => {
-  const { setActiveDocument, setDocumentMode, setSelectedDocs } =
+const ContactListItem = ({data}: ContactListItemProps) => {
+  const {setActiveDocument, setDocumentMode, setSelectedDocs} =
     useAppSpaceActionsContext();
-  const { activeDocument, activeTab, currentSpace, selectedDocs } =
+  const {activeDocument, activeTab, currentSpace, selectedDocs} =
     useAppSpaceContext();
 
   const allowSelection = activeTab === 'logs';
@@ -136,7 +126,7 @@ const ContactListItem = ({ data }: ContactListItemProps) => {
         onClick={onClick}
       >
         <StyledItem>
-          <UserAvatar user={{ full_name: data.name }} size={36} />
+          <UserAvatar user={{full_name: data.name}} size={36}/>
         </StyledItem>
 
         <StyledInnerRoot>
@@ -217,7 +207,7 @@ const ContactListItem = ({ data }: ContactListItemProps) => {
                 marginTop: -6,
               }}
             >
-              <IoCallOutline size={12} />
+              <IoCallOutline size={12}/>
               <StyledParagraph type="secondary" className="mb-0" ellipsis>
                 {data.contact_number || data.title}
               </StyledParagraph>

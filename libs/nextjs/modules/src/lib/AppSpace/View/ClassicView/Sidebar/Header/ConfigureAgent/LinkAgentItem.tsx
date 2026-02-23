@@ -1,10 +1,10 @@
-import { Flex, Typography } from 'antd';
-import { StyledButton, StyledFlex } from './index.styled';
-import { RiRobot2Line } from 'react-icons/ri';
-import { useIntl } from 'react-intl';
-import type { Spaces } from '@unpod/constants/types';
+import {Flex, Typography} from 'antd';
+import {StyledButton, StyledFlex} from './index.styled';
+import {RiRobot2Line} from 'react-icons/ri';
+import {useIntl} from 'react-intl';
+import type {Spaces} from '@unpod/constants/types';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type AgentItem = {
   name?: string;
@@ -19,11 +19,11 @@ type LinkAgentItemProps = {
 };
 
 const LinkAgentItem = ({
-  item,
-  currentSpace,
-  saveAgent,
-}: LinkAgentItemProps) => {
-  const { formatMessage } = useIntl();
+                         item,
+                         currentSpace,
+                         saveAgent,
+                       }: LinkAgentItemProps) => {
+  const {formatMessage} = useIntl();
 
   return (
     <StyledFlex
@@ -33,7 +33,7 @@ const LinkAgentItem = ({
       className={item?.space?.slug === currentSpace?.slug ? 'active' : ''}
     >
       <Flex gap={10}>
-        <RiRobot2Line fontSize={18} />
+        <RiRobot2Line fontSize={18}/>
         <Text strong>{item.name}</Text>
       </Flex>
       <StyledButton
@@ -45,8 +45,8 @@ const LinkAgentItem = ({
         className={item?.space?.slug === currentSpace?.slug ? 'Unlink' : ''}
       >
         {item?.space?.slug === currentSpace?.slug
-          ? formatMessage({ id: 'drawer.unlink' })
-          : formatMessage({ id: 'drawer.link' })}
+          ? formatMessage({id: 'drawer.unlink'})
+          : formatMessage({id: 'drawer.link'})}
       </StyledButton>
     </StyledFlex>
   );

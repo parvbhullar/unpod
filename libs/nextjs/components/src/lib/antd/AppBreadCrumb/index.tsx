@@ -1,8 +1,8 @@
 import React from 'react';
-import { Breadcrumb, Tooltip } from 'antd';
+import {Breadcrumb, Tooltip} from 'antd';
 import styled from 'styled-components';
-import { truncateString } from '@unpod/helpers/StringHelper';
-import { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb';
+import {truncateString} from '@unpod/helpers/StringHelper';
+import {BreadcrumbItemType} from 'antd/es/breadcrumb/Breadcrumb';
 
 export const StyledBreadcrumb = styled(Breadcrumb)`
   font-size: 11px;
@@ -14,19 +14,20 @@ export const StyledBreadcrumb = styled(Breadcrumb)`
     }
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     display: none;
   }
 `;
 
 type AppBreadCrumbTitleProps = {
   title: string;
-  length?: number;};
+  length?: number;
+};
 
 export const AppBreadCrumbTitle: React.FC<AppBreadCrumbTitleProps> = ({
-  title,
-  length = 60,
-}) => {
+                                                                        title,
+                                                                        length = 60,
+                                                                      }) => {
   if (!title) return null;
 
   return title.length > length ? (
@@ -37,10 +38,11 @@ export const AppBreadCrumbTitle: React.FC<AppBreadCrumbTitleProps> = ({
 };
 
 type AppBreadCrumbProps = {
-  items: BreadcrumbItemType[];};
+  items: BreadcrumbItemType[];
+};
 
-const AppBreadCrumb: React.FC<AppBreadCrumbProps> = ({ items }) => {
-  return <StyledBreadcrumb separator=">" items={items} />;
+const AppBreadCrumb: React.FC<AppBreadCrumbProps> = ({items}) => {
+  return <StyledBreadcrumb separator=">" items={items}/>;
 };
 
 export default AppBreadCrumb;

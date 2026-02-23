@@ -1,19 +1,15 @@
 'use client';
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { uploadDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { CONTACT_SPACE_FIELDS } from '@unpod/constants';
-import { Button, Form, Space } from 'antd';
-import { generateKbSchema } from '@unpod/helpers/AppKbHelper';
-import {
-  DrawerBody,
-  DrawerForm,
-  DrawerFormFooter,
-} from '../../antd';
+import {uploadDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {CONTACT_SPACE_FIELDS} from '@unpod/constants';
+import {Button, Form, Space} from 'antd';
+import {generateKbSchema} from '@unpod/helpers/AppKbHelper';
+import {DrawerBody, DrawerForm, DrawerFormFooter,} from '../../antd';
 import GeneralForm from './GeneralForm';
-import SchemaForm, { SchemaInput } from './SchemaForm';
+import SchemaForm, {SchemaInput} from './SchemaForm';
 import UploadDocumentForm from './UploadDocumentForm';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 type CreateKbPayload = {
   name: string;
@@ -32,7 +28,7 @@ type AddFormProps = {
   onClose?: () => void;
 };
 
-const AddForm = ({ onSaved, content_type, isSpace, onClose }: AddFormProps) => {
+const AddForm = ({onSaved, content_type, isSpace, onClose}: AddFormProps) => {
   const [form] = Form.useForm();
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
@@ -42,7 +38,7 @@ const AddForm = ({ onSaved, content_type, isSpace, onClose }: AddFormProps) => {
   const [formInputs, setFormInputs] = useState<SchemaInput[]>([]);
   const [media, setMedia] = useState<File | null>(null);
   const [userList, setUserList] = useState<any[]>([]);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onBackClick = () => {
     if (step === 2) {
@@ -66,7 +62,7 @@ const AddForm = ({ onSaved, content_type, isSpace, onClose }: AddFormProps) => {
     const validInputs = formInputs.filter((input) => input.title);
     const schema = generateKbSchema(validInputs);
     if (!payload) return;
-    createKnowledgeBase({ ...payload, schema: JSON.stringify(schema) });
+    createKnowledgeBase({...payload, schema: JSON.stringify(schema)});
   };
 
   const createKnowledgeBase = (payload: CreateKbPayload) => {
@@ -162,7 +158,7 @@ const AddForm = ({ onSaved, content_type, isSpace, onClose }: AddFormProps) => {
             <Space>
               {step > 1 && (
                 <Button type="primary" onClick={onBackClick} ghost>
-                  {formatMessage({ id: 'common.back' })}
+                  {formatMessage({id: 'common.back'})}
                 </Button>
               )}
 
@@ -172,23 +168,23 @@ const AddForm = ({ onSaved, content_type, isSpace, onClose }: AddFormProps) => {
                   onClick={onCreateClick}
                   loading={loading}
                 >
-                  {formatMessage({ id: 'common.save' })}
+                  {formatMessage({id: 'common.save'})}
                 </Button>
               ) : (
                 <Button type="primary" onClick={onNextClick} loading={loading}>
-                  {formatMessage({ id: 'common.next' })}
+                  {formatMessage({id: 'common.next'})}
                 </Button>
               )}
             </Space>
           ) : (
             <>
               <Button type="primary" onClick={onClose} ghost>
-                {formatMessage({ id: 'common.cancel' })}
+                {formatMessage({id: 'common.cancel'})}
               </Button>
               <Button type="primary" htmlType="submit" loading={loading}>
                 {contentType === 'table' || contentType === 'contact'
-                  ? formatMessage({ id: 'common.next' })
-                  : formatMessage({ id: 'common.save' })}
+                  ? formatMessage({id: 'common.next'})
+                  : formatMessage({id: 'common.save'})}
               </Button>
             </>
           )}

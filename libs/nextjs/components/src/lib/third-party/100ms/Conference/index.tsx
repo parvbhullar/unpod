@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   selectAppData,
   selectIsConnectedToRoom,
@@ -6,27 +6,17 @@ import {
   useHMSActions,
   useHMSStore,
 } from '@100mslive/react-sdk';
-import { ConferenceMainView } from './Views/mainView';
+import {ConferenceMainView} from './Views/mainView';
 import Footer from './Footer';
 import SideBar from './SideBar';
 import FullPageProgress from '../../../common/AppLoader';
-import { RoleChangeRequestModal } from './RoleChangeRequestModal';
-import { useIsHeadless } from '../AppData/useUISettings';
-import {
-  APP_DATA,
-  EMOJI_REACTION_TYPE,
-  isAndroid,
-  isIOS,
-  isIPadOS,
-} from '../common/constants';
-import {
-  StyledContainer,
-  StyledFooterContainer,
-  StyledRoot,
-} from './index.styled';
-import { useRouter } from 'next/navigation';
-import { useMediaQuery } from 'react-responsive';
-import { TabWidthQuery } from '@unpod/constants';
+import {RoleChangeRequestModal} from './RoleChangeRequestModal';
+import {useIsHeadless} from '../AppData/useUISettings';
+import {APP_DATA, EMOJI_REACTION_TYPE, isAndroid, isIOS, isIPadOS,} from '../common/constants';
+import {StyledContainer, StyledFooterContainer, StyledRoot,} from './index.styled';
+import {useRouter} from 'next/navigation';
+import {useMediaQuery} from 'react-responsive';
+import {TabWidthQuery} from '@unpod/constants';
 
 const Conference = () => {
   const isTabletOrMobile = useMediaQuery(TabWidthQuery);
@@ -89,12 +79,12 @@ const Conference = () => {
   }, [isHeadless, hmsActions]);
 
   if (!isConnectedToRoom) {
-    return <FullPageProgress />;
+    return <FullPageProgress/>;
   }
 
   return (
     <StyledRoot>
-      <StyledContainer style={{ flex: isTabletOrMobile ? 1 : 2 }}>
+      <StyledContainer style={{flex: isTabletOrMobile ? 1 : 2}}>
         <div
           style={{
             width: '100%',
@@ -107,7 +97,7 @@ const Conference = () => {
           data-testid="conferencing"
           onClick={toggleControls}
         >
-          <ConferenceMainView />
+          <ConferenceMainView/>
         </div>
         {!isHeadless && (
           <StyledFooterContainer
@@ -130,13 +120,13 @@ const Conference = () => {
           }}*/
             data-testid="footer"
           >
-            <Footer />
+            <Footer/>
           </StyledFooterContainer>
         )}
       </StyledContainer>
 
-      <SideBar />
-      <RoleChangeRequestModal />
+      <SideBar/>
+      <RoleChangeRequestModal/>
     </StyledRoot>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 export type ScrollSpyProps = {
   items?: string[];
@@ -12,13 +12,13 @@ export type ScrollSpyProps = {
 };
 
 const ScrollSpy: React.FC<ScrollSpyProps> = ({
-  items = [],
-  currentClassName = 'is-current',
-  className,
-  offset = 0,
-  children,
-  ...rest
-}) => {
+                                               items = [],
+                                               currentClassName = 'is-current',
+                                               className,
+                                               offset = 0,
+                                               children,
+                                               ...rest
+                                             }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLUListElement>(null);
 
@@ -41,7 +41,7 @@ const ScrollSpy: React.FC<ScrollSpyProps> = ({
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, {passive: true});
     return () => window.removeEventListener('scroll', handleScroll);
   }, [items, offset]);
 

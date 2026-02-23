@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Typography } from 'antd';
+import {useState} from 'react';
+import {Typography} from 'antd';
 import styled from 'styled-components';
-import { StyledRoot } from './index.styled';
-import { AppDrawer } from '@unpod/components/antd';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
+import {StyledRoot} from './index.styled';
+import {AppDrawer} from '@unpod/components/antd';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
 import AppSpaceCallModal from '@unpod/components/modules/AppSpaceContactCall/AppSpaceCallModal';
-import { useAppSpaceActionsContext } from '@unpod/providers';
-import { MdCall, MdSchedule } from 'react-icons/md';
+import {useAppSpaceActionsContext} from '@unpod/providers';
+import {MdCall, MdSchedule} from 'react-icons/md';
 import DocSelector from './DocSelector';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const EmptyStateRoot = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const EmptyStateRoot = styled.div`
   gap: 16px;
   height: calc(100vh - 74px);
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding: 12px;
   }
 `;
@@ -27,8 +27,8 @@ const EmptyStateCard = styled.div`
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border: 1px solid ${({ theme }) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 16px;
   cursor: pointer;
   max-width: 400px;
@@ -36,7 +36,7 @@ const EmptyStateCard = styled.div`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.background.component};
+    background-color: ${({theme}) => theme.palette.background.component};
   }
 `;
 
@@ -55,14 +55,14 @@ const IconWrapper = styled.div`
   }
 `;
 
-const { Paragraph, Title } = Typography;
+const {Paragraph, Title} = Typography;
 
 const LandingView = () => {
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
-  const { callsActions } = useAppSpaceActionsContext();
+  const {callsActions} = useAppSpaceActionsContext();
   const isMobile =
     typeof window !== 'undefined' ? window.innerWidth <= 576 : false;
   const onFinishSchedule = () => {
@@ -74,13 +74,13 @@ const LandingView = () => {
         <EmptyStateRoot>
           <EmptyStateCard onClick={() => setOpen(true)}>
             <IconWrapper>
-              <MdSchedule />
+              <MdSchedule/>
               <Title level={4}>
-                {formatMessage({ id: 'call.landingViewTitle' })}
+                {formatMessage({id: 'call.landingViewTitle'})}
               </Title>
             </IconWrapper>
             <Paragraph className="mb-0">
-              {formatMessage({ id: 'call.landingViewDes' })}
+              {formatMessage({id: 'call.landingViewDes'})}
             </Paragraph>
           </EmptyStateCard>
         </EmptyStateRoot>
@@ -89,24 +89,24 @@ const LandingView = () => {
         open={open}
         onClose={() => setOpen(false)}
         closable={false}
-        title={formatMessage({ id: 'call.landingViewDrawerTitle' })}
+        title={formatMessage({id: 'call.landingViewDrawerTitle'})}
         padding="0"
         extra={
           <AppHeaderButton
             type="primary"
             shape={!isMobile ? 'round' : 'circle'}
             icon={
-              <span className="anticon" style={{ verticalAlign: 'middle' }}>
-                <MdCall fontSize={!isMobile ? 16 : 22} />
+              <span className="anticon" style={{verticalAlign: 'middle'}}>
+                <MdCall fontSize={!isMobile ? 16 : 22}/>
               </span>
             }
             onClick={() => setVisible(true)}
           >
-            {!isMobile && formatMessage({ id: 'spaceHeader.callNow' })}
+            {!isMobile && formatMessage({id: 'spaceHeader.callNow'})}
           </AppHeaderButton>
         }
       >
-        <DocSelector allowSelection />
+        <DocSelector allowSelection/>
       </AppDrawer>
 
       <AppSpaceCallModal

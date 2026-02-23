@@ -1,9 +1,9 @@
-import { memo } from 'react';
+import {memo} from 'react';
 
-import { useRovingTabIndex } from './hooks';
-import { getCellClassname, getCellStyle } from './utils';
-import type { CalculatedColumn, GroupRow } from './models/data-grid';
-import { StyledCellWrapper } from './style/cell';
+import {useRovingTabIndex} from './hooks';
+import {getCellClassname, getCellStyle} from './utils';
+import type {CalculatedColumn, GroupRow} from './models/data-grid';
+import {StyledCellWrapper} from './style/cell';
 
 type GroupCellProps<R, SR> = {
   id: string;
@@ -15,21 +15,22 @@ type GroupCellProps<R, SR> = {
   row: GroupRow<R>;
   isCellSelected: boolean;
   groupColumnIndex: number;
-  isGroupByColumn: boolean;};
+  isGroupByColumn: boolean;
+};
 
 function GroupCell<R, SR>({
-  id,
-  groupKey,
-  childRows,
-  isExpanded,
-  isCellSelected,
-  column,
-  row,
-  groupColumnIndex,
-  isGroupByColumn,
-  toggleGroup: toggleGroupWrapper,
-}: GroupCellProps<R, SR>) {
-  const { tabIndex, childTabIndex, onFocus } =
+                            id,
+                            groupKey,
+                            childRows,
+                            isExpanded,
+                            isCellSelected,
+                            column,
+                            row,
+                            groupColumnIndex,
+                            isGroupByColumn,
+                            toggleGroup: toggleGroupWrapper,
+                          }: GroupCellProps<R, SR>) {
+  const {tabIndex, childTabIndex, onFocus} =
     useRovingTabIndex(isCellSelected);
 
   function toggleGroup() {

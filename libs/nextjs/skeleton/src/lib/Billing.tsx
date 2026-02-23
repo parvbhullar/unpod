@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import { Card, Col, Row, Skeleton } from 'antd';
+import {Card, Col, Row, Skeleton} from 'antd';
 import styled from 'styled-components';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -19,7 +19,7 @@ const HeaderLeft = styled.div`
   flex-direction: column;
   gap: 8px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
   }
 `;
@@ -47,7 +47,7 @@ const CardRowBottom = styled(Col)`
   justify-content: space-between;
   align-items: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
@@ -56,7 +56,7 @@ const CardRowBottom = styled(Col)`
 
 const SmallCardsRow = styled(Row)`
   margin-bottom: 24px;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
   }
 `;
@@ -71,7 +71,7 @@ const SmallCardContent = styled.div`
   align-items: flex-start;
   gap: 16px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -99,7 +99,7 @@ const TableRowInner = styled.div`
   flex-wrap: wrap;
   width: 100%;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     gap: 16px;
     flex-direction: column;
   }
@@ -119,45 +119,45 @@ const BillingSkeleton: React.FC = () => {
     <>
       <HeaderWrapper>
         <HeaderLeft>
-          <Skeleton.Input active style={{ width: 100, height: 28 }} />
+          <Skeleton.Input active style={{width: 100, height: 28}}/>
           <Skeleton.Input
             active
-            style={{ width: mobileScreen ? 280 : 350, height: 18 }}
+            style={{width: mobileScreen ? 280 : 350, height: 18}}
           />
         </HeaderLeft>
         <Skeleton.Button
           active
           size="large"
-          style={{ width: 140, height: 35 }}
+          style={{width: 140, height: 35}}
         />
       </HeaderWrapper>
 
       <MainCard>
         <CardContent>
           <CardRow>
-            <Skeleton.Input active style={{ width: 120, height: 20 }} />
+            <Skeleton.Input active style={{width: 120, height: 20}}/>
             <Skeleton.Input
               active
-              style={{ width: mobileScreen ? 240 : 500, height: 16 }}
+              style={{width: mobileScreen ? 240 : 500, height: 16}}
             />
           </CardRow>
           <CardRowBottom>
-            <Skeleton.Input active style={{ width: 200, height: 14 }} />
-            <Skeleton.Button active style={{ width: 100, height: 32 }} />
+            <Skeleton.Input active style={{width: 200, height: 14}}/>
+            <Skeleton.Button active style={{width: 100, height: 32}}/>
           </CardRowBottom>
         </CardContent>
       </MainCard>
 
       <SmallCardsRow gutter={[16, 16]}>
-        {Array.from({ length: 3 }).map((_, idx) => (
+        {Array.from({length: 3}).map((_, idx) => (
           <Col xs={24} sm={24} md={8} key={idx}>
             <SmallCard>
               <SmallCardContent>
-                <Skeleton.Avatar active shape="circle" size={32} />
+                <Skeleton.Avatar active shape="circle" size={32}/>
                 <SmallCardText>
-                  <Skeleton.Input active style={{ width: 200, height: 20 }} />
-                  <Skeleton.Button active style={{ width: 100, height: 24 }} />
-                  <Skeleton.Input active style={{ width: 100, height: 18 }} />
+                  <Skeleton.Input active style={{width: 200, height: 20}}/>
+                  <Skeleton.Button active style={{width: 100, height: 24}}/>
+                  <Skeleton.Input active style={{width: 100, height: 18}}/>
                 </SmallCardText>
               </SmallCardContent>
             </SmallCard>
@@ -168,28 +168,28 @@ const BillingSkeleton: React.FC = () => {
       <TableCard>
         <Skeleton.Input
           active
-          style={{ width: 180, height: 20, marginBottom: 16 }}
+          style={{width: 180, height: 20, marginBottom: 16}}
         />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {Array.from({ length: 4 }).map((_, idx) => (
+        <div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
+          {Array.from({length: 4}).map((_, idx) => (
             <TableRow key={idx}>
               <TableRowInner>
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({length: 5}).map((_, i) => (
                   <Skeleton.Input
                     active
                     key={i}
-                    style={{ width: 100, height: 16 }}
+                    style={{width: 100, height: 16}}
                   />
                 ))}
               </TableRowInner>
             </TableRow>
           ))}
           <TableRowBottom>
-            {Array.from({ length: 2 }).map((_, idx) => (
+            {Array.from({length: 2}).map((_, idx) => (
               <Skeleton.Input
                 active
                 key={idx}
-                style={{ width: 100, height: 16 }}
+                style={{width: 100, height: 16}}
               />
             ))}
           </TableRowBottom>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { FiPhone } from 'react-icons/fi';
+import {FiPhone} from 'react-icons/fi';
 import Button from '../components/Button';
-import { InfoSection, Label, WidgetContainer } from './ChatWidget.styled';
-import { AnimatedSphere } from './AnimatedSphere';
-import { useIntl } from 'react-intl';
+import {InfoSection, Label, WidgetContainer} from './ChatWidget.styled';
+import {AnimatedSphere} from './AnimatedSphere';
+import {useIntl} from 'react-intl';
 
 type ChatWidgetProps = {
   startCallText?: string;
@@ -12,17 +12,17 @@ type ChatWidgetProps = {
 };
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
-  startCallText = 'common.call',
-  actionText = 'common.needHelp',
-  onClick,
-}) => {
-  const { formatMessage } = useIntl();
+                                                        startCallText = 'common.call',
+                                                        actionText = 'common.needHelp',
+                                                        onClick,
+                                                      }) => {
+  const {formatMessage} = useIntl();
   return (
     <WidgetContainer className="chat-widget">
-      <AnimatedSphere size={60} />
+      <AnimatedSphere size={60}/>
       <InfoSection className="widget-info-section">
         <Label className="widget-action-text">
-          {formatMessage({ id: actionText })}
+          {formatMessage({id: actionText})}
         </Label>
         <Button
           className="widget-button"
@@ -30,8 +30,8 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           shape="round"
           variant="primary"
         >
-          <FiPhone />
-          {formatMessage({ id: startCallText })}
+          <FiPhone/>
+          {formatMessage({id: startCallText})}
         </Button>
       </InfoSection>
     </WidgetContainer>

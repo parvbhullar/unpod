@@ -1,24 +1,19 @@
 'use client';
-import React, {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { Select } from 'antd';
+import React, {CSSProperties, ReactNode, useEffect, useRef, useState,} from 'react';
+import {Select} from 'antd';
 import clsx from 'clsx';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { countryCodes } from '@unpod/constants/CountryData';
-import { StyledSelect } from './index.styled';
-import type { BaseSelectRef } from '@rc-component/select';
-import type { DefaultOptionType, SelectProps } from 'antd/es/select';
+import {countryCodes} from '@unpod/constants/CountryData';
+import {StyledSelect} from './index.styled';
+import type {BaseSelectRef} from '@rc-component/select';
+import type {DefaultOptionType, SelectProps} from 'antd/es/select';
 
-const { Option } = Select;
+const {Option} = Select;
 
 type PhoneSelectValue = {
   region: string;
-  numbers: string[];};
+  numbers: string[];
+};
 
 type AppPhoneSelectProps = {
   placeholder?: string;
@@ -33,23 +28,24 @@ type AppPhoneSelectProps = {
   children?: ReactNode;
   value?: PhoneSelectValue;
   defaultRegion?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppPhoneSelect: React.FC<AppPhoneSelectProps> = ({
-  placeholder,
-  className,
-  style,
-  disabled,
-  onChange,
-  asterisk,
-  loading,
-  suffixIcon,
-  mode = 'multiple',
-  children,
-  value,
-  defaultRegion = 'IN',
-  ...rest
-}) => {
+                                                         placeholder,
+                                                         className,
+                                                         style,
+                                                         disabled,
+                                                         onChange,
+                                                         asterisk,
+                                                         loading,
+                                                         suffixIcon,
+                                                         mode = 'multiple',
+                                                         children,
+                                                         value,
+                                                         defaultRegion = 'IN',
+                                                         ...rest
+                                                       }) => {
   const inputRef = useRef<BaseSelectRef | null>(null);
   const [state, setState] = useState<PhoneSelectValue>({
     region: defaultRegion,
@@ -63,7 +59,7 @@ const AppPhoneSelect: React.FC<AppPhoneSelectProps> = ({
   }, [value]);
 
   const triggerChange = (changed: Partial<PhoneSelectValue>) => {
-    const updated = { ...state, ...changed };
+    const updated = {...state, ...changed};
     setState(updated);
     onChange?.(updated);
   };
@@ -104,9 +100,9 @@ const AppPhoneSelect: React.FC<AppPhoneSelectProps> = ({
       asterisk={asterisk}
     >
       <StyledSelect
-        style={{ width: 80, maxWidth: 80 }}
+        style={{width: 80, maxWidth: 80}}
         variant="borderless"
-        styles={{ popup: { root: { margin: 0, padding: 0, minWidth: 200 } } }}
+        styles={{popup: {root: {margin: 0, padding: 0, minWidth: 200}}}}
         maxTagCount="responsive"
         value={state.region || 'IN'}
         onChange={handleRegionChange}
@@ -118,7 +114,7 @@ const AppPhoneSelect: React.FC<AppPhoneSelectProps> = ({
         labelRender={(item) => {
           const country = countryCodes.find((c) => c.short === item.value);
           return (
-            <span style={{ margin: 0, padding: 0 }}>
+            <span style={{margin: 0, padding: 0}}>
               {country?.flag} {country?.code}
             </span>
           );
@@ -133,14 +129,14 @@ const AppPhoneSelect: React.FC<AppPhoneSelectProps> = ({
 
       <Select
         ref={inputRef}
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         mode={mode}
         loading={loading}
         maxTagCount="responsive"
         suffixIcon={loading ? undefined : suffixIcon}
         value={state.numbers}
         onChange={(val: string[]) => {
-          triggerChange({ numbers: val });
+          triggerChange({numbers: val});
         }}
         disabled={disabled}
         {...rest}

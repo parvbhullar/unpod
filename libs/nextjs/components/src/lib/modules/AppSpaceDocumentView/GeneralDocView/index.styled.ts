@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row } from 'antd';
+import {Row} from 'antd';
 
 export const StyledDetailsRoot = styled.div`
   margin: 0;

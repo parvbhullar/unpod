@@ -1,7 +1,7 @@
 'use client';
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, {CSSProperties, useEffect, useRef, useState} from 'react';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { InputNumber } from 'antd';
+import {InputNumber} from 'antd';
 
 type AppInputNumberProps = {
   placeholder: string;
@@ -13,20 +13,21 @@ type AppInputNumberProps = {
   onChange?: (value: number | null) => void;
   setFocus?: boolean;
   asterisk?: boolean;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppInputNumber: React.FC<AppInputNumberProps> = ({
-  placeholder,
-  className = '',
-  style,
-  defaultValue,
-  disabled = false,
-  value,
-  onChange,
-  setFocus,
-  asterisk,
-  ...restProps
-}) => {
+                                                         placeholder,
+                                                         className = '',
+                                                         style,
+                                                         defaultValue,
+                                                         disabled = false,
+                                                         value,
+                                                         onChange,
+                                                         setFocus,
+                                                         asterisk,
+                                                         ...restProps
+                                                       }) => {
   const [inputVal, setInputVal] = useState<number | string | undefined>(
     value || defaultValue || '',
   );

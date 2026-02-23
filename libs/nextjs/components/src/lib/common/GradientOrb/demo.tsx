@@ -1,6 +1,6 @@
 'use client';
 
-import styled, { keyframes } from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 // Iridescent color shift animation
 const iridescentShift = keyframes`
@@ -224,16 +224,16 @@ const VoiceRipple = styled.div<{
   height: 100px;
   margin: -50px 0 0 -50px;
   border-radius: 50%;
-  border: ${({ thickness }) => thickness || '1.5px'} solid
-    rgba(121, 108, 255, ${({ opacity }) => opacity || 0.4});
-  animation: ${({ speed }) =>
-      speed === 'slow'
-        ? rippleExpand
-        : speed === 'medium'
-          ? rippleExpandMedium
-          : rippleExpandFast}
-    ${({ duration }) => duration || 3}s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  animation-delay: ${({ delay }) => delay || 0}s;
+  border: ${({thickness}) => thickness || '1.5px'} solid
+    rgba(121, 108, 255, ${({opacity}) => opacity || 0.4});
+  animation: ${({speed}) =>
+  speed === 'slow'
+    ? rippleExpand
+    : speed === 'medium'
+      ? rippleExpandMedium
+      : rippleExpandFast}
+    ${({duration}) => duration || 3}s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: ${({delay}) => delay || 0}s;
   z-index: 5;
 `;
 
@@ -266,18 +266,18 @@ const RainDrop = styled.div<{
 }>`
   position: absolute;
   top: -20px;
-  left: ${({ left }) => left || '50%'};
-  width: ${({ size }) => size || '2px'};
-  height: ${({ height }) => height || '8px'};
+  left: ${({left}) => left || '50%'};
+  width: ${({size}) => size || '2px'};
+  height: ${({height}) => height || '8px'};
   background: linear-gradient(
     to bottom,
     rgba(121, 108, 255, 0) 0%,
-    rgba(121, 108, 255, ${({ opacity }) => opacity || 0.5}) 50%,
+    rgba(121, 108, 255, ${({opacity}) => opacity || 0.5}) 50%,
     rgba(121, 108, 255, 0) 100%
   );
   border-radius: 50%;
-  animation: ${rainFall} ${({ duration }) => duration || 2}s linear infinite;
-  animation-delay: ${({ delay }) => delay || 0}s;
+  animation: ${rainFall} ${({duration}) => duration || 2}s linear infinite;
+  animation-delay: ${({delay}) => delay || 0}s;
   z-index: 1;
 `;
 
@@ -305,8 +305,8 @@ const OrbitingParticle = styled.div<{
   position: absolute;
   top: 50%;
   left: 50%;
-  width: ${({ size }) => size || '3px'};
-  height: ${({ size }) => size || '3px'};
+  width: ${({size}) => size || '3px'};
+  height: ${({size}) => size || '3px'};
   background: radial-gradient(
     circle,
     rgba(121, 108, 255, 0.9) 0%,
@@ -314,8 +314,8 @@ const OrbitingParticle = styled.div<{
     transparent 100%
   );
   border-radius: 50%;
-  animation: ${orbit} ${({ duration }) => duration || 8}s ease-in-out infinite;
-  animation-delay: ${({ delay }) => delay || 0}s;
+  animation: ${orbit} ${({duration}) => duration || 8}s ease-in-out infinite;
+  animation-delay: ${({delay}) => delay || 0}s;
   z-index: 3;
   box-shadow: 0 0 6px rgba(121, 108, 255, 0.5);
 `;
@@ -341,15 +341,15 @@ const Sparkle = styled.div<{
   delay?: number;
 }>`
   position: absolute;
-  top: ${({ top }) => top || '50%'};
-  left: ${({ left }) => left || '50%'};
-  width: ${({ size }) => size || '2.5px'};
-  height: ${({ size }) => size || '2.5px'};
+  top: ${({top}) => top || '50%'};
+  left: ${({left}) => left || '50%'};
+  width: ${({size}) => size || '2.5px'};
+  height: ${({size}) => size || '2.5px'};
   background: rgba(255, 255, 255, 0.9);
   border-radius: 50%;
-  animation: ${sparkle} ${({ duration }) => duration || 2}s
+  animation: ${sparkle} ${({duration}) => duration || 2}s
     cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  animation-delay: ${({ delay }) => delay || 0}s;
+  animation-delay: ${({delay}) => delay || 0}s;
   z-index: 8;
   box-shadow: 0 0 5px rgba(121, 108, 255, 0.7);
 
@@ -407,8 +407,8 @@ const EnergyArc = styled.div<{
   border: 1.5px solid transparent;
   border-top-color: rgba(121, 108, 255, 0.5);
   border-right-color: rgba(121, 108, 255, 0.25);
-  animation: ${arcFlow} ${({ duration }) => duration || 6}s ease-in-out infinite;
-  animation-delay: ${({ delay }) => delay || 0}s;
+  animation: ${arcFlow} ${({duration}) => duration || 6}s ease-in-out infinite;
+  animation-delay: ${({delay}) => delay || 0}s;
   z-index: 4;
   filter: blur(1.5px);
 `;
@@ -545,24 +545,24 @@ const GradientOrbDemo = () => {
 
   // Orbiting particles - 4 particles evenly distributed
   const particles = [
-    { duration: 12, delay: 0, size: '3px' },
-    { duration: 12, delay: 3, size: '3px' },
-    { duration: 12, delay: 6, size: '3px' },
-    { duration: 12, delay: 9, size: '3px' },
+    {duration: 12, delay: 0, size: '3px'},
+    {duration: 12, delay: 3, size: '3px'},
+    {duration: 12, delay: 6, size: '3px'},
+    {duration: 12, delay: 9, size: '3px'},
   ];
 
   // Sparkles - 4 sparkles at cardinal positions
   const sparkles = [
-    { top: '20%', left: '50%', duration: 3.5, delay: 0, size: '2.5px' },
-    { top: '50%', left: '80%', duration: 3.5, delay: 0.875, size: '2.5px' },
-    { top: '80%', left: '50%', duration: 3.5, delay: 1.75, size: '2.5px' },
-    { top: '50%', left: '20%', duration: 3.5, delay: 2.625, size: '2.5px' },
+    {top: '20%', left: '50%', duration: 3.5, delay: 0, size: '2.5px'},
+    {top: '50%', left: '80%', duration: 3.5, delay: 0.875, size: '2.5px'},
+    {top: '80%', left: '50%', duration: 3.5, delay: 1.75, size: '2.5px'},
+    {top: '50%', left: '20%', duration: 3.5, delay: 2.625, size: '2.5px'},
   ];
 
   // Energy arcs - 2 arcs for smooth flow
   const energyArcs = [
-    { duration: 12, delay: 0 },
-    { duration: 12, delay: 6 },
+    {duration: 12, delay: 0},
+    {duration: 12, delay: 6},
   ];
 
   return (
@@ -604,7 +604,7 @@ const GradientOrbDemo = () => {
 
       {/* Energy arcs flowing around */}
       {energyArcs.map((arc, i) => (
-        <EnergyArc key={`arc-${i}`} duration={arc.duration} delay={arc.delay} />
+        <EnergyArc key={`arc-${i}`} duration={arc.duration} delay={arc.delay}/>
       ))}
 
       {/* Balanced wave rings */}
@@ -620,7 +620,7 @@ const GradientOrbDemo = () => {
       ))}
 
       {/* Voice agent core sphere */}
-      <VoiceAgentCore />
+      <VoiceAgentCore/>
     </DemoContainer>
   );
 };

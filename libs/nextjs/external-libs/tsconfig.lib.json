@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "types": [
       "node",
       "@nx/react/typings/cssmodule.d.ts",

@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
-import { Card, Skeleton } from 'antd';
+import React, {Fragment} from 'react';
+import {Card, Skeleton} from 'antd';
 import styled from 'styled-components';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonAvatar from './common/SkeletonAvatar';
 
 const StyldeCard = styled(Card)`
@@ -14,19 +14,20 @@ const StyldeCard = styled(Card)`
 type CardWithImageProps = {
   count?: number;
   image?: boolean;
-  secondText?: boolean;};
+  secondText?: boolean;
+};
 
 const CardWithImage: React.FC<CardWithImageProps> = ({
-  count = 1,
-  image = false,
-  secondText = false,
-}) => {
+                                                       count = 1,
+                                                       image = false,
+                                                       secondText = false,
+                                                     }) => {
   return (
     <Fragment>
-      {Array.from({ length: count }).map((_, idx) => (
+      {Array.from({length: count}).map((_, idx) => (
         <StyldeCard key={idx}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
               <SkeletonInput
                 style={{
                   width: 180,
@@ -54,9 +55,9 @@ const CardWithImage: React.FC<CardWithImageProps> = ({
                 }}
               >
                 <SkeletonInput
-                  style={{ width: 120, height: 14, borderRadius: 6 }}
+                  style={{width: 120, height: 14, borderRadius: 6}}
                 />
-                <SkeletonAvatar />
+                <SkeletonAvatar/>
                 <SkeletonInput
                   style={{
                     width: 120,
@@ -112,13 +113,13 @@ const SharedWithMeSkeleton: React.FC = () => {
         margin: '14px auto 0 auto',
       }}
     >
-      <CardWithImage image />
-      <CardWithImage secondText />
-      <CardWithImage image secondText />
-      <CardWithImage secondText />
-      <CardWithImage secondText />
+      <CardWithImage image/>
+      <CardWithImage secondText/>
+      <CardWithImage image secondText/>
+      <CardWithImage secondText/>
+      <CardWithImage secondText/>
     </div>
   );
 };
 
-export { SharedWithMeSkeleton };
+export {SharedWithMeSkeleton};

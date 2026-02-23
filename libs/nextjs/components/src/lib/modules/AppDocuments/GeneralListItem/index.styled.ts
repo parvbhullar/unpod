@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
 export const StyledRoot = styled.div`
   display: flex;
@@ -7,7 +7,7 @@ export const StyledRoot = styled.div`
   gap: 10px;
   cursor: pointer;
   padding: 10px 10px 10px 16px;
-  border-block-end: 1px solid ${({ theme }) => theme.border.color};
+  border-block-end: 1px solid ${({theme}) => theme.border.color};
 
   &:hover {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -15,7 +15,7 @@ export const StyledRoot = styled.div`
 
   &.active,
   &.selected {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   }
 `;

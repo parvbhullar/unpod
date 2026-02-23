@@ -1,14 +1,9 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row, Tooltip } from 'antd';
-import { useDrag, useDrop } from 'react-dnd';
-import {
-  MdDelete,
-  MdFormatListBulleted,
-  MdOutlineDragIndicator,
-  MdOutlineMoreVert,
-} from 'react-icons/md';
-import { INPUT_TYPE_ICONS, REQUIRED_CONTACT_FIELDS } from '@unpod/constants';
+import React, {useEffect, useRef, useState} from 'react';
+import {Col, Row, Tooltip} from 'antd';
+import {useDrag, useDrop} from 'react-dnd';
+import {MdDelete, MdFormatListBulleted, MdOutlineDragIndicator, MdOutlineMoreVert,} from 'react-icons/md';
+import {INPUT_TYPE_ICONS, REQUIRED_CONTACT_FIELDS} from '@unpod/constants';
 import AppPopconfirm from '../../antd/AppPopconfirm';
 import {
   StyledActions,
@@ -31,7 +26,8 @@ type InputItem = {
   placeholder?: string;
   description?: string;
   required?: boolean;
-  isEnum?: boolean;};
+  isEnum?: boolean;
+};
 
 type AppInputRowProps = {
   item: InputItem;
@@ -45,22 +41,23 @@ type AppInputRowProps = {
   onRowReorder?: (fromIndex: number, toIndex: number) => void;
   contentType?: string;
   showEnumOption?: boolean;
-  index?: number;};
+  index?: number;
+};
 
 const AppInputRow: React.FC<AppInputRowProps> = ({
-  item,
-  handleInputChange,
-  handleDescriptionChange,
-  setSelectedItem,
-  setOpenDetail,
-  handleDeleteInput,
-  handleRequiredChange,
-  handleEnumChange,
-  onRowReorder,
-  contentType,
-  showEnumOption,
-  index = 0,
-}) => {
+                                                   item,
+                                                   handleInputChange,
+                                                   handleDescriptionChange,
+                                                   setSelectedItem,
+                                                   setOpenDetail,
+                                                   handleDeleteInput,
+                                                   handleRequiredChange,
+                                                   handleEnumChange,
+                                                   onRowReorder,
+                                                   contentType,
+                                                   showEnumOption,
+                                                   index = 0,
+                                                 }) => {
   const [openDelTooltip, setDelTooltip] = useState(false);
   const [inputVal, setInputVal] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -77,7 +74,7 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
     if (item.description) setDescription(item.description);
   }, [item.description]);
 
-  const [{ isOver }, drop] = useDrop<
+  const [{isOver}, drop] = useDrop<
     { index: number },
     void,
     { isOver: boolean }
@@ -94,14 +91,14 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
     }),
   });
 
-  const [{ isDragging }, drag] = useDrag<
+  const [{isDragging}, drag] = useDrag<
     { index: number },
     void,
     { isDragging: boolean }
   >({
     type: 'row',
     item: () => {
-      return { index };
+      return {index};
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -112,9 +109,9 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
   drag(drop(ref));
 
   return (
-    <StyledRoot isOver={isOver} style={{ opacity }}>
+    <StyledRoot isOver={isOver} style={{opacity}}>
       <StyledDragHandle ref={ref}>
-        <MdOutlineDragIndicator fontSize={18} />
+        <MdOutlineDragIndicator fontSize={18}/>
       </StyledDragHandle>
 
       <StyledContainer>
@@ -163,8 +160,8 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
 
           <StyledActions>
             {(item.type === 'select' ||
-              item.type === 'multi-select' ||
-              item.type === 'checkboxes') &&
+                item.type === 'multi-select' ||
+                item.type === 'checkboxes') &&
               !showEnumOption && (
                 <Tooltip title="Choices">
                   <StyledButton
@@ -175,7 +172,7 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
                       setOpenDetail?.(true);
                     }}
                   >
-                    <MdFormatListBulleted fontSize={18} />
+                    <MdFormatListBulleted fontSize={18}/>
                   </StyledButton>
                 </Tooltip>
               )}
@@ -204,7 +201,7 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
                   onOpenChange={(open: boolean) => setDelTooltip(open)}
                 >
                   <StyledButton type="text" size="small">
-                    <MdDelete fontSize={18} />
+                    <MdDelete fontSize={18}/>
                   </StyledButton>
                 </Tooltip>
               </AppPopconfirm>
@@ -226,7 +223,7 @@ const AppInputRow: React.FC<AppInputRowProps> = ({
                   setOpenDetail?.(true);
                 }}
               >
-                <MdOutlineMoreVert fontSize={16} />
+                <MdOutlineMoreVert fontSize={16}/>
               </StyledButton>
             </Tooltip>
           </StyledActions>

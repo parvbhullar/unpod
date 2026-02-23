@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Flex } from 'antd';
+import {Button, Flex} from 'antd';
 
 export const StyledContainer = styled.div`
   display: flex;
@@ -17,9 +17,8 @@ export const StyledSearchBoxWrapper = styled.div`
   top: 0;
   z-index: 10;
   padding: 6px;
-  background: ${({ theme }) => theme.palette.background.paper};
-  border-bottom: ${({ theme }) => theme.border.width}
-    ${({ theme }) => theme.border.style} ${({ theme }) => theme.border.color};
+  background: ${({theme}) => theme.palette.background.paper};
+  border-bottom: ${({theme}) => theme.border.width} ${({theme}) => theme.border.style} ${({theme}) => theme.border.color};
 
   & > *:first-child {
     flex: 1;
@@ -30,18 +29,18 @@ export const StyledSearchBoxWrapper = styled.div`
 
 export const StyledFlex = styled(Flex)`
   padding: 10px;
-  border-radius: ${({ theme }) => theme.radius.base}px;
-  border: ${({ theme }) => theme.border.width}
-    ${({ theme }) => theme.border.style} ${({ theme }) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
+  border: ${({theme}) => theme.border.width}
+    ${({theme}) => theme.border.style} ${({theme}) => theme.border.color};
   margin-bottom: 12px;
 
   &:hover {
-    border-color: ${({ theme }) => theme.palette.primary};
+    border-color: ${({theme}) => theme.palette.primary};
     cursor: pointer;
   }
 
   &.active {
-    border-color: ${({ theme }) => theme.palette.primary};
+    border-color: ${({theme}) => theme.palette.primary};
   }
 `;
 

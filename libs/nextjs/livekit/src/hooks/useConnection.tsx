@@ -1,12 +1,7 @@
 'use client';
 
-import React, {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useState,
-} from 'react';
-import { useConfig } from './useConfig';
+import React, {createContext, type ReactNode, useCallback, useState,} from 'react';
+import {useConfig} from './useConfig';
 
 type ConnectionMode = 'manual' | 'env';
 
@@ -21,8 +16,8 @@ type ConnectionContextValue = {
 
 const ConnectionContext = createContext<ConnectionContextValue | null>(null);
 
-export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
-  const { config } = useConfig();
+export const ConnectionProvider = ({children}: { children: ReactNode }) => {
+  const {config} = useConfig();
   const [connectionDetails, setConnectionDetails] = useState<{
     wsUrl: string;
     token: string;
@@ -55,7 +50,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         }
 
         console.log('params', params);
-        const { accessToken } = await fetch(
+        const {accessToken} = await fetch(
           `/api/token/livekit/?${params}`,
         ).then((res) => res.json());
         token = accessToken;
@@ -64,7 +59,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         url = config.settings.ws_url;
       }
       console.log('config.settings', config.settings);
-      setConnectionDetails({ wsUrl: url, token, shouldConnect: true, mode });
+      setConnectionDetails({wsUrl: url, token, shouldConnect: true, mode});
     },
     [
       config.settings.token,
@@ -75,7 +70,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const disconnect = useCallback(async () => {
-    setConnectionDetails((prev) => ({ ...prev, shouldConnect: false }));
+    setConnectionDetails((prev) => ({...prev, shouldConnect: false}));
   }, []);
 
   return (

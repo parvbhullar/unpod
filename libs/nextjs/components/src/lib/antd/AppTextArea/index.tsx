@@ -1,15 +1,8 @@
 'use client';
-import React, {
-  ChangeEvent,
-  CSSProperties,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { Input } from 'antd';
+import React, {ChangeEvent, CSSProperties, useEffect, useMemo, useRef, useState,} from 'react';
+import {Input} from 'antd';
 import AppFloatingOutline from '../AppFloatingOutline';
-import type { TextAreaRef } from 'antd/es/input/TextArea';
+import type {TextAreaRef} from 'antd/es/input/TextArea';
 
 type AppTextAreaProps = {
   placeholder: string;
@@ -21,19 +14,20 @@ type AppTextAreaProps = {
   disabled?: boolean;
   asterisk?: boolean;
   id?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppTextArea: React.FC<AppTextAreaProps> = ({
-  placeholder,
-  className = '',
-  style,
-  onChange,
-  defaultValue,
-  value,
-  disabled = false,
-  asterisk,
-  ...restProps
-}) => {
+                                                   placeholder,
+                                                   className = '',
+                                                   style,
+                                                   onChange,
+                                                   defaultValue,
+                                                   value,
+                                                   disabled = false,
+                                                   asterisk,
+                                                   ...restProps
+                                                 }) => {
   const [inputVal, setInputVal] = useState<string>('');
   const inputRef = useRef<TextAreaRef | null>(null);
   const inputId = useMemo(() => {

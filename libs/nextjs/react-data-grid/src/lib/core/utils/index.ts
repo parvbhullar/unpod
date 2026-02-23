@@ -1,7 +1,4 @@
-import type {
-  CalculatedColumn,
-  CalculatedColumnOrColumnGroup,
-} from '../models/data-grid';
+import type {CalculatedColumn, CalculatedColumnOrColumnGroup,} from '../models/data-grid';
 
 export * from './colSpanUtils';
 export * from './domUtils';
@@ -11,7 +8,7 @@ export * from './renderMeasuringCells';
 export * from './selectedCellUtils';
 export * from './styleUtils';
 
-export const { min, max, floor, sign, abs } = Math;
+export const {min, max, floor, sign, abs} = Math;
 
 export function assertIsValidKeyGetter<R, K extends React.Key>(
   keyGetter: unknown,
@@ -23,7 +20,7 @@ export function assertIsValidKeyGetter<R, K extends React.Key>(
 
 export function clampColumnWidth<R, SR>(
   width: number,
-  { minWidth, maxWidth }: CalculatedColumn<R, SR>,
+  {minWidth, maxWidth}: CalculatedColumn<R, SR>,
 ): number {
   width = max(width, minWidth);
 
@@ -43,6 +40,7 @@ export function getHeaderCellRowSpan<R, SR>(
     ? rowIdx
     : column.level - column.parent.level;
 }
+
 export function getHeaderCellAlphaIdx(colIndex: number): string {
   let columnLabel = '';
 

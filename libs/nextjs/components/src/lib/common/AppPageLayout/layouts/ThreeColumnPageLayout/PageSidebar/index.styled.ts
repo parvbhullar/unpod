@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Button, Layout, Menu, Skeleton } from 'antd';
+import {Button, Layout, Menu, Skeleton} from 'antd';
 import SimpleBar from 'simplebar-react';
 
-const { Sider } = Layout;
+const {Sider} = Layout;
 
 export const StyledScrollbar = styled(SimpleBar)`
   height: 100%;
@@ -49,10 +49,10 @@ export const StyledMainMenu = styled(Menu)`
 
       &:hover,
       &.ant-menu-item-selected {
-        color: ${({ theme }) => theme.palette.primary} !important;
+        color: ${({theme}) => theme.palette.primary} !important;
 
         & .ant-menu-item-icon {
-          color: ${({ theme }) => theme.palette.primary};
+          color: ${({theme}) => theme.palette.primary};
         }
       }
 
@@ -99,7 +99,7 @@ export const StyledAddBtnView = styled.div`
   bottom: 0;
   top: auto;
   margin: auto 0 0;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
 `;
 
 export const StyledAddBtn = styled(Button)`
@@ -110,13 +110,13 @@ export const StyledAddBtn = styled(Button)`
 `;
 
 export const StyledSidebar = styled(Sider)<{ $hidePageHeader?: boolean }>`
-  border-radius: ${({ theme }) =>
-    `${theme.radius.base}px ${theme.radius.base}px ${theme.radius.base}px 0`};
-  height: ${({ $hidePageHeader }) =>
-    $hidePageHeader ? '100vh' : 'calc(100vh - 80px)'};
+  border-radius: ${({theme}) =>
+  `${theme.radius.base}px ${theme.radius.base}px ${theme.radius.base}px 0`};
+  height: ${({$hidePageHeader}) =>
+  $hidePageHeader ? '100vh' : 'calc(100vh - 80px)'};
   overflow-y: auto;
   position: sticky !important;
   top: 64px;
-  background-color: ${({ theme }) =>
-    theme.palette.background.default} !important;
+  background-color: ${({theme}) =>
+  theme.palette.background.default} !important;
 `;

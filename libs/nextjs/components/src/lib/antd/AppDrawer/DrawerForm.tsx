@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import type { FormProps } from 'antd';
-import { Form } from 'antd';
+import type {FormProps} from 'antd';
+import {Form} from 'antd';
 
 type DrawerFormProps = Omit<FormProps, 'children'> & {
   children?: React.ReactNode;

@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  StyledFPContainer,
-  StyledFPInnerContainer,
-  StyledFPSubTitle,
-  StyledFPTitle,
-} from './FirstPersonDisplay.styled';
-import { Typography } from 'antd';
+import {StyledFPContainer, StyledFPInnerContainer, StyledFPSubTitle, StyledFPTitle,} from './FirstPersonDisplay.styled';
+import {Typography} from 'antd';
 
 export const FirstPersonDisplay = React.memo(() => {
   return (

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 // import { selectIsConnectedToRoom, useHMSStore } from '@100mslive/react-sdk';
-import { Toast } from './Toast';
-import { ToastManager } from './ToastManager';
+import {Toast} from './Toast';
+import {ToastManager} from './ToastManager';
 
 export const ToastContainer = () => {
   // const isConnected = useHMSStore(selectIsConnectedToRoom);

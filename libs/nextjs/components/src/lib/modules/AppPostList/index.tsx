@@ -1,12 +1,12 @@
-import type { ComponentType, ReactNode } from 'react';
-import { memo } from 'react';
+import type {ComponentType, ReactNode} from 'react';
+import {memo} from 'react';
 
-import { Spin } from 'antd';
-import { useRouter } from 'next/navigation';
-import { onEndReached } from '@unpod/helpers/ListHelper';
+import {Spin} from 'antd';
+import {useRouter} from 'next/navigation';
+import {onEndReached} from '@unpod/helpers/ListHelper';
 import AppPostCard from './AppPostCard';
-import { StyledList, StyledRootContainer, StyledRow } from './index.styled';
-import type { Thread } from '@unpod/constants/types';
+import {StyledList, StyledRootContainer, StyledRow} from './index.styled';
+import type {Thread} from '@unpod/constants/types';
 
 type AppPostListProps = {
   apiData?: Thread[];
@@ -14,16 +14,17 @@ type AppPostListProps = {
   setPage?: (page: number) => void;
   loading?: boolean;
   isLoadingMore?: boolean;
-  setLoadingMore?: (loading: boolean) => void;};
+  setLoadingMore?: (loading: boolean) => void;
+};
 
 const AppPostList = ({
-  apiData = [],
-  page = 1,
-  setPage = () => undefined,
-  loading = false,
-  isLoadingMore = false,
-  setLoadingMore = () => undefined,
-}: AppPostListProps) => {
+                       apiData = [],
+                       page = 1,
+                       setPage = () => undefined,
+                       loading = false,
+                       isLoadingMore = false,
+                       setLoadingMore = () => undefined,
+                     }: AppPostListProps) => {
   const router = useRouter();
   const List = StyledList as unknown as ComponentType<{
     data: Thread[];
@@ -38,7 +39,7 @@ const AppPostList = ({
   if (loading)
     return (
       <StyledRow align="middle" justify="center">
-        <Spin />
+        <Spin/>
       </StyledRow>
     );
 

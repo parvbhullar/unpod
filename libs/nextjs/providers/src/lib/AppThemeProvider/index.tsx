@@ -1,12 +1,13 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import { ConfigProvider, ThemeConfig } from 'antd';
+import React, {ReactNode} from 'react';
+import {ConfigProvider, ThemeConfig} from 'antd';
 import AppLocale from '@unpod/localization';
-import { useAppContext } from '../context-provider';
+import {useAppContext} from '../context-provider';
 
 type AppLocaleEntry = {
-  antLocale: unknown;};
+  antLocale: unknown;
+};
 
 export type Theme = {
   font: {
@@ -25,23 +26,25 @@ export type Theme = {
   };
   border: {
     color: string;
-  };};
+  };
+};
 
 export type AppThemeProviderProps = {
   children: ReactNode;
-  theme: Theme;};
+  theme: Theme;
+};
 
 export const AppThemeProvider: React.FC<AppThemeProviderProps> = ({
-  theme,
-  children,
-}) => {
-  const { locale } = useAppContext();
-  const { antLocale } =
-    (AppLocale as Record<string, AppLocaleEntry>)[locale.locale] ||
-    (AppLocale as Record<string, AppLocaleEntry>)['en'];
+                                                                    theme,
+                                                                    children,
+                                                                  }) => {
+  const {locale} = useAppContext();
+  const {antLocale} =
+  (AppLocale as Record<string, AppLocaleEntry>)[locale.locale] ||
+  (AppLocale as Record<string, AppLocaleEntry>)['en'];
 
   const themeSettings: ThemeConfig = {
-    cssVar: { key: 'unpod' },
+    cssVar: {key: 'unpod'},
     token: {
       fontFamily: theme.font.family,
       colorPrimary: theme.palette.primary,
@@ -82,7 +85,7 @@ export const AppThemeProvider: React.FC<AppThemeProviderProps> = ({
 
   return (
     <ConfigProvider
-      csp={{ nonce: 'unpod' }}
+      csp={{nonce: 'unpod'}}
       locale={antLocale as undefined}
       theme={themeSettings}
     >

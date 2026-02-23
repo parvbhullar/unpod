@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Typography} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledListItemMetaWrapper = styled.div`
   flex: 1;
@@ -17,12 +17,12 @@ export const StyledCardWrapper = styled.div`
   flex-direction: column;
   min-width: 0;
   cursor: pointer;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
-  border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.component.card.borderRadius};
-  box-shadow: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.component.card.boxShadow};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
+  border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
+  box-shadow: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.boxShadow};
 `;
 export const StyledCardContentWrapper = styled.div`
   padding: 12px;
@@ -54,7 +54,7 @@ export const StyledMetaContent = styled.div`
 
 export const StyledHubSpaceTitle = styled(Typography.Paragraph)`
   font-size: 14px;
-  color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary};
+  color: ${({theme}: { theme: GlobalTheme }) => theme.palette.primary};
   margin-bottom: 0 !important;
 
   .ant-typography {
@@ -83,8 +83,8 @@ export const StyledGridThumbnailWrapper = styled.div`
   // opacity: 0.9;
   flex: 1;
   padding-top: 56.25%;
-  border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.component.card.borderRadius};
+  border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
 `;
 export const StyledContentWrapper = styled.div`
   margin-top: 8px;

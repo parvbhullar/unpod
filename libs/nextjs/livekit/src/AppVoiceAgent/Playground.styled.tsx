@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyledAgentContainer = styled.div<{ $direction?: string }>`
   display: flex;
-  flex-direction: ${({ $direction }) => $direction || 'row'};
+  flex-direction: ${({$direction}) => $direction || 'row'};
   align-items: center;
   justify-content: center;
   margin-bottom: -20px;
@@ -21,8 +21,8 @@ export const StyledVisualizerContainer = styled.div`
   color: #333333;
   align-items: center;
   justify-content: center;
-  // border: ${({ theme }) => `1px solid ${theme?.palette?.text?.primary}`};
+  // border: ${({theme}) => `1px solid ${theme?.palette?.text?.primary}`};
   --lk-va-bar-width: 10px;
   --lk-va-bar-gap: 5px;
-  --lk-fg: ${({ theme }) => theme?.palette?.secondary};
+  --lk-fg: ${({theme}) => theme?.palette?.secondary};
 `;

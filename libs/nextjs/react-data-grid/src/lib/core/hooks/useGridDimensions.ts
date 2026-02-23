@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
+import {useRef, useState} from 'react';
+import {flushSync} from 'react-dom';
 
-import { useLayoutEffect } from './useLayoutEffect';
+import {useLayoutEffect} from './useLayoutEffect';
 
 export function useGridDimensions() {
   const gridRef = useRef<HTMLDivElement>(null);
@@ -9,15 +9,15 @@ export function useGridDimensions() {
   const [blockSize, setBlockSize] = useState(1);
 
   useLayoutEffect(() => {
-    const { ResizeObserver } = window;
+    const {ResizeObserver} = window;
 
     // don't break in Node.js (SSR), jsdom, and browsers that don't support ResizeObserver
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (ResizeObserver == null) return;
 
-    const { clientWidth, clientHeight, offsetWidth, offsetHeight } =
+    const {clientWidth, clientHeight, offsetWidth, offsetHeight} =
       gridRef.current!;
-    const { width, height } = gridRef.current!.getBoundingClientRect();
+    const {width, height} = gridRef.current!.getBoundingClientRect();
     const initialWidth = width - offsetWidth + clientWidth;
     const initialHeight = height - offsetHeight + clientHeight;
 

@@ -19,7 +19,7 @@ export const StyledTabContent = styled.div`
 `;
 
 export const StyledDetailsRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   //height: calc(100vh - 120px);
   height: calc(100vh - 60px);
   overflow-y: auto;

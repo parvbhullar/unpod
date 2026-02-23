@@ -1,25 +1,15 @@
-import type { Dispatch, SetStateAction } from 'react';
-import { memo, useEffect, useState } from 'react';
-import type { UploadProps } from 'antd';
-import { Button, Form, Upload } from 'antd';
+import type {Dispatch, SetStateAction} from 'react';
+import {memo, useEffect, useState} from 'react';
+import type {UploadProps} from 'antd';
+import {Button, Form, Upload} from 'antd';
 import AppImage from '@unpod/components/next/AppImage';
-import {
-  AppInput,
-  AppTextArea,
-  DrawerBody,
-  DrawerForm,
-  DrawerFormFooter,
-} from '@unpod/components/antd';
-import type { Spaces } from '@unpod/constants/types';
-import {
-  putDataApi,
-  uploadPutDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { StyledEditContainer, StylesImageWrapper } from '../index.styled';
-import { useIntl } from 'react-intl';
+import {AppInput, AppTextArea, DrawerBody, DrawerForm, DrawerFormFooter,} from '@unpod/components/antd';
+import type {Spaces} from '@unpod/constants/types';
+import {putDataApi, uploadPutDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {StyledEditContainer, StylesImageWrapper} from '../index.styled';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 type EditSpaceProps = {
   onClose: () => void;
@@ -29,14 +19,14 @@ type EditSpaceProps = {
 };
 
 const EditSpace = ({
-  onClose,
-  currentSpace,
-  setCurrentSpace,
-  $bodyHeight,
-}: EditSpaceProps) => {
+                     onClose,
+                     currentSpace,
+                     setCurrentSpace,
+                     $bodyHeight,
+                   }: EditSpaceProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [spaceLogo, setSpaceLogo] = useState<string>(
     typeof currentSpace?.logo === 'string' ? currentSpace.logo : '',
@@ -97,12 +87,12 @@ const EditSpace = ({
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'editSpace.validationName' }),
+                message: formatMessage({id: 'editSpace.validationName'}),
               },
             ]}
           >
             <AppInput
-              placeholder={formatMessage({ id: 'editSpace.namePlaceholder' })}
+              placeholder={formatMessage({id: 'editSpace.namePlaceholder'})}
             />
           </Item>
           <Item
@@ -145,10 +135,10 @@ const EditSpace = ({
 
       <DrawerFormFooter isTabDrawer={true}>
         <Button onClick={onClose}>
-          {formatMessage({ id: 'common.close' })}
+          {formatMessage({id: 'common.close'})}
         </Button>
         <Button type="primary" htmlType="submit">
-          {formatMessage({ id: 'common.save' })}
+          {formatMessage({id: 'common.save'})}
         </Button>
       </DrawerFormFooter>
     </DrawerForm>

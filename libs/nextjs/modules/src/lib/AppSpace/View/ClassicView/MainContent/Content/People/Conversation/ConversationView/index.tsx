@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Button } from 'antd';
-import { MdRefresh } from 'react-icons/md';
+import {useCallback, useEffect, useState} from 'react';
+import {Button} from 'antd';
+import {MdRefresh} from 'react-icons/md';
 import {
   deleteDataApi,
   getDataApi,
@@ -9,13 +9,13 @@ import {
   useGetDataApi,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { tablePageSize } from '@unpod/constants';
-import { getRandomColor } from '@unpod/helpers/StringHelper';
+import {tablePageSize} from '@unpod/constants';
+import {getRandomColor} from '@unpod/helpers/StringHelper';
 import ReplyItem from '@unpod/components/modules/AppPostReplies/ReplyItem';
 import AppConfirmModal from '@unpod/components/antd/AppConfirmModal';
-import { StyledMoreContainer } from './index.styled';
+import {StyledMoreContainer} from './index.styled';
 import AppList from '@unpod/components/common/AppList';
-import type { Conversation } from '@unpod/constants/types';
+import type {Conversation} from '@unpod/constants/types';
 
 type ReplyUser = {
   user_token?: string;
@@ -43,9 +43,9 @@ type ConversationViewProps = {
   conversation: Conversation;
 };
 
-const ConversationView = ({ conversation }: ConversationViewProps) => {
+const ConversationView = ({conversation}: ConversationViewProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { activeOrg } = useAuthContext();
+  const {activeOrg} = useAuthContext();
   const [selectedBlock, setSelectedBlock] = useState<ReplyItemData | null>(
     null,
   );
@@ -56,9 +56,9 @@ const ConversationView = ({ conversation }: ConversationViewProps) => {
   const [hasMoreRecords, setHasMoreRecords] = useState(false);
   const [replyParent, setReplyParent] = useState<ReplyItemData | null>(null);
 
-  const [{ apiData, loading }, { setData, setQueryParams }] = useGetDataApi(
+  const [{apiData, loading}, {setData, setQueryParams}] = useGetDataApi(
     `conversation/${conversation.post_id}/messages/`,
-    { data: [] },
+    {data: []},
     {
       domain: activeOrg?.domain_handle,
       page: 1,
@@ -106,7 +106,7 @@ const ConversationView = ({ conversation }: ConversationViewProps) => {
   useEffect(() => {
     setPage(1);
     setItems([]);
-    setData({ data: [] });
+    setData({data: []});
     setQueryParams({
       domain: activeOrg?.domain_handle,
       page: 1,
@@ -144,10 +144,10 @@ const ConversationView = ({ conversation }: ConversationViewProps) => {
               infoViewActionsContext.showMessage(response.message);
 
             setItems((prevState) => {
-              const selectedReply = { ...reply };
+              const selectedReply = {...reply};
 
               if (isSubReply && parentReply && replyParent) {
-                const selectedParentReply = { ...parentReply };
+                const selectedParentReply = {...parentReply};
                 selectedReply.reaction_count =
                   Number(selectedReply.reaction_count || 0) + reactionCount;
 
@@ -250,7 +250,7 @@ const ConversationView = ({ conversation }: ConversationViewProps) => {
       deleteDataApi<unknown>(
         `threads/${selectedBlock.block_id}/action/`,
         infoViewActionsContext,
-        { post_type: 'block' },
+        {post_type: 'block'},
         true,
       )
         .then((data) => {
@@ -290,7 +290,7 @@ const ConversationView = ({ conversation }: ConversationViewProps) => {
                 onClick={loadOlderMessages}
                 loading={loadingMore}
                 ghost
-                icon={<MdRefresh fontSize={16} />}
+                icon={<MdRefresh fontSize={16}/>}
               >
                 Load Older Messages
               </Button>

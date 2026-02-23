@@ -1,17 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { RiRobot2Line } from 'react-icons/ri';
-import { useAuthContext } from '@unpod/providers';
-import { tablePageSize } from '@unpod/constants';
+import {useEffect} from 'react';
+import {useRouter, useSearchParams} from 'next/navigation';
+import {RiRobot2Line} from 'react-icons/ri';
+import {useAuthContext} from '@unpod/providers';
+import {tablePageSize} from '@unpod/constants';
 import AppSidebar from '@unpod/components/common/AppSidebar';
-import {
-  useAppModuleActionsContext,
-  useAppModuleContext,
-} from '@unpod/providers/AppModuleContextProvider';
-import { SidebarAgentList } from '@unpod/skeleton';
-import type { Pilot } from '@unpod/constants/types';
+import {useAppModuleActionsContext, useAppModuleContext,} from '@unpod/providers/AppModuleContextProvider';
+import {SidebarAgentList} from '@unpod/skeleton';
+import type {Pilot} from '@unpod/constants/types';
 
 const pageLimit = tablePageSize * 2;
 type SidebarProps = {
@@ -20,12 +17,12 @@ type SidebarProps = {
   idKey?: string;
 };
 
-const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
+const Sidebar = ({path, title, idKey = 'handle'}: SidebarProps) => {
   const router = useRouter();
   const params = useSearchParams();
-  const { activeOrg } = useAuthContext();
+  const {activeOrg} = useAuthContext();
 
-  const { listData, record } = useAppModuleContext() as {
+  const {listData, record} = useAppModuleContext() as {
     listData: {
       apiData: any[];
       loading: boolean;
@@ -35,10 +32,10 @@ const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
     };
     record: Pilot;
   };
-  const { apiData, loading, isLoadingMore, hasMoreRecord, page } = listData;
-  const { listActions, setRecord, setIsNewRecord } =
+  const {apiData, loading, isLoadingMore, hasMoreRecord, page} = listData;
+  const {listActions, setRecord, setIsNewRecord} =
     useAppModuleActionsContext() as any;
-  const { setLoadingMore, setPage, setQueryParams } = listActions;
+  const {setLoadingMore, setPage, setQueryParams} = listActions;
 
   useEffect(() => {
     if (activeOrg?.domain_handle) {
@@ -56,7 +53,7 @@ const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
     setRecord(null);
   };
 
-  const onSelectAgent = ({ key }: { key: string }) => {
+  const onSelectAgent = ({key}: { key: string }) => {
     const agent = apiData?.find((agent) => agent[idKey] === key);
     if (!agent) return;
     setRecord(agent);
@@ -88,7 +85,7 @@ const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
     return apiData?.map((item) => ({
       key: item[idKey],
       label: item.name,
-      icon: <RiRobot2Line fontSize={18} />,
+      icon: <RiRobot2Line fontSize={18}/>,
     }));
   };
 
@@ -100,7 +97,7 @@ const Sidebar = ({ path, title, idKey = 'handle' }: SidebarProps) => {
       selectedKeys={[String(record?.[idKey] || '')]}
       onClickAdd={onClickAdd}
       onSelectMenu={onSelectAgent}
-      initialLoader={<SidebarAgentList />}
+      initialLoader={<SidebarAgentList/>}
       onEndReached={onEndReached}
       isLoadingMore={isLoadingMore}
       onSearch={onSearch}

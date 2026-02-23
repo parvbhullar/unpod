@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card } from 'antd';
-import { SkeletonInput } from './common/SkeletonInput';
+import {Card} from 'antd';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonAvatar from './common/SkeletonAvatar';
 import SkeletonButton from './common/SkeletonButton';
 
@@ -25,10 +25,10 @@ const SuperBooksSkeleton: React.FC = () => {
           textAlign: 'center',
         }}
       >
-        <SkeletonAvatar shape="square" size={30} style={{ borderRadius: 8 }} />
-        <SkeletonInput style={{ width: '40%', height: 14, margin: 0 }} />
+        <SkeletonAvatar shape="square" size={30} style={{borderRadius: 8}}/>
+        <SkeletonInput style={{width: '40%', height: 14, margin: 0}}/>
       </div>
-      <SkeletonInput style={{ width: '60%', height: 14, marginBottom: 60 }} />
+      <SkeletonInput style={{width: '60%', height: 14, marginBottom: 60}}/>
 
       <div
         style={{
@@ -38,7 +38,7 @@ const SuperBooksSkeleton: React.FC = () => {
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <div style={{display: 'flex', gap: 12, alignItems: 'center'}}>
           <div
             style={{
               height: 40,
@@ -50,8 +50,8 @@ const SuperBooksSkeleton: React.FC = () => {
               gap: 5,
             }}
           >
-            <SkeletonAvatar size={20} />
-            <SkeletonInput style={{ width: '20%', height: 20, minWidth: 90 }} />
+            <SkeletonAvatar size={20}/>
+            <SkeletonInput style={{width: '20%', height: 20, minWidth: 90}}/>
           </div>
           <div
             style={{
@@ -64,17 +64,17 @@ const SuperBooksSkeleton: React.FC = () => {
               gap: 5,
             }}
           >
-            <SkeletonAvatar size={20} />
-            <SkeletonInput style={{ width: '20%', height: 20, minWidth: 90 }} />
+            <SkeletonAvatar size={20}/>
+            <SkeletonInput style={{width: '20%', height: 20, minWidth: 90}}/>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <SkeletonAvatar size={40} />
-          <SkeletonButton size="large" active style={{ width: 90 }} />
+        <div style={{display: 'flex', gap: 12, alignItems: 'center'}}>
+          <SkeletonAvatar size={40}/>
+          <SkeletonButton size="large" active style={{width: 90}}/>
         </div>
       </div>
     </Card>
   );
 };
 
-export { SuperBooksSkeleton };
+export {SuperBooksSkeleton};

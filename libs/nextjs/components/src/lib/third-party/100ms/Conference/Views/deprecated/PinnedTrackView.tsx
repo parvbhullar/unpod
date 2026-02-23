@@ -1,15 +1,11 @@
 import React from 'react';
-import { useMeasure } from 'react-use';
-import {
-  selectPeers,
-  selectVideoTrackByPeerID,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import { GridSidePaneView } from '../MainGridView/GridView';
+import {useMeasure} from 'react-use';
+import {selectPeers, selectVideoTrackByPeerID, useHMSStore,} from '@100mslive/react-sdk';
+import {GridSidePaneView} from '../MainGridView/GridView';
 import VideoTile from '../VideoTile';
-import { usePinnedTrack } from '../../../AppData/useUISettings';
-import { StyledContainer } from '../index.styled';
-import { useWindowSize } from '@unpod/custom-hooks';
+import {usePinnedTrack} from '../../../AppData/useUISettings';
+import {StyledContainer} from '../index.styled';
+import {useWindowSize} from '@unpod/custom-hooks';
 
 const PinnedPeerView = () => {
   // can be audio or video track, if tile with only audio track is pinned
@@ -20,7 +16,7 @@ const PinnedPeerView = () => {
   );
   const pinnedVideoTrack =
     pinnedTrack && pinnedTrack.type === 'audio' ? peerVideoTrack : pinnedTrack;
-  const [ref, { height, width }] = useMeasure();
+  const [ref, {height, width}] = useMeasure();
   const peers = (useHMSStore(selectPeers) || []).filter(
     (peer) =>
       peer.videoTrack || peer.audioTrack || peer.auxiliaryTracks.length > 0
@@ -39,7 +35,7 @@ const PinnedPeerView = () => {
   }
 
   return (
-    <StyledContainer style={{ height: '100%', width: '100%' }}>
+    <StyledContainer style={{height: '100%', width: '100%'}}>
       <StyledContainer
         style={{
           flex: '1 1 0',

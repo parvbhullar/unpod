@@ -1,14 +1,8 @@
-import type { FC } from 'react';
-import { Typography } from 'antd';
+import type {FC} from 'react';
+import {Typography} from 'antd';
 import AppImage from '../../next/AppImage';
-import {
-  StyledContainer,
-  StyledContent,
-  StyledItemRoot,
-  StyledRoot,
-  StyledTitleWrapper,
-} from './index.styled';
-import { useIntl } from 'react-intl';
+import {StyledContainer, StyledContent, StyledItemRoot, StyledRoot, StyledTitleWrapper,} from './index.styled';
+import {useIntl} from 'react-intl';
 
 const items = [
   {
@@ -31,10 +25,10 @@ const items = [
   },
 ];
 
-const { Paragraph, Title } = Typography;
+const {Paragraph, Title} = Typography;
 
 const AppAgentTypesWidget: FC = () => {
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const handleItemClick = (key: string) => {
     // setActiveTab?.(key);
   };
@@ -51,7 +45,7 @@ const AppAgentTypesWidget: FC = () => {
           >
             <StyledContent>
               <StyledTitleWrapper>
-                <Title level={4}>{formatMessage({ id: item.titleId })}</Title>
+                <Title level={4}>{formatMessage({id: item.titleId})}</Title>
                 <AppImage
                   src={item.image}
                   alt={item.titleId}
@@ -60,7 +54,7 @@ const AppAgentTypesWidget: FC = () => {
                 />
               </StyledTitleWrapper>
               <Paragraph className="mb-0">
-                {formatMessage({ id: item.descriptionId })}
+                {formatMessage({id: item.descriptionId})}
               </Paragraph>
             </StyledContent>
           </StyledItemRoot>

@@ -4,7 +4,7 @@ export const StyledSuggestionRoot = styled.div`
   padding: 16px;
   position: sticky;
   bottom: 0;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   z-index: 1;
 `;
 export const StyledContainer = styled.div`

@@ -1,8 +1,8 @@
 'use client';
-import { useState } from 'react';
+import {useState} from 'react';
 
-import { AppDrawer } from '@unpod/components/antd';
-import { getFormattedDate } from '@unpod/helpers/DateHelper';
+import {AppDrawer} from '@unpod/components/antd';
+import {getFormattedDate} from '@unpod/helpers/DateHelper';
 import {
   CallCard,
   CallCardBody,
@@ -40,7 +40,7 @@ type CallCardsProps = {
   data?: CallCardsData;
 };
 
-const CallCards = ({ data }: CallCardsProps) => {
+const CallCards = ({data}: CallCardsProps) => {
   const calls = data?.items || [];
   const [selectedCall, setSelectedCall] = useState<CallItem | null>(null);
 
@@ -94,7 +94,8 @@ const CallCards = ({ data }: CallCardsProps) => {
                     stroke="currentColor"
                     strokeWidth="2"
                   >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                 </CallIconWrapper>
                 <CallHeaderContent>
@@ -113,7 +114,8 @@ const CallCards = ({ data }: CallCardsProps) => {
                         width="14"
                         height="14"
                       >
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        <path
+                          d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                       </svg>
                       <a href={`tel:${call.provider_phone}`}>
                         {call.provider_phone}
@@ -376,7 +378,8 @@ const CallCards = ({ data }: CallCardsProps) => {
                       width="36"
                       height="36"
                     >
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
                   </div>
                 </div>
@@ -447,7 +450,8 @@ const CallCards = ({ data }: CallCardsProps) => {
                         width="20"
                         height="20"
                       >
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        <path
+                          d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                       </svg>
                       {selectedCall.provider_phone}
                     </a>
@@ -512,7 +516,7 @@ const CallCards = ({ data }: CallCardsProps) => {
 
                 {/* Call Timeline */}
                 {(selectedCall.started_at || selectedCall.ended_at) && (
-                  <div style={{ marginBottom: '24px' }}>
+                  <div style={{marginBottom: '24px'}}>
                     <div
                       style={{
                         fontSize: '14px',
@@ -525,7 +529,7 @@ const CallCards = ({ data }: CallCardsProps) => {
                     >
                       Timeline
                     </div>
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{display: 'flex', gap: '12px'}}>
                       {selectedCall.started_at && (
                         <div
                           style={{
@@ -683,7 +687,7 @@ const CallCards = ({ data }: CallCardsProps) => {
                       marginBottom: '20px',
                     }}
                   >
-                    <div style={{ display: 'flex', gap: '10px' }}>
+                    <div style={{display: 'flex', gap: '10px'}}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -692,12 +696,12 @@ const CallCards = ({ data }: CallCardsProps) => {
                         strokeWidth="2"
                         width="20"
                         height="20"
-                        style={{ flexShrink: 0, marginTop: '2px' }}
+                        style={{flexShrink: 0, marginTop: '2px'}}
                       >
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                       </svg>
-                      <div style={{ flex: 1 }}>
+                      <div style={{flex: 1}}>
                         <div
                           style={{
                             fontSize: '12px',
@@ -769,7 +773,7 @@ const CallCards = ({ data }: CallCardsProps) => {
                           <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                       </div>
-                      <div style={{ flex: 1 }}>
+                      <div style={{flex: 1}}>
                         <div
                           style={{
                             fontSize: '12px',

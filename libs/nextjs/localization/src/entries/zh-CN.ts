@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import zhMessages from '../locales/zh_CN.json';
 import zhCN from 'antd/lib/locale/zh_CN';
 

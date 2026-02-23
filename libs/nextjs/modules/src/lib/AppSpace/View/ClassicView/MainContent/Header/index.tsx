@@ -1,27 +1,27 @@
-import { StyledMainHeader, StyledRoot } from './index.styled';
-import { useAppSpaceContext } from '@unpod/providers';
+import {StyledMainHeader, StyledRoot} from './index.styled';
+import {useAppSpaceContext} from '@unpod/providers';
 import EntityHeader from './EntityHeader';
 import CallHeader from './CallHeader';
 import ContactHeader from './ContactHeader';
-import type { ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
 type HeaderProps = {
   taskCallButton?: ReactNode;
   onAddClick: (key: string) => void;
 };
 
-const Header = ({ taskCallButton, onAddClick }: HeaderProps) => {
-  const { activeTab } = useAppSpaceContext();
+const Header = ({taskCallButton, onAddClick}: HeaderProps) => {
+  const {activeTab} = useAppSpaceContext();
 
   const getHeaderContent = () => {
     switch (activeTab) {
       case 'call':
-        return <CallHeader />;
+        return <CallHeader/>;
       case 'doc':
-        return <ContactHeader />;
+        return <ContactHeader/>;
     }
     return (
-      <EntityHeader onAddClick={onAddClick} taskCallButton={taskCallButton} />
+      <EntityHeader onAddClick={onAddClick} taskCallButton={taskCallButton}/>
     );
   };
   return (

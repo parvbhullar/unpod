@@ -1,6 +1,6 @@
 import React from 'react';
-import MDEditor, { type MDEditorProps } from '@uiw/react-md-editor';
-import { StyledContainer } from './index.styled';
+import MDEditor, {type MDEditorProps} from '@uiw/react-md-editor';
+import {StyledContainer} from './index.styled';
 
 type AppMarkdownEditorProps = {
   value?: string;
@@ -11,13 +11,13 @@ type AppMarkdownEditorProps = {
 } & Omit<MDEditorProps, 'value' | 'onChange' | 'textareaProps'>;
 
 const AppMarkdownEditor: React.FC<AppMarkdownEditorProps> = ({
-  value = '',
-  onChange,
-  placeholder = 'Write here...',
-  bordered = false,
-  rows = 8,
-  ...props
-}) => {
+                                                               value = '',
+                                                               onChange,
+                                                               placeholder = 'Write here...',
+                                                               bordered = false,
+                                                               rows = 8,
+                                                               ...props
+                                                             }) => {
   const editorHeight = Math.max(rows * 24, 192);
 
   return (

@@ -1,19 +1,14 @@
-import React, { useMemo } from 'react';
-import { Flex, Typography } from 'antd';
-import {
-  StyledFlex,
-  TestCard,
-  TestInfo,
-  TestMeta,
-} from './PreviousTests.styled';
-import { TestResultProps } from '@unpod/constants';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
-import { AiOutlineLineChart } from 'react-icons/ai';
-import { FaFileAlt, FaPhone, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
+import React, {useMemo} from 'react';
+import {Flex, Typography} from 'antd';
+import {StyledFlex, TestCard, TestInfo, TestMeta,} from './PreviousTests.styled';
+import {TestResultProps} from '@unpod/constants';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
+import {AiOutlineLineChart} from 'react-icons/ai';
+import {FaFileAlt, FaPhone, FaSignOutAlt, FaUserAlt} from 'react-icons/fa';
 import AppList from '@unpod/components/common/AppList';
-import { StatusColor, TestStatus } from './PreviousTests';
+import {StatusColor, TestStatus} from './PreviousTests';
 
-const { Text, Paragraph } = Typography;
+const {Text, Paragraph} = Typography;
 
 type TestResultItemProps = {
   item: TestResultProps;
@@ -32,22 +27,22 @@ const getNameFromSlug = (slug?: string | null) => {
 const getIcon = (type: string | null) => {
   switch (type) {
     case 'Get Docs':
-      return <FaFileAlt />;
+      return <FaFileAlt/>;
     case 'Create Followup Or Callback':
-      return <FaPhone />;
+      return <FaPhone/>;
     case 'Handover ToolRecord User Info':
-      return <FaUserAlt />;
+      return <FaUserAlt/>;
     case 'End Call':
-      return <FaSignOutAlt />;
+      return <FaSignOutAlt/>;
     default:
-      return <FaFileAlt />;
+      return <FaFileAlt/>;
   }
 };
 
 const statusColors: Record<TestStatus, StatusColor> = {
-  passed: { label: 'Passed', color: 'badge-success' },
-  failed: { label: 'Failed', color: 'badge-error' },
-  partial: { label: 'Partial', color: 'badge-warning' },
+  passed: {label: 'Passed', color: 'badge-success'},
+  failed: {label: 'Failed', color: 'badge-error'},
+  partial: {label: 'Partial', color: 'badge-warning'},
 };
 
 type Field = {
@@ -55,13 +50,13 @@ type Field = {
   value: string | number | null | undefined;
 };
 
-const TestResultItem = ({ item }: TestResultItemProps) => {
+const TestResultItem = ({item}: TestResultItemProps) => {
   const fields: Field[] = [
-    { label: 'Question', value: item?.question },
-    { label: 'Expected Answer', value: item?.expected_answer },
-    { label: 'Intent', value: item?.intent },
-    { label: 'Actual Response', value: item?.actual_response },
-    { label: 'Error', value: item?.error_message },
+    {label: 'Question', value: item?.question},
+    {label: 'Expected Answer', value: item?.expected_answer},
+    {label: 'Intent', value: item?.intent},
+    {label: 'Actual Response', value: item?.actual_response},
+    {label: 'Error', value: item?.error_message},
   ];
 
   const formattedToolName = useMemo(() => {
@@ -88,7 +83,7 @@ const TestResultItem = ({ item }: TestResultItemProps) => {
                 <Text strong>{item.label}</Text>
                 <Paragraph
                   type="secondary"
-                  ellipsis={{ rows: 2, expandable: true, symbol: 'More' }}
+                  ellipsis={{rows: 2, expandable: true, symbol: 'More'}}
                 >
                   {item.value || '-'}
                 </Paragraph>
@@ -98,7 +93,7 @@ const TestResultItem = ({ item }: TestResultItemProps) => {
         </Flex>
         <TestMeta>
           <Flex align="center" gap={6}>
-            <AiOutlineLineChart size={14} />
+            <AiOutlineLineChart size={14}/>
             <Text type="secondary">
               {item?.answer_similarity_score?.toFixed(2)} Similarity Score
             </Text>

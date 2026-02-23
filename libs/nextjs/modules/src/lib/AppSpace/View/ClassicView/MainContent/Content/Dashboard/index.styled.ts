@@ -7,7 +7,7 @@ export const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  background-color: ${({ theme }) => theme.palette.common.white};
+  background-color: ${({theme}) => theme.palette.common.white};
   scrollbar-width: thin;
 `;
 

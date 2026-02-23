@@ -1,10 +1,6 @@
-import { useEffect, useState } from 'react';
-import {
-  HMSNotificationTypes,
-  useHMSActions,
-  useHMSNotifications,
-} from '@100mslive/react-sdk';
-import { BsMic } from 'react-icons/bs';
+import {useEffect, useState} from 'react';
+import {HMSNotificationTypes, useHMSActions, useHMSNotifications,} from '@100mslive/react-sdk';
+import {BsMic} from 'react-icons/bs';
 import AppConfirmModal from '../../../antd/AppConfirmModal';
 
 export const TrackUnmuteModal = () => {
@@ -36,7 +32,7 @@ export const TrackUnmuteModal = () => {
     return null;
   }
 
-  const { requestedBy: peer, track, enabled } = muteNotification;
+  const {requestedBy: peer, track, enabled} = muteNotification;
 
   return (
     <AppConfirmModal
@@ -51,7 +47,7 @@ export const TrackUnmuteModal = () => {
         setMuteNotification(null);
       }}
       isDanger={false}
-      Icon={<BsMic />}
+      Icon={<BsMic/>}
     />
   );
 };

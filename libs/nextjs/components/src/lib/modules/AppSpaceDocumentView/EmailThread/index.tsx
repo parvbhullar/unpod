@@ -1,20 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Collapse, Spin } from 'antd';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useFetchDataApi,
-} from '@unpod/providers';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {useEffect, useState} from 'react';
+import {Collapse, Spin} from 'antd';
+import {useAppSpaceActionsContext, useAppSpaceContext, useFetchDataApi,} from '@unpod/providers';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import AppMarkdownViewer from '../../../third-party/AppMarkdownViewer';
 import DocumentFooter from '../DocumentFooter';
 import EmailItem from './EmailItem';
-import {
-  StyledDetailsRoot,
-  StyledRow,
-  StyledSummaryContent,
-} from './index.styled';
-import { useIntl } from 'react-intl';
+import {StyledDetailsRoot, StyledRow, StyledSummaryContent,} from './index.styled';
+import {useIntl} from 'react-intl';
 
 type EmailItemData = {
   document_id?: string | number;
@@ -23,12 +15,12 @@ type EmailItemData = {
 };
 
 const EmailThread = () => {
-  const { currentSpace, activeDocument } = useAppSpaceContext();
-  const { setActiveTab } = useAppSpaceActionsContext();
+  const {currentSpace, activeDocument} = useAppSpaceContext();
+  const {setActiveTab} = useAppSpaceActionsContext();
   const [summary, setSummary] = useState('');
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
-  const [{ apiData, loading }, { setData, setPage, updateInitialUrl }] =
+  const [{apiData, loading}, {setData, setPage, updateInitialUrl}] =
     useFetchDataApi(
       `knowledge_base/${currentSpace?.token}/connector-doc-data/${activeDocument?.document_id}/`,
       [],
@@ -80,7 +72,7 @@ const EmailThread = () => {
     <StyledDetailsRoot>
       {loading && (
         <StyledRow align="middle" justify="center">
-          <Spin />
+          <Spin/>
         </StyledRow>
       )}
 
@@ -93,8 +85,8 @@ const EmailThread = () => {
             items={[
               {
                 key: 'summary',
-                label: formatMessage({ id: 'common.summary' }),
-                children: <AppMarkdownViewer markdown={summary} />,
+                label: formatMessage({id: 'common.summary'}),
+                children: <AppMarkdownViewer markdown={summary}/>,
               },
             ]}
           />

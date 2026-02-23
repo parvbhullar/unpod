@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Space } from 'antd';
+import {Space} from 'antd';
 
 /*export const StyledTableWrapper = styled.div`
   position: relative;

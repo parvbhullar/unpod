@@ -1,5 +1,5 @@
-import { Button, Form, TimePicker, Typography } from 'antd';
-import { BsPlusCircleFill, BsTrash } from 'react-icons/bs';
+import {Button, Form, TimePicker, Typography} from 'antd';
+import {BsPlusCircleFill, BsTrash} from 'react-icons/bs';
 import {
   StyledContainer,
   StyledDayButton,
@@ -8,16 +8,16 @@ import {
   StyledTimeRangesWrapper,
 } from './index.styled';
 import dayjs from 'dayjs';
-import { useIntl } from 'react-intl';
-import { DAYS } from '@unpod/constants/CommonConsts';
+import {useIntl} from 'react-intl';
+import {DAYS} from '@unpod/constants/CommonConsts';
 
-const { Paragraph, Title, Text } = Typography;
-const { Item, List, useFormInstance, useWatch } = Form;
+const {Paragraph, Title, Text} = Typography;
+const {Item, List, useFormInstance, useWatch} = Form;
 
 const CallingHours = () => {
   const form = useFormInstance();
   const selectedDays = useWatch('calling_days', form) || [];
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const toggleDay = (day: string) => {
     if (selectedDays.includes(day)) {
@@ -34,20 +34,20 @@ const CallingHours = () => {
     <StyledContainer>
       {/*<Title level={5}>{formatMessage({ id: 'advanced.callingHours' })}</Title>*/}
       <Paragraph type="secondary">
-        {formatMessage({ id: 'advanced.callingHoursDesc' })}
+        {formatMessage({id: 'advanced.callingHoursDesc'})}
       </Paragraph>
 
-      <Title level={5}>{formatMessage({ id: 'advanced.selectDays' })}</Title>
+      <Title level={5}>{formatMessage({id: 'advanced.selectDays'})}</Title>
 
       <Item name="calling_days">
         <StyledDaysContainer>
-          {DAYS.map(({ value, label }) => (
+          {DAYS.map(({value, label}) => (
             <StyledDayButton
               key={value}
               type={selectedDays.includes(value) ? 'primary' : 'default'}
               onClick={() => toggleDay(value)}
             >
-              {formatMessage({ id: label })}
+              {formatMessage({id: label})}
             </StyledDayButton>
           ))}
         </StyledDaysContainer>
@@ -56,7 +56,7 @@ const CallingHours = () => {
       {selectedDays.length > 0 && (
         <>
           <Title level={5}>
-            {formatMessage({ id: 'advanced.timeRanges' })}
+            {formatMessage({id: 'advanced.timeRanges'})}
           </Title>
           <Item
             name="calling_time_ranges"
@@ -70,7 +70,7 @@ const CallingHours = () => {
                   ) {
                     return Promise.reject(
                       new Error(
-                        formatMessage({ id: 'validation.minOneSlotError' }),
+                        formatMessage({id: 'validation.minOneSlotError'}),
                       ),
                     );
                   }
@@ -80,14 +80,14 @@ const CallingHours = () => {
             ]}
           >
             <List name="calling_time_ranges">
-              {(fields, { add, remove }) => (
+              {(fields, {add, remove}) => (
                 <StyledTimeRangesWrapper>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields.map(({key, name, ...restField}) => (
                     <StyledTimeRangeRow key={key}>
                       <Item
                         {...restField}
                         name={[name, 'start']}
-                        rules={[{ required: true, message: '' }]}
+                        rules={[{required: true, message: ''}]}
                         initialValue={dayjs('08:00 AM', 'hh:mm A')}
                         noStyle
                       >
@@ -100,14 +100,14 @@ const CallingHours = () => {
                         />
                       </Item>
 
-                      <Text style={{ wordBreak: 'normal' }}>
-                        {formatMessage({ id: 'advanced.to' })}
+                      <Text style={{wordBreak: 'normal'}}>
+                        {formatMessage({id: 'advanced.to'})}
                       </Text>
 
                       <Item
                         {...restField}
                         name={[name, 'end']}
-                        rules={[{ required: true, message: '' }]}
+                        rules={[{required: true, message: ''}]}
                         initialValue={dayjs('08:00 PM', 'hh:mm A')}
                         noStyle
                       >
@@ -128,7 +128,7 @@ const CallingHours = () => {
                           danger
                           ghost
                         >
-                          <BsTrash size={16} />
+                          <BsTrash size={16}/>
                         </Button>
                       )}
                     </StyledTimeRangeRow>
@@ -138,10 +138,10 @@ const CallingHours = () => {
                     <Button
                       type="link"
                       size="small"
-                      icon={<BsPlusCircleFill size={16} />}
+                      icon={<BsPlusCircleFill size={16}/>}
                       onClick={add}
                     >
-                      {formatMessage({ id: 'advanced.addRange' })}
+                      {formatMessage({id: 'advanced.addRange'})}
                     </Button>
                   )}
                 </StyledTimeRangesWrapper>

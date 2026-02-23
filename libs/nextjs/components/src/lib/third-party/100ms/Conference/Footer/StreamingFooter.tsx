@@ -1,14 +1,14 @@
 import React from 'react';
-import { Box, Flex, Footer as AppFooter } from '@100mslive/react-ui';
-import { AudioVideoToggle } from '../AudioVideoToggle';
-import { EmojiReaction } from '../EmojiReaction';
-import { StreamActions } from '../Header/StreamActions';
-import { LeaveRoom } from '../LeaveRoom';
+import {Box, Flex, Footer as AppFooter} from '@100mslive/react-ui';
+import {AudioVideoToggle} from '../AudioVideoToggle';
+import {EmojiReaction} from '../EmojiReaction';
+import {StreamActions} from '../Header/StreamActions';
+import {LeaveRoom} from '../LeaveRoom';
 import MetaActions from '../MetaActions';
-import { MoreSettings } from '../MoreSettings/MoreSettings';
-import { PIP } from '../PIP';
-import { ScreenshareToggle } from '../ScreenShare';
-import { ChatToggle } from './ChatToggle';
+import {MoreSettings} from '../MoreSettings/MoreSettings';
+import {PIP} from '../PIP';
+import {ScreenshareToggle} from '../ScreenShare';
+import {ChatToggle} from './ChatToggle';
 
 export const StreamingFooter = () => {
   return (
@@ -28,7 +28,7 @@ export const StreamingFooter = () => {
           },
         }}
       >
-        <AudioVideoToggle />
+        <AudioVideoToggle/>
       </AppFooter.Left>
       <AppFooter.Center
         css={{
@@ -37,9 +37,9 @@ export const StreamingFooter = () => {
           },
         }}
       >
-        <ScreenshareToggle css={{ '@sm': { display: 'none' } }} />
-        <Box css={{ '@md': { display: 'none' } }}>
-          <PIP />
+        <ScreenshareToggle css={{'@sm': {display: 'none'}}}/>
+        <Box css={{'@md': {display: 'none'}}}>
+          <PIP/>
         </Box>
         <Box
           css={{
@@ -51,23 +51,23 @@ export const StreamingFooter = () => {
             },
           }}
         >
-          <StreamActions />
+          <StreamActions/>
         </Box>
-        <MoreSettings />
-        <Box css={{ '@md': { display: 'none' } }}>
-          <LeaveRoom />
+        <MoreSettings/>
+        <Box css={{'@md': {display: 'none'}}}>
+          <LeaveRoom/>
         </Box>
         <Flex
           align="center"
-          css={{ display: 'none', '@md': { display: 'flex' } }}
+          css={{display: 'none', '@md': {display: 'flex'}}}
         >
-          <ChatToggle />
+          <ChatToggle/>
         </Flex>
       </AppFooter.Center>
       <AppFooter.Right>
-        <EmojiReaction />
-        <MetaActions />
-        <ChatToggle />
+        <EmojiReaction/>
+        <MetaActions/>
+        <ChatToggle/>
       </AppFooter.Right>
     </AppFooter.Root>
   );

@@ -1,45 +1,38 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dropdown, Row, Select, Space, Typography } from 'antd';
-import { RiArrowDownSFill } from 'react-icons/ri';
-import {
-  StyledFormContainer,
-  StyledPopoverWrapper,
-  StyledSpace,
-} from './index.styled';
-import { MdClear } from 'react-icons/md';
-import { SHARED_OPTIONS } from './data';
-import { useAuthContext, useOrgContext } from '@unpod/providers';
+import {Button, Dropdown, Row, Select, Space, Typography} from 'antd';
+import {RiArrowDownSFill} from 'react-icons/ri';
+import {StyledFormContainer, StyledPopoverWrapper, StyledSpace,} from './index.styled';
+import {MdClear} from 'react-icons/md';
+import {SHARED_OPTIONS} from './data';
+import {useAuthContext, useOrgContext} from '@unpod/providers';
 import AppSelect from '../../antd/AppSelect';
-import { EMAIL_REGX } from '@unpod/constants';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import {
-  getPostAllowedRoles,
-  isEditAccessAllowed,
-} from '@unpod/helpers/PermissionHelper';
+import {EMAIL_REGX} from '@unpod/constants';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import {getPostAllowedRoles, isEditAccessAllowed,} from '@unpod/helpers/PermissionHelper';
 import PostMemberRow from './PostMemberRow';
 import AppScrollbar from '../../third-party/AppScrollbar';
 import UserAvatar from '../UserAvatar';
-import { AppPopover } from '../../antd';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {AppPopover} from '../../antd';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
 const PostPermissionPopover = ({
-  title,
-  open,
-  setOpen,
-  placement,
-  linkShareable,
-  userList,
-  setUserList,
-  ...restProps
-}) => {
-  const { currentSpace, currentPost, orgUsers } = useOrgContext();
+                                 title,
+                                 open,
+                                 setOpen,
+                                 placement,
+                                 linkShareable,
+                                 userList,
+                                 setUserList,
+                                 ...restProps
+                               }) => {
+  const {currentSpace, currentPost, orgUsers} = useOrgContext();
   // console.log('currentSpace', currentSpace, currentPost, orgUsers)
-  const { user, globalData } = useAuthContext();
-  const { roles } = globalData;
-  const { formatMessage } = useIntl();
+  const {user, globalData} = useAuthContext();
+  const {roles} = globalData;
+  const {formatMessage} = useIntl();
 
   const [shareType, setShareType] = useState(
     currentSpace?.is_private_domain ? 'link' : 'shared',
@@ -91,8 +84,8 @@ const PostPermissionPopover = ({
           <StyledFormContainer>
             <AppSelect
               mode="tags"
-              placeholder={formatMessage({ id: 'form.enterEmails' })}
-              style={{ flex: 1 }}
+              placeholder={formatMessage({id: 'form.enterEmails'})}
+              style={{flex: 1}}
               value={emails}
               onChange={onEmailChange}
               allowClear
@@ -110,12 +103,12 @@ const PostPermissionPopover = ({
                   label={`${orgUser.full_name} ${orgUser.user_email}`}
                 >
                   <Space>
-                    <UserAvatar user={orgUser} />
+                    <UserAvatar user={orgUser}/>
                     <Space direction="vertical" size={0}>
                       {orgUser?.full_name && (
                         <Typography.Text
                           type={'secondary'}
-                          style={{ marginBottom: -4, display: 'block' }}
+                          style={{marginBottom: -4, display: 'block'}}
                         >
                           {orgUser?.full_name}
                         </Typography.Text>
@@ -132,7 +125,7 @@ const PostPermissionPopover = ({
               placeholder="Role"
               value={selectedRole}
               onChange={setSelectedRole}
-              style={{ width: 100 }}
+              style={{width: 100}}
             >
               {getPostAllowedRoles(
                 currentPost ? roles?.post : roles?.space || [],
@@ -186,7 +179,7 @@ const PostPermissionPopover = ({
             </AppScrollbar>
           ) : (
             <Typography.Paragraph>
-              {formatMessage({ id: 'common.noUser' })}
+              {formatMessage({id: 'common.noUser'})}
             </Typography.Paragraph>
           )}
 
@@ -205,12 +198,12 @@ const PostPermissionPopover = ({
                   <div>
                     <Space>
                       <Typography.Text strong>
-                        {formatMessage({ id: selectedShareType.label })}
+                        {formatMessage({id: selectedShareType.label})}
                       </Typography.Text>
-                      <RiArrowDownSFill fontSize={24} />
+                      <RiArrowDownSFill fontSize={24}/>
                     </Space>
                     <Typography.Paragraph className={'mb-0'}>
-                      {formatMessage({ id: selectedShareType.description })}
+                      {formatMessage({id: selectedShareType.description})}
                     </Typography.Paragraph>
                   </div>
                 </StyledSpace>
@@ -222,11 +215,11 @@ const PostPermissionPopover = ({
               <div>
                 <Space>
                   <Typography.Text strong>
-                    {formatMessage({ id: selectedShareType.label })}
+                    {formatMessage({id: selectedShareType.label})}
                   </Typography.Text>
                 </Space>
                 <Typography.Paragraph className={'mb-0'}>
-                  {formatMessage({ id: selectedShareType.description })}
+                  {formatMessage({id: selectedShareType.description})}
                 </Typography.Paragraph>
               </div>
             </StyledSpace>
@@ -234,7 +227,7 @@ const PostPermissionPopover = ({
 
           <Row justify="end">
             <Typography.Link onClick={hidePopover}>
-              {formatMessage({ id: 'common.done' })}
+              {formatMessage({id: 'common.done'})}
             </Typography.Link>
           </Row>
         </StyledPopoverWrapper>

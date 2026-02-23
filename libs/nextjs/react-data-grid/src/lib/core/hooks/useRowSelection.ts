@@ -1,6 +1,6 @@
-import { createContext, useContext } from 'react';
+import {createContext, useContext} from 'react';
 
-import type { SelectRowEvent } from '../models/data-grid';
+import type {SelectRowEvent} from '../models/data-grid';
 
 const RowSelectionContext = createContext<boolean | undefined>(undefined);
 

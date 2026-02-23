@@ -8,13 +8,14 @@ export const StyledScrollViewport = styled.div`
 
 type StyledContentWrapperProps = {
   $maxWidth?: string | number;
-  $padding?: string | number;};
+  $padding?: string | number;
+};
 
 export const StyledContentWrapper = styled.div<StyledContentWrapperProps>`
   width: 100%;
-  max-width: ${({ theme, $maxWidth }) =>
-    $maxWidth ? $maxWidth : theme.sizes.mainContentWidth};
-  padding: ${({ $padding }) => ($padding ? $padding : 0)};
+  max-width: ${({theme, $maxWidth}) =>
+  $maxWidth ? $maxWidth : theme.sizes.mainContentWidth};
+  padding: ${({$padding}) => ($padding ? $padding : 0)};
   display: flex;
   flex-direction: column;
 
@@ -42,12 +43,12 @@ export const StyledEmptyListContainerFlex = styled(StyledEmptyListContainer)`
   flex-direction: row;
   opacity: 0;
   animation: fadeIn 0.5s ease-in-out 0.2s forwards;
-  font-size: ${({ theme }) => theme.font.size.base};
-  color: ${({ theme }) => theme.palette.text.primary};
+  font-size: ${({theme}) => theme.font.size.base};
+  color: ${({theme}) => theme.palette.text.primary};
   padding: 20px;
   & h4 {
     font-size: 18px;
-    color: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({theme}) => theme.palette.text.secondary};
     margin-bottom: 12px;
   }
 
@@ -64,12 +65,12 @@ export const StyledEmptyListContainerFlex = styled(StyledEmptyListContainer)`
 export const StyledListFooter = styled.div`
   padding: 10px;
   z-index: 11;
-  background-color: ${({ theme }) =>
-    theme.palette.background.paper
-      ? `${theme.palette.background.paper}80`
-      : 'rgba(255, 255, 255, 0.5)'};
+  background-color: ${({theme}) =>
+  theme.palette.background.paper
+    ? `${theme.palette.background.paper}80`
+    : 'rgba(255, 255, 255, 0.5)'};
   backdrop-filter: blur(6px);
-  color: ${({ theme }) => theme.palette.text.secondary};
+  color: ${({theme}) => theme.palette.text.secondary};
   display: flex;
   justify-content: center;
   opacity: 0;
@@ -91,15 +92,15 @@ export const StyledRecordCount = styled.div`
   left: 0;
   right: 0;
   padding: 10px;
-  background-color: ${({ theme }) =>
-    theme.palette.background.paper
-      ? `${theme.palette.background.paper}80`
-      : 'rgba(255, 255, 255, 0.5)'};
+  background-color: ${({theme}) =>
+  theme.palette.background.paper
+    ? `${theme.palette.background.paper}80`
+    : 'rgba(255, 255, 255, 0.5)'};
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
-  color: ${({ theme }) => theme.palette.text.secondary};
-  font-size: ${({ theme }) => theme.font.size.sm};
+  color: ${({theme}) => theme.palette.text.secondary};
+  font-size: ${({theme}) => theme.font.size.sm};
   z-index: 10;
 `;
 
@@ -107,7 +108,7 @@ export const StyledLoaderProgress = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  color: ${({ theme }) => theme.palette.text.secondary};
+  color: ${({theme}) => theme.palette.text.secondary};
   padding: 8px;
 
   box-sizing: border-box;

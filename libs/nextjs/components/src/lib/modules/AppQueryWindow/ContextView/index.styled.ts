@@ -12,5 +12,5 @@ export const StyledParent = styled.div`
 `;
 
 export const StyledTooltipContent = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
 `;

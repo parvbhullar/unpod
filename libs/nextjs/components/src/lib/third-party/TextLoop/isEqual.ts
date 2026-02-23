@@ -19,7 +19,7 @@ function equal(a: any, b: any) {
     if (Array.isArray(a)) {
       length = a.length;
       if (length != b.length) return false;
-      for (i = length; i-- !== 0; ) if (!equal(a[i], b[i])) return false;
+      for (i = length; i-- !== 0;) if (!equal(a[i], b[i])) return false;
       return true;
     }
 
@@ -47,7 +47,7 @@ function equal(a: any, b: any) {
       const viewB = new Uint8Array(b.buffer, b.byteOffset, b.byteLength);
       length = viewA.byteLength;
       if (length != viewB.byteLength) return false;
-      for (i = length; i-- !== 0; ) if (viewA[i] !== viewB[i]) return false;
+      for (i = length; i-- !== 0;) if (viewA[i] !== viewB[i]) return false;
       return true;
     }
 
@@ -62,7 +62,7 @@ function equal(a: any, b: any) {
     length = keys.length;
     if (length !== Object.keys(b).length) return false;
 
-    for (i = length; i-- !== 0; )
+    for (i = length; i-- !== 0;)
       if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
     // END: fast-deep-equal
 
@@ -71,7 +71,7 @@ function equal(a: any, b: any) {
     if (hasElementType && a instanceof Element) return false;
 
     // custom handling for React/Preact
-    for (i = length; i-- !== 0; ) {
+    for (i = length; i-- !== 0;) {
       if (
         (keys[i] === '_owner' || keys[i] === '__v' || keys[i] === '__o') &&
         a.$$typeof

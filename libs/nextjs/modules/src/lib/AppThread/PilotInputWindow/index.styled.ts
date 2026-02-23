@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Divider, Input, Typography } from 'antd';
+import {Button, Divider, Input, Typography} from 'antd';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 export const StyledBottomBar = styled.div`
   display: flex;
@@ -15,13 +15,13 @@ export const StyledBottomBar = styled.div`
 `;
 
 export const StyledPilotRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.component};
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  background-color: ${({theme}) => theme.palette.background.component};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 95%;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
-  // border: 3px solid ${({ theme }) => theme.palette.background.component};
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
+    // border: 3px solid ${({theme}) => theme.palette.background.component};
+  border: 1px solid ${({theme}) => theme.border.color};
   // box-shadow: 0 4px 4px 4px rgba(0, 0, 0, 0.01);
   padding: 16px;
   margin: auto auto 20px;
@@ -30,7 +30,7 @@ export const StyledPilotRoot = styled.div`
   top: auto;
   z-index: 101;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     margin-bottom: 5px;
     bottom: 10px;
   }
@@ -38,8 +38,8 @@ export const StyledPilotRoot = styled.div`
 
 export const StyledPilotContainer = styled.div`
   position: relative;
-  background-color: ${({ theme }) => theme.palette.background.component};
-  border-radius: ${({ theme }) => `${theme.radius.base}px`};
+  background-color: ${({theme}) => theme.palette.background.component};
+  border-radius: ${({theme}) => `${theme.radius.base}px`};
   padding: 0 100px 16px 0;
   transition: all 0.25s linear;
   // max-height: 65px;
@@ -82,7 +82,7 @@ export const StyledButton = styled(Button)`
 export const StyledInput = styled(TextArea)`
   padding: 4px 0;
   resize: none;
-  background-color: ${({ theme }) => theme.palette.background.component};
+  background-color: ${({theme}) => theme.palette.background.component};
 `;
 
 export const StyledDivider = styled(Divider)`

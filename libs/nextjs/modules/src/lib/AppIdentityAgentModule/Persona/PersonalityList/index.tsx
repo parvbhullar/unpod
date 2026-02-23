@@ -1,8 +1,8 @@
-import { Typography } from 'antd';
-import { TagWrapper, TonePersonalityContainer } from './index.styled';
+import {Typography} from 'antd';
+import {TagWrapper, TonePersonalityContainer} from './index.styled';
 import CheckboxCard from '../../CheckboxCard';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 type PersonalityItem = {
   key: string;
@@ -18,11 +18,11 @@ type PersonalityListProps = {
 };
 
 const PersonalityList = ({
-  value,
-  onChange,
-  items,
-  label,
-}: PersonalityListProps) => {
+                           value,
+                           onChange,
+                           items,
+                           label,
+                         }: PersonalityListProps) => {
   const onChangePersonality = (selectedLabel: string) => {
     const newValue = value === selectedLabel ? '' : selectedLabel;
     onChange?.(newValue);

@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { useFullscreen, useToggle } from 'react-use';
+import React, {useRef} from 'react';
+import {useFullscreen, useToggle} from 'react-use';
 import {
   selectVideoPlaylist,
   selectVideoPlaylistAudioTrackByPeerID,
@@ -8,13 +8,13 @@ import {
   useHMSStore,
 } from '@100mslive/react-sdk';
 // import { VideoPlaylistControls } from './PlaylistControls';
-import { useUISettings } from '../../../AppData/useUISettings';
-import { UI_SETTINGS } from '../../../common/constants';
-import { Button } from 'antd';
-import { Video } from '../VideoTile';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import {useUISettings} from '../../../AppData/useUISettings';
+import {UI_SETTINGS} from '../../../common/constants';
+import {Button} from 'antd';
+import {Video} from '../VideoTile';
+import {AiOutlineCloseCircle} from 'react-icons/ai';
 
-export const VideoPlayer = React.memo(({ peerId }) => {
+export const VideoPlayer = React.memo(({peerId}) => {
   const videoTrack = useHMSStore(selectVideoPlaylistVideoTrackByPeerID(peerId));
   const audioTrack = useHMSStore(selectVideoPlaylistAudioTrackByPeerID(peerId));
   const active = useHMSStore(selectVideoPlaylist.selectedItem);
@@ -49,7 +49,7 @@ export const VideoPlayer = React.memo(({ peerId }) => {
             borderTopRightRadius: 4,
           }}
         >
-          <div css={{ color: '$textPrimary' }}>{active.name}</div>
+          <div css={{color: '$textPrimary'}}>{active.name}</div>
           <Button
             css={{
               color: '$white',
@@ -58,7 +58,7 @@ export const VideoPlayer = React.memo(({ peerId }) => {
               hmsActions.videoPlaylist.stop();
             }}
             data-testid="videoplaylist_cross_btn"
-            icon={<AiOutlineCloseCircle />}
+            icon={<AiOutlineCloseCircle/>}
           ></Button>
         </div>
       )}

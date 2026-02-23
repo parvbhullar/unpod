@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import { message, Space } from 'antd';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import React, {useEffect} from 'react';
+import {message, Space} from 'antd';
+import {AiOutlineCloseCircle} from 'react-icons/ai';
 
 export const Toast = ({
-  id,
-  title,
-  description = '',
-  close = true,
-  open,
-  duration = 6,
-  onOpenChange,
-  icon,
-  variant = 'info',
-}) => {
+                        id,
+                        title,
+                        description = '',
+                        close = true,
+                        open,
+                        duration = 6,
+                        onOpenChange,
+                        icon,
+                        variant = 'info',
+                      }) => {
   useEffect(() => {
     const config = {
       key: id,
@@ -52,7 +52,7 @@ export const Toast = ({
               message.destroy(id);
             }}
           >
-            <AiOutlineCloseCircle fontSize={22} />
+            <AiOutlineCloseCircle fontSize={22}/>
           </div>
         </Space>
       ),

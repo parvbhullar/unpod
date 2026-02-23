@@ -1,11 +1,7 @@
 'use client';
-import React, { ReactNode, useState } from 'react';
-import { Button } from 'antd';
-import {
-  StyledAppConfirmPopover,
-  StyledConfirmDeleteActions,
-  StyledMessageBody,
-} from './index.styled';
+import React, {ReactNode, useState} from 'react';
+import {Button} from 'antd';
+import {StyledAppConfirmPopover, StyledConfirmDeleteActions, StyledMessageBody,} from './index.styled';
 
 type AppConfirmPopoverProps = {
   title?: string;
@@ -14,16 +10,17 @@ type AppConfirmPopoverProps = {
   btnLabels?: [string, string];
   infoMsg?: string;
   children?: ReactNode;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppConfirmPopover: React.FC<AppConfirmPopoverProps> = ({
-  title,
-  message,
-  onConfirm,
-  btnLabels = ['Cancel', 'Ok'],
-  infoMsg,
-  ...restProps
-}) => {
+                                                               title,
+                                                               message,
+                                                               onConfirm,
+                                                               btnLabels = ['Cancel', 'Ok'],
+                                                               infoMsg,
+                                                               ...restProps
+                                                             }) => {
   const [openPopover, setOpenPopover] = useState<boolean>(false);
   const handleVisibleChange = (open: boolean) => setOpenPopover(open);
 
@@ -62,15 +59,16 @@ type ConfirmMessageProps = {
   onConfirm?: () => void;
   onCancel?: () => void;
   btnLabels?: [string, string];
-  infoMsg?: string;};
+  infoMsg?: string;
+};
 
 export const ConfirmMessage: React.FC<ConfirmMessageProps> = ({
-  message = 'Are you sure to perform this onClick?',
-  onConfirm,
-  onCancel,
-  btnLabels = ['Cancel', 'Ok'],
-  infoMsg,
-}) => {
+                                                                message = 'Are you sure to perform this onClick?',
+                                                                onConfirm,
+                                                                onCancel,
+                                                                btnLabels = ['Cancel', 'Ok'],
+                                                                infoMsg,
+                                                              }) => {
   const [cancelLabel, confirmLabel] = btnLabels;
   return (
     <React.Fragment>

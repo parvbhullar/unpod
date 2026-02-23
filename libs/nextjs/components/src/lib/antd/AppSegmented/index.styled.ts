@@ -1,5 +1,5 @@
-import type { SegmentedProps } from 'antd';
-import { Segmented } from 'antd';
+import type {SegmentedProps} from 'antd';
+import {Segmented} from 'antd';
 import styled from 'styled-components';
 
 export const StyledWrapper = styled.div`
@@ -19,12 +19,12 @@ export const StyledScrollArea = styled.div`
   flex-direction: column;
 
   &.CenterSegmented {
-    max-width: calc(${({ theme }) => theme.sizes.mainContentWidth}) !important;
+    max-width: calc(${({theme}) => theme.sizes.mainContentWidth}) !important;
     margin: 0 auto;
     align-items: flex-start;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding: 12px 0 12px 8px !important;
   }
 
@@ -36,7 +36,7 @@ export const StyledScrollArea = styled.div`
 export const StyledSegmented = styled(Segmented)<
   SegmentedProps<string | number>
 >`
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
   padding: 0;
   border-radius: 0 !important;
 
@@ -50,8 +50,8 @@ export const StyledSegmented = styled(Segmented)<
   .ant-segmented-item {
     font-size: 13px;
     font-weight: 500;
-    color: ${({ theme }) => theme.palette.text.secondary};
-    background: ${({ theme }) => theme.palette.background.component};
+    color: ${({theme}) => theme.palette.text.secondary};
+    background: ${({theme}) => theme.palette.background.component};
     transition: all 0.2s;
     display: flex;
     align-items: center;
@@ -62,17 +62,17 @@ export const StyledSegmented = styled(Segmented)<
     flex-shrink: 0;
 
     &:hover {
-      background: ${({ theme }) => theme.palette.background.colorPrimaryBg};
-      color: ${({ theme }) => theme.palette.text.heading};
+      background: ${({theme}) => theme.palette.background.colorPrimaryBg};
+      color: ${({theme}) => theme.palette.text.heading};
     }
   }
 
   .ant-segmented-item-selected {
-    background: ${({ theme }) => theme.palette.background.colorPrimaryBg};
-    color: ${({ theme }) => theme.palette.text.heading};
+    background: ${({theme}) => theme.palette.background.colorPrimaryBg};
+    color: ${({theme}) => theme.palette.text.heading};
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     .ant-segmented-item {
       font-size: 12px;
       gap: 4px;
@@ -94,7 +94,7 @@ export const StyledTabsContent = styled.div`
   gap: 8px;
   padding: 2px 6px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     gap: 4px;
   }
 `;

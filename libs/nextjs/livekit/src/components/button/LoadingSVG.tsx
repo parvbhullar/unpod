@@ -6,9 +6,9 @@ type LoadingSVGProps = {
 };
 
 export const LoadingSVG: React.FC<LoadingSVGProps> = ({
-  diameter = 20,
-  strokeWidth = 4,
-}) => (
+                                                        diameter = 20,
+                                                        strokeWidth = 4,
+                                                      }) => (
   <svg
     className="animate-spin"
     fill="none"

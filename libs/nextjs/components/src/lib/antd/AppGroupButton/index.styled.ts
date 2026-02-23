@@ -8,11 +8,11 @@ export const StyledButtonWrapper = styled.div`
     min-width: 50px;
 
     &:not(:first-child) {
-      border-left-color: ${({ theme }) => theme.palette.background.default};
+      border-left-color: ${({theme}) => theme.palette.background.default};
     }
 
     &:not(.ant-btn-background-ghost) {
-      border: 1px solid ${({ theme }) => theme.palette.primary};
+      border: 1px solid ${({theme}) => theme.palette.primary};
     }
   }
 `;

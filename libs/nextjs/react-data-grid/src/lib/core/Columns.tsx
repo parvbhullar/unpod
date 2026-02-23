@@ -1,12 +1,7 @@
-import { useRowSelection } from './hooks';
-import type {
-  Column,
-  RenderCellProps,
-  RenderGroupCellProps,
-  RenderHeaderCellProps,
-} from './models/data-grid';
-import { SelectCellFormatter } from './cellRenderers';
-import { SELECT_COLUMN_KEY } from './constants/AppConst';
+import {useRowSelection} from './hooks';
+import type {Column, RenderCellProps, RenderGroupCellProps, RenderHeaderCellProps,} from './models/data-grid';
+import {SelectCellFormatter} from './cellRenderers';
+import {SELECT_COLUMN_KEY} from './constants/AppConst';
 
 function HeaderRenderer(props: RenderHeaderCellProps<unknown>) {
   const [isRowSelected, onRowSelectionChange] = useRowSelection();
@@ -18,7 +13,7 @@ function HeaderRenderer(props: RenderHeaderCellProps<unknown>) {
       type={props.rowSelectionType ?? 'checkbox'}
       value={isRowSelected}
       onChange={(checked) => {
-        onRowSelectionChange({ type: 'HEADER', checked });
+        onRowSelectionChange({type: 'HEADER', checked});
       }}
     />
   );

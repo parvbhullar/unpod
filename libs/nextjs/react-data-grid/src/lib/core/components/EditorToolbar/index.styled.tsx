@@ -1,6 +1,6 @@
-import { Button, Input } from 'antd';
+import {Button, Input} from 'antd';
 import styled from 'styled-components';
-import { rgba } from 'polished';
+import {rgba} from 'polished';
 
 export const StyledRoot = styled.div`
   display: inline-flex;
@@ -14,33 +14,33 @@ export const StyledToolbarRoot = styled.div`
   align-items: center;
   gap: 1px;
   padding: 5px;
-  background-color: ${({ theme }: { theme: any }) =>
-    rgba(theme.primaryColor, 0.11)};
-  border: 1px solid ${({ theme }: { theme: any }) => theme.border.color};
-  border-radius: ${({ theme }: { theme: any }) =>
-    theme.radius?.base ?? theme.border?.radius ?? 6};
+  background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.primaryColor, 0.11)};
+  border: 1px solid ${({theme}: { theme: any }) => theme.border.color};
+  border-radius: ${({theme}: { theme: any }) =>
+  theme.radius?.base ?? theme.border?.radius ?? 6};
 `;
 
 export const StyledInput = styled(Input)`
-  border-radius: ${({ theme }: { theme: any }) =>
-    theme.radius?.base ?? theme.border?.radius ?? 6};
+  border-radius: ${({theme}: { theme: any }) =>
+  theme.radius?.base ?? theme.border?.radius ?? 6};
 
   &.ant-input-affix-wrapper {
     height: 36px;
   }
 
   & .ant-input-number-handler-wrap {
-    border-start-end-radius: ${({ theme }: { theme: any }) =>
-      theme.radius?.base ?? theme.border?.radius ?? 6};
-    border-end-end-radius: ${({ theme }: { theme: any }) =>
-      theme.radius?.base ?? theme.border?.radius ?? 6};
+    border-start-end-radius: ${({theme}: { theme: any }) =>
+  theme.radius?.base ?? theme.border?.radius ?? 6};
+    border-end-end-radius: ${({theme}: { theme: any }) =>
+  theme.radius?.base ?? theme.border?.radius ?? 6};
   }
 `;
 
 export const StyledButton = styled(Button)`
   &.selected {
-    background-color: ${({ theme }: { theme: any }) =>
-      rgba(theme.primaryColor, 0.17)};
+    background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.primaryColor, 0.17)};
   }
 `;
 export const StyledColorButton = styled(StyledButton)`

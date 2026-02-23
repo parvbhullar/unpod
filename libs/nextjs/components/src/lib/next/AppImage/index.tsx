@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Image, { ImageProps } from 'next/image';
+import React, {useEffect, useState} from 'react';
+import Image, {ImageProps} from 'next/image';
 
 type AppImageProps = Omit<ImageProps, 'src' | 'alt'> & {
   src: string;
@@ -7,20 +7,21 @@ type AppImageProps = Omit<ImageProps, 'src' | 'alt'> & {
   layout?: 'fill' | 'fixed' | 'intrinsic' | 'responsive';
   preview?: boolean;
   fallback?: string;
-  priority?: boolean;};
+  priority?: boolean;
+};
 
 const AppImage: React.FC<AppImageProps> = ({
-  src,
-  height,
-  width,
-  layout,
-  alt = 'unpod',
-  priority = false,
-  loading,
-  fallback,
-  style,
-  ...props
-}) => {
+                                             src,
+                                             height,
+                                             width,
+                                             layout,
+                                             alt = 'unpod',
+                                             priority = false,
+                                             loading,
+                                             fallback,
+                                             style,
+                                             ...props
+                                           }) => {
   const [imgSrc, setImgSrc] = useState<string>(src);
 
   useEffect(() => {
@@ -72,7 +73,7 @@ const AppImage: React.FC<AppImageProps> = ({
       unoptimized={unoptimized}
       onError={handleError}
       {...props}
-      style={{ maxWidth: '100%', height: 'auto', ...style }}
+      style={{maxWidth: '100%', height: 'auto', ...style}}
     />
   );
 };

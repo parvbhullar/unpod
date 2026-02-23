@@ -1,8 +1,8 @@
 export const PeopleTabs = [
-  { value: 'overview', label: 'Overview' },
+  {value: 'overview', label: 'Overview'},
   /* {
     value: 'conversation',
     label: 'Conversation',
   },*/
-  { value: 'calls', label: 'Calls' },
+  {value: 'calls', label: 'Calls'},
 ];

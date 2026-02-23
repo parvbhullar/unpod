@@ -1,19 +1,11 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
-import type { MenuProps } from 'antd';
-import { Badge, Button, Dropdown, Space, Tooltip, Typography } from 'antd';
-import {
-  MdCheckBoxOutlineBlank,
-  MdOutlineCheckBox,
-  MdOutlineDelete,
-  MdOutlineMoreVert,
-} from 'react-icons/md';
+import type {MenuProps} from 'antd';
+import {Badge, Button, Dropdown, Space, Tooltip, Typography} from 'antd';
+import {MdCheckBoxOutlineBlank, MdOutlineCheckBox, MdOutlineDelete, MdOutlineMoreVert,} from 'react-icons/md';
 import clsx from 'clsx';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import {
   deleteDataApi,
   useAppSpaceActionsContext,
@@ -30,11 +22,11 @@ import {
   StyledRoot,
 } from './index.styled';
 import AppConfirmModal from '../../../antd/AppConfirmModal';
-import { useRouter } from 'next/navigation';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {useRouter} from 'next/navigation';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
-const { Paragraph, Title, Text } = Typography;
+const {Paragraph, Title, Text} = Typography;
 
 const menuItems = [
   {
@@ -42,7 +34,7 @@ const menuItems = [
     label: 'common.delete',
     icon: (
       <span className="ant-icon delete-icon">
-        <MdOutlineDelete fontSize={18} />
+        <MdOutlineDelete fontSize={18}/>
       </span>
     ),
   },
@@ -61,18 +53,19 @@ type GeneralDocument = {
 
 type GeneralListItemProps = {
   data: GeneralDocument;
-  showTimeFrom?: boolean;};
+  showTimeFrom?: boolean;
+};
 
-const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
+const GeneralListItem = ({data, showTimeFrom}: GeneralListItemProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const { setActiveDocument, setBreadcrumb, setActiveTab, setSelectedDocs } =
+  const {setActiveDocument, setBreadcrumb, setActiveTab, setSelectedDocs} =
     useAppSpaceActionsContext();
-  const { activeDocument, activeTab, currentSpace, selectedDocs } =
+  const {activeDocument, activeTab, currentSpace, selectedDocs} =
     useAppSpaceContext();
   const allowSelection = activeTab === 'logs';
   const router = useRouter();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onDocumentClick = (doc: GeneralDocument) => {
     if (!currentSpace?.slug) return;
@@ -131,7 +124,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
       });
   };
 
-  const onMenuClick = ({ key, domEvent }: any) => {
+  const onMenuClick = ({key, domEvent}: any) => {
     if (key === 'delete') {
       onDeleteClick(domEvent);
     }
@@ -147,7 +140,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
       onClick={onClick}
     >
       <StyledItem>
-        <UserAvatar user={{ full_name: data.name }} size={36} />
+        <UserAvatar user={{full_name: data.name}} size={36}/>
       </StyledItem>
 
       <StyledInnerRoot>
@@ -155,7 +148,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
           <StyledMeta>
             <Title
               level={5}
-              className={clsx({ 'font-weight-normal': data.seen })}
+              className={clsx({'font-weight-normal': data.seen})}
               ellipsis
             >
               {data.title}
@@ -164,7 +157,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
 
           <StyledHeaderExtra>
             <Space>
-              {data.seen ? null : <Badge color="#796cff" />}
+              {data.seen ? null : <Badge color="#796cff"/>}
 
               {data.created && (
                 <Tooltip
@@ -178,10 +171,10 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
                     {showTimeFrom
                       ? getTimeFromNow(data.created)
                       : changeDateStringFormat(
-                          data.created,
-                          'YYYY-MM-DD HH:mm:ss',
-                          'DD MMM',
-                        )}
+                        data.created,
+                        'YYYY-MM-DD HH:mm:ss',
+                        'DD MMM',
+                      )}
                   </Text>
                 </Tooltip>
               )}
@@ -193,9 +186,9 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
                   size="small"
                   icon={
                     selectedDocs.includes(data.document_id) ? (
-                      <MdOutlineCheckBox fontSize={21} />
+                      <MdOutlineCheckBox fontSize={21}/>
                     ) : (
-                      <MdCheckBoxOutlineBlank fontSize={21} />
+                      <MdCheckBoxOutlineBlank fontSize={21}/>
                     )
                   }
                 />
@@ -215,7 +208,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
                   type="text"
                   shape="circle"
                   size="small"
-                  icon={<MdOutlineMoreVert fontSize={21} />}
+                  icon={<MdOutlineMoreVert fontSize={21}/>}
                   onClick={(e) => e.stopPropagation()}
                 />
               </Dropdown>
@@ -227,7 +220,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
           <Paragraph
             type="secondary"
             className="mb-0"
-            style={{ maxWidth: '90%' }}
+            style={{maxWidth: '90%'}}
             ellipsis
           >
             {getStringFromHtml(data.description || data.content)}
@@ -238,7 +231,7 @@ const GeneralListItem = ({ data, showTimeFrom }: GeneralListItemProps) => {
       <AppConfirmModal
         open={isDeleteOpen}
         onOk={onDeleteConfirm}
-        message={formatMessage({ id: 'spaceHeader.docsDeleteButton' })}
+        message={formatMessage({id: 'spaceHeader.docsDeleteButton'})}
         onCancel={() => setDeleteOpen(false)}
       />
     </StyledRoot>

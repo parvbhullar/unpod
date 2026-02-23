@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledSelectLabel = styled(Paragraph)`
   margin-bottom: 2px !important;

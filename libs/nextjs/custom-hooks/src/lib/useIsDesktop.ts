@@ -1,6 +1,6 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
+import {useSyncExternalStore} from 'react';
 
 type TauriWindow = Window & {
   __TAURI__?: unknown;
@@ -28,10 +28,12 @@ const getServerSnapshot = (): boolean => false;
 
 // Subscribe is a no-op since the desktop environment doesn't change
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const subscribe = (): (() => void) => () => {};
+const subscribe = (): (() => void) => () => {
+};
 
 export type UseIsDesktopResult = {
-  isDesktopApp: boolean;};
+  isDesktopApp: boolean;
+};
 
 /**
  * Hook to detect if the app is running inside a desktop app (Tauri)

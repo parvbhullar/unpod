@@ -1,13 +1,13 @@
-import React, { ReactNode } from 'react';
-import { Drawer } from 'antd';
+import React, {ReactNode} from 'react';
+import {Drawer} from 'antd';
 import styled from 'styled-components';
 
 export const StyledDrawer = styled(Drawer as any)`
   .ant-drawer-body {
     padding: 0;
-    background-color: ${({ theme }) => theme.palette.background.default};
-    border-radius: ${({ theme }) => theme.component.card.borderRadius}
-      ${({ theme }) => theme.component.card.borderRadius} 0 0;
+    background-color: ${({theme}) => theme.palette.background.default};
+    border-radius: ${({theme}) => theme.component.card.borderRadius}
+      ${({theme}) => theme.component.card.borderRadius} 0 0;
     display: flex;
     overflow: hidden;
     flex-direction: column;
@@ -19,14 +19,15 @@ export type AppSidebarDrawerProps = {
   children: ReactNode;
   sidebarWidth?: number;
   isDrawerOpened: boolean;
-  setInDrawerOpen: (open: boolean) => void;};
+  setInDrawerOpen: (open: boolean) => void;
+};
 
 export const AppSidebarDrawer: React.FC<AppSidebarDrawerProps> = ({
-  children,
-  sidebarWidth,
-  isDrawerOpened,
-  setInDrawerOpen,
-}) => {
+                                                                    children,
+                                                                    sidebarWidth,
+                                                                    isDrawerOpened,
+                                                                    setInDrawerOpen,
+                                                                  }) => {
   return (
     <StyledDrawer
       placement="left"

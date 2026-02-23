@@ -1,31 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { Button, Select, Space, Typography } from 'antd';
-import type { DefaultOptionType } from 'antd/es/select';
-import { useIntl } from 'react-intl';
+import {useState} from 'react';
+import {Button, Select, Space, Typography} from 'antd';
+import type {DefaultOptionType} from 'antd/es/select';
+import {useIntl} from 'react-intl';
 
-import { StyledFormContainer } from './index.styled';
-import type {
-  GlobalRoleMap,
-  InviteUserSectionProps,
-  PermissionEntity,
-  PermissionMember,
-} from './types';
+import {StyledFormContainer} from './index.styled';
+import type {GlobalRoleMap, InviteUserSectionProps, PermissionEntity, PermissionMember,} from './types';
 
 import AppSelect from '../../antd/AppSelect';
 import UserAvatar from '../UserAvatar';
 
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import { EMAIL_REGX } from '@unpod/constants';
-import {
-  postDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { getSpaceAllowedRoles } from '@unpod/helpers/PermissionHelper';
-import { maskEmail } from '@unpod/helpers/StringHelper';
-import { getRoleLabel } from '@unpod/helpers/LocalizationFormatHelper';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import {EMAIL_REGX} from '@unpod/constants';
+import {postDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {getSpaceAllowedRoles} from '@unpod/helpers/PermissionHelper';
+import {maskEmail} from '@unpod/helpers/StringHelper';
+import {getRoleLabel} from '@unpod/helpers/LocalizationFormatHelper';
 
 const getInviteUserUrl = (
   type: InviteUserSectionProps['type'],
@@ -46,15 +37,15 @@ const getPopupContainer = (triggerNode: HTMLElement): HTMLElement => {
 };
 
 const InviteUserSection = ({
-  type,
-  userList,
-  setUserList,
-  currentData,
-  setCurrentData,
-}: InviteUserSectionProps) => {
+                             type,
+                             userList,
+                             setUserList,
+                             currentData,
+                             setCurrentData,
+                           }: InviteUserSectionProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { user, globalData } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {user, globalData} = useAuthContext();
+  const {formatMessage} = useIntl();
 
   const [emails, setEmails] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState<string>(ACCESS_ROLE.VIEWER);
@@ -130,8 +121,8 @@ const InviteUserSection = ({
       {currentData?.slug ? (
         <AppSelect
           mode="tags"
-          placeholder={formatMessage({ id: 'invite.enterEmails' })}
-          style={{ flex: 1 }}
+          placeholder={formatMessage({id: 'invite.enterEmails'})}
+          style={{flex: 1}}
           value={emails}
           onChange={onEmailChange}
           allowClear
@@ -153,12 +144,12 @@ const InviteUserSection = ({
                 label={`${fullName} ${userEmail}`.trim()}
               >
                 <Space>
-                  <UserAvatar user={orgUser} />
+                  <UserAvatar user={orgUser}/>
                   <Space orientation="vertical" size={0}>
                     {fullName ? (
                       <Typography.Text
                         type="secondary"
-                        style={{ marginBottom: -4, display: 'block' }}
+                        style={{marginBottom: -4, display: 'block'}}
                       >
                         {fullName}
                       </Typography.Text>
@@ -175,8 +166,8 @@ const InviteUserSection = ({
       ) : (
         <AppSelect
           mode="tags"
-          placeholder={formatMessage({ id: 'invite.enterEmails' })}
-          style={{ flex: 1 }}
+          placeholder={formatMessage({id: 'invite.enterEmails'})}
+          style={{flex: 1}}
           value={emails}
           onChange={onEmailChange}
           getPopupContainer={getPopupContainer}
@@ -184,13 +175,13 @@ const InviteUserSection = ({
       )}
 
       <AppSelect
-        placeholder={formatMessage({ id: 'invite.role' })}
+        placeholder={formatMessage({id: 'invite.role'})}
         value={selectedRole}
         onChange={onRoleChange}
-        style={{ width: 100 }}
+        style={{width: 100}}
         getPopupContainer={getPopupContainer}
         dropdownMatchSelectWidth={false}
-        dropdownStyle={{ flex: 1 }}
+        dropdownStyle={{flex: 1}}
       >
         {getSpaceAllowedRoles(roleData, userList, user).map((role, index) => {
           const roleCode = role.role_code || ACCESS_ROLE.VIEWER;
@@ -209,7 +200,7 @@ const InviteUserSection = ({
         onClick={onAddClick}
         disabled={!selectedRole || emails.length === 0}
       >
-        {formatMessage({ id: 'common.add' })}
+        {formatMessage({id: 'common.add'})}
       </Button>
     </StyledFormContainer>
   );

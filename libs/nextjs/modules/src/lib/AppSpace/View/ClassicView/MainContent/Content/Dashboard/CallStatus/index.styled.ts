@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { Card } from 'antd';
+import {Card} from 'antd';
 
 export const StyledCard = styled(Card)`
-  //background-color: ${({ theme }) => theme.palette.background.component};
+  //background-color: ${({theme}) => theme.palette.background.component};
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
   .ant-card-body {
-    @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
       padding: 12px !important;
     }
   }
@@ -52,7 +52,7 @@ export const StatusItem = styled.div`
   align-items: center;
   gap: 16px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     gap: 8px;
   }
 `;
@@ -69,7 +69,7 @@ export const IconWrapper = styled.div<{ $bgColor?: string; $color?: string }>`
   font-size: 24px;
   flex-shrink: 0;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     font-size: 14px;
     width: 40px;
     height: 40px;
@@ -87,7 +87,7 @@ export const StatusLabel = styled.div`
   font-size: 16px;
   color: #000000;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
     font-size: 11px;
     white-space: nowrap;
     min-width: 50px;
@@ -113,7 +113,7 @@ export const ProgressWrapper = styled.div`
     height: 8px !important;
   }
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.xs}) {
+  @media (min-width: ${({theme}) => theme.breakpoints.xs}) {
     width: 120px;
   }
 `;
@@ -126,7 +126,7 @@ export const StatusStats = styled.div`
   min-width: 120px;
   justify-content: flex-end;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     min-width: auto;
   }
 `;
@@ -136,12 +136,12 @@ export const StatusCount = styled.span`
   font-weight: 600;
   color: #000000;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     font-size: 14px;
     white-space: nowrap;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
     font-size: 11px;
     white-space: nowrap;
   }
@@ -152,7 +152,7 @@ export const StatusPercentage = styled.span`
   color: #8c8c8c;
   font-weight: 400;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     font-size: 11px;
     white-space: nowrap;
   }

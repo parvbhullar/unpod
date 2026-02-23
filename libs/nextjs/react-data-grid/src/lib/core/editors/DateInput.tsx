@@ -1,8 +1,8 @@
-import type { DatePickerProps } from 'antd';
-import { DatePicker, TimePicker } from 'antd';
+import type {DatePickerProps} from 'antd';
+import {DatePicker, TimePicker} from 'antd';
 import styled from 'styled-components';
-import type { RenderEditCellProps } from '../models/data-grid';
-import { getDateObject } from '../helpers/DateHelper';
+import type {RenderEditCellProps} from '../models/data-grid';
+import {getDateObject} from '../helpers/DateHelper';
 
 const StyledDatePicker = styled(DatePicker)`
   border-width: 2px;
@@ -24,25 +24,25 @@ const StyledTimePicker = styled(TimePicker)`
 `;
 
 const DateInput = <TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-}: RenderEditCellProps<TRow, TSummaryRow>) => {
+                                        row,
+                                        column,
+                                        onRowChange,
+                                        onClose,
+                                      }: RenderEditCellProps<TRow, TSummaryRow>) => {
   return (
     <StyledDatePicker
       size="small"
       value={
         row[column.dataIndex as keyof TRow]
           ? getDateObject(
-              String(
-                row[column.dataIndex as keyof TRow] as DatePickerProps['value'],
-              ),
-            )
+            String(
+              row[column.dataIndex as keyof TRow] as DatePickerProps['value'],
+            ),
+          )
           : null
       }
       onChange={(date, dateString) =>
-        onRowChange({ ...row, [column.dataIndex]: dateString })
+        onRowChange({...row, [column.dataIndex]: dateString})
       }
       onBlur={() => onClose(true, false)}
     />
@@ -50,25 +50,25 @@ const DateInput = <TRow, TSummaryRow>({
 };
 
 export const DateTimeInput = <TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-}: RenderEditCellProps<TRow, TSummaryRow>) => {
+                                                   row,
+                                                   column,
+                                                   onRowChange,
+                                                   onClose,
+                                                 }: RenderEditCellProps<TRow, TSummaryRow>) => {
   return (
     <StyledDatePicker
       size="small"
       value={
         row[column.dataIndex as keyof TRow]
           ? getDateObject(
-              String(
-                row[column.dataIndex as keyof TRow] as DatePickerProps['value'],
-              ),
-            )
+            String(
+              row[column.dataIndex as keyof TRow] as DatePickerProps['value'],
+            ),
+          )
           : null
       }
       onChange={(date, dateString) =>
-        onRowChange({ ...row, [column.dataIndex]: dateString })
+        onRowChange({...row, [column.dataIndex]: dateString})
       }
       onBlur={() => onClose(true, false)}
       showTime
@@ -77,26 +77,26 @@ export const DateTimeInput = <TRow, TSummaryRow>({
 };
 
 export const TimeInput = <TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-}: RenderEditCellProps<TRow, TSummaryRow>) => {
+                                               row,
+                                               column,
+                                               onRowChange,
+                                               onClose,
+                                             }: RenderEditCellProps<TRow, TSummaryRow>) => {
   return (
     <StyledTimePicker
       size="small"
       value={
         row[column.dataIndex as keyof TRow]
           ? getDateObject(
-              String(
-                row[column.dataIndex as keyof TRow] as DatePickerProps['value'],
-              ),
-              'HH:mm:ss',
-            )
+            String(
+              row[column.dataIndex as keyof TRow] as DatePickerProps['value'],
+            ),
+            'HH:mm:ss',
+          )
           : null
       }
       onChange={(date, dateString) =>
-        onRowChange({ ...row, [column.dataIndex]: dateString })
+        onRowChange({...row, [column.dataIndex]: dateString})
       }
       onBlur={() => onClose(true, false)}
     />

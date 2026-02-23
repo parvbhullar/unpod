@@ -1,10 +1,7 @@
-import { Badge, Space, Tooltip, Typography } from 'antd';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {Badge, Space, Tooltip, Typography} from 'antd';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import {
   StyledContent,
   StyledConversationHeader,
@@ -16,13 +13,13 @@ import {
 import UserAvatar from '@unpod/components/common/UserAvatar';
 import AppLink from '@unpod/components/next/AppLink';
 
-const { Paragraph, Text } = Typography;
+const {Paragraph, Text} = Typography;
 
 const NoteItem = ({
-  thread,
-  onThreadClick,
-  activeNote,
-}: {
+                    thread,
+                    onThreadClick,
+                    activeNote,
+                  }: {
   thread: any;
   onThreadClick: (thread: any) => void;
   activeNote?: any;
@@ -46,7 +43,7 @@ const NoteItem = ({
       className={activeNote?.slug === thread?.slug ? 'active' : ''}
     >
       <StyledItem>
-        <UserAvatar user={thread.user} size={32} />
+        <UserAvatar user={thread.user} size={32}/>
       </StyledItem>
 
       <StyledContent>
@@ -79,7 +76,7 @@ const NoteItem = ({
 
         <Paragraph
           type="secondary"
-          ellipsis={{ rows: 1 }}
+          ellipsis={{rows: 1}}
           style={{
             fontSize: 13,
             marginBottom: 3,
@@ -88,20 +85,20 @@ const NoteItem = ({
           {getStringFromHtml(thread.content || thread.block?.data?.content)}
         </Paragraph>
 
-        <Space align="center" size={6} wrap={true} style={{ fontSize: 13 }}>
+        <Space align="center" size={6} wrap={true} style={{fontSize: 13}}>
           <Text
             className="text-capitalize"
             type="secondary"
-            style={{ fontSize: 13 }}
+            style={{fontSize: 13}}
           >
             {thread?.user?.full_name}
           </Text>
           <Tooltip title={thread?.privacy_type}>
-            <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <span style={{display: 'inline-flex', alignItems: 'center'}}>
               {getPostIcon(thread?.privacy_type)}
             </span>
           </Tooltip>
-          {thread.seen ? null : <Badge color="#796cff" />}
+          {thread.seen ? null : <Badge color="#796cff"/>}
         </Space>
       </StyledContent>
     </StyledConversationItem>

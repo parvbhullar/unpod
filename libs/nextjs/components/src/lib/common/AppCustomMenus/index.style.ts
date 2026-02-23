@@ -17,29 +17,29 @@ export const StyledMenuItem = styled.li`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
   padding: 7px 10px;
   width: 100%;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 
   &.active {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
-    color: ${({ theme }) => theme.palette.primary};
+    background-color: ${({theme}) => theme.palette.primaryHover};
+    color: ${({theme}) => theme.palette.primary};
   }
 
   &.disabled {
-    color: ${({ theme }) => theme.palette.text.secondary};
-    background-color: ${({ theme }) => theme.palette.background.disabled};
+    color: ${({theme}) => theme.palette.text.secondary};
+    background-color: ${({theme}) => theme.palette.background.disabled};
     cursor: not-allowed;
 
     &:hover,
     &.active {
-      background-color: ${({ theme }) => theme.palette.background.disabled};
+      background-color: ${({theme}) => theme.palette.background.disabled};
     }
   }
 

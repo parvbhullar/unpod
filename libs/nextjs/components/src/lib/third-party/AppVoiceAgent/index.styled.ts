@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import { Button, Input } from 'antd';
+import {Button, Input} from 'antd';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 export const StyledContainer = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  background-color: ${({theme}) => theme.palette.background.default};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto;
   position: relative;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
   padding: 16px 16px 12px 16px;
 `;
 

@@ -15,8 +15,8 @@ export const StyledCopyWrapper = styled.div`
   left: auto;
   z-index: 1;
   opacity: 0;
-  background: ${({ theme }) => theme.palette.background.component};
-  border-radius: ${({ theme }) => theme.radius.circle};
+  background: ${({theme}) => theme.palette.background.component};
+  border-radius: ${({theme}) => theme.radius.circle};
   transition: opacity 0.3s;
 `;
 
@@ -26,7 +26,7 @@ export const StyledFullContent = styled(StyledRootContainer)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
 
   &:hover ${StyledCopyWrapper} {
     opacity: 1;
@@ -36,13 +36,13 @@ export const StyledFullContent = styled(StyledRootContainer)`
 export const StyledContentContainer = styled.div`
   padding: 16px;
   height: 100%;
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   position: relative;
   overflow: hidden;
 
   &.json-content {
-    background: ${({ theme }) => theme.palette.background.component};
+    background: ${({theme}) => theme.palette.background.component};
   }
 
   & pre {
@@ -63,10 +63,10 @@ export const StyledContentWrapper = styled.div`
   font-size: 16px;
   line-height: 1.6;
 
-  /*font-family: ${({ theme }) => theme.font.family};
+  /*font-family: ${({theme}) => theme.font.family};
   font-size: 16px;
   line-height: 1.6;
-  color: ${({ theme }) => theme.palette.text.content};
+  color: ${({theme}) => theme.palette.text.content};
 
   & ol,
   & ul,
@@ -83,7 +83,7 @@ export const StyledDocWrapper = styled.div`
 
 export const StyledIframeContainer = styled.div`
   height: 100%;
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;
 `;

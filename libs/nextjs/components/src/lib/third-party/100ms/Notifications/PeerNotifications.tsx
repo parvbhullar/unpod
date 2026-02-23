@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
-import {
-  HMSNotificationTypes,
-  useHMSNotifications,
-} from '@100mslive/react-sdk';
-import { useSubscribedNotifications } from '../AppData/useUISettings';
-import { SUBSCRIBED_NOTIFICATIONS } from '../common/constants';
-import { ToastBatcher } from '../Toast/ToastBatcher';
+import {useEffect} from 'react';
+import {HMSNotificationTypes, useHMSNotifications,} from '@100mslive/react-sdk';
+import {useSubscribedNotifications} from '../AppData/useUISettings';
+import {SUBSCRIBED_NOTIFICATIONS} from '../common/constants';
+import {ToastBatcher} from '../Toast/ToastBatcher';
 
 const notificationTypes = [
   HMSNotificationTypes.PEER_LIST,
@@ -45,7 +42,7 @@ export const PeerNotifications = () => {
       default:
         return;
     }
-    ToastBatcher.showToast({ notification });
+    ToastBatcher.showToast({notification});
   }, [notification, isPeerJoinSubscribed, isPeerLeftSubscribed]);
 
   return null;

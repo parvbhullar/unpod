@@ -1,5 +1,5 @@
-import { Card } from 'antd';
-import { SkeletonInput } from './common/SkeletonInput';
+import {Card} from 'antd';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from './common/SkeletonButton';
 import SkeletonAvatar from './common/SkeletonAvatar';
 
@@ -23,10 +23,10 @@ const NewThreadSkeleton = () => {
         }}
       >
         <div>
-          <SkeletonInput style={{ width: 200, height: 28 }} />
+          <SkeletonInput style={{width: 200, height: 28}}/>
         </div>
         <div>
-          <SkeletonInput style={{ width: 380, height: 22 }} />
+          <SkeletonInput style={{width: 380, height: 22}}/>
         </div>
       </div>
       <Card
@@ -38,7 +38,7 @@ const NewThreadSkeleton = () => {
           marginBottom: 6,
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'start' }}>
+        <div style={{display: 'flex', justifyContent: 'start'}}>
           <SkeletonInput
             style={{
               width: '40%',
@@ -56,7 +56,7 @@ const NewThreadSkeleton = () => {
             justifyContent: 'space-between',
           }}
         >
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{display: 'flex', gap: 12, alignItems: 'center'}}>
             <div
               style={{
                 height: 40,
@@ -68,16 +68,16 @@ const NewThreadSkeleton = () => {
                 gap: 5,
               }}
             >
-              <SkeletonAvatar size={20} />
+              <SkeletonAvatar size={20}/>
               <SkeletonInput
-                style={{ width: '20%', height: 20, minWidth: 90 }}
+                style={{width: '20%', height: 20, minWidth: 90}}
               />
             </div>
-            <SkeletonAvatar size={20} />
+            <SkeletonAvatar size={20}/>
           </div>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <SkeletonAvatar size={20} />
-            <SkeletonButton size="large" style={{ width: 90 }} />
+          <div style={{display: 'flex', gap: 12, alignItems: 'center'}}>
+            <SkeletonAvatar size={20}/>
+            <SkeletonButton size="large" style={{width: 90}}/>
           </div>
         </div>
       </Card>
@@ -85,4 +85,4 @@ const NewThreadSkeleton = () => {
   );
 };
 
-export { NewThreadSkeleton };
+export {NewThreadSkeleton};

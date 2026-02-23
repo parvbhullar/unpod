@@ -56,8 +56,8 @@ export const StyledTypeLabel = styled.span<{ $color?: string; $bg?: string }>`
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;
-  color: ${({ $color }) => $color};
-  background: ${({ $bg }) => $bg};
+  color: ${({$color}) => $color};
+  background: ${({$bg}) => $bg};
   margin-bottom: 2px;
 `;
 
@@ -69,7 +69,7 @@ export const StyledContent = styled.div<{ $iconColor?: string }>`
   a svg,
   .icon {
     font-size: 2rem;
-    color: ${({ $iconColor }) => $iconColor || '#8a77ff'};
+    color: ${({$iconColor}) => $iconColor || '#8a77ff'};
   }
 `;
 
@@ -94,7 +94,7 @@ export const StyledIconCircle = styled.div<{ $bg?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ $bg }) => $bg || '#f6e7ff'};
+  background: ${({$bg}) => $bg || '#f6e7ff'};
   border-radius: 30%;
   width: 34px;
   height: 34px;
@@ -109,6 +109,6 @@ export const StyledPrivacyIcon = styled.div<{ $iconColor?: string }>`
   svg,
   .icon {
     font-size: 1rem;
-    color: ${({ $iconColor }) => $iconColor || '#8a77ff'};
+    color: ${({$iconColor}) => $iconColor || '#8a77ff'};
   }
 `;

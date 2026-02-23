@@ -1,4 +1,4 @@
-import { tablePageSize } from '@unpod/constants';
+import {tablePageSize} from '@unpod/constants';
 
 export type PaginationConfig = {
   onChange: (page: number, pageSize: number) => void;
@@ -22,7 +22,8 @@ export const getPagination = (
   }
   return {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onChange: onPageChange || (() => {}),
+    onChange: onPageChange || (() => {
+    }),
     position: 'bottom',
     pageSize: pageSize,
     showLessItems: true,

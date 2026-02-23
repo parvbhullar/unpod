@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import nlMessages from '../locales/nl_NL.json';
 import nlNL from 'antd/lib/locale/nl_NL';
 

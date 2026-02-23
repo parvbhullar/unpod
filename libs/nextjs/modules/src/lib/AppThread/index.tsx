@@ -1,42 +1,33 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
-import { Modal } from 'antd';
-import {
-  deleteDataApi,
-  putDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
+import {Fragment, useCallback, useEffect, useRef, useState} from 'react';
+import {Modal} from 'antd';
+import {deleteDataApi, putDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
 import AppPostView from '@unpod/components/modules/AppPostView';
-import { useParams, useRouter } from 'next/navigation';
+import {useParams, useRouter} from 'next/navigation';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
 import AppPostReplies from '@unpod/components/modules/AppPostReplies';
 import useWebSocket from 'react-use-websocket';
 import PageHeader from './PageHeader';
 import PilotInputWindow from './PilotInputWindow';
 import ReportPost from './ReportPost';
-import {
-  StyledContainer,
-  StyledDetailsRoot,
-  StyledThreadContainer,
-} from './index.styled';
+import {StyledContainer, StyledDetailsRoot, StyledThreadContainer,} from './index.styled';
 import AppConfirmModal from '@unpod/components/antd/AppConfirmModal';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 type AppThreadModuleProps = {
   token?: string;
   post: any;
 };
 
-const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
+const AppThreadModule = ({token, post}: AppThreadModuleProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated, visitorId } = useAuthContext();
+  const {isAuthenticated, visitorId} = useAuthContext();
   const router = useRouter();
-  const { orgSlug, spaceSlug, postSlug } = useParams() as {
+  const {orgSlug, spaceSlug, postSlug} = useParams() as {
     orgSlug?: string;
     spaceSlug?: string;
     postSlug?: string;
   };
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const didUnmount = useRef(false);
 
@@ -52,14 +43,14 @@ const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
   };
 
   if (!isAuthenticated) {
-    params = { session_user: visitorId, app_type: process.env.appType || '' };
+    params = {session_user: visitorId, app_type: process.env.appType || ''};
   }
 
   /*useEffect(() => {
     setCurrentPost(post);
   }, [post]);*/
 
-  const { sendJsonMessage, lastMessage } = useWebSocket(
+  const {sendJsonMessage, lastMessage} = useWebSocket(
     `${process.env.chatApiUrl}conversation/${currentPost?.post_id}/`,
     {
       queryParams: params,
@@ -95,7 +86,7 @@ const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
         .then((res: any) => {
           if (res.data?.reaction) {
             const count = +currentPost.reaction_count + reactionCount;
-            setCurrentPost({ ...currentPost, reaction_count: count });
+            setCurrentPost({...currentPost, reaction_count: count});
             infoViewActionsContext.showMessage(res.message);
           }
         })
@@ -144,7 +135,7 @@ const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
 
   return (
     <Fragment>
-      <PageHeader currentPost={currentPost} setCurrentPost={setCurrentPost} />
+      <PageHeader currentPost={currentPost} setCurrentPost={setCurrentPost}/>
 
       <AppPageContainer>
         <StyledThreadContainer>
@@ -179,7 +170,7 @@ const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
                 setReplyParent={setReplyParent}
               />
 
-              <div id="post-reply-end" />
+              <div id="post-reply-end"/>
             </StyledDetailsRoot>
 
             <PilotInputWindow
@@ -193,7 +184,7 @@ const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
       </AppPageContainer>
 
       <Modal
-        title={formatMessage({ id: 'report.title' })}
+        title={formatMessage({id: 'report.title'})}
         footer={false}
         open={isReportOpen}
         destroyOnHidden={true}
@@ -209,7 +200,7 @@ const AppThreadModule = ({ token, post }: AppThreadModuleProps) => {
       <AppConfirmModal
         open={isDeleteOpen}
         onOk={onDeletePost}
-        message={formatMessage({ id: 'post.deleteConfirm' })}
+        message={formatMessage({id: 'post.deleteConfirm'})}
         onCancel={() => setDeleteOpen(false)}
       />
     </Fragment>

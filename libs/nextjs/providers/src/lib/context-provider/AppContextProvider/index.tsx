@@ -1,14 +1,7 @@
 'use client';
 
-import type { SetStateAction } from 'react';
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import type {SetStateAction} from 'react';
+import React, {createContext, useCallback, useContext, useEffect, useMemo, useState,} from 'react';
 import type {
   AppActionsContextType,
   AppContextProviderProps,
@@ -86,8 +79,8 @@ const initializeState = (defaultState: AppContextState): AppContextState => {
 };
 
 export const AppContextProvider: React.FC<AppContextProviderProps> = ({
-  children,
-}) => {
+                                                                        children,
+                                                                      }) => {
   const [state, setState] = useState<AppContextState>(() =>
     initializeState(ContextState),
   );
@@ -128,13 +121,13 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({
       setState((prev: AppContextState) => {
         const nextValue =
           typeof value === 'function' ? value(prev.listingType) : value;
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.setItem('list_type', nextValue);
-        } catch (error) {
-          console.warn('Failed to save listing type to localStorage:', error);
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem('list_type', nextValue);
+          } catch (error) {
+            console.warn('Failed to save listing type to localStorage:', error);
+          }
         }
-      }
         return {
           ...prev,
           listingType: nextValue,

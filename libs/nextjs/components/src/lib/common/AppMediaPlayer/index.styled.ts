@@ -1,28 +1,28 @@
 import styled from 'styled-components';
 import MuxPlayer from '@mux/mux-player-react';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
 export const StyledMuxPlayer = styled(MuxPlayer)`
   width: 100%;
   // max-width: 100%;
   // margin-bottom: 20px;
-  /*border-radius: ${({ theme }) => theme.radius.base}px;
+  /*border-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;*/
 
   /*&.audio-player {
-    --secondary-color: ${({ theme }) => theme.palette.primary};
-    --media-background-color: ${({ theme }) => theme.palette.primary};
-    --media-control-background: ${({ theme }) => theme.palette.primary};
+    --secondary-color: ${({theme}) => theme.palette.primary};
+    --media-background-color: ${({theme}) => theme.palette.primary};
+    --media-control-background: ${({theme}) => theme.palette.primary};
 
     .media-controller {
-      background-color: ${({ theme }) => theme.palette.primary} !important;
+      background-color: ${({theme}) => theme.palette.primary} !important;
     }
   }*/
 
   &.video-player {
     margin-bottom: 20px;
     aspect-ratio: 16 / 9;
-    border-radius: ${({ theme }) => theme.radius.base}px;
+    border-radius: ${({theme}) => theme.radius.base}px;
     overflow: hidden;
   }
 
@@ -30,7 +30,7 @@ export const StyledMuxPlayer = styled(MuxPlayer)`
     --media-object-fit: cover;
     --media-object-position: center;
     background-color: rgba(0, 0, 0, 0.85);
-    border-radius: ${({ theme }) => theme.radius.base}px;
+    border-radius: ${({theme}) => theme.radius.base}px;
     overflow: hidden;
     padding-right: 2px;
 
@@ -43,14 +43,14 @@ export const StyledMuxPlayer = styled(MuxPlayer)`
     --seek-forward-button: none;
     --controls: none;*/
 
-    /*--secondary-color: ${({ theme }) => theme.palette.primary};
-    --media-background-color: ${({ theme }) => theme.palette.primary};
-    --media-control-background: ${({ theme }) => theme.palette.primary};
+    /*--secondary-color: ${({theme}) => theme.palette.primary};
+    --media-background-color: ${({theme}) => theme.palette.primary};
+    --media-control-background: ${({theme}) => theme.palette.primary};
 
-    --controls-backdrop-color: ${({ theme }) => theme.palette.primary};
+    --controls-backdrop-color: ${({theme}) => theme.palette.primary};
 
     .media-controller {
-      background-color: ${({ theme }) => theme.palette.primary} !important;
+      background-color: ${({theme}) => theme.palette.primary} !important;
     }*/
   }
 `;
@@ -68,7 +68,7 @@ export const StyledMeta = styled.div`
 
 export const StyledAvatarWrapper = styled.div`
   margin: 0 8px 0 0;
-  color: ${({ theme }) => theme.palette.primary};
+  color: ${({theme}) => theme.palette.primary};
 
   * + * {
     margin-left: 6px;
@@ -86,7 +86,7 @@ export const StyledMusicWrapper = styled.div`
   position: relative;
   height: 175px;
   width: 175px;
-  border-radius: ${({ theme }) => theme.radius.circle};
+  border-radius: ${({theme}) => theme.radius.circle};
   overflow: hidden;
 `;
 
@@ -108,8 +108,8 @@ export const StyledAudioPlayer = styled.div`
   position: relative;
   padding: 24px;
   margin-bottom: 20px;
-  background-color: ${({ theme }) => theme.palette.primary}33;
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  background-color: ${({theme}) => theme.palette.primary}33;
+  border-radius: ${({theme}) => theme.radius.base}px;
 `;
 
 export const StyledCanvas = styled.canvas`

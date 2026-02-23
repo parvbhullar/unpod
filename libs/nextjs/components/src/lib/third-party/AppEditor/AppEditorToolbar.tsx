@@ -1,29 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ToolbarFormats from './ToolbarOptions';
-import { StyledToolbar } from './AppEditorInput/index.styled';
-import { Tooltip } from 'antd';
+import {StyledToolbar} from './AppEditorInput/index.styled';
+import {Tooltip} from 'antd';
 
 const toolbarSelectBox = (formatData) => {
-  const { className, options } = formatData;
+  const {className, options} = formatData;
   return (
     <select className={`ql-${className}`} onChange={(e) => e.persist()}>
       {options.map((value, index) => {
-        return <option value={value} key={'option-' + index} />;
+        return <option value={value} key={'option-' + index}/>;
       })}
-      <option selected />
+      <option selected/>
     </select>
   );
 };
 const toolbarButton = (formatData) => {
-  const { className, value, tooltip } = formatData;
+  const {className, value, tooltip} = formatData;
   return (
     <Tooltip title={tooltip}>
-      <button className={`ql-${className}`} value={value} />
+      <button className={`ql-${className}`} value={value}/>
     </Tooltip>
   );
 };
-const AppEditorToolbar = ({ toolbarId }) => {
+const AppEditorToolbar = ({toolbarId}) => {
   return (
     <StyledToolbar id={toolbarId}>
       <span className="ql-formats">

@@ -1,7 +1,7 @@
-import { Typography } from 'antd';
-import { StyledCheckableTag } from './index.styled';
+import {Typography} from 'antd';
+import {StyledCheckableTag} from './index.styled';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 type FeatureCardProps = {
   label: string;
@@ -9,10 +9,10 @@ type FeatureCardProps = {
   onChange?: (checked: boolean) => void;
 };
 
-const CheckboxCard = ({ label, checked, onChange }: FeatureCardProps) => {
+const CheckboxCard = ({label, checked, onChange}: FeatureCardProps) => {
   return (
     <StyledCheckableTag checked={!!checked} onChange={onChange}>
-      <Title level={5} style={{ margin: 0 }}>
+      <Title level={5} style={{margin: 0}}>
         {label}
       </Title>
     </StyledCheckableTag>

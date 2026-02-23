@@ -1,5 +1,5 @@
-import type { Organization } from '../organization';
-import type { User } from '../user';
+import type {Organization} from '../organization';
+import type {User} from '../user';
 
 export type Spaces = {
   slug?: string;

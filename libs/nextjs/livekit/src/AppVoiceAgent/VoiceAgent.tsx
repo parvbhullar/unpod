@@ -1,5 +1,5 @@
 import '@livekit/components-styles';
-import { ConfigurationPanelItem } from './config/ConfigurationPanelItem';
+import {ConfigurationPanelItem} from './config/ConfigurationPanelItem';
 import {
   RoomAudioRenderer,
   StartAudio,
@@ -9,16 +9,13 @@ import {
   useRoomContext,
   useVoiceAssistant,
 } from '@livekit/components-react';
-import {
-  StyledAgentContainer,
-  StyledVisualizerContainer,
-} from './Playground.styled';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
-import { TranscriptionTile } from '../transcriptions/TranscriptionTile';
-import { WidgetContainer } from './AgentView.styled';
-import { useIntl } from 'react-intl';
-import { ConnectionState } from 'livekit-client';
+import {StyledAgentContainer, StyledVisualizerContainer,} from './Playground.styled';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {useKrispNoiseFilter} from '@livekit/components-react/krisp';
+import {TranscriptionTile} from '../transcriptions/TranscriptionTile';
+import {WidgetContainer} from './AgentView.styled';
+import {useIntl} from 'react-intl';
+import {ConnectionState} from 'livekit-client';
 import AudioOutputTile from './config/AudioOutputTile';
 
 type VoiceAgentProps = {
@@ -29,11 +26,11 @@ type VoiceAgentProps = {
 };
 
 const VoiceAgent: React.FC<VoiceAgentProps> = ({
-  onConnect,
-  config,
-  agentName,
-  setStartCall,
-}) => {
+                                                 onConnect,
+                                                 config,
+                                                 agentName,
+                                                 setStartCall,
+                                               }) => {
   const [, setTranscripts] = useState<
     {
       name: string;
@@ -42,11 +39,11 @@ const VoiceAgent: React.FC<VoiceAgentProps> = ({
       isSelf: boolean;
     }[]
   >([]);
-  const { localParticipant } = useLocalParticipant();
+  const {localParticipant} = useLocalParticipant();
   const voiceAssistant = useVoiceAssistant();
   const roomState = useConnectionState();
   const room = useRoomContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const krisp = useKrispNoiseFilter();
   useEffect(() => {
@@ -124,7 +121,7 @@ const VoiceAgent: React.FC<VoiceAgentProps> = ({
 
   const chatTileContent = useMemo(() => {
     if (voiceAssistant.audioTrack) {
-      return <TranscriptionTile agentAudioTrack={voiceAssistant.audioTrack} />;
+      return <TranscriptionTile agentAudioTrack={voiceAssistant.audioTrack}/>;
     }
     return <></>;
   }, [voiceAssistant.audioTrack]);
@@ -158,9 +155,9 @@ const VoiceAgent: React.FC<VoiceAgentProps> = ({
 
       {roomState === ConnectionState.Connected && (
         <>
-          <RoomAudioRenderer />
+          <RoomAudioRenderer/>
           <StartAudio
-            label={formatMessage({ id: 'talkToAgent.playbackMessage' })}
+            label={formatMessage({id: 'talkToAgent.playbackMessage'})}
           />
         </>
       )}

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
-import { useFetchDataApi } from '@unpod/providers';
-import type { Thread } from '@unpod/constants/types';
+import {useFetchDataApi} from '@unpod/providers';
+import type {Thread} from '@unpod/constants/types';
 import AppPostGrid from '../AppPostGrid';
 import AppPostList from '../AppPostList';
 import AppLoadingMore from '../../common/AppLoadingMore';
@@ -10,12 +10,13 @@ import AppEmptyWorkSpace from '../AppEmptyWorkSpace';
 
 type AppHubThreadsProps = {
   currentHub?: { domain_handle?: string; joined?: boolean };
-  listingType?: 'grid' | 'list';};
+  listingType?: 'grid' | 'list';
+};
 
-const AppHubThreads = ({ currentHub, listingType }: AppHubThreadsProps) => {
+const AppHubThreads = ({currentHub, listingType}: AppHubThreadsProps) => {
   const [
-    { apiData, loading, page, isLoadingMore },
-    { setPage, setLoadingMore, updateInitialUrl, setData },
+    {apiData, loading, page, isLoadingMore},
+    {setPage, setLoadingMore, updateInitialUrl, setData},
   ] = useFetchDataApi<Thread[]>(
     `threads/organisation-threads/${currentHub?.domain_handle}/`,
     [],
@@ -34,7 +35,7 @@ const AppHubThreads = ({ currentHub, listingType }: AppHubThreadsProps) => {
   }, [currentHub]);
 
   return apiData?.length ? (
-    <div style={{ minHeight: '50vh' }}>
+    <div style={{minHeight: '50vh'}}>
       {listingType === 'grid' ? (
         <AppPostGrid
           loading={loading}
@@ -58,12 +59,12 @@ const AppHubThreads = ({ currentHub, listingType }: AppHubThreadsProps) => {
         />
       )}
 
-      {isLoadingMore && <AppLoadingMore />}
+      {isLoadingMore && <AppLoadingMore/>}
     </div>
   ) : loading ? (
-    <AppLoader />
+    <AppLoader/>
   ) : (
-    <AppEmptyWorkSpace type="org" />
+    <AppEmptyWorkSpace type="org"/>
   );
 };
 

@@ -1,6 +1,6 @@
 'use client';
-import type { ComponentType, ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type {ComponentType, ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 /**
  * Common wrapper for all scrollable card containers
@@ -18,10 +18,10 @@ type CardsScrollWrapperProps = {
 };
 
 const CardsScrollWrapper = ({
-  children,
-  ScrollComponent,
-  items = [],
-}: CardsScrollWrapperProps) => {
+                              children,
+                              ScrollComponent,
+                              items = [],
+                            }: CardsScrollWrapperProps) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showLeftShadow, setShowLeftShadow] = useState(false);
   const [showRightShadow, setShowRightShadow] = useState(false);
@@ -32,7 +32,7 @@ const CardsScrollWrapper = ({
   const checkScroll = () => {
     if (!scrollRef.current) return;
 
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    const {scrollLeft, scrollWidth, clientWidth} = scrollRef.current;
 
     // Show left shadow if scrolled away from left edge
     setShowLeftShadow(scrollLeft > 0);

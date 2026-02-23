@@ -1,7 +1,7 @@
 import AppTableActions from '../AppTableActions';
-import { getActionColumn } from '@unpod/helpers/TableHelper';
-import { capitalizedString } from '@unpod/helpers/StringHelper';
-import type { ColumnType } from 'antd/es/table';
+import {getActionColumn} from '@unpod/helpers/TableHelper';
+import {capitalizedString} from '@unpod/helpers/StringHelper';
+import type {ColumnType} from 'antd/es/table';
 
 type SharedUser = {
   email: string;

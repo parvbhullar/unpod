@@ -1,22 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Badge,
-  Button,
-  Dropdown,
-  Progress,
-  Select,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
-import { MdClear, MdOutlineImage } from 'react-icons/md';
+import {Badge, Button, Dropdown, Progress, Select, Space, Typography, Upload,} from 'antd';
+import {MdClear, MdOutlineImage} from 'react-icons/md';
 import AppImage from '@unpod/components/next/AppImage';
 import AppMarkdownEditor from '@unpod/components/third-party/AppMarkdownEditor';
 import PostPermissionPopover from '@unpod/components/common/PermissionPopover/PostPermissionPopover';
-import { PERMISSION_TYPES } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { useInfoViewActionsContext } from '@unpod/providers';
+import {PERMISSION_TYPES} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {useInfoViewActionsContext} from '@unpod/providers';
 import {
   StyledActionBar,
   StyledContent,
@@ -29,37 +20,37 @@ import {
   StyledTitleWrapper,
   StyleExtraSpace,
 } from './index.styled';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
-import { useIntl } from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
 
-const { Title } = Typography;
-const { Option } = Select;
+const {Title} = Typography;
+const {Option} = Select;
 const acceptTypes = '.png, .jpg, .jpeg';
 
 const CommonFields = ({
-  queryTitle,
-  setQueryTitle,
-  content,
-  setContent,
-  tags,
-  setTags,
-  tagsData,
-  currentPrivacy,
-  setPrivacyType,
-  userList,
-  setUserList,
-  coverUploadPercent,
-  coverPreviewUrl,
-  setCoverPreviewUrl,
-  coverImage,
-  setCoverImage,
-  isSubEnabled,
-  setThreadType,
-  submitRequest,
-}) => {
+                        queryTitle,
+                        setQueryTitle,
+                        content,
+                        setContent,
+                        tags,
+                        setTags,
+                        tagsData,
+                        currentPrivacy,
+                        setPrivacyType,
+                        userList,
+                        setUserList,
+                        coverUploadPercent,
+                        coverPreviewUrl,
+                        setCoverPreviewUrl,
+                        coverImage,
+                        setCoverImage,
+                        isSubEnabled,
+                        setThreadType,
+                        submitRequest,
+                      }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [open, setOpen] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onTitleChange = (e) => {
     const newTitle = e.target.value;
@@ -104,7 +95,7 @@ const CommonFields = ({
           <Title level={4} type="secondary" className="mb-0">
             Cover Image
           </Title>
-          <Progress percent={coverUploadPercent} />
+          <Progress percent={coverUploadPercent}/>
         </StyledMediaWrapper>
       ) : (
         !!coverPreviewUrl && (
@@ -142,7 +133,7 @@ const CommonFields = ({
         />
       </StyledTitleWrapper>
 
-      <StyledDivider />
+      <StyledDivider/>
 
       <StyledContent>
         <AppMarkdownEditor
@@ -155,7 +146,7 @@ const CommonFields = ({
 
       {content && (
         <Fragment>
-          <StyledDivider />
+          <StyledDivider/>
 
           <StyledTagsSelect
             placeholder="Tags"
@@ -173,7 +164,7 @@ const CommonFields = ({
         </Fragment>
       )}
 
-      <StyleExtraSpace />
+      <StyleExtraSpace/>
 
       <StyledActionBar>
         <Space>
@@ -195,7 +186,7 @@ const CommonFields = ({
               arrow
             >
               <Button shape="round" icon={currentPrivacy?.icon}>
-                {formatMessage({id:currentPrivacy?.label})}
+                {formatMessage({id: currentPrivacy?.label})}
               </Button>
             </Dropdown>
           </PostPermissionPopover>
@@ -212,7 +203,7 @@ const CommonFields = ({
               <Button
                 type="default"
                 shape="round"
-                icon={<MdOutlineImage fontSize={24} />}
+                icon={<MdOutlineImage fontSize={24}/>}
               />
             </Badge>
           </Upload>
@@ -255,7 +246,7 @@ const CommonFields = ({
   );
 };
 
-const { bool, func, string, array, object, number } = PropTypes;
+const {bool, func, string, array, object, number} = PropTypes;
 
 CommonFields.propTypes = {
   queryTitle: string,

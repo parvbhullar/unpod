@@ -1,32 +1,22 @@
-import type { FocusEvent } from 'react';
-import { Fragment, useState } from 'react';
-import { Button, Flex, Form, message, Space, Tooltip } from 'antd';
-import {
-  MdAdd,
-  MdDelete,
-  MdOutlineClose,
-  MdOutlineRecordVoiceOver,
-  MdOutlineSettings,
-} from 'react-icons/md';
-import { useGetDataApi, useInfoViewContext } from '@unpod/providers';
-import { AppDrawer, AppInput } from '@unpod/components/antd';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { CollapseWrapper, StyledItemRow } from './index.styled';
+import type {FocusEvent} from 'react';
+import {Fragment, useState} from 'react';
+import {Button, Flex, Form, message, Space, Tooltip} from 'antd';
+import {MdAdd, MdDelete, MdOutlineClose, MdOutlineRecordVoiceOver, MdOutlineSettings,} from 'react-icons/md';
+import {useGetDataApi, useInfoViewContext} from '@unpod/providers';
+import {AppDrawer, AppInput} from '@unpod/components/antd';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {CollapseWrapper, StyledItemRow} from './index.styled';
 import VoiceProfiles from './VoiceProfiles';
 import VoiceProfileCard from './VoiceProfiles/VoiceProfileCard';
 import CardWrapper from '@unpod/components/common/CardWrapper';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-} from '../index.styled';
-import { useIntl } from 'react-intl';
-import { ConfigItem, Pilot, VoiceProfile } from '@unpod/constants/types';
+import {StickyFooter, StyledMainContainer, StyledTabRoot,} from '../index.styled';
+import {useIntl} from 'react-intl';
+import {ConfigItem, Pilot, VoiceProfile} from '@unpod/constants/types';
 import VoiceCollapseSection from './VoiceCollapseSection';
-import { SaveOutlined } from '@ant-design/icons';
-import type { FormInstance } from 'antd/es/form';
+import {SaveOutlined} from '@ant-design/icons';
+import type {FormInstance} from 'antd/es/form';
 
-const { Item, List, useForm } = Form;
+const {Item, List, useForm} = Form;
 
 type VoiceFormProps = {
   agentData: Pilot;
@@ -48,26 +38,25 @@ type AgentFormValues = Partial<VoiceProfile> & {
   provider?: string;
 };
 
-const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
+const VoiceForm = ({agentData, updateAgentData}: VoiceFormProps) => {
   const infoViewContext = useInfoViewContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const [messageApi, contextHolder] = message.useMessage();
   const [openVoiceProfile, setOpenVoiceProfile] = useState(false);
 
 
-
   const [
-    { apiData: voiceProfile, loading: selectedVoiceLoading },
-    { setData },
+    {apiData: voiceProfile, loading: selectedVoiceLoading},
+    {setData},
   ] = useGetDataApi<VoiceProfile | null>(
     `/core/voice-profiles/${agentData?.telephony_config?.voice_profile_id}/`,
-    { data: null },
+    {data: null},
     {},
     !!agentData?.telephony_config?.voice_profile_id,
   );
 
-  console.log('agent data trancriber',agentData)
+  console.log('agent data trancriber', agentData)
   const onFinish = (values: AgentFormValues) => {
     const formData: FormData = new FormData();
 
@@ -92,12 +81,12 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
     formData.append('token', String(values.max_tokens ?? ''));
     formData.append(
       'chat_model',
-      JSON.stringify({ codename: values.model, provider: values?.provider }),
+      JSON.stringify({codename: values.model, provider: values?.provider}),
     );
     formData.append('provider', values.provider || '');
     formData.append(
       'embedding_model',
-      JSON.stringify({ codename: values.model, provider: values?.provider }),
+      JSON.stringify({codename: values.model, provider: values?.provider}),
     );
     formData.append('name', agentData?.name || '');
     formData.append('telephony_config', JSON.stringify(telephonyConfig));
@@ -114,7 +103,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
   };
 
   const onProfileSelect = (profile: VoiceProfile | null) => {
-    setData({ data: profile });
+    setData({data: profile});
     setOpenVoiceProfile(false);
 
     form.setFieldsValue({
@@ -138,7 +127,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
     }, 300);
   };
 
-  const onFinishFailed = ({ errorFields }: { errorFields: any[] }) => {
+  const onFinishFailed = ({errorFields}: { errorFields: any[] }) => {
     if (!errorFields || errorFields.length === 0) return;
     messageApi.error(errorFields[0].errors[0]);
   };
@@ -174,8 +163,8 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
       <StyledTabRoot>
         <StyledMainContainer>
           <CardWrapper
-            title={formatMessage({ id: 'identityStudio.voiceProfile' })}
-            icon={<MdOutlineRecordVoiceOver />}
+            title={formatMessage({id: 'identityStudio.voiceProfile'})}
+            icon={<MdOutlineRecordVoiceOver/>}
             extra={
               voiceProfile?.data && (
                 <Button
@@ -184,7 +173,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                   shape="round"
                   onClick={() => setOpenVoiceProfile(true)}
                 >
-                  {formatMessage({ id: 'identityStudio.manageProfiles' })}
+                  {formatMessage({id: 'identityStudio.manageProfiles'})}
                 </Button>
               )
             }
@@ -204,7 +193,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                 onClick={() => setOpenVoiceProfile(true)}
                 ghost
               >
-                {formatMessage({ id: 'aiStudio.selectVoiceProfile' })}
+                {formatMessage({id: 'aiStudio.selectVoiceProfile'})}
               </Button>
             )}
           </CardWrapper>
@@ -218,14 +207,14 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
           </CollapseWrapper>
 
           <CardWrapper
-            title={formatMessage({ id: 'identityStudio.config' })}
-            icon={<MdOutlineSettings />}
+            title={formatMessage({id: 'identityStudio.config'})}
+            icon={<MdOutlineSettings/>}
           >
             {/*<StyledLabel>Config</StyledLabel>*/}
             <List name="config_items">
-              {(fields, { add, remove }) => (
+              {(fields, {add, remove}) => (
                 <Fragment>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields.map(({key, name, ...restField}) => (
                     <StyledItemRow key={key}>
                       <Item
                         {...restField}
@@ -250,7 +239,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                               const formattedKey = getMachineName(configKey);
                               const items = form.getFieldValue('config_items');
                               items[name].config_key = formattedKey;
-                              form.setFieldsValue({ config_items: items });
+                              form.setFieldsValue({config_items: items});
                             }
                           }}
                           asterisk
@@ -281,7 +270,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                         <Button
                           type="primary"
                           onClick={() => remove(name)}
-                          icon={<MdDelete fontSize={18} />}
+                          icon={<MdDelete fontSize={18}/>}
                           danger
                           ghost
                         />
@@ -294,7 +283,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                       type="dashed"
                       onClick={() => add()}
                       block
-                      icon={<MdAdd />}
+                      icon={<MdAdd/>}
                     >
                       {formatMessage({
                         id: 'identityStudio.addField',
@@ -313,7 +302,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext.loading}
           >
             Save
@@ -322,7 +311,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
       </StickyFooter>
 
       <AppDrawer
-        title={formatMessage({ id: 'identityStudio.voiceProfiles' })}
+        title={formatMessage({id: 'identityStudio.voiceProfiles'})}
         open={openVoiceProfile}
         onClose={() => setOpenVoiceProfile(false)}
         size={780}
@@ -333,7 +322,7 @@ const VoiceForm = ({ agentData, updateAgentData }: VoiceFormProps) => {
                 type="text"
                 size="small"
                 shape="circle"
-                icon={<MdOutlineClose fontSize={21} />}
+                icon={<MdOutlineClose fontSize={21}/>}
                 onClick={() => setOpenVoiceProfile(false)}
               />
             </Tooltip>

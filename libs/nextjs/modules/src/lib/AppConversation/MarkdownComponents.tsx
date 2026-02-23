@@ -1,8 +1,8 @@
 'use client';
-import type { Components } from 'react-markdown';
-import type { HTMLAttributes, ReactNode } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import type {Components} from 'react-markdown';
+import type {HTMLAttributes, ReactNode} from 'react';
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import {vscDarkPlus} from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 type CodeProps = HTMLAttributes<HTMLElement> & {
   inline?: boolean;
@@ -11,7 +11,7 @@ type CodeProps = HTMLAttributes<HTMLElement> & {
 };
 
 export const getMarkdownComponents = (isUser: boolean): Components => ({
-  code({ inline, className, children, ...props }: CodeProps) {
+  code({inline, className, children, ...props}: CodeProps) {
     const match = /language-(\w+)/.exec(className || '');
     return !inline && match ? (
       <SyntaxHighlighter
@@ -45,7 +45,7 @@ export const getMarkdownComponents = (isUser: boolean): Components => ({
       </code>
     );
   },
-  a({ children, href, ...props }) {
+  a({children, href, ...props}) {
     return (
       <a
         href={href}
@@ -62,48 +62,48 @@ export const getMarkdownComponents = (isUser: boolean): Components => ({
       </a>
     );
   },
-  p({ children }) {
-    return <p style={{ margin: 0, lineHeight: '1.6' }}>{children}</p>;
+  p({children}) {
+    return <p style={{margin: 0, lineHeight: '1.6'}}>{children}</p>;
   },
-  ul({ children }) {
+  ul({children}) {
     return (
-      <ul style={{ marginLeft: '20px', marginTop: '8px', marginBottom: '8px' }}>
+      <ul style={{marginLeft: '20px', marginTop: '8px', marginBottom: '8px'}}>
         {children}
       </ul>
     );
   },
-  ol({ children }) {
+  ol({children}) {
     return (
-      <ol style={{ marginLeft: '20px', marginTop: '8px', marginBottom: '8px' }}>
+      <ol style={{marginLeft: '20px', marginTop: '8px', marginBottom: '8px'}}>
         {children}
       </ol>
     );
   },
-  li({ children }) {
-    return <li style={{ marginBottom: '4px' }}>{children}</li>;
+  li({children}) {
+    return <li style={{marginBottom: '4px'}}>{children}</li>;
   },
-  h1({ children }) {
+  h1({children}) {
     return (
-      <h1 style={{ fontSize: '1.5em', fontWeight: 700, margin: '12px 0 8px' }}>
+      <h1 style={{fontSize: '1.5em', fontWeight: 700, margin: '12px 0 8px'}}>
         {children}
       </h1>
     );
   },
-  h2({ children }) {
+  h2({children}) {
     return (
-      <h2 style={{ fontSize: '1.3em', fontWeight: 700, margin: '12px 0 8px' }}>
+      <h2 style={{fontSize: '1.3em', fontWeight: 700, margin: '12px 0 8px'}}>
         {children}
       </h2>
     );
   },
-  h3({ children }) {
+  h3({children}) {
     return (
-      <h3 style={{ fontSize: '1.1em', fontWeight: 600, margin: '10px 0 6px' }}>
+      <h3 style={{fontSize: '1.1em', fontWeight: 600, margin: '10px 0 6px'}}>
         {children}
       </h3>
     );
   },
-  blockquote({ children }) {
+  blockquote({children}) {
     return (
       <blockquote
         style={{
@@ -118,9 +118,9 @@ export const getMarkdownComponents = (isUser: boolean): Components => ({
       </blockquote>
     );
   },
-  table({ children }) {
+  table({children}) {
     return (
-      <div style={{ overflowX: 'auto', margin: '12px 0' }}>
+      <div style={{overflowX: 'auto', margin: '12px 0'}}>
         <table
           style={{
             borderCollapse: 'collapse',
@@ -133,7 +133,7 @@ export const getMarkdownComponents = (isUser: boolean): Components => ({
       </div>
     );
   },
-  th({ children }) {
+  th({children}) {
     return (
       <th
         style={{
@@ -148,7 +148,7 @@ export const getMarkdownComponents = (isUser: boolean): Components => ({
       </th>
     );
   },
-  td({ children }) {
+  td({children}) {
     return (
       <td
         style={{

@@ -1,16 +1,17 @@
-import React, { useMemo } from 'react';
+import React, {useMemo} from 'react';
 
-import { debounce } from 'lodash';
-import { StyledSearch } from './index.styled';
+import {debounce} from 'lodash';
+import {StyledSearch} from './index.styled';
 
 type AppGlobalSearchProps = {
   setGlobalSearch?: (value: string) => void;
-  placeholder?: string;};
+  placeholder?: string;
+};
 
 const AppGlobalSearch: React.FC<AppGlobalSearchProps> = ({
-  setGlobalSearch,
-  placeholder,
-}) => {
+                                                           setGlobalSearch,
+                                                           placeholder,
+                                                         }) => {
   const onSearch = (value: string) => {
     setGlobalSearch?.(value);
   };

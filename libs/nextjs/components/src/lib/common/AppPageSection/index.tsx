@@ -1,6 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type {CSSProperties, ReactNode} from 'react';
 
-import { StyledContainer, StyledSection } from './index.styled';
+import {StyledContainer, StyledSection} from './index.styled';
 import AppSectionHeader from './AppSectionHeader';
 
 type AppPageSectionProps = {
@@ -12,15 +12,16 @@ type AppPageSectionProps = {
   subHeading?: ReactNode;
   description?: ReactNode;
   headerMaxWidth?: number;
-  extra?: ReactNode;};
+  extra?: ReactNode;
+};
 
 const AppPageSection = ({
-  children,
-  bgColor = 'transparent',
-  style,
-  id,
-  ...restProps
-}: AppPageSectionProps) => {
+                          children,
+                          bgColor = 'transparent',
+                          style,
+                          id,
+                          ...restProps
+                        }: AppPageSectionProps) => {
   return (
     <StyledSection $bgColor={bgColor} style={style} id={id}>
       <StyledContainer>

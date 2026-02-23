@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 // https://www.w3.org/TR/wai-aria-practices-1.1/#kbd_roving_tabindex
 export function useRovingTabIndex(isSelected: boolean) {

@@ -1,26 +1,23 @@
-import { Flex, Typography } from 'antd';
+import {Flex, Typography} from 'antd';
 import styled from 'styled-components';
 import AppGrid from '@unpod/components/common/AppGrid';
 import AppLink from '@unpod/components/next/AppLink';
-import {
-  StyledAnalyticsCard,
-  StyledCardTitle,
-} from '../../People/Overview/Summary/index.styled';
+import {StyledAnalyticsCard, StyledCardTitle,} from '../../People/Overview/Summary/index.styled';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 const StyledLinkText = styled(Text)`
-  color: ${({ theme }) => theme.palette.primary};
+  color: ${({theme}) => theme.palette.primary};
   cursor: pointer;
   transition: color 0.3s ease;
 
   &:hover {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 `;
 const AppGridAny = AppGrid as any;
 
-const Metrics = ({ data }: { data: any[] }) => {
+const Metrics = ({data}: { data: any[] }) => {
   return (
     <AppGridAny
       data={data}

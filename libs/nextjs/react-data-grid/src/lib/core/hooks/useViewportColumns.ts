@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 
-import { getColSpan } from '../utils';
-import type { CalculatedColumn, Maybe } from '../models/data-grid';
+import {getColSpan} from '../utils';
+import type {CalculatedColumn, Maybe} from '../models/data-grid';
 
 type ViewportColumnsArgs<R, SR> = {
   columns: readonly CalculatedColumn<R, SR>[];
@@ -13,20 +13,21 @@ type ViewportColumnsArgs<R, SR> = {
   colOverscanEndIdx: number;
   lastLeftFixedColumnIndex: number;
   rowOverscanStartIdx: number;
-  rowOverscanEndIdx: number;};
+  rowOverscanEndIdx: number;
+};
 
 export function useViewportColumns<R, SR>({
-  columns,
-  colSpanColumns,
-  rows,
-  topSummaryRows,
-  bottomSummaryRows,
-  colOverscanStartIdx,
-  colOverscanEndIdx,
-  lastLeftFixedColumnIndex,
-  rowOverscanStartIdx,
-  rowOverscanEndIdx,
-}: ViewportColumnsArgs<R, SR>) {
+                                            columns,
+                                            colSpanColumns,
+                                            rows,
+                                            topSummaryRows,
+                                            bottomSummaryRows,
+                                            colOverscanStartIdx,
+                                            colOverscanEndIdx,
+                                            lastLeftFixedColumnIndex,
+                                            rowOverscanStartIdx,
+                                            rowOverscanEndIdx,
+                                          }: ViewportColumnsArgs<R, SR>) {
   // find the column that spans over a column within the visible columns range and adjust colOverscanStartIdx
   const startIdx = useMemo(() => {
     if (colOverscanStartIdx === 0) return 0;
@@ -48,7 +49,7 @@ export function useViewportColumns<R, SR>({
       if (
         updateStartIdx(
           colIdx,
-          getColSpan(column, lastLeftFixedColumnIndex, { type: 'HEADER' }),
+          getColSpan(column, lastLeftFixedColumnIndex, {type: 'HEADER'}),
         )
       ) {
         break;
@@ -64,7 +65,7 @@ export function useViewportColumns<R, SR>({
         if (
           updateStartIdx(
             colIdx,
-            getColSpan(column, lastLeftFixedColumnIndex, { type: 'ROW', row }),
+            getColSpan(column, lastLeftFixedColumnIndex, {type: 'ROW', row}),
           )
         ) {
           break;

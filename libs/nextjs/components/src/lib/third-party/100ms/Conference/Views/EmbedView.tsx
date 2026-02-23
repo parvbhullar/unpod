@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   selectLocalPeerID,
   selectLocalPeerRoleName,
@@ -8,20 +8,20 @@ import {
   useHMSStore,
   useScreenShare,
 } from '@100mslive/react-sdk';
-import { SidePane } from './screenShareView';
-import { useSetAppDataByKey } from '../../AppData/useUISettings';
-import { APP_DATA } from '../../common/constants';
-import { StyledContainer } from './index.styled';
+import {SidePane} from './screenShareView';
+import {useSetAppDataByKey} from '../../AppData/useUISettings';
+import {APP_DATA} from '../../common/constants';
+import {StyledContainer} from './index.styled';
 
 export const EmbedView = () => {
   return (
     <EmbedScreenShareView>
-      <EmbedComponent />
+      <EmbedComponent/>
     </EmbedScreenShareView>
   );
 };
 
-export const EmbedScreenShareView = ({ children }) => {
+export const EmbedScreenShareView = ({children}) => {
   const peers = useHMSStore(selectPeers);
 
   const showSidebarInBottom = true;
@@ -72,7 +72,7 @@ export const EmbedScreenShareView = ({ children }) => {
 };
 
 const EmbedComponent = () => {
-  const { amIScreenSharing, toggleScreenShare } =
+  const {amIScreenSharing, toggleScreenShare} =
     useScreenShare(throwErrorHandler);
   const [embedConfig, setEmbedConfig] = useSetAppDataByKey(
     APP_DATA.embedConfig
@@ -85,7 +85,7 @@ const EmbedComponent = () => {
 
   const resetEmbedConfig = useCallback(() => {
     if (src) {
-      setEmbedConfig({ url: '' });
+      setEmbedConfig({url: ''});
     }
   }, [src, setEmbedConfig]);
 
@@ -139,7 +139,7 @@ const EmbedComponent = () => {
       <iframe
         src={src}
         title={src}
-        style={{ width: '100%', height: '100%', border: 0 }}
+        style={{width: '100%', height: '100%', border: 0}}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture fullscreen"
         referrerPolicy="no-referrer"
       />

@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import itMessages from '../locales/it_IT.json';
 import itIT from 'antd/lib/locale/it_IT';
 

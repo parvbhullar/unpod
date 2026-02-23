@@ -1,18 +1,14 @@
-import { memo, type ReactNode } from 'react';
+import {memo, type ReactNode} from 'react';
 
-import { Carousel, Col, Row } from 'antd';
-import { getImageUrl } from '@unpod/helpers/UrlHelper';
-import {
-  StyledCarouselWrapper,
-  StyledImage,
-  StyledSliderContent,
-  StyledSliderLayoutWrapper,
-} from './index.styled';
+import {Carousel, Col, Row} from 'antd';
+import {getImageUrl} from '@unpod/helpers/UrlHelper';
+import {StyledCarouselWrapper, StyledImage, StyledSliderContent, StyledSliderLayoutWrapper,} from './index.styled';
 
 type SliderLayoutProps = {
-  children?: ReactNode;};
+  children?: ReactNode;
+};
 
-const SliderLayout = ({ children }: SliderLayoutProps) => {
+const SliderLayout = ({children}: SliderLayoutProps) => {
   return (
     <StyledSliderLayoutWrapper>
       <Row align={'middle'} className={'h-100'}>
@@ -41,7 +37,7 @@ const SliderLayout = ({ children }: SliderLayoutProps) => {
                   </h3>
                   <h4>Percy Scott</h4>
                   <p>
-                    Developer, thinkitive <br />
+                    Developer, thinkitive <br/>
                     Web design agency
                   </p>
                 </StyledSliderContent>
@@ -59,7 +55,7 @@ const SliderLayout = ({ children }: SliderLayoutProps) => {
                   <h4>Reginald Padilla</h4>
                   <p>
                     Designer, thinkitive
-                    <br />
+                    <br/>
                     Web design agency
                   </p>
                 </StyledSliderContent>
@@ -77,7 +73,7 @@ const SliderLayout = ({ children }: SliderLayoutProps) => {
                   <h4>Candice Gross</h4>
                   <p>
                     Developer, thinkitive
-                    <br />
+                    <br/>
                     agency
                   </p>
                 </StyledSliderContent>

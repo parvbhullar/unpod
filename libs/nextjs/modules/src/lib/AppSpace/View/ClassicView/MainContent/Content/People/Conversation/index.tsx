@@ -1,31 +1,26 @@
-import { useState } from 'react';
-import { StyledDescription, StyledTime } from './index.styled';
+import {useState} from 'react';
+import {StyledDescription, StyledTime} from './index.styled';
 import UserAvatar from '@unpod/components/common/UserAvatar';
-import { Flex, Typography } from 'antd';
+import {Flex, Typography} from 'antd';
 import ListItems from '../../Conversation/Overview/ListItems';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useAuthContext,
-  useGetDataApi,
-} from '@unpod/providers';
+import {useAppSpaceActionsContext, useAppSpaceContext, useAuthContext, useGetDataApi,} from '@unpod/providers';
 import AppList from '@unpod/components/common/AppList';
-import { getTimeFromNow } from '@unpod/helpers/DateHelper';
+import {getTimeFromNow} from '@unpod/helpers/DateHelper';
 import ConversationView from './ConversationView';
-import { AppDrawer } from '@unpod/components/antd';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
+import {AppDrawer} from '@unpod/components/antd';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
 
-const { Text } = Typography;
+const {Text} = Typography;
 const statusColors = {
-  interested: { color: 'badge-success', label: 'Interested' },
-  interrested: { color: 'badge-success', label: 'Interested' },
-  'not connected': { color: 'badge-error', label: 'Not Connected' },
-  'follow up': { color: 'badge-warning', label: 'Follow Up' },
-  connected: { color: 'badge-primary', label: 'Connected' },
-  scheduled: { color: 'badge-info', label: 'Scheduled' },
-  completed: { color: 'badge-success', label: 'Completed' },
-  pending: { color: 'badge-warning', label: 'Pending' },
-  cancelled: { color: 'badge-error', label: 'Cancelled' },
+  interested: {color: 'badge-success', label: 'Interested'},
+  interrested: {color: 'badge-success', label: 'Interested'},
+  'not connected': {color: 'badge-error', label: 'Not Connected'},
+  'follow up': {color: 'badge-warning', label: 'Follow Up'},
+  connected: {color: 'badge-primary', label: 'Connected'},
+  scheduled: {color: 'badge-info', label: 'Scheduled'},
+  completed: {color: 'badge-success', label: 'Completed'},
+  pending: {color: 'badge-warning', label: 'Pending'},
+  cancelled: {color: 'badge-error', label: 'Cancelled'},
 };
 
 type ConversationItem = {
@@ -43,14 +38,14 @@ type ConversationItem = {
 
 const Conversations = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { activeDocument, activeConversation } = useAppSpaceContext();
-  const { setActiveConversation } = useAppSpaceActionsContext();
-  const { activeOrg } = useAuthContext();
+  const {activeDocument, activeConversation} = useAppSpaceContext();
+  const {setActiveConversation} = useAppSpaceActionsContext();
+  const {activeOrg} = useAuthContext();
   const activeConversationData = activeConversation as ConversationItem | null;
 
-  const [{ apiData, loading }] = useGetDataApi(
+  const [{apiData, loading}] = useGetDataApi(
     `threads/connector-doc-data/${activeDocument?.document_id}/`,
-    { data: [] },
+    {data: []},
     {
       domain: activeOrg?.domain_handle,
       page_size: 20,
@@ -84,13 +79,13 @@ const Conversations = () => {
           return (
             <ListItems
               onClick={() => handleConversationClick(conversation)}
-              avatar={<UserAvatar user={conversation.user} size={48} />}
+              avatar={<UserAvatar user={conversation.user} size={48}/>}
               title={
                 <Flex vertical gap={2}>
                   <Flex justify="space-between" align="center">
                     <Text
                       strong
-                      style={{ fontSize: 15, color: '#262626', flex: 1 }}
+                      style={{fontSize: 15, color: '#262626', flex: 1}}
                       ellipsis
                     >
                       {conversation.content ||
@@ -98,7 +93,7 @@ const Conversations = () => {
                         'No content'}
                     </Text>
                     <StyledTime
-                      style={{ margin: '0 0 0 12px', fontSize: 12 }}
+                      style={{margin: '0 0 0 12px', fontSize: 12}}
                       type="secondary"
                     >
                       {getTimeFromNow(conversation.created)}
@@ -156,7 +151,7 @@ const Conversations = () => {
               description={
                 <StyledDescription
                   type="secondary"
-                  style={{ margin: '8px 0 0', fontSize: 13, lineHeight: 1.6 }}
+                  style={{margin: '8px 0 0', fontSize: 13, lineHeight: 1.6}}
                   ellipsis={{
                     rows: 2,
                     expandable: false,
@@ -193,7 +188,7 @@ const Conversations = () => {
         }
       >
         {activeConversationData && (
-          <ConversationView conversation={activeConversationData} />
+          <ConversationView conversation={activeConversationData}/>
         )}
       </AppDrawer>
     </>

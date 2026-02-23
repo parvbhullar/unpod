@@ -7,24 +7,24 @@ import {
   ProfileOutlined,
 } from '@ant-design/icons';
 
-import { MdChecklist, MdDataObject, MdLink, MdPhone } from 'react-icons/md';
-import { BsTextareaResize } from 'react-icons/bs';
+import {MdChecklist, MdDataObject, MdLink, MdPhone} from 'react-icons/md';
+import {BsTextareaResize} from 'react-icons/bs';
 
 export const inputTypeIcons = {
-  text: <AlignLeftOutlined />,
-  textarea: <BsTextareaResize />,
-  email: <MailOutlined />,
-  number: <CalculatorOutlined />,
-  file: <FileAddOutlined />,
-  phone: <MdPhone />,
-  url: <MdLink />,
-  json: <MdDataObject fontSize={20} style={{ marginLeft: -3 }} />,
-  date: <CalendarOutlined />,
-  time: <CalendarOutlined />,
-  'date-time': <CalendarOutlined />,
-  checkboxes: <MdChecklist />,
-  select: <ProfileOutlined />,
-  'multi-select': <ProfileOutlined />,
+  text: <AlignLeftOutlined/>,
+  textarea: <BsTextareaResize/>,
+  email: <MailOutlined/>,
+  number: <CalculatorOutlined/>,
+  file: <FileAddOutlined/>,
+  phone: <MdPhone/>,
+  url: <MdLink/>,
+  json: <MdDataObject fontSize={20} style={{marginLeft: -3}}/>,
+  date: <CalendarOutlined/>,
+  time: <CalendarOutlined/>,
+  'date-time': <CalendarOutlined/>,
+  checkboxes: <MdChecklist/>,
+  select: <ProfileOutlined/>,
+  'multi-select': <ProfileOutlined/>,
 };
 
 export const inputTypes = [

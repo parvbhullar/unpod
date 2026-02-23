@@ -1,13 +1,14 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import clsx from 'clsx';
-import { MdCheckCircle } from 'react-icons/md';
-import { StyledMenu, StyledMenuItem } from './index.style';
+import {MdCheckCircle} from 'react-icons/md';
+import {StyledMenu, StyledMenuItem} from './index.style';
 
 type MenuItemProps = {
   item: AppCustomMenuItem;
   activeKeys?: string[];
   showCheckIcon?: boolean;
-  activeCheckIcon?: ReactNode;};
+  activeCheckIcon?: ReactNode;
+};
 
 type AppCustomMenuItem = {
   label: ReactNode;
@@ -15,15 +16,16 @@ type AppCustomMenuItem = {
   rightIcon?: ReactNode;
   key: string;
   onClick?: () => void;
-  disabled?: boolean;};
+  disabled?: boolean;
+};
 
 const MenuItem: React.FC<MenuItemProps> = ({
-  item,
-  activeKeys = [],
-  showCheckIcon = false,
-  activeCheckIcon,
-}) => {
-  const { label, icon, rightIcon, key, onClick, disabled } = item;
+                                             item,
+                                             activeKeys = [],
+                                             showCheckIcon = false,
+                                             activeCheckIcon,
+                                           }) => {
+  const {label, icon, rightIcon, key, onClick, disabled} = item;
   return (
     <StyledMenuItem
       onClick={onClick}
@@ -38,7 +40,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
       {showCheckIcon && activeKeys.includes(key) && !disabled && (
         <span className="check-icon">
-          {activeCheckIcon || <MdCheckCircle fontSize={18} />}
+          {activeCheckIcon || <MdCheckCircle fontSize={18}/>}
         </span>
       )}
 
@@ -52,15 +54,16 @@ type AppCustomMenusProps = {
   activeKeys?: string[];
   showCheckIcon?: boolean;
   activeCheckIcon?: ReactNode;
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 const AppCustomMenus: React.FC<AppCustomMenusProps> = ({
-  items,
-  activeKeys,
-  showCheckIcon = false,
-  activeCheckIcon,
-  ...restProps
-}) => {
+                                                         items,
+                                                         activeKeys,
+                                                         showCheckIcon = false,
+                                                         activeCheckIcon,
+                                                         ...restProps
+                                                       }) => {
   return (
     <StyledMenu className={clsx('app-custom-menus')} {...restProps}>
       {items.map((item, index) => (

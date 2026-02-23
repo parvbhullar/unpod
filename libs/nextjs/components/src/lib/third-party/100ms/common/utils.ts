@@ -1,4 +1,4 @@
-import { QUERY_PARAM_SKIP_PREVIEW } from './constants';
+import {QUERY_PARAM_SKIP_PREVIEW} from './constants';
 
 export function shadeColor(color, percent) {
   let R = parseInt(color.substring(1, 3), 16);
@@ -92,18 +92,18 @@ export const metadataPayloadParser = (payload) => {
     const parsedData = JSON.parse(data);
     return parsedData;
   } catch (e) {
-    return { payload };
+    return {payload};
   }
 };
 
-export const getVideoTileLabel = ({ peerName, isLocal, track }) => {
+export const getVideoTileLabel = ({peerName, isLocal, track}) => {
   const isPeerPresent = peerName !== undefined;
   if (!isPeerPresent || !track) {
     // for peers with only audio track
     return isPeerPresent
       ? labelMap
-          .get([isLocal, undefined].toString())
-          .replace(PEER_NAME_PLACEHOLDER, peerName)
+        .get([isLocal, undefined].toString())
+        .replace(PEER_NAME_PLACEHOLDER, peerName)
       : '';
   }
   const isLocallyMuted = track.volume === 0;

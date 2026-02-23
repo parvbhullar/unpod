@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledSelectLabel = styled(Paragraph)`
   margin-bottom: 2px !important;
@@ -22,11 +22,11 @@ export const StyledSelectWrapper = styled.div`
   }
 `;
 export const StyledMainContainer = styled.div`
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto !important;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     width: 100%;
   }
 `;

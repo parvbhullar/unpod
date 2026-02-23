@@ -1,24 +1,17 @@
 'use client';
 
-import React, {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useRef,
-  useState,
-} from 'react';
-import { useAuthContext } from '../context-provider/AuthContextProvider';
-import { usePaginatedDataApi } from '../APIHooks';
-import { usePathname, useRouter } from 'next/navigation';
-import { APIData } from './data';
-import type { Organization } from '@unpod/constants/types';
+import React, {createContext, Dispatch, ReactNode, SetStateAction, useContext, useRef, useState,} from 'react';
+import {useAuthContext} from '../context-provider/AuthContextProvider';
+import {usePaginatedDataApi} from '../APIHooks';
+import {usePathname, useRouter} from 'next/navigation';
+import {APIData} from './data';
+import type {Organization} from '@unpod/constants/types';
 
 export type AppModuleContextType<T> = {
   record: T | null;
   listData: unknown;
-  isNewRecord: boolean;};
+  isNewRecord: boolean;
+};
 
 export type AppModuleActionsContextType<T> = {
   setRecord: Dispatch<SetStateAction<T | null>>;
@@ -27,7 +20,8 @@ export type AppModuleActionsContextType<T> = {
   deleteRecord: (slug: string) => void;
   updateRecord: (record: T) => void;
   refreshRecords: () => void;
-  addNewRecord: (record: T) => void;};
+  addNewRecord: (record: T) => void;
+};
 
 const ContextState: AppModuleContextType<Record<string, unknown>> = {
   record: null,
@@ -58,13 +52,14 @@ export const useAppModuleActionsContext = <
 
 export type AppModuleContextProviderProps = {
   children: ReactNode;
-  type?: 'bridge' | 'agent';};
+  type?: 'bridge' | 'agent';
+};
 
 export const AppModuleContextProvider: React.FC<
   AppModuleContextProviderProps
-> = ({ children, type = 'bridge' }) => {
+> = ({children, type = 'bridge'}) => {
   const [record, setRecord] = useState<Record<string, unknown> | null>(null);
-  const { activeOrg } = useAuthContext();
+  const {activeOrg} = useAuthContext();
   const activeOrgRef = useRef<Organization | null>(activeOrg);
   const [isNewRecord, setIsNewRecord] = useState(false);
   const router = useRouter();
@@ -107,7 +102,7 @@ export const AppModuleContextProvider: React.FC<
         setPage: (p: number) => void;
         setQueryParams: (p: Record<string, unknown>) => void;
       }
-    ).setQueryParams({ page: 1 });
+    ).setQueryParams({page: 1});
   };
 
   const updateRecord = (updatedRecord: Record<string, unknown>): void => {
@@ -118,7 +113,7 @@ export const AppModuleContextProvider: React.FC<
     ).setData((prevData: Record<string, unknown>[]) =>
       prevData.map((item) =>
         item[APIData[type].uniqueKey] === updatedRecord[APIData[type].uniqueKey]
-          ? { ...item, ...updatedRecord }
+          ? {...item, ...updatedRecord}
           : item,
       ),
     );

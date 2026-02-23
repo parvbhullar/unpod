@@ -53,7 +53,7 @@ export const getStringFromHtml = (
   htmlContent: string | null | undefined,
 ): string => {
   return htmlContent &&
-    !isEmptyObject(htmlContent as unknown as Record<string, unknown>)
+  !isEmptyObject(htmlContent as unknown as Record<string, unknown>)
     ? htmlContent?.replace(/(<([^>]+)>)/gi, '')
     : '';
 };

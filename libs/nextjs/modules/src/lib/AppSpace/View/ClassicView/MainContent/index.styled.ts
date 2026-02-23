@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row } from 'antd';
+import {Row} from 'antd';
 
 export const StyledRoot = styled.div`
   flex: 1;
@@ -12,7 +12,7 @@ export const StyledRoot = styled.div`
 
 export const StyledContainer = styled.div`
   flex: 1;
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 16px auto 16px;
   //padding-inline: 16px;
@@ -23,7 +23,7 @@ export const StyledContainer = styled.div`
   justify-content: center;
   padding: 0 14px !important;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg + 200}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg + 200}px) {
     width: 500px;
   }
 `;
@@ -48,11 +48,11 @@ export const StyledAskContainer = styled.div`
     rgba(222, 216, 255, 0.05) 100%
   );
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md + 75}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md + 75}px) {
     margin-top: 0;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     max-width: 100%;
     padding: 0 12px;
   }
@@ -82,7 +82,7 @@ export const StyledSegmentWrapper = styled.div`
 `;
 
 export const StyledSegmented = styled.div`
-  max-width: calc(${({ theme }) => theme.sizes.mainContentWidth});
+  max-width: calc(${({theme}) => theme.sizes.mainContentWidth});
   display: flex;
   flex-direction: column;
   align-items: flex-start;

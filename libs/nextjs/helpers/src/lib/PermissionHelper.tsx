@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { ACCESS_ROLE, POST_TYPE } from '@unpod/constants';
-import { RiUserSharedLine } from 'react-icons/ri';
-import { MdLockOutline, MdPublic } from 'react-icons/md';
+import {ReactNode} from 'react';
+import {ACCESS_ROLE, POST_TYPE} from '@unpod/constants';
+import {RiUserSharedLine} from 'react-icons/ri';
+import {MdLockOutline, MdPublic} from 'react-icons/md';
 
 export const Permissions = {
   add: 'add',
@@ -365,11 +365,11 @@ export const getPostIcon = (
 ): ReactNode => {
   switch (key) {
     case 'private':
-      return <MdLockOutline fontSize={size} className={className} />;
+      return <MdLockOutline fontSize={size} className={className}/>;
     case 'shared':
-      return <RiUserSharedLine fontSize={size} className={className} />;
+      return <RiUserSharedLine fontSize={size} className={className}/>;
     default:
-      return <MdPublic fontSize={size} className={className} />;
+      return <MdPublic fontSize={size} className={className}/>;
   }
 };
 

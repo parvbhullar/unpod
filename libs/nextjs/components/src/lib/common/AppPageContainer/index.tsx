@@ -1,16 +1,17 @@
 import React from 'react';
 
-import { StyledContainer, StyledInnerContainer } from './index.styled';
+import {StyledContainer, StyledInnerContainer} from './index.styled';
 
 type AppPageContainerProps = {
   style?: React.CSSProperties;
   children?: React.ReactNode;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppPageContainer: React.FC<AppPageContainerProps> = ({
-  style,
-  ...props
-}) => {
+                                                             style,
+                                                             ...props
+                                                           }) => {
   return (
     <StyledContainer
       style={{

@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
-import { Divider, Space } from 'antd';
+import type {ReactNode} from 'react';
+import {Divider, Space} from 'antd';
 import AppClapBtn from '../AppClapBtn';
 import AppCommentBtn from '../AppCommentBtn';
 
-import { useAuthContext } from '@unpod/providers';
+import {useAuthContext} from '@unpod/providers';
 import AppCopyToClipboard from '../../third-party/AppCopyToClipboard';
-import type { PostShare } from './AppShare';
+import type {PostShare} from './AppShare';
 import AppShare from './AppShare';
 
 type AppPostFooterProps = {
@@ -20,36 +20,37 @@ type AppPostFooterProps = {
   hideClap?: boolean;
   isSharable?: boolean;
   children?: ReactNode;
-  copyContent?: string;};
+  copyContent?: string;
+};
 
 const AppPostFooter = ({
-  post,
-  comment,
-  clapCount,
-  commentCount,
-  activeComment,
-  onClapClick,
-  onCommentClick,
-  hideComment = false,
-  hideClap = false,
-  isSharable = false,
-  children,
-  copyContent,
-}: AppPostFooterProps) => {
-  const { isAuthenticated } = useAuthContext();
+                         post,
+                         comment,
+                         clapCount,
+                         commentCount,
+                         activeComment,
+                         onClapClick,
+                         onCommentClick,
+                         hideComment = false,
+                         hideClap = false,
+                         isSharable = false,
+                         children,
+                         copyContent,
+                       }: AppPostFooterProps) => {
+  const {isAuthenticated} = useAuthContext();
 
   return (
     <Space
       onClick={(e) => {
         e.stopPropagation();
       }}
-      split={<Divider type="vertical" />}
+      split={<Divider type="vertical"/>}
       className="app-post-footer"
     >
-      {copyContent && <AppCopyToClipboard text={copyContent} />}
+      {copyContent && <AppCopyToClipboard text={copyContent}/>}
 
       {isAuthenticated && !hideClap && (
-        <AppClapBtn clapCount={clapCount} onClapClick={onClapClick} />
+        <AppClapBtn clapCount={clapCount} onClapClick={onClapClick}/>
       )}
 
       {!hideComment && (
@@ -60,7 +61,7 @@ const AppPostFooter = ({
           onCommentClick={onCommentClick}
         />
       )}
-      {isSharable && <AppShare post={post} />}
+      {isSharable && <AppShare post={post}/>}
       {children}
     </Space>
   );

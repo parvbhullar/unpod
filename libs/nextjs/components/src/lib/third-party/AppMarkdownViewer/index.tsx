@@ -1,26 +1,25 @@
-
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import AppCopyToClipboard from '../AppCopyToClipboard';
-import ReactMarkdown, { Components } from 'react-markdown';
+import ReactMarkdown, {Components} from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { base16AteliersulphurpoolLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { useTheme } from 'styled-components';
-import { StyledContainer, StyledCopyWrapper, StyledRoot } from './index.styled';
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import {base16AteliersulphurpoolLight} from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import {useTheme} from 'styled-components';
+import {StyledContainer, StyledCopyWrapper, StyledRoot} from './index.styled';
 
 type CodeCopyBtnProps = {
   children: ReactNode;
   textToCopy: string;
 };
 
-const CodeCopyBtn: React.FC<CodeCopyBtnProps> = ({ children, textToCopy }) => {
+const CodeCopyBtn: React.FC<CodeCopyBtnProps> = ({children, textToCopy}) => {
   return (
     <StyledContainer>
       <StyledCopyWrapper>
-        <AppCopyToClipboard text={textToCopy} showToolTip />
+        <AppCopyToClipboard text={textToCopy} showToolTip/>
       </StyledCopyWrapper>
       {children}
     </StyledContainer>
@@ -34,10 +33,10 @@ type AppMarkdownViewerProps = {
 };
 
 const AppMarkdownViewer: React.FC<AppMarkdownViewerProps> = ({
-  markdown,
-  children,
-  components,
-}) => {
+                                                               markdown,
+                                                               children,
+                                                               components,
+                                                             }) => {
   const theme = useTheme();
 
   return (
@@ -47,14 +46,14 @@ const AppMarkdownViewer: React.FC<AppMarkdownViewerProps> = ({
         remarkPlugins={[remarkGfm, remarkMath]}
         components={{
           h1: 'h2',
-          a: ({ node, inline, children, ...props }: any) => {
+          a: ({node, inline, children, ...props}: any) => {
             return (
               <a {...props} target="_blank" rel="noopener noreferrer">
                 {children}
               </a>
             );
           },
-          code({ node, inline, className, children, ...props }: any) {
+          code({node, inline, className, children, ...props}: any) {
             const match = /language-(\w+)/.exec(className || '');
 
             return !inline && match ? (

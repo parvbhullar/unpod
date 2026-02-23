@@ -11,14 +11,14 @@ import {
 } from './index.styled';
 
 const UnpodLogoAnimation = ({
-  size = 320,
-  showOrbits = true,
-  showGlow = true,
-  orbitSpeed = 1,
-}) => {
+                              size = 320,
+                              showOrbits = true,
+                              showGlow = true,
+                              orbitSpeed = 1,
+                            }) => {
   return (
     <StyledOrbitContainer size={size}>
-      {showGlow && <StyledGlow size={size} />}
+      {showGlow && <StyledGlow size={size}/>}
 
       {showOrbits && (
         <StyledOrbitWrapper size={size}>
@@ -52,30 +52,30 @@ const UnpodLogoAnimation = ({
           <defs>
             {/* Radial gradient for iris - Tech/AI theme (Electric Blue) */}
             <radialGradient id="irisGradient" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#6366f1" stopOpacity="1" />
-              <stop offset="50%" stopColor="#5046e5" stopOpacity="1" />
-              <stop offset="100%" stopColor="#4338ca" stopOpacity="1" />
+              <stop offset="0%" stopColor="#6366f1" stopOpacity="1"/>
+              <stop offset="50%" stopColor="#5046e5" stopOpacity="1"/>
+              <stop offset="100%" stopColor="#4338ca" stopOpacity="1"/>
             </radialGradient>
 
             {/* Clip paths to keep pupil within iris boundaries */}
             <clipPath id="leftEyeClip">
-              <circle cx="75" cy="127" r="9.5" />
+              <circle cx="75" cy="127" r="9.5"/>
             </clipPath>
             <clipPath id="rightEyeClip">
-              <circle cx="125" cy="127" r="9.5" />
+              <circle cx="125" cy="127" r="9.5"/>
             </clipPath>
 
             {/* Clip paths for ear sound waves - show only outer side (away from head) */}
             <clipPath id="leftEarWaveClip">
-              <rect x="0" y="80" width="25" height="100" />
+              <rect x="0" y="80" width="25" height="100"/>
             </clipPath>
             <clipPath id="rightEarWaveClip">
-              <rect x="175" y="80" width="50" height="100" />
+              <rect x="175" y="80" width="50" height="100"/>
             </clipPath>
           </defs>
 
           {/* Antenna base - with gap above head */}
-          <ellipse className="body" cx="100" cy="70" rx="25" ry="6" />
+          <ellipse className="body" cx="100" cy="70" rx="25" ry="6"/>
 
           {/* Antenna */}
           <line
@@ -87,7 +87,7 @@ const UnpodLogoAnimation = ({
             strokeWidth="6"
             strokeLinecap="round"
           />
-          <circle className="antenna-ball" cx="100" cy="40" r="8" />
+          <circle className="antenna-ball" cx="100" cy="40" r="8"/>
 
           {/* Main head/body */}
           <path
@@ -343,24 +343,24 @@ const UnpodLogoAnimation = ({
           {/* LEFT EYE - Complete anatomical structure */}
           <g className="left-eye">
             {/* 1. Sclera (Eye white background) */}
-            <circle className="sclera" cx="75" cy="127" r="20" />
+            <circle className="sclera" cx="75" cy="127" r="20"/>
 
             {/* 2. Sclera shadow for depth (at edges) */}
-            <circle className="sclera-shadow" cx="75" cy="127" r="19" />
+            <circle className="sclera-shadow" cx="75" cy="127" r="19"/>
 
             {/* 3. Movable pupil group (animated with eye-look) */}
             <g className="pupil-group" clipPath="url(#leftEyeClip)">
               {/* 3a. Iris glow (outer glow around iris for depth) - moves with iris */}
-              <circle className="iris-glow" cx="75" cy="127" r="12" />
+              <circle className="iris-glow" cx="75" cy="127" r="12"/>
 
               {/* 3b. Iris (colored part with radial gradient) */}
-              <circle className="iris" cx="75" cy="127" r="9.5" />
+              <circle className="iris" cx="75" cy="127" r="9.5"/>
 
               {/* 3c. Pupil (black center, dilates with emotion) */}
-              <circle className="pupil" cx="75" cy="127" r="4.5" />
+              <circle className="pupil" cx="75" cy="127" r="4.5"/>
 
               {/* 3d. Cornea highlight (main glossy reflection) */}
-              <circle className="cornea" cx="72.5" cy="124" r="3.5" />
+              <circle className="cornea" cx="72.5" cy="124" r="3.5"/>
 
               {/* 3e. Secondary eye shine/catchlight (spark of life) */}
               <ellipse
@@ -373,30 +373,30 @@ const UnpodLogoAnimation = ({
             </g>
 
             {/* 4. Eyelid (for blinking animation) */}
-            <ellipse className="eyelid" cx="75" cy="127" rx="20" ry="20" />
+            <ellipse className="eyelid" cx="75" cy="127" rx="20" ry="20"/>
           </g>
 
           {/* RIGHT EYE - Complete anatomical structure */}
           <g className="right-eye">
             {/* 1. Sclera (Eye white background) */}
-            <circle className="sclera" cx="125" cy="127" r="20" />
+            <circle className="sclera" cx="125" cy="127" r="20"/>
 
             {/* 2. Sclera shadow for depth (at edges) */}
-            <circle className="sclera-shadow" cx="125" cy="127" r="19" />
+            <circle className="sclera-shadow" cx="125" cy="127" r="19"/>
 
             {/* 3. Movable pupil group (animated with eye-look) */}
             <g className="pupil-group" clipPath="url(#rightEyeClip)">
               {/* 3a. Iris glow (outer glow around iris for depth) - moves with iris */}
-              <circle className="iris-glow" cx="125" cy="127" r="12" />
+              <circle className="iris-glow" cx="125" cy="127" r="12"/>
 
               {/* 3b. Iris (colored part with radial gradient) */}
-              <circle className="iris" cx="125" cy="127" r="9.5" />
+              <circle className="iris" cx="125" cy="127" r="9.5"/>
 
               {/* 3c. Pupil (black center, dilates with emotion) */}
-              <circle className="pupil" cx="125" cy="127" r="4.5" />
+              <circle className="pupil" cx="125" cy="127" r="4.5"/>
 
               {/* 3d. Cornea highlight (main glossy reflection) */}
-              <circle className="cornea" cx="122.5" cy="124" r="3.5" />
+              <circle className="cornea" cx="122.5" cy="124" r="3.5"/>
 
               {/* 3e. Secondary eye shine/catchlight (spark of life) */}
               <ellipse
@@ -409,7 +409,7 @@ const UnpodLogoAnimation = ({
             </g>
 
             {/* 4. Eyelid (for blinking animation) */}
-            <ellipse className="eyelid" cx="125" cy="127" rx="20" ry="20" />
+            <ellipse className="eyelid" cx="125" cy="127" rx="20" ry="20"/>
           </g>
         </StyledUnpodLogo>
       </StyledOrbitLogo>

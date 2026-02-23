@@ -1,9 +1,9 @@
-import { useRef } from 'react';
-import { flushSync } from 'react-dom';
+import {useRef} from 'react';
+import {flushSync} from 'react-dom';
 
-import type { CalculatedColumn, StateSetter } from '../models/data-grid';
-import { useLayoutEffect } from './useLayoutEffect';
-import type { DataGridProps } from '../DataGrid';
+import type {CalculatedColumn, StateSetter} from '../models/data-grid';
+import {useLayoutEffect} from './useLayoutEffect';
+import type {DataGridProps} from '../DataGrid';
 
 export function useColumnWidths<R, SR>(
   columns: readonly CalculatedColumn<R, SR>[],
@@ -40,7 +40,7 @@ export function useColumnWidths<R, SR>(
   const newTemplateColumns = [...templateColumns];
   const columnsToMeasure: string[] = [];
 
-  for (const { dataIndex, idx, width } of viewportColumns) {
+  for (const {dataIndex, idx, width} of viewportColumns) {
     // isColumnEditable is used for dynamic columns tables - Gourav Dev
     if (isColumnEditable) {
       if (typeof width === 'string' && !resizedColumnWidths.has(dataIndex)) {
@@ -90,7 +90,7 @@ export function useColumnWidths<R, SR>(
     column: CalculatedColumn<R, SR>,
     nextWidth: number | 'max-content',
   ) {
-    const { dataIndex: resizingKey } = column;
+    const {dataIndex: resizingKey} = column;
     const newTemplateColumns = [...templateColumns];
     const columnsToMeasure: string[] = [];
 
@@ -99,7 +99,7 @@ export function useColumnWidths<R, SR>(
       nextWidth = 250;
     }*/
 
-    for (const { dataIndex, idx, width } of viewportColumns) {
+    for (const {dataIndex, idx, width} of viewportColumns) {
       if (resizingKey === dataIndex) {
         const width =
           typeof nextWidth === 'number' ? `${nextWidth}px` : nextWidth;

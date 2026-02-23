@@ -1,13 +1,8 @@
-import { ReactNode } from 'react';
-import {
-  MdOutlineEmail,
-  MdOutlineExtension,
-  MdOutlineWorkspaces,
-  MdPlayCircleOutline,
-} from 'react-icons/md';
-import { RiContactsLine, RiImage2Line, RiTableView } from 'react-icons/ri';
-import { GrDocumentText } from 'react-icons/gr';
-import { SiGmail } from 'react-icons/si';
+import {ReactNode} from 'react';
+import {MdOutlineEmail, MdOutlineExtension, MdOutlineWorkspaces, MdPlayCircleOutline,} from 'react-icons/md';
+import {RiContactsLine, RiImage2Line, RiTableView} from 'react-icons/ri';
+import {GrDocumentText} from 'react-icons/gr';
+import {SiGmail} from 'react-icons/si';
 
 export type ContentTypeItem = {
   id: string;
@@ -19,22 +14,22 @@ export const contentTypeData: ContentTypeItem[] = [
   {
     id: 'document',
     name: 'space.document',
-    icon: <GrDocumentText fontSize={16} />,
+    icon: <GrDocumentText fontSize={16}/>,
   },
   {
     id: 'table',
     name: 'space.table',
-    icon: <RiTableView fontSize={16} />,
+    icon: <RiTableView fontSize={16}/>,
   },
   {
     id: 'email',
     name: 'space.email',
-    icon: <MdOutlineEmail fontSize={16} />,
+    icon: <MdOutlineEmail fontSize={16}/>,
   },
   {
     id: 'contact',
     name: 'space.contact',
-    icon: <RiContactsLine fontSize={16} />,
+    icon: <RiContactsLine fontSize={16}/>,
   },
 ];
 
@@ -42,7 +37,7 @@ export const spaceContentTypeData: ContentTypeItem[] = [
   {
     id: 'contact',
     name: 'space.contact',
-    icon: <RiContactsLine fontSize={16} />,
+    icon: <RiContactsLine fontSize={16}/>,
   },
 ];
 
@@ -143,18 +138,18 @@ export const CONTACT_SPACE_FIELDS: ContactSpaceField[] = [
 ];
 
 export const CONTENT_TYPE_ICONS: Record<string, ReactNode> = {
-  general: <MdOutlineWorkspaces fontSize={16} />,
-  email: <MdOutlineEmail fontSize={16} />,
-  contact: <RiContactsLine fontSize={16} />,
-  document: <GrDocumentText fontSize={16} />,
-  table: <RiTableView fontSize={16} />,
-  image: <RiImage2Line fontSize={16} />,
-  media: <MdPlayCircleOutline fontSize={16} />,
+  general: <MdOutlineWorkspaces fontSize={16}/>,
+  email: <MdOutlineEmail fontSize={16}/>,
+  contact: <RiContactsLine fontSize={16}/>,
+  document: <GrDocumentText fontSize={16}/>,
+  table: <RiTableView fontSize={16}/>,
+  image: <RiImage2Line fontSize={16}/>,
+  media: <MdPlayCircleOutline fontSize={16}/>,
 };
 
 export const CONNECTOR_ICONS: Record<string, ReactNode> = {
-  default: <MdOutlineExtension fontSize={16} />,
-  gmail: <SiGmail fontSize={16} />,
+  default: <MdOutlineExtension fontSize={16}/>,
+  gmail: <SiGmail fontSize={16}/>,
 };
 
 export const SPACE_VISIBLE_CONTENT_TYPES = ['contact'];

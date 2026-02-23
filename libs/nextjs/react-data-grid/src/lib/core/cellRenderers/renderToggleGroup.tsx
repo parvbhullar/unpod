@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import type { RenderGroupCellProps } from '../models/data-grid';
+import type {RenderGroupCellProps} from '../models/data-grid';
 
 const StyledGroupCellContent = styled.span`
   outline: none;
@@ -23,12 +23,12 @@ export function renderToggleGroup<R, SR>(props: RenderGroupCellProps<R, SR>) {
 }
 
 export function ToggleGroup<R, SR>({
-  groupKey,
-  isExpanded,
-  tabIndex,
-  toggleGroup,
-}: RenderGroupCellProps<R, SR>) {
-  function handleKeyDown({ key }: React.KeyboardEvent<HTMLSpanElement>) {
+                                     groupKey,
+                                     isExpanded,
+                                     tabIndex,
+                                     toggleGroup,
+                                   }: RenderGroupCellProps<R, SR>) {
+  function handleKeyDown({key}: React.KeyboardEvent<HTMLSpanElement>) {
     if (key === 'Enter') {
       toggleGroup();
     }
@@ -50,7 +50,7 @@ export function ToggleGroup<R, SR>({
         className="rdg-caret"
         aria-hidden
       >
-        <path d={d} />
+        <path d={d}/>
       </StyledCaret>
     </StyledGroupCellContent>
   );

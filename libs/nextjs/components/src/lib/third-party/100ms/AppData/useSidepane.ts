@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
-import { selectAppData, useHMSActions, useHMSStore, useHMSVanillaStore } from '@100mslive/react-sdk';
-import { APP_DATA } from '../common/constants';
+import {useCallback} from 'react';
+import {selectAppData, useHMSActions, useHMSStore, useHMSVanillaStore} from '@100mslive/react-sdk';
+import {APP_DATA} from '../common/constants';
 
 /**
  * Gives a boolean value if the sidepaneType matches current sidepane value in store

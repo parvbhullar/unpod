@@ -1,19 +1,19 @@
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import styled from 'styled-components';
-import type { MenuProps } from 'antd';
-import { Dropdown } from 'antd';
-import { VscBlank } from 'react-icons/vsc';
-import { MdArrowDropDown, MdCheck } from 'react-icons/md';
-import { rgba } from 'polished';
-import { SelectCellState } from './DataGrid';
-import { getMinMaxIdx } from './utils';
+import type {MenuProps} from 'antd';
+import {Dropdown} from 'antd';
+import {VscBlank} from 'react-icons/vsc';
+import {MdArrowDropDown, MdCheck} from 'react-icons/md';
+import {rgba} from 'polished';
+import {SelectCellState} from './DataGrid';
+import {getMinMaxIdx} from './utils';
 
 const StyledFooterRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  background: ${({ theme }: { theme: any }) => theme.backgroundColor};
+  background: ${({theme}: { theme: any }) => theme.backgroundColor};
   padding: 8px 8px 10px;
   position: sticky;
   bottom: 0;
@@ -24,8 +24,8 @@ const StyledHandle = styled.div`
   align-items: center;
   gap: 4px;
   padding: 6px 10px;
-  background-color: ${({ theme }: { theme: any }) =>
-    rgba(theme.primaryColor, 0.17)};
+  background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.primaryColor, 0.17)};
   border-radius: 8px;
 
   & .dropdown-arrow {
@@ -46,7 +46,7 @@ type MenuItem = {
   danger?: boolean;
 };
 
-const iconStyle = { fontSize: 16 };
+const iconStyle = {fontSize: 16};
 
 type FooterRowProps = {
   rows: readonly any[];
@@ -57,14 +57,14 @@ type FooterRowProps = {
 };
 
 const FooterRow = ({
-  selectedPosition,
-  draggedOverCellIdx,
-  draggedOverRowIdx,
-  rows,
-  columns,
-  ...restProps
-}: FooterRowProps) => {
-  const { idx, rowIdx } = selectedPosition;
+                     selectedPosition,
+                     draggedOverCellIdx,
+                     draggedOverRowIdx,
+                     rows,
+                     columns,
+                     ...restProps
+                   }: FooterRowProps) => {
+  const {idx, rowIdx} = selectedPosition;
   const [startIdx, endIdx] = getMinMaxIdx(idx, draggedOverCellIdx);
   const totalSelectedCells = endIdx - startIdx + 1;
   const [startRowIdx, endRowIdx] = getMinMaxIdx(rowIdx, draggedOverRowIdx);
@@ -107,7 +107,7 @@ const FooterRow = ({
         menus.push({
           key: 'sum',
           label: `Sum: ${totalSum}`,
-          icon: <VscBlank style={iconStyle} />,
+          icon: <VscBlank style={iconStyle}/>,
         });
       }
 
@@ -115,7 +115,7 @@ const FooterRow = ({
         menus.push({
           key: 'avg-val',
           label: `Avg: ${totalSum / numbersCount}`,
-          icon: <VscBlank style={iconStyle} />,
+          icon: <VscBlank style={iconStyle}/>,
         });
       }
 
@@ -123,7 +123,7 @@ const FooterRow = ({
         menus.push({
           key: 'min',
           label: `Min: ${minValue}`,
-          icon: <VscBlank style={iconStyle} />,
+          icon: <VscBlank style={iconStyle}/>,
         });
       }
 
@@ -131,21 +131,21 @@ const FooterRow = ({
         menus.push({
           key: 'max',
           label: `Max: ${maxValue}`,
-          icon: <VscBlank style={iconStyle} />,
+          icon: <VscBlank style={iconStyle}/>,
         });
       }
 
       menus.push({
         key: 'count',
         label: `Count: ${totalSelectedCells * totalSelectedRows}`,
-        icon: <VscBlank style={iconStyle} />,
+        icon: <VscBlank style={iconStyle}/>,
       });
 
       if (numbersCount > 0) {
         menus.push({
           key: 'count-numbers',
           label: `Count Numbers: ${numbersCount}`,
-          icon: <VscBlank style={iconStyle} />,
+          icon: <VscBlank style={iconStyle}/>,
         });
       }
 
@@ -161,7 +161,7 @@ const FooterRow = ({
 
       return menus.map((item) => {
         if (item.key === currentKey) {
-          return { ...item, icon: <MdCheck style={iconStyle} /> };
+          return {...item, icon: <MdCheck style={iconStyle}/>};
         }
 
         return item;
@@ -179,7 +179,7 @@ const FooterRow = ({
     totalSelectedRows,
   ]);
 
-  const handleMenuItemClick: MenuProps['onClick'] = ({ key }) => {
+  const handleMenuItemClick: MenuProps['onClick'] = ({key}) => {
     setActiveKey(key);
     setActiveMenu(
       (items.find((item) => item?.key === key) || null) as MenuItem,
@@ -188,14 +188,14 @@ const FooterRow = ({
 
   return items.length > 0 ? (
     <StyledFooterRow>
-      <div />
+      <div/>
       <Dropdown
-        menu={{ items, onClick: handleMenuItemClick }}
+        menu={{items, onClick: handleMenuItemClick}}
         trigger={['click']}
       >
         <StyledHandle>
           {activeMenu?.label}
-          <MdArrowDropDown className="dropdown-arrow" />
+          <MdArrowDropDown className="dropdown-arrow"/>
         </StyledHandle>
       </Dropdown>
     </StyledFooterRow>

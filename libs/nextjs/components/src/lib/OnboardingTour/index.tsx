@@ -1,21 +1,22 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
-import { driver, Driver, DriveStep } from 'driver.js';
+import React, {useEffect, useRef} from 'react';
+import {driver, Driver, DriveStep} from 'driver.js';
 import 'driver.js/dist/driver.css';
 import './tour.css';
-import { useAuthContext } from '@unpod/providers';
-import { useRouter } from 'next/navigation';
+import {useAuthContext} from '@unpod/providers';
+import {useRouter} from 'next/navigation';
 
 type OnboardingTourProps = {
   isOpen: boolean;
-  onComplete?: () => void;};
+  onComplete?: () => void;
+};
 
 const OnboardingTour: React.FC<OnboardingTourProps> = ({
-  isOpen,
-  onComplete,
-}) => {
+                                                         isOpen,
+                                                         onComplete,
+                                                       }) => {
   const driverRef = useRef<Driver | null>(null);
-  const { user } = useAuthContext();
+  const {user} = useAuthContext();
   const spaceSlug = user?.active_space?.slug;
   const router = useRouter();
 
@@ -241,7 +242,7 @@ const OnboardingTour: React.FC<OnboardingTourProps> = ({
       popoverClass: 'driverjs-theme',
       stagePadding: 8,
       stageRadius: 12,
-      onPopoverRender: (popover, { config, state }) => {
+      onPopoverRender: (popover, {config, state}) => {
         // Add custom close button with icon
         const closeBtn = popover.wrapper.querySelector(
           '.driver-popover-close-btn',

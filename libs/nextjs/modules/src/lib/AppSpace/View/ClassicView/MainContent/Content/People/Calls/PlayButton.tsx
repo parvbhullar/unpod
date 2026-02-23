@@ -1,14 +1,14 @@
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { useRef, useState } from 'react';
-import { Button, Tooltip } from 'antd';
-import { MdOutlinePause, MdOutlinePlayArrow } from 'react-icons/md';
-import type { Call } from '@unpod/constants/types';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {useRef, useState} from 'react';
+import {Button, Tooltip} from 'antd';
+import {MdOutlinePause, MdOutlinePlayArrow} from 'react-icons/md';
+import type {Call} from '@unpod/constants/types';
 
 type PlayButtonProps = {
   item: Call;
 };
 
-const PlayButton = ({ item }: PlayButtonProps) => {
+const PlayButton = ({item}: PlayButtonProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -60,12 +60,12 @@ const PlayButton = ({ item }: PlayButtonProps) => {
       <Button
         shape="circle"
         size="small"
-        icon={<MdOutlinePause fontSize={18} />}
+        icon={<MdOutlinePause fontSize={18}/>}
         onClick={(e) => {
           onPlaySound();
           e.stopPropagation();
         }}
-        style={{ color: 'red' }} // Change color to indicate pause state
+        style={{color: 'red'}} // Change color to indicate pause state
       />
     </Tooltip>
   ) : (
@@ -73,7 +73,7 @@ const PlayButton = ({ item }: PlayButtonProps) => {
       <Button
         shape="circle"
         size="small"
-        icon={<MdOutlinePlayArrow fontSize={18} />}
+        icon={<MdOutlinePlayArrow fontSize={18}/>}
         onClick={(e) => {
           onPlaySound();
           e.stopPropagation();

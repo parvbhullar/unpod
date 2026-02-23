@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import screenfull from 'screenfull';
 import {
   selectLocalPeerID,
@@ -8,19 +8,14 @@ import {
   useHMSStore,
 } from '@100mslive/react-sdk';
 import TileMenu from '../TileMenu';
-import { useIsHeadless, useUISettings } from '../../AppData/useUISettings';
-import { UI_SETTINGS } from '../../common/constants';
-import {
-  Container,
-  Info,
-  Root,
-  StyledMenuWrapper,
-} from './VideoTile/index.styled';
-import { Video } from './VideoTile';
-import { ImShrink2 } from 'react-icons/im';
-import { FaExpandAlt } from 'react-icons/fa';
-import { getVideoTileLabel } from '../../common/utils';
-import { Button } from 'antd';
+import {useIsHeadless, useUISettings} from '../../AppData/useUISettings';
+import {UI_SETTINGS} from '../../common/constants';
+import {Container, Info, Root, StyledMenuWrapper,} from './VideoTile/index.styled';
+import {Video} from './VideoTile';
+import {ImShrink2} from 'react-icons/im';
+import {FaExpandAlt} from 'react-icons/fa';
+import {getVideoTileLabel} from '../../common/utils';
+import {Button} from 'antd';
 
 const labelStyles = {
   position: 'unset',
@@ -31,7 +26,7 @@ const labelStyles = {
   flexShrink: 0,
 };
 
-const Tile = ({ peerId, width = '100%', height = '100%' }) => {
+const Tile = ({peerId, width = '100%', height = '100%'}) => {
   const isLocal = useHMSStore(selectLocalPeerID) === peerId;
   const track = useHMSStore(selectScreenShareByPeerID(peerId));
   const peer = useHMSStore(selectPeerByID(peerId));
@@ -54,12 +49,12 @@ const Tile = ({ peerId, width = '100%', height = '100%' }) => {
   const isFullScreenSupported = screenfull.isEnabled;
   const audioTrack = useHMSStore(selectScreenShareAudioByPeerID(peer?.id));
   return (
-    <Root css={{ width, height }} data-testid="screenshare_tile">
+    <Root css={{width, height}} data-testid="screenshare_tile">
       {peer ? (
         <Container
           transparentBg
           ref={fullscreenRef}
-          css={{ flexDirection: 'column' }}
+          css={{flexDirection: 'column'}}
           onMouseEnter={() => setIsMouseHovered(true)}
           onMouseLeave={() => {
             setIsMouseHovered(false);
@@ -80,7 +75,7 @@ const Tile = ({ peerId, width = '100%', height = '100%' }) => {
           {isFullScreenSupported && !isHeadless ? (
             <Button
               onClick={() => setFullscreen(!isFullscreen)}
-              icon={isFullscreen ? <ImShrink2 /> : <FaExpandAlt />}
+              icon={isFullscreen ? <ImShrink2/> : <FaExpandAlt/>}
             />
           ) : null}
           {track ? (

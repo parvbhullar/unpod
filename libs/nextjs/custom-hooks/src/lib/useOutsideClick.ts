@@ -1,6 +1,6 @@
 'use client';
 
-import { RefObject, useEffect } from 'react';
+import {RefObject, useEffect} from 'react';
 
 export const useOutsideClick = <T extends HTMLElement>(
   ref: RefObject<T | null>,

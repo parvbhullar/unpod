@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import { GoogleAuthProvider } from 'firebase/auth';
+import {GoogleAuthProvider} from 'firebase/auth';
 
 export type FirebaseConfig = {
   apiKey?: string;
@@ -11,7 +11,8 @@ export type FirebaseConfig = {
   messagingSenderId?: string;
   appId?: string;
   measurementId?: string;
-  [key: string]: string | undefined;};
+  [key: string]: string | undefined;
+};
 
 let auth: firebase.auth.Auth | undefined;
 let googleAuthProvider: GoogleAuthProvider | undefined;
@@ -23,4 +24,4 @@ export const setFirebaseConfig = (config: FirebaseConfig): void => {
   googleAuthProvider = new GoogleAuthProvider();
 };
 
-export { auth, googleAuthProvider };
+export {auth, googleAuthProvider};

@@ -1,10 +1,4 @@
-import type {
-  AuthAction,
-  AuthState,
-  GlobalData,
-  Organization,
-  User,
-} from '@unpod/constants/types';
+import type {AuthAction, AuthState, GlobalData, Organization, User,} from '@unpod/constants/types';
 
 export const AUTH_ACTIONS = {
   SET_AUTH_USER: 'SET_AUTH_USER',

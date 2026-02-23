@@ -9,7 +9,6 @@ import type {
   Conversation,
   ConversationsHandle,
   Document,
-  NotesHandle,
   PathData,
   Spaces,
   SpaceSchema,
@@ -17,25 +16,15 @@ import type {
   UsePaginatedDataState,
 } from '@unpod/constants/types';
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import React, {createContext, useContext, useEffect, useRef, useState,} from 'react';
+import {useParams, usePathname, useRouter} from 'next/navigation';
 
-import { POST_TYPE } from '@unpod/constants/AppEnums';
+import {POST_TYPE} from '@unpod/constants/AppEnums';
 
-import {
-  getDataApi,
-  usePaginatedConnectorDataApi,
-  usePaginatedDataApi,
-} from '../../APIHooks';
-import { useAuthActionsContext, useAuthContext } from '../AuthContextProvider';
-import { useInfoViewActionsContext } from '../AppInfoViewProvider';
-import { useOrgContext } from '../AppOrgContextProvider';
+import {getDataApi, usePaginatedConnectorDataApi, usePaginatedDataApi,} from '../../APIHooks';
+import {useAuthActionsContext, useAuthContext} from '../AuthContextProvider';
+import {useInfoViewActionsContext} from '../AppInfoViewProvider';
+import {useOrgContext} from '../AppOrgContextProvider';
 
 const emptyConversationDataState: UsePaginatedDataState<Conversation[]> = {
   loading: false,
@@ -73,8 +62,7 @@ const emptyConnectorDataState: UsePaginatedConnectorDataState<Document[]> = {
 };
 
 const ContextState: AppSpaceContextType = {
-  notesRef: { current: null },
-  conversationsRef: { current: null },
+  conversationsRef: {current: null},
   token: undefined,
   notesData: emptyConversationDataState,
   callsData: emptyCallsDataState,
@@ -122,7 +110,7 @@ const getActiveTab = (): string | null => {
 
 export const AppSpaceContextProvider: React.FC<
   AppSpaceContextProviderProps
-> = ({ children, space, token }) => {
+> = ({children, space, token}) => {
   const tab = getActiveTab();
   const [documentMode, setDocumentMode] = useState('view');
   const [activeTab, setActiveTab] = useState(tab || 'chat');
@@ -138,11 +126,10 @@ export const AppSpaceContextProvider: React.FC<
   const [activeNote, setActiveNote] = useState<Conversation | null>(null);
   const [activeCall, setActiveCall] = useState<Call | null>(null);
   const [selectedDocs, setSelectedDocs] = useState<unknown[]>([]);
-  const { isAuthenticated, activeOrg, user } = useAuthContext();
-  const { updateAuthUser } = useAuthActionsContext();
+  const {isAuthenticated, activeOrg, user} = useAuthContext();
+  const {updateAuthUser} = useAuthActionsContext();
   const infoViewActionsContext = useInfoViewActionsContext();
   const router = useRouter();
-  const notesRef = useRef<NotesHandle | null>(null);
   const conversationsRef = useRef<ConversationsHandle | null>(null);
   const currentIdRef = useRef<string | undefined>(undefined);
   const [pathData, setPathData] = useState<PathData>({
@@ -150,7 +137,7 @@ export const AppSpaceContextProvider: React.FC<
     id: undefined,
   });
   const activeOrgRef = useRef(activeOrg?.domain_handle || null);
-  const { notificationData } = useOrgContext();
+  const {notificationData} = useOrgContext();
 
   useEffect(() => {
     if (
@@ -304,7 +291,7 @@ export const AppSpaceContextProvider: React.FC<
   useEffect(() => {
     if (currentSpace?.token && isAuthenticated) {
       connectorActions.setPage(1);
-      connectorActions.setQueryParams({ page: 1, search: '' });
+      connectorActions.setQueryParams({page: 1, search: ''});
 
       connectorActions.updateInitialUrl(
         `knowledge_base/${currentSpace.token}/connector-data/`,
@@ -335,7 +322,6 @@ export const AppSpaceContextProvider: React.FC<
     >
       <AppSpaceContext.Provider
         value={{
-          notesRef,
           conversationsRef,
           token,
           notesData,

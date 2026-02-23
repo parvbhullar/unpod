@@ -1,11 +1,6 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import {
-  AppFormControlWrapper,
-  FormControlFieldset,
-  InputContainer,
-  InputLabel,
-} from './index.styled';
-import { useAutoComplete } from '../../hooks/useAutoComplete';
+import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import {AppFormControlWrapper, FormControlFieldset, InputContainer, InputLabel,} from './index.styled';
+import {useAutoComplete} from '../../hooks/useAutoComplete';
 
 type Props = {
   placeholder: string;
@@ -18,16 +13,16 @@ type Props = {
 };
 
 const AppFloatingOutline = ({
-  placeholder,
-  value,
-  disabled,
-  className,
-  children = false,
-  asterisk = false,
-  ...restProps
-}: Props) => {
+                              placeholder,
+                              value,
+                              disabled,
+                              className,
+                              children = false,
+                              asterisk = false,
+                              ...restProps
+                            }: Props) => {
   const [isFocused, setFocused] = useState<boolean>(false);
-  const { filled, setFilled } = useAutoComplete();
+  const {filled, setFilled} = useAutoComplete();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

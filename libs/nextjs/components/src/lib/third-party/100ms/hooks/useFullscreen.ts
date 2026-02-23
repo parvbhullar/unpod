@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import screenfull from 'screenfull';
-import { message } from 'antd';
+import {message} from 'antd';
 
 export const useFullscreen = () => {
   const [isFullScreenEnabled, setIsFullScreenEnabled] = useState(

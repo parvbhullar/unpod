@@ -17,7 +17,7 @@ export type MediaQueryConfig = {
   query: string;
 };
 
-export const TabWidthQuery: MediaQueryConfig = { query: '(max-width: 768px)' };
+export const TabWidthQuery: MediaQueryConfig = {query: '(max-width: 768px)'};
 export const MobileWidthQuery: MediaQueryConfig = {
   query: '(max-width: 550px)',
 };

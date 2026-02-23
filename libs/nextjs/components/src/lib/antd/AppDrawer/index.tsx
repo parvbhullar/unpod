@@ -1,25 +1,25 @@
-import React, { ReactNode } from 'react';
-import { Drawer, DrawerProps } from 'antd';
-import styled, { useTheme } from 'styled-components';
+import React, {ReactNode} from 'react';
+import {Drawer, DrawerProps} from 'antd';
+import styled, {useTheme} from 'styled-components';
 import AppLoader from '../../common/AppLoader';
 import clsx from 'clsx';
-import { useMediaQuery } from 'react-responsive';
-import { CloseOutlined } from '@ant-design/icons';
-import { useInfoViewContext } from '@unpod/providers';
+import {useMediaQuery} from 'react-responsive';
+import {CloseOutlined} from '@ant-design/icons';
+import {useInfoViewContext} from '@unpod/providers';
 
 export const StyledDrawer = styled(Drawer as any)`
   /*& .ant-drawer-wrapper-body {
     width: 320px !important;
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.sm}px) {
       width: 450px !important;
     }
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.xl}px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.xl}px) {
       width: 550px !important;
     }
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.xxl}px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.xxl}px) {
       width: 650px !important;
     }
   }
@@ -29,13 +29,13 @@ export const StyledDrawer = styled(Drawer as any)`
   }
 
   &.medium-view .ant-drawer-wrapper-body {
-    @media screen and (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media screen and (min-width: ${({theme}) => theme.breakpoints.sm}px) {
       width: 50% !important;
     }
   }
 
   &.large-view .ant-drawer-wrapper-body {
-    @media screen and (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media screen and (min-width: ${({theme}) => theme.breakpoints.sm}px) {
       width: 90% !important;
     }
   }*/
@@ -59,14 +59,14 @@ export const StyledDrawer = styled(Drawer as any)`
 
   & .ant-drawer-title {
     font-size: 16px;
-    color: ${({ theme }) => theme.palette.text.heading};
-    font-weight: ${({ theme }) => theme.font.weight.bold};
+    color: ${({theme}) => theme.palette.text.heading};
+    font-weight: ${({theme}) => theme.font.weight.bold};
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.xxl}px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.xxl}px) {
       font-size: 18px;
     }
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.xxl + 320}px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.xxl + 320}px) {
       font-size: 20px;
     }
   }
@@ -103,29 +103,30 @@ type AppDrawerProps = DrawerProps & {
   isTabDrawer?: boolean;
   isCallFilterView?: boolean;
   overflowY?: 'auto' | 'hidden' | 'scroll' | 'visible';
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export const AppDrawer: React.FC<AppDrawerProps> = ({
-  className = '',
-  fullWidth = false,
-  title,
-  showLoader = false,
-  children,
-  loading,
-  padding,
-  placement = 'right',
-  closable = false,
-  isTabDrawer = false,
-  isCallFilterView = false,
-  overflowY,
-  width,
-  ...restProps
-}) => {
-  const { loading: innerLoading } = useInfoViewContext();
+                                                      className = '',
+                                                      fullWidth = false,
+                                                      title,
+                                                      showLoader = false,
+                                                      children,
+                                                      loading,
+                                                      padding,
+                                                      placement = 'right',
+                                                      closable = false,
+                                                      isTabDrawer = false,
+                                                      isCallFilterView = false,
+                                                      overflowY,
+                                                      width,
+                                                      ...restProps
+                                                    }) => {
+  const {loading: innerLoading} = useInfoViewContext();
   const theme = useTheme();
-  const isSm = useMediaQuery({ minWidth: theme.breakpoints.sm });
-  const isXl = useMediaQuery({ minWidth: theme.breakpoints.xl });
-  const isSXll = useMediaQuery({ minWidth: theme.breakpoints.xxl });
+  const isSm = useMediaQuery({minWidth: theme.breakpoints.sm});
+  const isXl = useMediaQuery({minWidth: theme.breakpoints.xl});
+  const isSXll = useMediaQuery({minWidth: theme.breakpoints.xxl});
 
   let drawerWidth: string | number = width || 378;
   const isMediumView = className.includes('medium-view');
@@ -165,7 +166,7 @@ export const AppDrawer: React.FC<AppDrawerProps> = ({
       size={drawerWidth}
       closable={closable}
       destroyOnHidden={true}
-      closeIcon={<CloseOutlined mi-role={'close'} />}
+      closeIcon={<CloseOutlined mi-role={'close'}/>}
       {...restProps}
       styles={{
         body: {
@@ -185,7 +186,7 @@ export const AppDrawer: React.FC<AppDrawerProps> = ({
     >
       {children}
       {showLoader && (innerLoading || loading) && (
-        <AppLoader position="absolute" />
+        <AppLoader position="absolute"/>
       )}
     </Drawer>
   );

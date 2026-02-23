@@ -1,39 +1,34 @@
-import { useEffect, useRef, useState } from 'react';
-import { MdClose } from 'react-icons/md';
-import type { RazorpayOrderOptions } from 'react-razorpay';
-import { useRazorpay } from 'react-razorpay';
-import { formatCredits } from '@unpod/helpers/NumberHelper';
-import {
-  postDataApi,
-  putDataApi,
-  useAuthContext,
-  useGetDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { getOrderPayload } from '@unpod/helpers/PaymentHelper';
+import {useEffect, useRef, useState} from 'react';
+import {MdClose} from 'react-icons/md';
+import type {RazorpayOrderOptions} from 'react-razorpay';
+import {useRazorpay} from 'react-razorpay';
+import {formatCredits} from '@unpod/helpers/NumberHelper';
+import {postDataApi, putDataApi, useAuthContext, useGetDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {getOrderPayload} from '@unpod/helpers/PaymentHelper';
 import AddCreditForm from './AddCreditForm';
 import AppDrawer from '../../antd/AppDrawer';
 
 type AppAddAmountProps = {
   open: boolean;
-  setOpen: (open: boolean) => void;};
+  setOpen: (open: boolean) => void;
+};
 
-const AppAddAmount = ({ open, setOpen }: AppAddAmountProps) => {
+const AppAddAmount = ({open, setOpen}: AppAddAmountProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { Razorpay } = useRazorpay();
-  const { user, currency } = useAuthContext();
+  const {Razorpay} = useRazorpay();
+  const {user, currency} = useAuthContext();
 
   const [currentTransactionId, setCurrentTransactionId] = useState(0);
   const [currentBitValue, setCurrentBitValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const transactionId = useRef(0);
 
-  const [{ apiData: bitData }] = useGetDataApi<any>(
+  const [{apiData: bitData}] = useGetDataApi<any>(
     'wallet/bit-detail/',
-    { data: {} },
-    { currency: currency },
+    {data: {}},
+    {currency: currency},
   );
-  const [{ apiData: walletData }] = useGetDataApi<any>('wallet/detail/', {
+  const [{apiData: walletData}] = useGetDataApi<any>('wallet/detail/', {
     data: {},
   });
 
@@ -185,7 +180,7 @@ const AppAddAmount = ({ open, setOpen }: AppAddAmountProps) => {
     putDataApi('wallet/payment/transaction-status/', infoViewActionsContext, {
       payload: payload,
     })
-      .then(({ data }: any) => {
+      .then(({data}: any) => {
         setCurrentTransactionId(data.id);
         transactionId.current = data.id;
       })
@@ -202,7 +197,7 @@ const AppAddAmount = ({ open, setOpen }: AppAddAmountProps) => {
     const payload = {
       amount: amount,
       currency: currency,
-      notes: { message: 'To Recharge the Wallet' },
+      notes: {message: 'To Recharge the Wallet'},
     };
 
     postDataApi('wallet/payment/create-order/', infoViewActionsContext, payload)
@@ -221,7 +216,7 @@ const AppAddAmount = ({ open, setOpen }: AppAddAmountProps) => {
       placement="right"
       onClose={onClose}
       closable={false}
-      closeIcon={<MdClose fontSize={16} />}
+      closeIcon={<MdClose fontSize={16}/>}
       open={open}
     >
       <AddCreditForm

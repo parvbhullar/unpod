@@ -1,10 +1,10 @@
 'use client';
 import styled from 'styled-components';
-import { Tag, Typography } from 'antd';
+import {Tag, Typography} from 'antd';
 
-const { CheckableTag } = Tag;
+const {CheckableTag} = Tag;
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 export const StyledCheckableTag = styled(CheckableTag)`
   display: flex;
@@ -14,21 +14,21 @@ export const StyledCheckableTag = styled(CheckableTag)`
   padding: 12px 12px;
   border-radius: 12px;
   cursor: pointer;
-  border: 1px solid ${({ theme }) => theme.palette.text.light};
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow} !important;
-  background: ${({ theme }) => theme.palette.background.default};
-  color: ${({ theme }) => theme.palette.text.primary};
+  border: 1px solid ${({theme}) => theme.palette.text.light};
+  box-shadow: ${({theme}) => theme.component.card.boxShadow} !important;
+  background: ${({theme}) => theme.palette.background.default};
+  color: ${({theme}) => theme.palette.text.primary};
   transition: all 0.2s ease;
   white-space: normal;
   text-align: center;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.background.default};
+    background: ${({theme}) => theme.palette.background.default};
   }
 
   &.ant-tag-checkable-checked {
-    border: 1px solid ${({ theme }) => theme.palette.primary};
-    color: ${({ theme }) => theme.palette.common.white} !important;
+    border: 1px solid ${({theme}) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.common.white} !important;
   }
 `;
 

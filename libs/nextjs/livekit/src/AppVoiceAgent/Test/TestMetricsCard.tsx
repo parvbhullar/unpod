@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import { Avatar, Badge, Card, Flex, Typography } from 'antd';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
-import { FlexContainer, StyledButton } from './TestView.styled';
-import { ResponseType } from './TestAgent';
+import {ReactNode} from 'react';
+import {Avatar, Badge, Card, Flex, Typography} from 'antd';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
+import {FlexContainer, StyledButton} from './TestView.styled';
+import {ResponseType} from './TestAgent';
 
-const { Title, Text } = Typography;
+const {Title, Text} = Typography;
 
 type TestMetricsCardProps = {
   children?: ReactNode;
@@ -15,12 +15,12 @@ type TestMetricsCardProps = {
 };
 
 export const TestMetricsCard = ({
-  children,
-  agentName,
-  state,
-  response,
-  onEndTest,
-}: TestMetricsCardProps) => {
+                                  children,
+                                  agentName,
+                                  state,
+                                  response,
+                                  onEndTest,
+                                }: TestMetricsCardProps) => {
   const statusColors: Record<
     string,
     {
@@ -32,7 +32,7 @@ export const TestMetricsCard = ({
       color: 'badge-success',
       label: (
         <Flex align="center" gap={6}>
-          {!state && <Badge dot status="success" />}
+          {!state && <Badge dot status="success"/>}
           <Text type="success">{state ? `${state}...` : 'DisConnect'}</Text>
         </Flex>
       ),
@@ -44,7 +44,7 @@ export const TestMetricsCard = ({
       <>{children}</>
 
       <Card
-        style={{ width: '100%' }}
+        style={{width: '100%'}}
         styles={{
           body: {
             display: 'flex',

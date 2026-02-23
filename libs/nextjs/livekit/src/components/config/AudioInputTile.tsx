@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  BarVisualizer,
-  TrackReferenceOrPlaceholder,
-} from '@livekit/components-react';
+import {BarVisualizer, TrackReferenceOrPlaceholder,} from '@livekit/components-react';
 import styled from 'styled-components';
 import CircularVisualizer from './CircularVisualizer';
 
@@ -16,7 +13,7 @@ const StyledBarVisualizerContainer = styled.div`
   width: 100%;
   --lk-va-bar-width: 5px;
   --lk-va-bar-gap: 5px;
-  --lk-fg: ${({ theme }) => theme?.palette.primary};
+  --lk-fg: ${({theme}) => theme?.palette.primary};
 `;
 const StyledDiv = styled.div`
   width: 100%;
@@ -34,16 +31,16 @@ type AudioInputTileProps = {
 };
 
 export const AudioInputTile: React.FC<AudioInputTileProps> = ({
-  trackRef,
-  config,
-}) => {
+                                                                trackRef,
+                                                                config,
+                                                              }) => {
   if (config?.circular) {
     return (
       <CircularVisualizer
         trackRef={trackRef}
         barCount={50}
         config={config.local}
-        options={{ minHeight: 3, maxHeight: 50 }}
+        options={{minHeight: 3, maxHeight: 50}}
       />
     );
   }
@@ -53,7 +50,7 @@ export const AudioInputTile: React.FC<AudioInputTileProps> = ({
         <BarVisualizer
           trackRef={trackRef}
           barCount={50}
-          options={{ minHeight: 3, maxHeight: 50 }}
+          options={{minHeight: 3, maxHeight: 50}}
         />
       </StyledBarVisualizerContainer>
     </StyledDiv>

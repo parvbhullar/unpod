@@ -1,8 +1,8 @@
 import React from 'react';
-import { BsChatText, BsPerson } from 'react-icons/bs';
-import { MdSignalWifiStatusbarConnectedNoInternet } from 'react-icons/md';
-import { ImConnection } from 'react-icons/im';
-import { TbHandStop } from 'react-icons/tb';
+import {BsChatText, BsPerson} from 'react-icons/bs';
+import {MdSignalWifiStatusbarConnectedNoInternet} from 'react-icons/md';
+import {ImConnection} from 'react-icons/im';
+import {TbHandStop} from 'react-icons/tb';
 
 // const isChatOpen = () => {
 //   return (
@@ -34,7 +34,7 @@ export const ToastConfig = {
       if (notification.data.length === 1) {
         return {
           title: `${notification.data[0]?.name} joined`,
-          icon: <BsPerson fontSize={20} />,
+          icon: <BsPerson fontSize={20}/>,
         };
         // return message.info(`${notification.data[0]?.name} joined`);
       }
@@ -42,7 +42,7 @@ export const ToastConfig = {
         title: `${notification.data[notification.data.length - 1]?.name} and ${
           notification.data.length - 1
         } others joined`,
-        icon: <BsPerson fontSize={20} />,
+        icon: <BsPerson fontSize={20}/>,
       };
       // return message.info(
       //   `${notification.data[notification.data.length - 1]?.name} and and ${
@@ -55,7 +55,7 @@ export const ToastConfig = {
         title: `${notifications[0].data.name} and ${
           notifications.length - 1
         } others joined`,
-        icon: <BsPerson fontSize={20} />,
+        icon: <BsPerson fontSize={20}/>,
       };
       // return message.info(
       //   `${notifications[0].data.name} and ${
@@ -68,7 +68,7 @@ export const ToastConfig = {
     single: function (notification) {
       return {
         title: `${notification.data?.name} joined`,
-        icon: <BsPerson fontSize={20} />,
+        icon: <BsPerson fontSize={20}/>,
       };
       // return message.info(`${notification.data?.name} joined`);
     },
@@ -77,7 +77,7 @@ export const ToastConfig = {
         title: `${notifications[notifications.length - 1].data.name} and ${
           notifications.length - 1
         } others joined`,
-        icon: <BsPerson fontSize={20} />,
+        icon: <BsPerson fontSize={20}/>,
       };
       // return message.info(
       //   `${notifications[notifications.length - 1].data.name} and ${
@@ -90,7 +90,7 @@ export const ToastConfig = {
     single: function (notification) {
       return {
         title: `${notification.data?.name} left`,
-        icon: <BsPerson fontSize={20} />,
+        icon: <BsPerson fontSize={20}/>,
       };
       // return message.info(`${notification.data?.name} left`);
     },
@@ -99,7 +99,7 @@ export const ToastConfig = {
         title: `${notifications[notifications.length - 1].data.name} and ${
           notifications.length - 1
         } others left`,
-        icon: <BsPerson fontSize={20} />,
+        icon: <BsPerson fontSize={20}/>,
       };
 
       // return message.info(
@@ -113,7 +113,7 @@ export const ToastConfig = {
     single: (notification) => {
       return {
         title: `${notification.data?.name} raised hand`,
-        icon: <TbHandStop fontSize={20} />,
+        icon: <TbHandStop fontSize={20}/>,
       };
       // return message.info(`${notification.data?.name} raised hand`);
     },
@@ -122,7 +122,7 @@ export const ToastConfig = {
         title: `${notifications[notifications.length - 1].data?.name} and ${
           notifications.length - 1
         } others raised hand`,
-        icon: <TbHandStop fontSize={20} />,
+        icon: <TbHandStop fontSize={20}/>,
       };
       // return message.info(
       //   `${notifications[notifications.length - 1].data?.name} and ${
@@ -135,7 +135,7 @@ export const ToastConfig = {
     single: (notification) => {
       return {
         title: `New message from ${notification.data?.senderName}`,
-        icon: <BsChatText fontSize={20} />,
+        icon: <BsChatText fontSize={20}/>,
         // action: isChatOpen() ? null : <ChatAction />,
       };
       // return message.info(`New message from ${notification.data?.senderName}`);
@@ -143,7 +143,7 @@ export const ToastConfig = {
     multiple: (notifications) => {
       return {
         title: `${notifications.length} new messages`,
-        icon: <BsChatText fontSize={20} />,
+        icon: <BsChatText fontSize={20}/>,
         // action: isChatOpen() ? null : <ChatAction />,
       };
       // return message.info(`${notifications.length} new messages`);
@@ -153,7 +153,7 @@ export const ToastConfig = {
     single: () => {
       return {
         title: `You are now connected`,
-        icon: <ImConnection fontSize={20} />,
+        icon: <ImConnection fontSize={20}/>,
         variant: 'success',
         duration: 3000,
       };
@@ -166,7 +166,7 @@ export const ToastConfig = {
         title: `You are offline for now. while we try to reconnect, please check
         your internet connection. ${message}.
       `,
-        icon: <MdSignalWifiStatusbarConnectedNoInternet fontSize={20} />,
+        icon: <MdSignalWifiStatusbarConnectedNoInternet fontSize={20}/>,
         variant: 'warning',
         duration: 30000,
       };

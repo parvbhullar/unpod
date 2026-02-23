@@ -1,9 +1,9 @@
-import { Typography } from 'antd';
-import { StyledLabel, StyledRoot } from './index.styled';
-import { useIntl } from 'react-intl';
-import type { ReactNode } from 'react';
+import {Typography} from 'antd';
+import {StyledLabel, StyledRoot} from './index.styled';
+import {useIntl} from 'react-intl';
+import type {ReactNode} from 'react';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type LabelItem = {
   name: string;
@@ -19,12 +19,12 @@ type LabelsProps = {
 };
 
 const Labels = ({
-  data,
-  value,
-  onChange,
-  multiSelect = false,
-}: LabelsProps) => {
-  const { formatMessage } = useIntl();
+                  data,
+                  value,
+                  onChange,
+                  multiSelect = false,
+                }: LabelsProps) => {
+  const {formatMessage} = useIntl();
 
   const handleChange = (checked: boolean, slug: string) => {
     if (!onChange) return;
@@ -60,7 +60,7 @@ const Labels = ({
           onChange={(checked: boolean) => handleChange(checked, label.slug)}
         >
           {label.icon ? <Text>{label.icon}</Text> : null}
-          <Text>{formatMessage({ id: label.name })}</Text>
+          <Text>{formatMessage({id: label.name})}</Text>
         </StyledLabel>
       ))}
     </StyledRoot>

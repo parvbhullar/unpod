@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import { MdBusinessCenter } from 'react-icons/md';
-import { FaHeart, FaUser } from 'react-icons/fa';
+import {ReactNode} from 'react';
+import {MdBusinessCenter} from 'react-icons/md';
+import {FaHeart, FaUser} from 'react-icons/fa';
 
 export const PUBLIC_EMAIL_DOMAIN = [
   'gmail.com',
@@ -122,21 +122,21 @@ export const PURPOSE_CATEGORIES: PurposeCategory[] = [
     key: 'Business',
     label: 'identityOnboarding.businessFunctions',
     desc: 'identityOnboarding.businessFunctionsDesc',
-    icon: <MdBusinessCenter size={24} />,
+    icon: <MdBusinessCenter size={24}/>,
     color: '#9d5c06ff',
   },
   {
     key: 'Personal',
     label: 'identityOnboarding.personalFunctions',
     desc: 'identityOnboarding.personalFunctionsDesc',
-    icon: <FaUser size={24} />,
+    icon: <FaUser size={24}/>,
     color: '#979492ff',
   },
   {
     key: 'Service',
     label: 'identityOnboarding.serviceFunctions',
     desc: 'identityOnboarding.serviceFunctionsDesc',
-    icon: <FaHeart size={24} />,
+    icon: <FaHeart size={24}/>,
     color: '#e70000ff',
   },
 ];
@@ -147,11 +147,11 @@ export type DayOption = {
 };
 
 export const DAYS: DayOption[] = [
-  { value: 'Mon', label: 'advanced.dayMon' },
-  { value: 'Tue', label: 'advanced.dayTue' },
-  { value: 'Wed', label: 'advanced.dayWed' },
-  { value: 'Thu', label: 'advanced.dayThu' },
-  { value: 'Fri', label: 'advanced.dayFri' },
-  { value: 'Sat', label: 'advanced.daySat' },
-  { value: 'Sun', label: 'advanced.daySun' },
+  {value: 'Mon', label: 'advanced.dayMon'},
+  {value: 'Tue', label: 'advanced.dayTue'},
+  {value: 'Wed', label: 'advanced.dayWed'},
+  {value: 'Thu', label: 'advanced.dayThu'},
+  {value: 'Fri', label: 'advanced.dayFri'},
+  {value: 'Sat', label: 'advanced.daySat'},
+  {value: 'Sun', label: 'advanced.daySun'},
 ];

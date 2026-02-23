@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { StyledPlaceHolder, StyledPlaceHolderInner } from './index.styled';
+import {useEffect, useState} from 'react';
+import {StyledPlaceHolder, StyledPlaceHolderInner} from './index.styled';
 import AppImage from '@unpod/components/next/AppImage';
-import { Button, Space, Typography } from 'antd';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
+import {Button, Space, Typography} from 'antd';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
 
 type RequestPostProps = {
   post: any;
 };
 
-const RequestPost = ({ post }: RequestPostProps) => {
+const RequestPost = ({post}: RequestPostProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [myPost, setMyPost] = useState<any>(post);
 
@@ -36,7 +36,7 @@ const RequestPost = ({ post }: RequestPostProps) => {
       infoViewActionsContext,
     )
       .then((data: any) => {
-        setMyPost({ ...myPost, request_token: data.request_token });
+        setMyPost({...myPost, request_token: data.request_token});
         infoViewActionsContext.showMessage(data.message);
       })
       .catch((error: any) => {
@@ -54,7 +54,7 @@ const RequestPost = ({ post }: RequestPostProps) => {
           width={376}
           height={344}
         />
-        <Typography.Title level={3} style={{ marginTop: 32 }}>
+        <Typography.Title level={3} style={{marginTop: 32}}>
           You don&apos;t have access to this post.
         </Typography.Title>
 

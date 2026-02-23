@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Layout } from 'antd';
+import {Layout} from 'antd';
 
-const { Header } = Layout;
+const {Header} = Layout;
 
 export const StyledHeader = styled(Header)`
   display: flex;
@@ -14,9 +14,9 @@ export const StyledHeader = styled(Header)`
   z-index: 101;
   height: 64px;
   border-radius: 12px 12px 0 0;
-  border-bottom: 1px solid ${({ theme }) => theme.border.color};
+  border-bottom: 1px solid ${({theme}) => theme.border.color};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     padding: 10px 10px !important;
   }
 `;
@@ -30,7 +30,7 @@ export const StylesImageWrapper = styled.div`
   position: relative;
   width: 100px;
   height: 100px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 12px;

@@ -1,6 +1,6 @@
-import { Select } from 'antd';
+import {Select} from 'antd';
 import styled from 'styled-components';
-import { RenderEditSelectCellProps } from '../models/data-grid';
+import {RenderEditSelectCellProps} from '../models/data-grid';
 
 const StyledSelect = styled(Select)`
   vertical-align: top;
@@ -16,21 +16,21 @@ const StyledSelect = styled(Select)`
   }
 `;
 
-const { Option } = Select;
+const {Option} = Select;
 
 const SelectInput = <TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-  options,
-}: RenderEditSelectCellProps<TRow, TSummaryRow>) => {
+                                          row,
+                                          column,
+                                          onRowChange,
+                                          onClose,
+                                          options,
+                                        }: RenderEditSelectCellProps<TRow, TSummaryRow>) => {
   return (
     <StyledSelect
       size="small"
       value={row[column.dataIndex as keyof TRow]}
       onChange={(newValue) =>
-        onRowChange({ ...row, [column.dataIndex]: newValue })
+        onRowChange({...row, [column.dataIndex]: newValue})
       }
       onBlur={() => onClose(true, false)}
     >

@@ -1,31 +1,29 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { useWindowSize } from 'react-use';
+import React, {useMemo, useRef, useState} from 'react';
+import {useWindowSize} from 'react-use';
 import AppImage from '../../next/AppImage';
-import {
-  StyledActionsWrapper,
-  StyledGalleryItem,
-  StyledRoot,
-} from './index.styled';
-import { MdOutlineDownloadForOffline } from 'react-icons/md';
-import { Image as AntImage } from 'antd';
+import {StyledActionsWrapper, StyledGalleryItem, StyledRoot,} from './index.styled';
+import {MdOutlineDownloadForOffline} from 'react-icons/md';
+import {Image as AntImage} from 'antd';
 
 type ImageItem = {
-  media_url: string;};
+  media_url: string;
+};
 
 type ImageReplyGalleryProps = {
   images: ImageItem[];
-  onDownload?: (item: ImageItem, event: React.MouseEvent<SVGElement>) => void;};
+  onDownload?: (item: ImageItem, event: React.MouseEvent<SVGElement>) => void;
+};
 
 const ImageGallery: React.FC<ImageReplyGalleryProps> = ({
-  images,
-  onDownload,
-}) => {
-  const { width, height } = useWindowSize();
+                                                          images,
+                                                          onDownload,
+                                                        }) => {
+  const {width, height} = useWindowSize();
   const [open, setOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<ImageItem | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
 
-  const { thWidth, thHeight } = useMemo(() => {
+  const {thWidth, thHeight} = useMemo(() => {
     const galleryWidth = (galleryRef.current?.clientWidth ?? 0) - 24;
     return {
       thWidth: galleryWidth ? galleryWidth / 3 : 0,
@@ -78,7 +76,7 @@ const ImageGallery: React.FC<ImageReplyGalleryProps> = ({
 
       {currentItem && (
         <AntImage
-          style={{ display: 'none' }}
+          style={{display: 'none'}}
           src={`${currentItem.media_url}?tr=w-1080,h-180`}
           preview={{
             visible: open,

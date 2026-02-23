@@ -1,5 +1,5 @@
-import { MdLockOutline, MdPublic } from 'react-icons/md';
-import { RiUserSharedLine } from 'react-icons/ri';
+import {MdLockOutline, MdPublic} from 'react-icons/md';
+import {RiUserSharedLine} from 'react-icons/ri';
 
 export const SHARED_OPTIONS = [
   {
@@ -8,7 +8,7 @@ export const SHARED_OPTIONS = [
     description: 'permissionPopover.privateDescription',
     image: (
       <span>
-        <MdLockOutline fontSize={32} />
+        <MdLockOutline fontSize={32}/>
       </span>
     ),
     /* icon: (
@@ -26,7 +26,7 @@ export const SHARED_OPTIONS = [
     description: 'permissionPopover.sharedDescription',
     image: (
       <span>
-        <RiUserSharedLine fontSize={32} />
+        <RiUserSharedLine fontSize={32}/>
       </span>
     ),
     /* icon: (
@@ -46,7 +46,7 @@ export const LINK_OPTIONS = {
   description: 'permissionPopover.linkDescription',
   image: (
     <span>
-      <MdPublic fontSize={32} />
+      <MdPublic fontSize={32}/>
     </span>
   ),
   /* icon: (
@@ -67,7 +67,7 @@ export const PUBLIC_OPTIONS = {
   description: 'permissionPopover.publicDescription',
   image: (
     <span>
-      <MdPublic fontSize={32} />
+      <MdPublic fontSize={32}/>
     </span>
   ),
   /* icon: (

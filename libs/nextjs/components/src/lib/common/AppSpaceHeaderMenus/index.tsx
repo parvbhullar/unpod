@@ -1,19 +1,8 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Button, Tooltip } from 'antd';
-import {
-  getDataApi,
-  useAppSpaceContext,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
+import React, {Fragment, useCallback, useEffect, useMemo, useState,} from 'react';
+import {useParams, useRouter} from 'next/navigation';
+import {Button, Tooltip} from 'antd';
+import {getDataApi, useAppSpaceContext, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
 import {
   MdAddCircleOutline,
   MdOutlineArrowDropDown,
@@ -21,10 +10,7 @@ import {
   MdOutlineWorkspaces,
   MdRefresh,
 } from 'react-icons/md';
-import {
-  COLLECTION_TYPE_DATA,
-  SPACE_VISIBLE_CONTENT_TYPES,
-} from '@unpod/constants';
+import {COLLECTION_TYPE_DATA, SPACE_VISIBLE_CONTENT_TYPES,} from '@unpod/constants';
 import AppLoader from '../AppLoader';
 import AppNewSpace from '../../modules/AppNewSpace';
 import AppCustomMenus from '../AppCustomMenus';
@@ -41,8 +27,8 @@ import {
   StyledTitleContent,
   StyledTitleWrapper,
 } from './index.styled';
-import { AppPopover } from '../../antd';
-import { useIntl } from 'react-intl';
+import {AppPopover} from '../../antd';
+import {useIntl} from 'react-intl';
 import {
   getStatusOptionsFromConfig,
   type StatusConfigValue,
@@ -53,7 +39,8 @@ type SpaceItem = {
   slug: string;
   name: string;
   content_type: string;
-  privacy_type?: string;};
+  privacy_type?: string;
+};
 
 type MenuItem = {
   label: string;
@@ -61,24 +48,26 @@ type MenuItem = {
   icon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   onClick?: () => void;
-  contentType: string;};
+  contentType: string;
+};
 
 type AppSpaceHeaderMenusProps = {
   addNew?: boolean;
   setAddNew: (open: boolean) => void;
-  isContentHeader?: boolean;};
+  isContentHeader?: boolean;
+};
 
 const AppSpaceHeaderMenus = ({
-  addNew = false,
-  setAddNew,
-  isContentHeader = false,
-}: AppSpaceHeaderMenusProps) => {
-  const { formatMessage } = useIntl();
-  const { currentSpace, activeTab } = useAppSpaceContext();
+                               addNew = false,
+                               setAddNew,
+                               isContentHeader = false,
+                             }: AppSpaceHeaderMenusProps) => {
+  const {formatMessage} = useIntl();
+  const {currentSpace, activeTab} = useAppSpaceContext();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated, activeOrg } = useAuthContext();
+  const {isAuthenticated, activeOrg} = useAuthContext();
   const router = useRouter();
-  const { spaceSlug } = useParams<{ spaceSlug?: string }>();
+  const {spaceSlug} = useParams<{ spaceSlug?: string }>();
   const [loading, setLoading] = useState(false);
   const [spaces, setSpaces] = useState<SpaceItem[]>([]);
   const [search, setSearch] = useState('');
@@ -182,9 +171,9 @@ const AppSpaceHeaderMenus = ({
     <Fragment>
       <StyledTitleBlock>
         {currentSpace?.name ? (
-          <MdOutlineWorkspaces fontSize={isContentHeader ? 26 : 21} />
+          <MdOutlineWorkspaces fontSize={isContentHeader ? 26 : 21}/>
         ) : (
-          <MdOutlineWorkspaces fontSize={isContentHeader ? 26 : 21} />
+          <MdOutlineWorkspaces fontSize={isContentHeader ? 26 : 21}/>
         )}
 
         {isAuthenticated ? (
@@ -195,16 +184,16 @@ const AppSpaceHeaderMenus = ({
                 <StyledMenusContainer>
                   <StyledInputWrapper>
                     <StyledInput
-                      placeholder={formatMessage({ id: 'common.searchHere' })}
+                      placeholder={formatMessage({id: 'common.searchHere'})}
                       value={search}
                       onChange={(event) => setSearch(event.target.value)}
                     />
 
-                    <Tooltip title={formatMessage({ id: 'common.refresh' })}>
+                    <Tooltip title={formatMessage({id: 'common.refresh'})}>
                       <Button
                         type="text"
                         size="small"
-                        icon={<MdRefresh fontSize={24} />}
+                        icon={<MdRefresh fontSize={24}/>}
                         onClick={() => getSpaces()}
                         loading={loading}
                       />
@@ -236,19 +225,19 @@ const AppSpaceHeaderMenus = ({
                       >
                         <AppLoader
                           position="relative"
-                          style={{ backgroundColor: 'transparent' }}
+                          style={{backgroundColor: 'transparent'}}
                         />
                       </StyledLoader>
                     </>
                   )}
 
                   <StyledAddButton onClick={() => onCreateClick()}>
-                    <MdAddCircleOutline fontSize={16} />
-                    <span>{formatMessage({ id: 'space.addNew' })}</span>
+                    <MdAddCircleOutline fontSize={16}/>
+                    <span>{formatMessage({id: 'space.addNew'})}</span>
                   </StyledAddButton>
                 </StyledMenusContainer>
               }
-              styles={{ root: { zIndex: 1000 } }}
+              styles={{root: {zIndex: 1000}}}
               onOpenChange={setOpenPopover}
             >
               <StyledTitleContent>
@@ -265,7 +254,7 @@ const AppSpaceHeaderMenus = ({
                 )}*/}
 
                 <StyledIconWrapper>
-                  <MdOutlineArrowDropUp fontSize={isContentHeader ? 20 : 18} />
+                  <MdOutlineArrowDropUp fontSize={isContentHeader ? 20 : 18}/>
                   <MdOutlineArrowDropDown
                     fontSize={isContentHeader ? 20 : 18}
                   />

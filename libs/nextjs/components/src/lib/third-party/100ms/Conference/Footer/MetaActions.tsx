@@ -1,24 +1,20 @@
-import {
-  selectIsConnectedToRoom,
-  selectPeerCount,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import { useIsFeatureEnabled } from '../../hooks/useFeatures';
-import { useMyMetadata } from '../../hooks/useMetadata';
-import { FEATURE_LIST } from '../../common/constants';
-import { Badge, Button, Space, Tooltip } from 'antd';
-import { GiBackForth } from 'react-icons/gi';
-import { TbHandOff, TbHandStop } from 'react-icons/tb';
+import {selectIsConnectedToRoom, selectPeerCount, useHMSStore,} from '@100mslive/react-sdk';
+import {useIsFeatureEnabled} from '../../hooks/useFeatures';
+import {useMyMetadata} from '../../hooks/useMetadata';
+import {FEATURE_LIST} from '../../common/constants';
+import {Badge, Button, Space, Tooltip} from 'antd';
+import {GiBackForth} from 'react-icons/gi';
+import {TbHandOff, TbHandStop} from 'react-icons/tb';
 import React from 'react';
 import AppDrawer from '../../../../antd/AppDrawer';
-import { ParticipantList } from '../Views/SidePanel/ParticipantList';
-import { FiUsers } from 'react-icons/fi';
-import { globalTheme } from '@unpod/mix';
+import {ParticipantList} from '../Views/SidePanel/ParticipantList';
+import {FiUsers} from 'react-icons/fi';
+import {globalTheme} from '@unpod/mix';
 
-const MetaActions = ({ isMobile = false }) => {
+const MetaActions = ({isMobile = false}) => {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const peerCount = useHMSStore(selectPeerCount);
-  const { isHandRaised, isBRBOn, toggleHandRaise, toggleBRB } = useMyMetadata();
+  const {isHandRaised, isBRBOn, toggleHandRaise, toggleBRB} = useMyMetadata();
   const isHandRaiseEnabled = useIsFeatureEnabled(FEATURE_LIST.HAND_RAISE);
   const isBRBEnabled = useIsFeatureEnabled(FEATURE_LIST.BRB);
   const [showParticipants, setShowParticipants] = React.useState(false);
@@ -40,7 +36,7 @@ const MetaActions = ({ isMobile = false }) => {
             <Button
               shape="circle"
               onClick={() => setShowParticipants(true)}
-              icon={<FiUsers fontSize={20} />}
+              icon={<FiUsers fontSize={20}/>}
             />
           </Badge>
         </Tooltip>
@@ -62,9 +58,9 @@ const MetaActions = ({ isMobile = false }) => {
               }`}
               icon={
                 isHandRaised ? (
-                  <TbHandOff fontSize={20} />
+                  <TbHandOff fontSize={20}/>
                 ) : (
-                  <TbHandStop fontSize={20} />
+                  <TbHandStop fontSize={20}/>
                 )
               }
             />
@@ -78,7 +74,7 @@ const MetaActions = ({ isMobile = false }) => {
               type={isBRBOn ? 'primary' : 'default'}
               shape="circle"
               data-testid="brb_btn"
-              icon={<GiBackForth fontSize={20} />}
+              icon={<GiBackForth fontSize={20}/>}
             />
           </Tooltip>
         )}
@@ -89,7 +85,7 @@ const MetaActions = ({ isMobile = false }) => {
         open={showParticipants}
         onClose={() => setShowParticipants(false)}
       >
-        <ParticipantList />
+        <ParticipantList/>
       </AppDrawer>
 
       <AppDrawer

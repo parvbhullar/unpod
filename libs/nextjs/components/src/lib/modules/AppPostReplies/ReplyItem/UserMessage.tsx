@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Fragment } from 'react';
+import type {ReactNode} from 'react';
+import {Fragment} from 'react';
 import clsx from 'clsx';
 import {
   StyledAvatar,
@@ -13,22 +13,11 @@ import {
   StyledUserMeta,
   StyledUserQuestion,
 } from '../index.styled';
-import {
-  Button,
-  Divider,
-  Dropdown,
-  Grid,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd';
+import {Button, Divider, Dropdown, Grid, Space, Tooltip, Typography,} from 'antd';
 import UserAvatar from '../../../common/UserAvatar';
-import { BsArrowReturnLeft } from 'react-icons/bs';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
+import {BsArrowReturnLeft} from 'react-icons/bs';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
 import ReactHtmlParser from '@unpod/external-libs/react-render-html';
 import ContentWithSource from './ContentWithSource';
 import AppMarkdownViewer from '../../../third-party/AppMarkdownViewer';
@@ -36,32 +25,32 @@ import AppJsonViewer from '../../../third-party/AppJsonViewer';
 import ImageGallery from '../../../common/ImageGallery';
 import AppAttachments from '../../../common/AppAttachments';
 import AppMediaPlayer from '../../../common/AppMediaPlayer';
-import { MdMoreVert, MdOutlineAccessTime } from 'react-icons/md';
+import {MdMoreVert, MdOutlineAccessTime} from 'react-icons/md';
 import AppPostFooter from '../../AppPostFooter';
-import { getAvatarIconSize, getAvatarSize, getIconSize } from '../IconSize';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
+import {getAvatarIconSize, getAvatarSize, getIconSize} from '../IconSize';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
 
-const { Paragraph, Text } = Typography;
+const {Paragraph, Text} = Typography;
 
-const { useBreakpoint } = Grid;
+const {useBreakpoint} = Grid;
 
 const UserMessage = ({
-  reply,
-  replyParent,
-  onClapClick,
-  onReplyClick,
-  onMenuClick,
-  items,
-  isAuthenticated,
-  user,
-  attachmentImages,
-  attachmentFiles,
-  onDownloadClick,
-  children,
-  hideReply = false,
-  hideDelete = false,
-}: {
+                       reply,
+                       replyParent,
+                       onClapClick,
+                       onReplyClick,
+                       onMenuClick,
+                       items,
+                       isAuthenticated,
+                       user,
+                       attachmentImages,
+                       attachmentFiles,
+                       onDownloadClick,
+                       children,
+                       hideReply = false,
+                       hideDelete = false,
+                     }: {
   reply: any;
   replyParent?: any;
   onClapClick?: (
@@ -166,7 +155,7 @@ const UserMessage = ({
           {reply.parent?.block_id && (
             <StyledReplyParent>
               <StyledParent>
-                <BsArrowReturnLeft fontSize={16} />
+                <BsArrowReturnLeft fontSize={16}/>
                 <Paragraph type="secondary" ellipsis>
                   {reply.parent.title
                     ? reply.parent.title
@@ -178,7 +167,7 @@ const UserMessage = ({
                 <UserAvatar
                   user={reply.parent.user}
                   size={24}
-                  style={{ fontSize: 10 }}
+                  style={{fontSize: 10}}
                 />
                 <Text>{reply.parent.user.full_name}</Text>
                 <StyledTime type="secondary">
@@ -196,19 +185,19 @@ const UserMessage = ({
                     {ReactHtmlParser(reply.data.content)}
                   </StyledUserQuestion>
                 ) : reply.data.metadata ? (
-                  <ContentWithSource reply={reply} />
+                  <ContentWithSource reply={reply}/>
                 ) : (
                   <StyledContentWrapper>
-                    <AppMarkdownViewer markdown={reply.data.content} />
+                    <AppMarkdownViewer markdown={reply.data.content}/>
                   </StyledContentWrapper>
                 ))}
 
               {reply.data?.json && (
-                <AppJsonViewer json={reply.data.json} showCopyClipboard />
+                <AppJsonViewer json={reply.data.json} showCopyClipboard/>
               )}
 
               {attachmentImages && attachmentImages?.length > 0 && (
-                <div style={{ marginTop: 12 }}>
+                <div style={{marginTop: 12}}>
                   <ImageGallery
                     images={(attachmentImages || []) as { media_url: string }[]}
                     onDownload={
@@ -222,7 +211,7 @@ const UserMessage = ({
 
               {attachmentFiles && attachmentFiles.length > 0 && (
                 <Fragment>
-                  <Divider type="horizontal" style={{ marginBlock: 12 }} />
+                  <Divider type="horizontal" style={{marginBlock: 12}}/>
                   <AppAttachments
                     attachments={(attachmentFiles || []) as any}
                     onDownload={onDownloadClick}
@@ -233,7 +222,7 @@ const UserMessage = ({
           ) : (
             reply.block === 'media' && (
               <div className="app-post-viewer">
-                <AppMediaPlayer title={reply.title} media={reply.media} />
+                <AppMediaPlayer title={reply.title} media={reply.media}/>
               </div>
             )
           )}
@@ -282,7 +271,7 @@ const UserMessage = ({
                     size="small"
                     type={'link'}
                     shape="circle"
-                    icon={<MdMoreVert fontSize={avatarIconSize} />}
+                    icon={<MdMoreVert fontSize={avatarIconSize}/>}
                   />
                 </Dropdown>
               )}
@@ -296,7 +285,7 @@ const UserMessage = ({
             )}
           >
             <StyledTime type="secondary">
-              <MdOutlineAccessTime fontSize={iconSize} />
+              <MdOutlineAccessTime fontSize={iconSize}/>
               {getTimeFromNow(reply.created)}
             </StyledTime>
           </Tooltip>
@@ -312,9 +301,9 @@ const UserMessage = ({
                 user={
                   reply.user?.user_id === user?.id
                     ? {
-                        ...user,
-                        // profile_color: user?.user_detail?.profile_color,
-                      }
+                      ...user,
+                      // profile_color: user?.user_detail?.profile_color,
+                    }
                     : reply.user
                 }
               />

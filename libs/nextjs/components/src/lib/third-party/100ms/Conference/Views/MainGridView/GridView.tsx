@@ -1,16 +1,11 @@
 import React from 'react';
-import { FirstPersonDisplay } from '../FirstPersonDisplay';
+import {FirstPersonDisplay} from '../FirstPersonDisplay';
 import VideoList from '../VideoList';
-import { useAppConfig } from '../../../AppData/useAppConfig';
-import { useIsHeadless } from '../../../AppData/useUISettings';
-import { useMediaQuery } from 'react-responsive';
-import {
-  StyledCenterView,
-  StyledImage,
-  StyledInnerContainer,
-  StyledSidePaneContainer,
-} from './index.styled';
-import { TabWidthQuery } from '@unpod/constants';
+import {useAppConfig} from '../../../AppData/useAppConfig';
+import {useIsHeadless} from '../../../AppData/useUISettings';
+import {useMediaQuery} from 'react-responsive';
+import {StyledCenterView, StyledImage, StyledInnerContainer, StyledSidePaneContainer,} from './index.styled';
+import {TabWidthQuery} from '@unpod/constants';
 
 const MAX_TILES_FOR_MOBILE = 4;
 
@@ -24,7 +19,7 @@ const eventsImg = webinarProps?.IMAGE_FILE || ''; // the image to show in center
 const webinarInfoLink = webinarProps?.LINK_HREF || 'https://100ms.live/';
 
 // The center of the screen shows bigger tiles
-export const GridCenterView = ({ peers, maxTileCount }) => {
+export const GridCenterView = ({peers, maxTileCount}) => {
   const limitMaxTiles = useMediaQuery(TabWidthQuery);
   const headlessConfig = useAppConfig('headlessConfig');
   const isHeadless = useIsHeadless();
@@ -52,21 +47,21 @@ export const GridCenterView = ({ peers, maxTileCount }) => {
         >
           <a href={webinarInfoLink} target="_blank" rel="noreferrer">
             <StyledImage
-              style={{ padding: 8 }}
+              style={{padding: 8}}
               alt="Event template"
               src={eventsImg}
             />
           </a>
         </div>
       ) : (
-        <FirstPersonDisplay />
+        <FirstPersonDisplay/>
       )}
     </StyledCenterView>
   );
 };
 
 // Side pane shows smaller tiles
-export const GridSidePaneView = ({ peers }) => {
+export const GridSidePaneView = ({peers}) => {
   const headlessConfig = useAppConfig('headlessConfig');
   const isHeadless = useIsHeadless();
   return (
@@ -78,7 +73,7 @@ export const GridSidePaneView = ({ peers }) => {
     >
       <StyledInnerContainer>
         {peers && peers.length > 0 && (
-          <VideoList peers={peers} maxColCount={1} />
+          <VideoList peers={peers} maxColCount={1}/>
         )}
       </StyledInnerContainer>
     </StyledSidePaneContainer>

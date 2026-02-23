@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { FunctionOutlined } from '@ant-design/icons';
-import { SelectCellState } from '../../DataGrid';
-import { CalculatedColumn, GridFormulaType } from '../../models/data-grid';
-import { StyledFormulaInput } from './index.styled';
+import React, {useEffect, useState} from 'react';
+import {FunctionOutlined} from '@ant-design/icons';
+import {SelectCellState} from '../../DataGrid';
+import {CalculatedColumn, GridFormulaType} from '../../models/data-grid';
+import {StyledFormulaInput} from './index.styled';
 
 type Props<R> = {
   rows: readonly R[];
@@ -14,13 +14,13 @@ type Props<R> = {
 };
 
 function FormulaInput<R>({
-  rows,
-  columns,
-  formulas,
-  selectedPosition,
-  onUpdateFormula,
-  rowKeyId,
-}: Props<R>) {
+                           rows,
+                           columns,
+                           formulas,
+                           selectedPosition,
+                           onUpdateFormula,
+                           rowKeyId,
+                         }: Props<R>) {
   const [currFormula, setCurrFormula] = useState<string | undefined>(undefined);
 
   const dataIndex =
@@ -47,7 +47,7 @@ function FormulaInput<R>({
 
   return (
     <StyledFormulaInput
-      prefix={<FunctionOutlined />}
+      prefix={<FunctionOutlined/>}
       value={currFormula}
       disabled={selectedPosition.idx < 0}
       onChange={(e) => onChangeFormula(e.target.value)}

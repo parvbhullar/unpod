@@ -1,39 +1,22 @@
-import React, { ReactNode, useState } from 'react';
-import { Button, Flex, Form, Space, Switch, Typography } from 'antd';
-import {
-  DatabaseOutlined,
-  MessageOutlined,
-  SaveOutlined,
-} from '@ant-design/icons';
-import { AppInput, AppSelect } from '@unpod/components/antd';
-import {
-  useAuthContext,
-  useGetDataApi,
-  useInfoViewContext,
-} from '@unpod/providers';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import {
-  StyledSelectDesc,
-  StyledSelectLabel,
-  StyledSelectWrapper,
-} from './index.styled';
+import React, {ReactNode, useState} from 'react';
+import {Button, Flex, Form, Space, Switch, Typography} from 'antd';
+import {DatabaseOutlined, MessageOutlined, SaveOutlined,} from '@ant-design/icons';
+import {AppInput, AppSelect} from '@unpod/components/antd';
+import {useAuthContext, useGetDataApi, useInfoViewContext,} from '@unpod/providers';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {StyledSelectDesc, StyledSelectLabel, StyledSelectWrapper,} from './index.styled';
 import CardWrapper from '@unpod/components/common/CardWrapper';
 import PersonaForm from '../../AppIdentityAgentModule/Persona/PersonaForm';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-  StyledContent
-} from '../index.styled';
-import { useIntl } from 'react-intl';
+import {StickyFooter, StyledContent, StyledMainContainer, StyledTabRoot} from '../index.styled';
+import {useIntl} from 'react-intl';
 import AppTable from '@unpod/components/third-party/AppTable';
-import { StyledRowItem } from '../AdvancedForm/index.styled';
-import { KnowledgeBase, Pilot } from '@unpod/constants/types';
-import type { FormInstance } from 'antd/es/form';
-import { getEvalColumns } from './getEvalColumns';
+import {StyledRowItem} from '../AdvancedForm/index.styled';
+import {KnowledgeBase, Pilot} from '@unpod/constants/types';
+import type {FormInstance} from 'antd/es/form';
+import {getEvalColumns} from './getEvalColumns';
 
-const { useForm, Item, useWatch } = Form;
-const { Title, Text } = Typography;
+const {useForm, Item, useWatch} = Form;
+const {Title, Text} = Typography;
 
 type ModelFormProps = {
   agentData: Pilot;
@@ -60,7 +43,7 @@ export type AgentConfigFormValues = {
   knowledgeBase?: string[];
 };
 
-const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
+const ModelForm = ({agentData, updateAgentData}: ModelFormProps) => {
   const [selectedEvalKeys, setSelectedEvalKeys] = useState<React.Key[]>(() => [
     ...((agentData?.eval_kn_bases || []) as string[]),
   ]);
@@ -68,16 +51,16 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
 
   const [form] = useForm();
   // const [questionsFields, setQuestionsFields] = useState([]);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const realtime_evals = useWatch('realtime_evals', form);
   const selectedKB = useWatch('knowledgeBase', form);
 
-  const { activeOrg } = useAuthContext();
+  const {activeOrg} = useAuthContext();
   const infoViewContext = useInfoViewContext();
 
-  const [{ apiData: kbData }, { reCallAPI }] = useGetDataApi<KnowledgeBase[]>(
+  const [{apiData: kbData}, {reCallAPI}] = useGetDataApi<KnowledgeBase[]>(
     'spaces/?space_type=knowledge_base&case=pilot',
-    { data: [] },
+    {data: []},
   );
 
   const onFinish = (values: AgentConfigFormValues) => {
@@ -111,7 +94,7 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
   };
 
   const handleEvalResponse = (
-    { response }: { response: KnowledgeBase },
+    {response}: { response: KnowledgeBase },
     rowKey: string,
   ) => {
     if (response) {
@@ -200,18 +183,18 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
       <StyledTabRoot>
         <StyledMainContainer>
           <CardWrapper
-            icon={<MessageOutlined />}
-            title={formatMessage({ id: 'onboarding.persona' })}
+            icon={<MessageOutlined/>}
+            title={formatMessage({id: 'onboarding.persona'})}
           >
             <Item
               name="greeting_message"
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.greetingMassage' }),
+                  message: formatMessage({id: 'validation.greetingMassage'}),
                 },
               ]}
-              help={formatMessage({ id: 'aiStudio.greetingHelp' })}
+              help={formatMessage({id: 'aiStudio.greetingHelp'})}
             >
               <AppInput
                 placeholder={formatMessage({
@@ -220,7 +203,7 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
               />
             </Item>
 
-            <PersonaForm form={form} agentData={agentData} />
+            <PersonaForm form={form} agentData={agentData}/>
           </CardWrapper>
 
           {/* <CardWrapper icon={<BulbOutlined />} title="Objectives">
@@ -236,12 +219,12 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
       </CardWrapper>*/}
 
           <CardWrapper
-            icon={<DatabaseOutlined />}
-            title={formatMessage({ id: 'aiStudio.knowledgeBase' })}
+            icon={<DatabaseOutlined/>}
+            title={formatMessage({id: 'aiStudio.knowledgeBase'})}
           >
             <Item
               name="knowledgeBase"
-              help={formatMessage({ id: 'aiStudio.knowledgeBaseHelp' })}
+              help={formatMessage({id: 'aiStudio.knowledgeBaseHelp'})}
             >
               <AppSelect
                 mode="multiple"
@@ -251,7 +234,7 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
                 placeholder={formatMessage({
                   id: 'aiStudio.knowledgeBaseSelect',
                 })}
-                suffixIcon={<DatabaseOutlined />}
+                suffixIcon={<DatabaseOutlined/>}
                 popupRender={(menu: ReactNode) => (
                   <StyledSelectWrapper>{menu}</StyledSelectWrapper>
                 )}
@@ -262,11 +245,11 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
               <StyledContent>
                 <Title level={5}>Real Time Evals</Title>
                 <Text type="secondary">
-                  {formatMessage({ id: 'advanced.enableDesc' })}
+                  {formatMessage({id: 'advanced.enableDesc'})}
                 </Text>
               </StyledContent>
               <Item name="realtime_evals" noStyle>
-                <Switch />
+                <Switch/>
               </Item>
             </StyledRowItem>
 
@@ -296,11 +279,11 @@ const ModelForm = ({ agentData, updateAgentData }: ModelFormProps) => {
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext?.loading}
             disabled={!activeOrg?.domain_handle}
           >
-            {formatMessage({ id: 'common.save' })}
+            {formatMessage({id: 'common.save'})}
           </Button>
         </Flex>
       </StickyFooter>

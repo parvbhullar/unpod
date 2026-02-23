@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
 export const StyledRowItem = styled.div`
   display: flex;

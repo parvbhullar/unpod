@@ -12,7 +12,8 @@ export type ListConfig = {
     data: unknown[],
     router: AppRouterInstance,
     pathname: string,
-  ) => void;};
+  ) => void;
+};
 
 export type APIDataConfig = {
   uniqueKey: string;
@@ -21,7 +22,8 @@ export type APIDataConfig = {
   get: string;
   create: string;
   update: string;
-  delete: string;};
+  delete: string;
+};
 
 export const APIData: Record<string, APIDataConfig> = {
   bridge: {

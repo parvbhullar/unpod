@@ -37,10 +37,10 @@ export const getLocalizedOptions = (
     return {
       ...item,
       label: labelId
-        ? formatMessage({ id: labelId, defaultMessage: item.key || '' })
+        ? formatMessage({id: labelId, defaultMessage: item.key || ''})
         : '',
       description: descriptionId
-        ? formatMessage({ id: descriptionId, defaultMessage: '' })
+        ? formatMessage({id: descriptionId, defaultMessage: ''})
         : '',
     };
   });
@@ -63,7 +63,7 @@ export const getStatusOptionsFromConfig = (
   return Object.entries(statusConfig).map(([key, value]) => ({
     key,
     ...value,
-    name: formatMessage({ id: value.name }),
+    name: formatMessage({id: value.name}),
   }));
 };
 
@@ -82,7 +82,7 @@ export const localizeCallStatusLabels = (
       key,
       {
         ...value,
-        label: formatMessage({ id: value.label }),
+        label: formatMessage({id: value.label}),
       },
     ]),
   );

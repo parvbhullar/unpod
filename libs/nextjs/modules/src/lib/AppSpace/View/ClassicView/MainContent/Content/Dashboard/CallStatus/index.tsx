@@ -1,4 +1,4 @@
-import { Progress } from 'antd';
+import {Progress} from 'antd';
 import {
   IconWrapper,
   ProgressWrapper,
@@ -11,18 +11,18 @@ import {
   StatusStats,
   StyledCard,
 } from './index.styled';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const CallStatusBreakdown = ({
-  title = 'analytics.breakdown',
-  data,
-  suffix = 'analytics.calls',
-}: {
+                               title = 'analytics.breakdown',
+                               data,
+                               suffix = 'analytics.calls',
+                             }: {
   title?: string;
   data: any[];
   suffix?: string;
 }) => {
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const [total, ...statusConfig] = data;
 
   const calculatePercentage = (value: any) => {
@@ -32,11 +32,11 @@ const CallStatusBreakdown = ({
 
   return (
     <StyledCard
-      title={formatMessage({ id: title })}
+      title={formatMessage({id: title})}
       extra={
-        <strong>{`${formatMessage({ id: 'common.total' })} ${(
+        <strong>{`${formatMessage({id: 'common.total'})} ${(
           total.value | 0
-        ).toLocaleString()} ${formatMessage({ id: suffix })}`}</strong>
+        ).toLocaleString()} ${formatMessage({id: suffix})}`}</strong>
       }
     >
       <StatusList>
@@ -56,7 +56,7 @@ const CallStatusBreakdown = ({
 
                 <StatusContent>
                   <StatusLabel>
-                    {formatMessage({ id: status.label })}
+                    {formatMessage({id: status.label})}
                   </StatusLabel>
 
                   <ProgressWrapper>

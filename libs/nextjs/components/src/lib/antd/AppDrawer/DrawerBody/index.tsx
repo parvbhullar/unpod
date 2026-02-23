@@ -8,11 +8,11 @@ type StyledFormBodyProps = {
 };
 
 const StyledFormBody = styled.div<StyledFormBodyProps>`
-  height: ${({ $bodyHeight }) =>
-    `calc(100vh - ${$bodyHeight ? $bodyHeight : 152}px)`};
-  overflow-y: ${({ $overFlowY }) => ($overFlowY ? $overFlowY : 'auto')};
+  height: ${({$bodyHeight}) =>
+  `calc(100vh - ${$bodyHeight ? $bodyHeight : 152}px)`};
+  overflow-y: ${({$overFlowY}) => ($overFlowY ? $overFlowY : 'auto')};
   scrollbar-width: thin;
-  padding-right: ${({ $paddingRight }) => ($paddingRight ? '16px' : '0')};
+  padding-right: ${({$paddingRight}) => ($paddingRight ? '16px' : '0')};
 `;
 
 const StyledInnerBody = styled.div`
@@ -29,12 +29,12 @@ type DrawerBodyProps = {
 };
 
 export const DrawerBody = ({
-  bodyHeight,
-  overFlowY,
-  isTabDrawer,
-  children,
-  ...restProps
-}: DrawerBodyProps) => {
+                             bodyHeight,
+                             overFlowY,
+                             isTabDrawer,
+                             children,
+                             ...restProps
+                           }: DrawerBodyProps) => {
   return (
     <StyledFormBody
       $bodyHeight={bodyHeight}

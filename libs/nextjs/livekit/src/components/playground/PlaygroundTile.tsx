@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import styled from 'styled-components';
 
 const StyledPlaygroundTile = styled.div<{
@@ -10,8 +10,8 @@ const StyledPlaygroundTile = styled.div<{
   flex-direction: column;
   border: 1px solid #999999;
   border-radius: 4px;
-  background-color: ${({ $backgroundColor }) =>
-    $backgroundColor || 'transparent'};
+  background-color: ${({$backgroundColor}) =>
+  $backgroundColor || 'transparent'};
   color: #6b7280;
   & .title {
     display: flex;
@@ -30,8 +30,8 @@ const StyledPlaygroundTile = styled.div<{
     align-items: center;
     flex-grow: 1;
     width: 100%;
-    padding: ${({ $padding }) => ($padding ? '16px' : '0')};
-    height: ${({ $title }) => ($title ? 'calc(100% - 32px)' : '100%')};
+    padding: ${({$padding}) => ($padding ? '16px' : '0')};
+    height: ${({$title}) => ($title ? 'calc(100% - 32px)' : '100%')};
   }
 `;
 
@@ -45,13 +45,13 @@ export type PlaygroundTileProps = {
 };
 
 export const PlaygroundTile: React.FC<PlaygroundTileProps> = ({
-  children,
-  title,
-  className,
-  childrenClassName,
-  padding = true,
-  backgroundColor = 'transparent',
-}) => {
+                                                                children,
+                                                                title,
+                                                                className,
+                                                                childrenClassName,
+                                                                padding = true,
+                                                                backgroundColor = 'transparent',
+                                                              }) => {
   return (
     <StyledPlaygroundTile
       className={className}

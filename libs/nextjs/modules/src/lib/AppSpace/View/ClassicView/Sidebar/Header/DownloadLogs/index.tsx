@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Button, Col, Form, Select } from 'antd';
+import {useEffect, useState} from 'react';
+import {Button, Col, Form, Select} from 'antd';
 import {
   downloadDataApi,
   useAppSpaceContext,
@@ -8,11 +8,7 @@ import {
   useInfoViewContext,
   usePaginatedDataApi,
 } from '@unpod/providers';
-import {
-  changeDateStringFormat,
-  getDateObject,
-  getUtcTimestamp,
-} from '@unpod/helpers/DateHelper';
+import {changeDateStringFormat, getDateObject, getUtcTimestamp,} from '@unpod/helpers/DateHelper';
 import {
   AppDateTime,
   AppGridContainer,
@@ -22,13 +18,13 @@ import {
   DrawerForm,
   DrawerFormFooter,
 } from '@unpod/components/antd';
-import { fileDownload } from '@unpod/helpers/FileHelper';
-import { useIntl } from 'react-intl';
-import type { Dayjs } from 'dayjs';
-import { cleanObject, isEmptyObject } from '@unpod/helpers';
+import {fileDownload} from '@unpod/helpers/FileHelper';
+import {useIntl} from 'react-intl';
+import type {Dayjs} from 'dayjs';
+import {cleanObject, isEmptyObject} from '@unpod/helpers';
 
-const { Item } = Form;
-const { Option } = Select;
+const {Item} = Form;
+const {Option} = Select;
 
 type RunItem = {
   run_id?: string;
@@ -63,15 +59,15 @@ type DownloadLogsProps = {
   onClose?: () => void;
 };
 
-const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
+const DownloadLogs = ({onClose}: DownloadLogsProps) => {
   const [form] = Form.useForm();
   const [userList, setUserList] = useState<UserItem[]>([]);
-  const { currentSpace } = useAppSpaceContext();
+  const {currentSpace} = useAppSpaceContext();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
-  const { loading: downloading } = useInfoViewContext();
+  const {formatMessage} = useIntl();
+  const {loading: downloading} = useInfoViewContext();
 
-  const [{ apiData }, { reCallAPI }] = usePaginatedDataApi(
+  const [{apiData}, {reCallAPI}] = usePaginatedDataApi(
     `tasks/space-runs/${currentSpace?.token}/`,
     [],
     {
@@ -81,11 +77,11 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
     false,
   ) as unknown as [{ apiData: RunItem[] }, { reCallAPI: () => void }];
 
-  const [{ apiData: agents }, { setQueryParams, reCallAPI: reCallPilotsAPI }] =
+  const [{apiData: agents}, {setQueryParams, reCallAPI: reCallPilotsAPI}] =
     useGetDataApi(
       `core/pilots/org/`,
-      { data: [] },
-      { type: 'Voice', search: '' },
+      {data: []},
+      {type: 'Voice', search: ''},
       false,
     ) as unknown as [
       { apiData?: { data?: AgentItem[] } },
@@ -113,13 +109,13 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
   }, [currentSpace?.users]);
 
   const onSearch = (value: string) => {
-    setQueryParams({ search: value, type: 'Voice' });
+    setQueryParams({search: value, type: 'Voice'});
   };
 
   const onSubmitSuccess = (formData: DownloadLogsForm) => {
     let params: Record<string, unknown> = {};
     if (!isEmptyObject(cleanObject(formData))) {
-      params = { ...formData };
+      params = {...formData};
     }
     if (formData.from_ts) {
       params['from_ts'] = getUtcTimestamp(formData.from_ts);
@@ -146,18 +142,18 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
       .then((data) => {
         fileDownload(
           data,
-          `${formatMessage({ id: 'downloadLogs.fileName' })} - ${now.format(
+          `${formatMessage({id: 'downloadLogs.fileName'})} - ${now.format(
             'YYYY-MM-DD HH:mm:ss',
           )}.csv`,
         );
         infoViewActionsContext.showMessage(
-          formatMessage({ id: 'downloadLogs.success' }),
+          formatMessage({id: 'downloadLogs.success'}),
         );
         onClose?.();
       })
       .catch(() => {
         infoViewActionsContext.showError(
-          formatMessage({ id: 'downloadLogs.error' }),
+          formatMessage({id: 'downloadLogs.error'}),
         );
       });
 
@@ -178,8 +174,8 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
           <Col md={12} sm={24}>
             <Item name="from_ts">
               <AppDateTime
-                placeholder={formatMessage({ id: 'downloadLogs.from' })}
-                showTime={{ format: 'HH:mm:ss' }}
+                placeholder={formatMessage({id: 'downloadLogs.from'})}
+                showTime={{format: 'HH:mm:ss'}}
                 format="DD-MM-YYYY HH:mm:ss"
               />
             </Item>
@@ -188,8 +184,8 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
           <Col md={12} sm={24}>
             <Item name="to_ts">
               <AppDateTime
-                placeholder={formatMessage({ id: 'downloadLogs.to' })}
-                showTime={{ format: 'HH:mm:ss' }}
+                placeholder={formatMessage({id: 'downloadLogs.to'})}
+                showTime={{format: 'HH:mm:ss'}}
                 format="DD-MM-YYYY HH:mm:ss"
               />
             </Item>
@@ -198,7 +194,7 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
 
         <Item name="runs">
           <AppSelect
-            placeholder={formatMessage({ id: 'downloadLogs.runIds' })}
+            placeholder={formatMessage({id: 'downloadLogs.runIds'})}
             mode="multiple"
             optionLabelProp="label"
             optionFilterProp="children"
@@ -220,7 +216,7 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
 
         <Item name="agents">
           <AppSelect
-            placeholder={formatMessage({ id: 'downloadLogs.agents' })}
+            placeholder={formatMessage({id: 'downloadLogs.agents'})}
             mode="multiple"
             onSearch={onSearch}
             allowClear
@@ -234,7 +230,7 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
         </Item>
 
         <Item name="user_token">
-          <AppSelect placeholder={formatMessage({ id: 'downloadLogs.user' })}>
+          <AppSelect placeholder={formatMessage({id: 'downloadLogs.user'})}>
             {userList.map((user, index) => (
               <Option key={index} value={user.token}>
                 {user.full_name || user.email}
@@ -253,17 +249,17 @@ const DownloadLogs = ({ onClose }: DownloadLogsProps) => {
 
         <Item name="document_id">
           <AppInput
-            placeholder={formatMessage({ id: 'downloadLogs.documentId' })}
+            placeholder={formatMessage({id: 'downloadLogs.documentId'})}
           />
         </Item>
       </DrawerBody>
 
       <DrawerFormFooter>
         <Button onClick={onClearForm}>
-          {formatMessage({ id: 'common.cancel' })}
+          {formatMessage({id: 'common.cancel'})}
         </Button>
         <Button type="primary" htmlType="submit" loading={downloading}>
-          {formatMessage({ id: 'common.download' })}
+          {formatMessage({id: 'common.download'})}
         </Button>
       </DrawerFormFooter>
     </DrawerForm>

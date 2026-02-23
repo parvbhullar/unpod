@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ChatTile } from '../components/chat/ChatTile';
+import React, {useEffect, useRef, useState} from 'react';
+import {ChatTile} from '../components/chat/ChatTile';
 import {
   TrackReferenceOrPlaceholder,
   useChat,
   useLocalParticipant,
   useTrackTranscription,
 } from '@livekit/components-react';
-import { LocalParticipant, Track } from 'livekit-client';
+import {LocalParticipant, Track} from 'livekit-client';
 
 type TranscriptionTileProps = {
   agentAudioTrack: TrackReferenceOrPlaceholder;
@@ -20,8 +20,8 @@ type ChatMessage = {
 };
 
 export const TranscriptionTile: React.FC<TranscriptionTileProps> = ({
-  agentAudioTrack,
-}) => {
+                                                                      agentAudioTrack,
+                                                                    }) => {
   const agentMessages = useTrackTranscription(agentAudioTrack);
   const localParticipant = useLocalParticipant();
   const localMessages = useTrackTranscription({
@@ -32,7 +32,7 @@ export const TranscriptionTile: React.FC<TranscriptionTileProps> = ({
 
   const transcriptsRef = useRef<Map<string, ChatMessage>>(new Map());
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const { chatMessages, send: sendChat } = useChat();
+  const {chatMessages, send: sendChat} = useChat();
 
   // store transcripts
   useEffect(() => {
@@ -90,7 +90,7 @@ export const TranscriptionTile: React.FC<TranscriptionTileProps> = ({
     localMessages.segments,
   ]);
 
-  return <ChatTile messages={messages} onSend={sendChat} />;
+  return <ChatTile messages={messages} onSend={sendChat}/>;
 };
 
 function segmentToChatMessage(

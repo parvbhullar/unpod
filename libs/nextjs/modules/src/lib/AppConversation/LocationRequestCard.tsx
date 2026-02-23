@@ -1,12 +1,8 @@
 'use client';
-import { useState } from 'react';
-import { Button } from 'antd';
-import {
-  CheckCircleFilled,
-  CloseCircleFilled,
-  EnvironmentOutlined,
-} from '@ant-design/icons';
-import { useIntl } from 'react-intl';
+import {useState} from 'react';
+import {Button} from 'antd';
+import {CheckCircleFilled, CloseCircleFilled, EnvironmentOutlined,} from '@ant-design/icons';
+import {useIntl} from 'react-intl';
 import {
   ButtonContainer,
   LocationCoords,
@@ -44,21 +40,21 @@ type LocationRequestProps = {
 };
 
 const LocationRequest = ({
-  data,
-  onLocationResponse,
-  status = 'location_request',
-}: LocationRequestProps) => {
-  const { formatMessage } = useIntl();
+                           data,
+                           onLocationResponse,
+                           status = 'location_request',
+                         }: LocationRequestProps) => {
+  const {formatMessage} = useIntl();
   const [localResponded, setLocalResponded] = useState(false);
   const [accepting, setAccepting] = useState(false);
 
   const requestId = data?.request_id;
   const reason =
-    data?.reason || formatMessage({ id: 'location.defaultReason' });
+    data?.reason || formatMessage({id: 'location.defaultReason'});
   const acceptText =
-    data?.accept_text || formatMessage({ id: 'location.shareLocation' });
+    data?.accept_text || formatMessage({id: 'location.shareLocation'});
   const cancelText =
-    data?.cancel_text || formatMessage({ id: 'location.notNow' });
+    data?.cancel_text || formatMessage({id: 'location.notNow'});
 
   const handleAccept = () => {
     if (!requestId || !onLocationResponse) return;
@@ -84,9 +80,9 @@ const LocationRequest = ({
 
   // Determine icon
   const renderIcon = () => {
-    if (isSuccess) return <CheckCircleFilled />;
-    if (isDeclined) return <CloseCircleFilled />;
-    return <EnvironmentOutlined />;
+    if (isSuccess) return <CheckCircleFilled/>;
+    if (isDeclined) return <CloseCircleFilled/>;
+    return <EnvironmentOutlined/>;
   };
 
   // Determine status message
@@ -94,18 +90,18 @@ const LocationRequest = ({
   let statusIcon = null;
 
   if (status === 'location_success') {
-    statusMessage = formatMessage({ id: 'location.sharedSuccessfully' });
-    statusIcon = <CheckCircleFilled />;
+    statusMessage = formatMessage({id: 'location.sharedSuccessfully'});
+    statusIcon = <CheckCircleFilled/>;
   } else if (status === 'location_declined') {
-    statusMessage = formatMessage({ id: 'location.requestDeclined' });
-    statusIcon = <CloseCircleFilled />;
+    statusMessage = formatMessage({id: 'location.requestDeclined'});
+    statusIcon = <CloseCircleFilled/>;
   } else if (localResponded) {
     if (accepting) {
-      statusMessage = formatMessage({ id: 'location.gettingLocation' });
-      statusIcon = <EnvironmentOutlined />;
+      statusMessage = formatMessage({id: 'location.gettingLocation'});
+      statusIcon = <EnvironmentOutlined/>;
     } else {
-      statusMessage = formatMessage({ id: 'location.requestDeclined' });
-      statusIcon = <CloseCircleFilled />;
+      statusMessage = formatMessage({id: 'location.requestDeclined'});
+      statusIcon = <CloseCircleFilled/>;
     }
   }
 
@@ -121,16 +117,16 @@ const LocationRequest = ({
         </LocationIcon>
         <RequestContent>
           <RequestTitle>
-            {formatMessage({ id: 'location.requestTitle' })}
+            {formatMessage({id: 'location.requestTitle'})}
           </RequestTitle>
           <RequestSubtitle>
             {isSuccess
-              ? formatMessage({ id: 'location.shared' })
+              ? formatMessage({id: 'location.shared'})
               : isDeclined
-                ? formatMessage({ id: 'location.declined' })
+                ? formatMessage({id: 'location.declined'})
                 : isLoading
-                  ? formatMessage({ id: 'location.processing' })
-                  : formatMessage({ id: 'location.permissionNeeded' })}
+                  ? formatMessage({id: 'location.processing'})
+                  : formatMessage({id: 'location.permissionNeeded'})}
           </RequestSubtitle>
         </RequestContent>
       </RequestHeader>
@@ -143,7 +139,7 @@ const LocationRequest = ({
             type="primary"
             ghost
             onClick={handleAccept}
-            icon={<EnvironmentOutlined />}
+            icon={<EnvironmentOutlined/>}
           >
             {acceptText}
           </Button>
@@ -162,7 +158,7 @@ const LocationRequest = ({
           >
             {statusIcon}
           </StatusIcon>
-          <div style={{ flex: 1 }}>
+          <div style={{flex: 1}}>
             <StatusText
               $success={isSuccess}
               $declined={isDeclined || (localResponded && !accepting)}

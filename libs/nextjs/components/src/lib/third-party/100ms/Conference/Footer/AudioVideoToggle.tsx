@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   selectIsConnectedToRoom,
   selectLocalVideoTrackID,
@@ -8,20 +8,14 @@ import {
   useHMSStore,
   useParticipants,
 } from '@100mslive/react-sdk';
-import {
-  MdCameraswitch,
-  MdMic,
-  MdMicOff,
-  MdVideocam,
-  MdVideocamOff,
-} from 'react-icons/md';
+import {MdCameraswitch, MdMic, MdMicOff, MdVideocam, MdVideocamOff,} from 'react-icons/md';
 
-import { isMacOS } from '../../common/constants';
-import { Button, message, Space, Tooltip } from 'antd';
-import { useInfoViewActionsContext } from '@unpod/providers';
+import {isMacOS} from '../../common/constants';
+import {Button, Space, Tooltip} from 'antd';
+import {useInfoViewActionsContext} from '@unpod/providers';
 
 export const AudioVideoToggle = () => {
-  const { isLocalVideoEnabled, isLocalAudioEnabled, toggleAudio, toggleVideo } =
+  const {isLocalVideoEnabled, isLocalAudioEnabled, toggleAudio, toggleVideo} =
     useAVToggle();
   const actions = useHMSActions();
   const videoTracKId = useHMSStore(selectLocalVideoTrackID);
@@ -29,7 +23,7 @@ export const AudioVideoToggle = () => {
   const isConnectedToRoom = useHMSStore(selectIsConnectedToRoom);
   const infoViewActionsContext = useInfoViewActionsContext();
 
-  const { participants } = useParticipants();
+  const {participants} = useParticipants();
   const isHost =
     participants.find((p) => p.videoTrack === localVideoTrack?.id)?.roleName ===
     'host';
@@ -58,9 +52,9 @@ export const AudioVideoToggle = () => {
             shape="circle"
             icon={
               !isLocalAudioEnabled ? (
-                <MdMicOff data-testid="audio_off_btn" fontSize={20} />
+                <MdMicOff data-testid="audio_off_btn" fontSize={20}/>
               ) : (
-                <MdMic data-testid="audio_on_btn" fontSize={20} />
+                <MdMic data-testid="audio_on_btn" fontSize={20}/>
               )
             }
           />
@@ -81,9 +75,9 @@ export const AudioVideoToggle = () => {
             disabled={!isHost}
             icon={
               !isLocalVideoEnabled ? (
-                <MdVideocamOff data-testid="video_off_btn" fontSize={20} />
+                <MdVideocamOff data-testid="video_off_btn" fontSize={20}/>
               ) : (
-                <MdVideocam data-testid="video_on_btn" fontSize={20} />
+                <MdVideocam data-testid="video_on_btn" fontSize={20}/>
               )
             }
             data-testid="video_btn"
@@ -104,7 +98,7 @@ export const AudioVideoToggle = () => {
                 );
               }
             }}
-            icon={<MdCameraswitch fontSize={20} />}
+            icon={<MdCameraswitch fontSize={20}/>}
           />
         </Tooltip>
       ) : null}

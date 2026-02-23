@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { PanelResizeHandle } from 'react-resizable-panels';
+import {PanelResizeHandle} from 'react-resizable-panels';
 
 export const StyledRoot = styled.div`
   position: relative;

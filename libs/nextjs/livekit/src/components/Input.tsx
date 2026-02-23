@@ -1,5 +1,5 @@
 // components/StyledInput.jsx
-import styled, { css, type RuleSet } from 'styled-components';
+import styled, {css, type RuleSet} from 'styled-components';
 
 type InputSize = 'small' | 'default' | 'large';
 type InputStatus = 'error' | 'warning' | 'success';
@@ -60,11 +60,11 @@ const Input = styled.input.withConfig({
   border-radius: 4px;
   outline: none;
   transition: all 0.2s ease-in-out;
-  ${({ size }) => sizeStyles[size || 'default']};
-  ${({ status }) => (status ? statusStyles[status] : undefined)};
+  ${({size}) => sizeStyles[size || 'default']};
+  ${({status}) => (status ? statusStyles[status] : undefined)};
 
   &:focus {
-    border-color: ${({ theme }) => theme?.palette?.primaryActive};
+    border-color: ${({theme}) => theme?.palette?.primaryActive};
     //box-shadow: 0 0 0 1px rgba(22, 119, 255, 0.2);
   }
 
@@ -72,7 +72,7 @@ const Input = styled.input.withConfig({
     color: #bfbfbf;
   }
 
-  ${({ fullWidth }) =>
+  ${({fullWidth}) =>
     fullWidth &&
     css`
       width: 100%;

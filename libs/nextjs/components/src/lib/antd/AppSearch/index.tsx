@@ -1,14 +1,8 @@
 'use client';
-import React, {
-  ChangeEvent,
-  CSSProperties,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { Input } from 'antd';
+import React, {ChangeEvent, CSSProperties, useEffect, useRef, useState,} from 'react';
+import {Input} from 'antd';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { InputRef } from 'antd/es/input';
+import {InputRef} from 'antd/es/input';
 
 type AppSearchProps = {
   placeholder: string;
@@ -19,19 +13,20 @@ type AppSearchProps = {
   disabled?: boolean;
   value?: string;
   asterisk?: boolean;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppSearch: React.FC<AppSearchProps> = ({
-  placeholder,
-  className = '',
-  style,
-  onChange,
-  defaultValue,
-  disabled = false,
-  value,
-  asterisk,
-  ...restProps
-}) => {
+                                               placeholder,
+                                               className = '',
+                                               style,
+                                               onChange,
+                                               defaultValue,
+                                               disabled = false,
+                                               value,
+                                               asterisk,
+                                               ...restProps
+                                             }) => {
   const [inputVal, setInputVal] = useState<string>('');
   const inputRef = useRef<InputRef>(null);
 

@@ -1,17 +1,17 @@
-import type { Dispatch, SetStateAction } from 'react';
-import { useCallback, useState } from 'react';
-import { MdAdd } from 'react-icons/md';
+import type {Dispatch, SetStateAction} from 'react';
+import {useCallback, useState} from 'react';
+import {MdAdd} from 'react-icons/md';
 import AppInputSelector from '../../../antd/AppInputSelector';
 import InputRow from '../../AppKbSchemaManager/InputRow';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { randomId } from '@unpod/helpers/GlobalHelper';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {randomId} from '@unpod/helpers/GlobalHelper';
 import ManageDetails from '../../AppKbSchemaManager/ManageDetails';
 
-import { Typography } from 'antd';
-import { StyledList, StyledStickyButton } from '../index.styled';
-import { useIntl } from 'react-intl';
+import {Typography} from 'antd';
+import {StyledList, StyledStickyButton} from '../index.styled';
+import {useIntl} from 'react-intl';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export type SchemaInput = {
   id: string | number;
@@ -33,14 +33,14 @@ type SchemaFormProps = {
 };
 
 const SchemaForm = ({
-  formInputs,
-  setFormInputs,
-  contentType,
-}: SchemaFormProps) => {
+                      formInputs,
+                      setFormInputs,
+                      contentType,
+                    }: SchemaFormProps) => {
   const [selectedItem, setSelectedItem] = useState<SchemaInput | null>(null);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const handleDeleteInput = (item: SchemaInput) => {
     setFormInputs((fields) => fields.filter((task) => item.id !== task.id));
@@ -133,7 +133,7 @@ const SchemaForm = ({
     setFormInputs((fields) =>
       fields.map((data) => {
         if (selectedItem && selectedItem.id === data.id) {
-          data = { ...data, ...values };
+          data = {...data, ...values};
         }
 
         return data;
@@ -146,7 +146,7 @@ const SchemaForm = ({
   return (
     <>
       <Paragraph strong>
-        {formatMessage({ id: 'knowledgeBase.addSchemaFields' })}
+        {formatMessage({id: 'knowledgeBase.addSchemaFields'})}
       </Paragraph>
       {formInputs.length > 0 && (
         <StyledList>
@@ -180,8 +180,8 @@ const SchemaForm = ({
           onClick={() => setInputModalOpen(!inputModalOpen)}
           ghost
         >
-          <MdAdd fontSize={16} />
-          <span>{formatMessage({ id: 'common.addField' })}</span>
+          <MdAdd fontSize={16}/>
+          <span>{formatMessage({id: 'common.addField'})}</span>
         </StyledStickyButton>
       </AppInputSelector>
       <ManageDetails

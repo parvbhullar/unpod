@@ -13,6 +13,6 @@ export const StyledActions = styled.div`
   bottom: 0;
   padding-bottom: 10px;
   padding-top: 10px;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   z-index: 3;
 `;

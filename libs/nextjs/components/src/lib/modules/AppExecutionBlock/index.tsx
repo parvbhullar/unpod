@@ -1,19 +1,14 @@
-import type { ReactNode } from 'react';
-import { Fragment, useState } from 'react';
+import type {ReactNode} from 'react';
+import {Fragment, useState} from 'react';
 
-import { Button, Space, Typography } from 'antd';
-import { MdCheck, MdClose, MdOutlineMoreHoriz } from 'react-icons/md';
-import {
-  StyledCollapse,
-  StyledErrorButton,
-  StyledSuccessButton,
-  StyledWarningButton,
-} from './index.styled';
+import {Button, Space, Typography} from 'antd';
+import {MdCheck, MdClose, MdOutlineMoreHoriz} from 'react-icons/md';
+import {StyledCollapse, StyledErrorButton, StyledSuccessButton, StyledWarningButton,} from './index.styled';
 import DataTable from './DataTable';
 import AppDrawer from '../../antd/AppDrawer';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Text, Paragraph } = Typography;
+const {Text, Paragraph} = Typography;
 
 type AppExecutionBlockProps = {
   id: string | number;
@@ -22,18 +17,19 @@ type AppExecutionBlockProps = {
   content?: ReactNode;
   threadId?: string;
   superbookHandle?: string;
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 const AppExecutionBlock = ({
-  id,
-  title,
-  status,
-  content,
-  threadId,
-  superbookHandle,
-  ...restProps
-}: AppExecutionBlockProps) => {
-  const { formatMessage } = useIntl();
+                             id,
+                             title,
+                             status,
+                             content,
+                             threadId,
+                             superbookHandle,
+                             ...restProps
+                           }: AppExecutionBlockProps) => {
+  const {formatMessage} = useIntl();
   const [open, setOpen] = useState(false);
 
   return (
@@ -67,7 +63,7 @@ const AppExecutionBlock = ({
                     setOpen(true);
                   }}
                 >
-                  {formatMessage({ id: 'common.view' })}
+                  {formatMessage({id: 'common.view'})}
                 </Button>
 
                 {status === 'success' && (
@@ -75,7 +71,7 @@ const AppExecutionBlock = ({
                     type="primary"
                     shape="circle"
                     size="small"
-                    icon={<MdCheck fontSize={18} />}
+                    icon={<MdCheck fontSize={18}/>}
                   />
                 )}
 
@@ -84,7 +80,7 @@ const AppExecutionBlock = ({
                     type="primary"
                     shape="circle"
                     size="small"
-                    icon={<MdClose fontSize={18} />}
+                    icon={<MdClose fontSize={18}/>}
                   />
                 )}
 
@@ -93,7 +89,7 @@ const AppExecutionBlock = ({
                     type="primary"
                     shape="circle"
                     size="small"
-                    icon={<MdOutlineMoreHoriz fontSize={18} />}
+                    icon={<MdOutlineMoreHoriz fontSize={18}/>}
                   />
                 )}
               </Space>
@@ -114,7 +110,7 @@ const AppExecutionBlock = ({
         open={open}
         onClose={() => setOpen(false)}
       >
-        <DataTable threadId={threadId} superbookHandle={superbookHandle} />
+        <DataTable threadId={threadId} superbookHandle={superbookHandle}/>
       </AppDrawer>
     </Fragment>
   );

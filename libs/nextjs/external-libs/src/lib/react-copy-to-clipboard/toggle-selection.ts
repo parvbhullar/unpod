@@ -6,7 +6,7 @@ export const deselectCurrent = (): (() => void) => {
   }
 
   const activeElement = document.activeElement as HTMLElement | null;
-  const ranges = Array.from({ length: selection.rangeCount }, (_, i) =>
+  const ranges = Array.from({length: selection.rangeCount}, (_, i) =>
     selection.getRangeAt(i),
   );
 

@@ -1,15 +1,16 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import {usePathname} from 'next/navigation';
+import {useEffect, useRef} from 'react';
 
 type PathRef = {
   current: string;
-  previous: string | null;};
+  previous: string | null;
+};
 
 export const usePreviousPath = (): string | null => {
   const pathname = usePathname();
-  const ref = useRef<PathRef>({ current: pathname, previous: null });
+  const ref = useRef<PathRef>({current: pathname, previous: null});
 
   useEffect(() => {
     if (ref.current.current !== pathname) {

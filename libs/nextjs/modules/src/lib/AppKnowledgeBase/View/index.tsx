@@ -1,56 +1,29 @@
 'use client';
-import {
-  type ComponentType,
-  Fragment,
-  isValidElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import {
-  deleteDataApi,
-  getDataApi,
-  useAuthContext,
-  useGetDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
+import {type ComponentType, Fragment, isValidElement, useCallback, useEffect, useMemo, useRef, useState,} from 'react';
+import {deleteDataApi, getDataApi, useAuthContext, useGetDataApi, useInfoViewActionsContext,} from '@unpod/providers';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
-import { Button, Dropdown, Tooltip } from 'antd';
-import {
-  MdArrowUpward,
-  MdEdit,
-  MdList,
-  MdOutlineSettings,
-  MdRefresh,
-} from 'react-icons/md';
-import { useRouter } from 'next/navigation';
-import { isEditAccessAllowed } from '@unpod/helpers/PermissionHelper';
+import {Button, Dropdown, Tooltip} from 'antd';
+import {MdArrowUpward, MdEdit, MdList, MdOutlineSettings, MdRefresh,} from 'react-icons/md';
+import {useRouter} from 'next/navigation';
+import {isEditAccessAllowed} from '@unpod/helpers/PermissionHelper';
 import AppTable from '@unpod/components/third-party/AppTable';
 import TextEditor from './TextEditor';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import type { CollectionDataResponse, CollectionRecord } from '@unpod/constants/types';
-import {
-  capitalizedAllWords,
-  convertMachineNameToName,
-} from '@unpod/helpers/StringHelper';
-import { AppDrawer } from '@unpod/components/antd';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import type {CollectionDataResponse, CollectionRecord} from '@unpod/constants/types';
+import {capitalizedAllWords, convertMachineNameToName,} from '@unpod/helpers/StringHelper';
+import {AppDrawer} from '@unpod/components/antd';
 import AppDotFlashing from '@unpod/components/common/AppDotFlashing';
 import AppEmptyWorkSpace from '@unpod/components/modules/AppEmptyWorkSpace';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import { getKbInputsStructure } from '@unpod/helpers/AppKbHelper';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {getKbInputsStructure} from '@unpod/helpers/AppKbHelper';
 import AppKbSchemaManager from '@unpod/components/modules/AppKbSchemaManager';
 import AppConnectorsSetting from '@unpod/components/modules/AppConnectorsSetting';
-import AppConnectorList from '@unpod/components/modules/AppConnectorList';
 import AppColumnZoomView from '@unpod/components/common/AppColumnZoomView';
 import AppColumnZoomCell from '@unpod/components/common/AppColumnZoomView/AppColumnZoomCell';
-import { SITE_URL } from '@unpod/constants';
 import PageHeader from './PageHeader';
 import EditRecord from './PageHeader/EditRecord';
 import HeaderDropdown from './HeaderDropdown';
 import UploadDocuments from './UploadDocuments';
-import Connectors from './Connectors';
 import TasksView from './TasksView';
 import {
   IconWrapper,
@@ -59,10 +32,10 @@ import {
   StyledTableRoot,
   StyledUploadRoot,
 } from './index.styled';
-import { LoadingConnectorsOrUpload, LoadingTable } from '@unpod/skeleton';
-import { useSkeleton } from '@unpod/custom-hooks/useSkeleton';
-import { openConfirmModal } from '@unpod/helpers/ComponentHelper';
-import { useIntl } from 'react-intl';
+import {LoadingConnectorsOrUpload, LoadingTable} from '@unpod/skeleton';
+import {useSkeleton} from '@unpod/custom-hooks/useSkeleton';
+import {openConfirmModal} from '@unpod/helpers/ComponentHelper';
+import {useIntl} from 'react-intl';
 
 const PAGE_SIZE = 50;
 
@@ -97,13 +70,13 @@ type AppKnowledgeBaseModuleProps = {
 };
 
 const AppKnowledgeBaseModule = ({
-  pageTitle,
-  knowledgeBase,
-}: AppKnowledgeBaseModuleProps) => {
+                                  pageTitle,
+                                  knowledgeBase,
+                                }: AppKnowledgeBaseModuleProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const router = useRouter();
-  const { formatMessage } = useIntl();
-  const { isAuthenticated, activeOrg } = useAuthContext();
+  const {formatMessage} = useIntl();
+  const {isAuthenticated, activeOrg} = useAuthContext();
 
   const activeOrgRef = useRef(activeOrg?.domain_handle ?? null);
   const [currentKb, setCurrentKb] = useState(knowledgeBase);
@@ -122,7 +95,7 @@ const AppKnowledgeBaseModule = ({
   const [isSyncing, setSyncing] = useState(false);
   const [selectedCol, setSelectedCol] = useState<any>(null);
 
-  const { isPageLoading, skeleton: SkeletonComponent } = useSkeleton(
+  const {isPageLoading, skeleton: SkeletonComponent} = useSkeleton(
     LoadingTable as ComponentType<unknown>,
     LoadingConnectorsOrUpload as ComponentType<unknown>,
     `knowledge_base/${currentKb?.token}`,
@@ -130,16 +103,16 @@ const AppKnowledgeBaseModule = ({
   const SkeletonView = isValidElement(SkeletonComponent) ? (
     SkeletonComponent
   ) : (
-    <SkeletonComponent />
+    <SkeletonComponent/>
   );
 
   const [
-    { apiData, loading: isLoading, isLoadingMore },
-    { updateInitialUrl, setQueryParams, reCallAPI, setLoadingMore },
+    {apiData, loading: isLoading, isLoadingMore},
+    {updateInitialUrl, setQueryParams, reCallAPI, setLoadingMore},
   ] = useGetDataApi<CollectionDataResponse>(
     `knowledge_base/${knowledgeBase?.token}/collection-data/`,
-    { data: { data: [], schemas: undefined, count: 0 } },
-    { page: 1, page_size: PAGE_SIZE },
+    {data: {data: [], schemas: undefined, count: 0}},
+    {page: 1, page_size: PAGE_SIZE},
     false,
   );
 
@@ -155,7 +128,7 @@ const AppKnowledgeBaseModule = ({
     }
   }, [activeOrg?.domain_handle]);
 
-  const { items, connector } = useMemo(() => {
+  const {items, connector} = useMemo(() => {
     const [connector] = currentKb?.connected_apps || [];
 
     const options: Array<{
@@ -170,7 +143,7 @@ const AppKnowledgeBaseModule = ({
         disabled: !(selectedRowKeys.length > 0) || indexLoading,
         icon: (
           <span className="ant-icon">
-            <MdOutlineSettings fontSize={16} />
+            <MdOutlineSettings fontSize={16}/>
           </span>
         ),
       },
@@ -182,7 +155,7 @@ const AppKnowledgeBaseModule = ({
         label: 'common.edit',
         icon: (
           <span className="ant-icon">
-            <MdEdit fontSize={16} />
+            <MdEdit fontSize={16}/>
           </span>
         ),
       });
@@ -193,7 +166,7 @@ const AppKnowledgeBaseModule = ({
           label: 'Tasks',
           icon: (
             <span className="ant-icon">
-              <MdList fontSize={18} />
+              <MdList fontSize={18}/>
             </span>
           ),
         });
@@ -205,7 +178,7 @@ const AppKnowledgeBaseModule = ({
           label: 'knowledgeBase.upload',
           icon: (
             <span className="ant-icon">
-              <MdArrowUpward fontSize={16} />
+              <MdArrowUpward fontSize={16}/>
             </span>
           ),
         });
@@ -215,7 +188,7 @@ const AppKnowledgeBaseModule = ({
           label: 'knowledgeBase.editSchema',
           icon: (
             <span className="ant-icon">
-              <MdEdit fontSize={16} />
+              <MdEdit fontSize={16}/>
             </span>
           ),
         });
@@ -237,7 +210,7 @@ const AppKnowledgeBaseModule = ({
       }
     }
 
-    return { items: options, connector };
+    return {items: options, connector};
   }, [selectedRowKeys, currentKb, indexLoading]);
 
   useEffect(() => {
@@ -293,7 +266,7 @@ const AppKnowledgeBaseModule = ({
       currentKb?.final_role !== ACCESS_ROLE.GUEST &&
       isAuthenticated
     ) {
-      setQueryParams({ page: page, page_size: PAGE_SIZE });
+      setQueryParams({page: page, page_size: PAGE_SIZE});
     }
   }, [page, currentKb?.token, isAuthenticated]);
 
@@ -316,7 +289,7 @@ const AppKnowledgeBaseModule = ({
         });
       }
 
-      const schema = responseData.schemas || { properties: undefined };
+      const schema = responseData.schemas || {properties: undefined};
       if (schema.properties) {
         const formInputs = getKbInputsStructure(schema);
         setInputs((prevInputs) =>
@@ -357,7 +330,7 @@ const AppKnowledgeBaseModule = ({
   const onRenameColumn = (columnKey: string, newTitle: string) => {
     const updatedColumns = columns.map((column: any) => {
       if (column.dataIndex === columnKey) {
-        return { ...column, title: newTitle };
+        return {...column, title: newTitle};
       }
       return column;
     });
@@ -399,7 +372,7 @@ const AppKnowledgeBaseModule = ({
     } else if (item.key === 'delete_kb') {
       openConfirmModal(
         {
-          content: formatMessage({ id: 'identityStudio.deleteConfirm' }),
+          content: formatMessage({id: 'identityStudio.deleteConfirm'}),
           onOk: onDelete,
         },
         formatMessage,
@@ -483,13 +456,13 @@ const AppKnowledgeBaseModule = ({
                 </AppHeaderButton>
               )}*/}
               {connector ? (
-                <AppConnectorsSetting data={currentKb} setData={setCurrentKb} />
+                <AppConnectorsSetting data={currentKb} setData={setCurrentKb}/>
               ) : (
                 isEditAccessAllowed(undefined, undefined, currentKb) && (
                   <Tooltip
                     title={
                       isSyncing
-                        ? formatMessage({ id: 'knowledgeBase.clickToRefresh' })
+                        ? formatMessage({id: 'knowledgeBase.clickToRefresh'})
                         : ''
                     }
                   >
@@ -502,18 +475,16 @@ const AppKnowledgeBaseModule = ({
                       ghost
                     >
                       {isSyncing
-                        ? formatMessage({ id: 'knowledgeBase.syncing' })
-                        : currentKb?.content_type === 'email'
-                          ? formatMessage({ id: 'common.connect' })
-                          : formatMessage({ id: 'knowledgeBase.import' })}
+                        ? formatMessage({id: 'knowledgeBase.syncing'})
+                        : formatMessage({id: 'knowledgeBase.import'})}
 
                       {isSyncing && (
                         <AppDotFlashing
-                          style={{ display: 'flex', marginLeft: 0, width: 28 }}
+                          style={{display: 'flex', marginLeft: 0, width: 28}}
                         />
                       )}
 
-                      {isSyncing && <MdRefresh fontSize={18} />}
+                      {isSyncing && <MdRefresh fontSize={18}/>}
                     </AppHeaderButton>
                   </Tooltip>
                 )
@@ -522,7 +493,7 @@ const AppKnowledgeBaseModule = ({
                 menu={{
                   items: items.map((item) => ({
                     ...item,
-                    label: formatMessage({ id: item.label }),
+                    label: formatMessage({id: item.label}),
                   })),
                   onClick: onMenuClick,
                 }}
@@ -530,7 +501,7 @@ const AppKnowledgeBaseModule = ({
                 trigger={['click']}
               >
                 <IconWrapper>
-                  <MdOutlineSettings fontSize={24} />
+                  <MdOutlineSettings fontSize={24}/>
                 </IconWrapper>
               </Dropdown>
             </Fragment>
@@ -538,11 +509,11 @@ const AppKnowledgeBaseModule = ({
         }
       />
 
-      <AppPageContainer style={{ position: 'relative' }}>
+      <AppPageContainer style={{position: 'relative'}}>
         {currentKb?.final_role === ACCESS_ROLE.GUEST ? (
           <StyledNoAccessContainer>
             <StyledNoAccessText level={2}>
-              {formatMessage({ id: 'knowledgeBase.noAccess' })}
+              {formatMessage({id: 'knowledgeBase.noAccess'})}
             </StyledNoAccessText>
           </StyledNoAccessContainer>
         ) : (
@@ -584,26 +555,18 @@ const AppKnowledgeBaseModule = ({
               (currentKb &&
               isEditAccessAllowed(undefined, undefined, currentKb) ? (
                 <StyledUploadRoot>
-                  {currentKb?.content_type === 'email' ? (
-                    <Connectors
-                      currentKb={currentKb}
-                      connector={connector}
-                      setOpenConnectors={setOpenConnectors}
-                    />
-                  ) : (
-                    <UploadDocuments
-                      currentKb={currentKb}
-                      onSaved={() => {
-                        reCallAPI();
-                        getSyncStatus();
-                      }}
-                    />
-                  )}
+                  <UploadDocuments
+                    currentKb={currentKb}
+                    onSaved={() => {
+                      reCallAPI();
+                      getSyncStatus();
+                    }}
+                  />
                 </StyledUploadRoot>
               ) : (
                 <AppEmptyWorkSpace type="kb">
                   <Button type="primary" onClick={() => setAddNew(true)}>
-                    {formatMessage({ id: 'knowledgeBase.addKnowledgeBase' })}
+                    {formatMessage({id: 'knowledgeBase.addKnowledgeBase'})}
                   </Button>
                 </AppEmptyWorkSpace>
               ))
@@ -615,8 +578,8 @@ const AppKnowledgeBaseModule = ({
       <AppDrawer
         title={
           currentKb?.content_type === 'email'
-            ? formatMessage({ id: 'common.connect' })
-            : formatMessage({ id: 'knowledgeBase.import' })
+            ? formatMessage({id: 'common.connect'})
+            : formatMessage({id: 'knowledgeBase.import'})
         }
         open={openConnectors}
         onClose={() => setOpenConnectors(false)}
@@ -624,29 +587,20 @@ const AppKnowledgeBaseModule = ({
       >
         {openConnectors && currentKb && (
           <Fragment>
-            {currentKb?.content_type === 'email' ? (
-              <AppConnectorList
-                defaultPayload={{
-                  redirect_route: `${SITE_URL}/knowledge-bases/${currentKb.slug}/`,
-                  kb: currentKb.slug,
-                }}
-              />
-            ) : (
-              <UploadDocuments
-                currentKb={currentKb}
-                onSaved={() => {
-                  reCallAPI();
-                  setOpenConnectors(false);
-                  getSyncStatus();
-                }}
-              />
-            )}
+            <UploadDocuments
+              currentKb={currentKb}
+              onSaved={() => {
+                reCallAPI();
+                setOpenConnectors(false);
+                getSyncStatus();
+              }}
+            />
           </Fragment>
         )}
       </AppDrawer>
 
       <AppDrawer
-        title={formatMessage({ id: 'knowledgeBase.uploadFiles' })}
+        title={formatMessage({id: 'knowledgeBase.uploadFiles'})}
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         size={560}
@@ -664,7 +618,7 @@ const AppKnowledgeBaseModule = ({
       </AppDrawer>
 
       <AppDrawer
-        title={formatMessage({ id: 'knowledgeBase.updateKnowledgeBase' })}
+        title={formatMessage({id: 'knowledgeBase.updateKnowledgeBase'})}
         open={isEditOpen}
         destroyOnHidden={true}
         onClose={() => setEditOpen(false)}
@@ -680,7 +634,7 @@ const AppKnowledgeBaseModule = ({
       </AppDrawer>
 
       <AppDrawer
-        title={formatMessage({ id: 'knowledgeBase.manageSchema' })}
+        title={formatMessage({id: 'knowledgeBase.manageSchema'})}
         open={isSchemaOpen}
         destroyOnHidden={true}
         onClose={() => setSchemaOpen(false)}
@@ -688,7 +642,7 @@ const AppKnowledgeBaseModule = ({
       >
         {isSchemaOpen && (
           <AppKbSchemaManager
-            title={formatMessage({ id: 'knowledgeBase.schema' })}
+            title={formatMessage({id: 'knowledgeBase.schema'})}
             currentKb={currentKb}
             inputs={inputs}
             setInputs={setInputs}
@@ -702,21 +656,21 @@ const AppKnowledgeBaseModule = ({
         open={selectedCol !== null}
         destroyOnHidden={true}
         onClose={() => setSelectedCol(null)}
-        styles={{ body: { padding: 0, position: 'relative' } }}
+        styles={{body: {padding: 0, position: 'relative'}}}
         width="60%"
       >
-        <AppColumnZoomView selectedCol={selectedCol} />
+        <AppColumnZoomView selectedCol={selectedCol}/>
       </AppDrawer>
 
       <AppDrawer
-        title={formatMessage({ id: 'knowledgeBase.tasks' })}
+        title={formatMessage({id: 'knowledgeBase.tasks'})}
         open={openTasks}
         destroyOnHidden={true}
         onClose={() => setOpenTasks(false)}
-        styles={{ body: { padding: 0, position: 'relative' } }}
+        styles={{body: {padding: 0, position: 'relative'}}}
         width="80%"
       >
-        <TasksView currentKb={currentKb} />
+        <TasksView currentKb={currentKb}/>
       </AppDrawer>
     </Fragment>
   );

@@ -1,34 +1,27 @@
 import styled from 'styled-components';
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  Input,
-  Select,
-  TimePicker,
-  Typography,
-} from 'antd';
-import { rgba } from 'polished';
+import {Button, Checkbox, DatePicker, Input, Select, TimePicker, Typography,} from 'antd';
+import {rgba} from 'polished';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type StyledRootProps = {
-  isOver?: boolean;};
+  isOver?: boolean;
+};
 
 export const StyledRoot = styled.div<StyledRootProps>`
   display: flex;
   align-items: center;
   gap: 12px;
   border-radius: 10px;
-  padding: ${({ isOver }) => (isOver ? `0 5px` : 0)};
-  background-color: ${({ isOver, theme }) =>
-    isOver
-      ? rgba(theme.palette.primary, 0.55)
-      : theme.palette.background.default};
+  padding: ${({isOver}) => (isOver ? `0 5px` : 0)};
+  background-color: ${({isOver, theme}) =>
+  isOver
+    ? rgba(theme.palette.primary, 0.55)
+    : theme.palette.background.default};
   transition: all 0.3s ease;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: ${({ isOver }) => (isOver ? `5px` : 0)};
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.sm}px) {
+    padding: ${({isOver}) => (isOver ? `5px` : 0)};
   }
 
   & .ant-row {
@@ -56,7 +49,7 @@ export const StyledContainer = styled.div`
   gap: 12px;
   flex-wrap: nowrap;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.md}px) {
     flex-wrap: wrap;
   }
 `;
@@ -67,18 +60,18 @@ export const StyledCheckbox = styled(Checkbox)`
     width: 20px;
     border-radius: 6px;
     border-width: 2px;
-    background-color: ${({ theme }) => theme.palette.common.white};
+    background-color: ${({theme}) => theme.palette.common.white};
 
     &::after {
       height: 12px;
       width: 6px;
       top: 44%;
-      border-color: ${({ theme }) => theme.palette.primary};
+      border-color: ${({theme}) => theme.palette.primary};
     }
   }
 
   &:hover .ant-checkbox-inner::after {
-    border-color: ${({ theme }) => theme.palette.common.white};
+    border-color: ${({theme}) => theme.palette.common.white};
   }
 `;
 
@@ -88,7 +81,7 @@ export const StyledActions = styled.div`
   justify-content: flex-end;
   gap: 5px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     justify-content: flex-start;
   }
 `;
@@ -119,7 +112,7 @@ export const StyledRowContainer = styled.div`
   gap: 12px;
   flex-wrap: nowrap;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.md}px) {
     flex-wrap: wrap;
   }
 `;
@@ -129,7 +122,7 @@ export const StyledActionsWrapper = styled(StyledInputWrapper)`
   width: 170px;
   margin: 0 0 0 auto;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.md}px) {
     width: 100%;
     justify-content: flex-start;
   }
@@ -139,7 +132,7 @@ export const StyledLabel = styled(Text)`
   min-width: 96px;
   display: none;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     display: inline-block;
   }
 `;

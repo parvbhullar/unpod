@@ -1,19 +1,19 @@
-import { Space, Typography } from 'antd';
-import { useIntl } from 'react-intl';
+import {Space, Typography} from 'antd';
+import {useIntl} from 'react-intl';
 
 import MemberRow from './MemberRow';
-import type { InvitedUsersListProps } from './types';
+import type {InvitedUsersListProps} from './types';
 
 import AppScrollbar from '../../third-party/AppScrollbar';
 
 const InvitedUsersList = ({
-  type,
-  currentData,
-  userList,
-  onRemoveInvitedMember,
-  onUpdateInvitedMember,
-}: InvitedUsersListProps) => {
-  const { formatMessage } = useIntl();
+                            type,
+                            currentData,
+                            userList,
+                            onRemoveInvitedMember,
+                            onUpdateInvitedMember,
+                          }: InvitedUsersListProps) => {
+  const {formatMessage} = useIntl();
 
   return (
     <>
@@ -45,7 +45,7 @@ const InvitedUsersList = ({
         </AppScrollbar>
       ) : (
         <Typography.Paragraph>
-          {formatMessage({ id: 'common.noUser' })}
+          {formatMessage({id: 'common.noUser'})}
         </Typography.Paragraph>
       )}
     </>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledRoot = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -9,11 +9,11 @@ export const StyledRoot = styled.div`
   height: calc(100vh - 10px);
   overflow-y: hidden;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     height: calc(100vh - 85px);
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     height: calc(100vh - 20px);
   }
 
@@ -39,12 +39,12 @@ export const StyledTabsWrapper = styled.div`
   scrollbar-width: thin;
 
   .ant-tabs-nav-wrap {
-    width: ${({ theme }) => theme.sizes.mainContentWidth};
+    width: ${({theme}) => theme.sizes.mainContentWidth};
     max-width: 100%;
     margin: 0 auto !important;
     flex: none !important;
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
       max-width: 100% !important;
     }
   }
@@ -74,9 +74,9 @@ export const StyledTabsWrapper = styled.div`
 export const StickyFooter = styled.div`
   position: sticky;
   bottom: 0;
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
   z-index: 99;
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto;
   padding-bottom: 14px;

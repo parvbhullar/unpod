@@ -1,10 +1,10 @@
-import { memo } from 'react';
+import {memo} from 'react';
 import styled from 'styled-components';
 
-import { useRovingTabIndex } from './hooks';
-import { getCellClassname, getCellStyle } from './utils';
-import type { CellRendererProps } from './models/data-grid';
-import { StyledCellWrapper } from './style/cell';
+import {useRovingTabIndex} from './hooks';
+import {getCellClassname, getCellStyle} from './utils';
+import type {CellRendererProps} from './models/data-grid';
+import {StyledCellWrapper} from './style/cell';
 
 export const StyledSummaryCell = styled(StyledCellWrapper)`
   &.summary-cell {
@@ -20,20 +20,21 @@ type SharedCellRendererProps<R, SR> = Pick<
 
 type SummaryCellProps<R, SR> = SharedCellRendererProps<R, SR> & {
   row: SR;
-  rowKeyId: string;};
+  rowKeyId: string;
+};
 
 function SummaryCell<R, SR>({
-  column,
-  colSpan,
-  row,
-  rowIdx,
-  isCellSelected,
-  selectCell,
-  rowKeyId,
-}: SummaryCellProps<R, SR>) {
-  const { tabIndex, childTabIndex, onFocus } =
+                              column,
+                              colSpan,
+                              row,
+                              rowIdx,
+                              isCellSelected,
+                              selectCell,
+                              rowKeyId,
+                            }: SummaryCellProps<R, SR>) {
+  const {tabIndex, childTabIndex, onFocus} =
     useRovingTabIndex(isCellSelected);
-  const { summaryCellClass } = column;
+  const {summaryCellClass} = column;
   const className = getCellClassname(
     column,
     'summary-cell',
@@ -63,7 +64,7 @@ function SummaryCell<R, SR>({
       onClick={onClick}
       onFocus={onFocus}
     >
-      {column.renderSummaryCell?.({ column, row, tabIndex: childTabIndex })}
+      {column.renderSummaryCell?.({column, row, tabIndex: childTabIndex})}
     </StyledSummaryCell>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import {useCallback} from 'react';
 import {
   selectAudioPlaylist,
   selectAudioPlaylistTrackByPeerID,
@@ -31,5 +31,5 @@ export const usePlaylistMusic = () => {
     [hmsActions, track]
   );
 
-  return { selection, peer, track, play, pause, setVolume };
+  return {selection, peer, track, play, pause, setVolume};
 };

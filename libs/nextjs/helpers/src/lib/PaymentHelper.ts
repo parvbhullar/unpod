@@ -1,4 +1,4 @@
-import { User } from '@unpod/constants';
+import {User} from '@unpod/constants';
 
 export type RazorpayResponse = {
   razorpay_payment_id?: string;

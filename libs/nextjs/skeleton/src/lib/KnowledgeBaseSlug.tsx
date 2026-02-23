@@ -1,17 +1,17 @@
 'use client';
 import React from 'react';
-import { Card, Space, Table } from 'antd';
+import {Card, Space, Table} from 'antd';
 import styled from 'styled-components';
 import SkeletonAvatar from './common/SkeletonAvatar';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from './common/SkeletonButton';
 
 const StyledContainer = styled.div`
   flex: 1;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius}
-    ${({ theme }) => theme.component.card.borderRadius} 0 0;
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-radius: ${({theme}) => theme.component.card.borderRadius}
+    ${({theme}) => theme.component.card.borderRadius} 0 0;
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
 
   .ant-table-tbody > tr > td {
     border-bottom: none !important;
@@ -25,7 +25,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledCard = styled(Card)`
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border-radius: ${({theme}) => theme.radius.base}px;
   .ant-card-body {
     padding: 12px !important;
   }
@@ -33,8 +33,8 @@ const StyledCard = styled(Card)`
 
 const StyledCardContainer = styled.div`
   padding: 24px;
-  border: 2px dashed ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: 2px dashed ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,15 +51,16 @@ const style = {
 };
 
 type ButtonSkeletonProps = {
-  width?: number;};
+  width?: number;
+};
 
-const ButtonSkeleton: React.FC<ButtonSkeletonProps> = ({ width = 100 }) => (
-  <SkeletonButton size="default" style={{ width: width, height: 20 }} />
+const ButtonSkeleton: React.FC<ButtonSkeletonProps> = ({width = 100}) => (
+  <SkeletonButton size="default" style={{width: width, height: 20}}/>
 );
 
 const columns = [
   {
-    title: <SkeletonAvatar size="small" />,
+    title: <SkeletonAvatar size="small"/>,
     dataIndex: 'id',
     key: 'id',
   },
@@ -67,92 +68,92 @@ const columns = [
     title: (
       <div style={style}>
         Name
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'name',
     key: 'name',
-    render: () => <ButtonSkeleton width={70} />,
+    render: () => <ButtonSkeleton width={70}/>,
   },
   {
     title: (
       <div style={style}>
         Email
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'email',
     key: 'email',
-    render: () => <ButtonSkeleton width={70} />,
+    render: () => <ButtonSkeleton width={70}/>,
   },
   {
     title: (
       <div style={style}>
         Contact Number
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'contact_number',
     key: 'contact_number',
-    render: () => <ButtonSkeleton width={150} />,
+    render: () => <ButtonSkeleton width={150}/>,
   },
   {
     title: (
       <div style={style}>
-        Alternate Contact Number <SkeletonAvatar />
+        Alternate Contact Number <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'alternate_contact_number',
     key: 'alternate_contact_number',
-    render: () => <ButtonSkeleton width={220} />,
+    render: () => <ButtonSkeleton width={220}/>,
   },
   {
     title: (
       <div style={style}>
         Occupation
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'occupation',
     key: 'occupation',
-    render: () => <ButtonSkeleton width={120} />,
+    render: () => <ButtonSkeleton width={120}/>,
   },
   {
     title: (
       <div style={style}>
         Company Name
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'company_name',
     key: 'company_name',
-    render: () => <ButtonSkeleton width={145} />,
+    render: () => <ButtonSkeleton width={145}/>,
   },
   {
     title: (
       <div style={style}>
         Address
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'address',
     key: 'address',
-    render: () => <ButtonSkeleton width={90} />,
+    render: () => <ButtonSkeleton width={90}/>,
   },
   {
     title: (
       <div style={style}>
         About
-        <SkeletonAvatar />
+        <SkeletonAvatar/>
       </div>
     ),
     dataIndex: 'about',
     key: 'about',
-    render: () => <ButtonSkeleton width={70} />,
+    render: () => <ButtonSkeleton width={70}/>,
   },
 ];
 
-const skeletonData = Array.from({ length: 6 }).map((_, i) => ({
+const skeletonData = Array.from({length: 6}).map((_, i) => ({
   key: i,
 }));
 
@@ -171,14 +172,16 @@ const LoadingTable: React.FC = () => {
 };
 
 type CurrentKb = {
-  content_type?: string;};
+  content_type?: string;
+};
 
 type LoadingConnectorsOrUploadProps = {
-  currentKb?: CurrentKb;};
+  currentKb?: CurrentKb;
+};
 
 const LoadingConnectorsOrUpload: React.FC<LoadingConnectorsOrUploadProps> = ({
-  currentKb,
-}) => {
+                                                                               currentKb,
+                                                                             }) => {
   return currentKb?.content_type === 'email' ? (
     <Card
       style={{
@@ -191,10 +194,10 @@ const LoadingConnectorsOrUpload: React.FC<LoadingConnectorsOrUploadProps> = ({
       }}
     >
       <Space orientation="vertical" align="center" size="large">
-        <SkeletonButton style={{ width: 100, height: 32 }} />
+        <SkeletonButton style={{width: 100, height: 32}}/>
 
         <Space size="large">
-          {Array.from({ length: 2 }).map((_, i) => (
+          {Array.from({length: 2}).map((_, i) => (
             <StyledCard key={i}>
               <div
                 style={{
@@ -208,9 +211,9 @@ const LoadingConnectorsOrUpload: React.FC<LoadingConnectorsOrUploadProps> = ({
                 <SkeletonAvatar
                   shape="square"
                   size={30}
-                  style={{ marginBottom: 8 }}
+                  style={{marginBottom: 8}}
                 />
-                <SkeletonButton style={{ width: 70, height: 16 }} />
+                <SkeletonButton style={{width: 70, height: 16}}/>
               </div>
             </StyledCard>
           ))}
@@ -234,14 +237,14 @@ const LoadingConnectorsOrUpload: React.FC<LoadingConnectorsOrUploadProps> = ({
         }}
       >
         <StyledCardContainer>
-          <SkeletonAvatar size={48} style={{ marginBottom: 8 }} />
-          <SkeletonInput style={{ width: 300, height: 20 }} size="small" />
+          <SkeletonAvatar size={48} style={{marginBottom: 8}}/>
+          <SkeletonInput style={{width: 300, height: 20}} size="small"/>
         </StyledCardContainer>
-        <SkeletonButton style={{ width: 200, height: 32 }} />
+        <SkeletonButton style={{width: 200, height: 32}}/>
       </div>
     </Card>
   );
 };
 
-export { LoadingConnectorsOrUpload };
-export { LoadingTable };
+export {LoadingConnectorsOrUpload};
+export {LoadingTable};

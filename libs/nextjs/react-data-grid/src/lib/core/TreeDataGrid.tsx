@@ -1,8 +1,8 @@
-import type { Key, RefAttributes } from 'react';
-import { forwardRef, useCallback, useMemo } from 'react';
+import type {Key, RefAttributes} from 'react';
+import {forwardRef, useCallback, useMemo} from 'react';
 
-import { useLatestFunc } from './hooks';
-import { assertIsValidKeyGetter, isCtrlKeyHeldDown } from './utils';
+import {useLatestFunc} from './hooks';
+import {assertIsValidKeyGetter, isCtrlKeyHeldDown} from './utils';
 import type {
   CellKeyboardEvent,
   CellKeyDownArgs,
@@ -14,13 +14,13 @@ import type {
   RowHeightArgs,
   RowsChangeData,
 } from './models/data-grid';
-import { renderToggleGroup } from './cellRenderers';
-import type { DataGridHandle, DataGridProps } from './DataGrid';
+import {renderToggleGroup} from './cellRenderers';
+import type {DataGridHandle, DataGridProps} from './DataGrid';
 import DataGrid from './DataGrid';
-import { useDefaultRenderers } from './DataGridDefaultRenderersProvider';
+import {useDefaultRenderers} from './DataGridDefaultRenderersProvider';
 import GroupedRow from './GroupRow';
-import { defaultRenderRow } from './Row';
-import { SELECT_COLUMN_KEY } from './constants/AppConst';
+import {defaultRenderRow} from './Row';
+import {SELECT_COLUMN_KEY} from './constants/AppConst';
 
 export type TreeDataGridProps<R, SR = unknown, K extends Key = Key> = Omit<
   DataGridProps<R, SR, K>,
@@ -34,7 +34,8 @@ export type TreeDataGridProps<R, SR = unknown, K extends Key = Key> = Omit<
     columnKey: string,
   ) => Record<string, readonly R[]>;
   expandedGroupIds: ReadonlySet<unknown>;
-  onExpandedGroupIdsChange: (expandedGroupIds: Set<unknown>) => void;};
+  onExpandedGroupIdsChange: (expandedGroupIds: Set<unknown>) => void;
+};
 
 type GroupByDictionary<TRow> = Record<
   string,
@@ -74,9 +75,9 @@ function TreeDataGrid<R, SR, K extends Key>(
   const rightKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
   const toggleGroupLatest = useLatestFunc(toggleGroup);
 
-  const { columns, groupBy } = useMemo(() => {
+  const {columns, groupBy} = useMemo(() => {
     const columns = [...rawColumns].sort(
-      ({ dataIndex: aKey }, { dataIndex: bKey }) => {
+      ({dataIndex: aKey}, {dataIndex: bKey}) => {
         // Sort select column first:
         if (aKey === SELECT_COLUMN_KEY) return -1;
         if (bKey === SELECT_COLUMN_KEY) return 1;
@@ -110,7 +111,7 @@ function TreeDataGrid<R, SR, K extends Key>(
       }
     }
 
-    return { columns, groupBy };
+    return {columns, groupBy};
   }, [rawColumns, rawGroupBy]);
 
   const [groupedRows, rowsCount] = useMemo(() => {
@@ -131,10 +132,10 @@ function TreeDataGrid<R, SR, K extends Key>(
           remainingGroupByKeys.length === 0
             ? [childRows, childRows.length]
             : groupRows(
-                childRows,
-                remainingGroupByKeys,
-                startRowIndex + groupRowsCount + 1,
-              ); // 1 for parent row
+              childRows,
+              remainingGroupByKeys,
+              startRowIndex + groupRowsCount + 1,
+            ); // 1 for parent row
         groups[key] = {
           childRows,
           childGroups,
@@ -171,7 +172,7 @@ function TreeDataGrid<R, SR, K extends Key>(
         const id =
           parentId !== undefined ? `${parentId}__${groupKey}` : groupKey;
         const isExpanded = expandedGroupIds.has(id);
-        const { childRows, childGroups, startRowIndex } = rows[groupKey];
+        const {childRows, childGroups, startRowIndex} = rows[groupKey];
 
         const groupRow: GroupRow<R> = {
           id,
@@ -205,9 +206,9 @@ function TreeDataGrid<R, SR, K extends Key>(
     if (typeof rawRowHeight === 'function') {
       return (row: R | GroupRow<R>): number => {
         if (isGroupRow(row)) {
-          return rawRowHeight({ type: 'GROUP', row });
+          return rawRowHeight({type: 'GROUP', row});
         }
-        return rawRowHeight({ type: 'ROW', row });
+        return rawRowHeight({type: 'ROW', row});
       };
     }
 
@@ -244,7 +245,7 @@ function TreeDataGrid<R, SR, K extends Key>(
 
       const parentRowAndIndex = getParentRowAndIndex(row);
       if (parentRowAndIndex !== undefined) {
-        const { startRowIndex, childRows } = parentRowAndIndex[0];
+        const {startRowIndex, childRows} = parentRowAndIndex[0];
         const groupIndex = childRows.indexOf(row);
         return startRowIndex + groupIndex + 1;
       }
@@ -315,7 +316,7 @@ function TreeDataGrid<R, SR, K extends Key>(
     if (event.isGridDefaultPrevented()) return;
 
     if (args.mode === 'EDIT') return;
-    const { column, rowIdx, selectCell } = args;
+    const {column, rowIdx, selectCell} = args;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const idx = column?.idx ?? -1;
     const row = rows[rowIdx];
@@ -343,7 +344,7 @@ function TreeDataGrid<R, SR, K extends Key>(
       const parentRowAndIndex = getParentRowAndIndex(row);
       if (parentRowAndIndex !== undefined) {
         event.preventGridDefault();
-        selectCell({ idx, rowIdx: parentRowAndIndex[1] });
+        selectCell({idx, rowIdx: parentRowAndIndex[1]});
       }
     }
 
@@ -358,7 +359,7 @@ function TreeDataGrid<R, SR, K extends Key>(
 
   function handleRowsChange(
     updatedRows: R[],
-    { indexes, column }: RowsChangeData<R, SR>,
+    {indexes, column}: RowsChangeData<R, SR>,
   ) {
     if (!onRowsChange) return;
     const updatedRawRows = [...rawRows];
@@ -402,7 +403,7 @@ function TreeDataGrid<R, SR, K extends Key>(
     }: RenderRowProps<R, SR>,
   ) {
     if (isGroupRow(row)) {
-      const { startRowIndex } = row;
+      const {startRowIndex} = row;
       return (
         <GroupedRow
           key={key}
@@ -418,7 +419,7 @@ function TreeDataGrid<R, SR, K extends Key>(
     let ariaRowIndex = rowProps['aria-rowindex'];
     const parentRowAndIndex = getParentRowAndIndex(row);
     if (parentRowAndIndex !== undefined) {
-      const { startRowIndex, childRows } = parentRowAndIndex[0];
+      const {startRowIndex, childRows} = parentRowAndIndex[0];
       const groupIndex = childRows.indexOf(row);
       ariaRowIndex =
         startRowIndex + headerAndTopSummaryRowsCount + groupIndex + 2;

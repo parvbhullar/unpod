@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Result } from 'antd';
-import { useIntl } from 'react-intl';
+import {Button, Result} from 'antd';
+import {useIntl} from 'react-intl';
 
-const SuccessResult = ({ onCloseClick, ...restProps }) => {
+const SuccessResult = ({onCloseClick, ...restProps}) => {
   const {formatMessage} = useIntl();
 
   return (
@@ -11,7 +11,7 @@ const SuccessResult = ({ onCloseClick, ...restProps }) => {
       status="success"
       extra={[
         <Button type="primary" key="close" onClick={onCloseClick}>
-          {formatMessage({ id: 'common.close' })}
+          {formatMessage({id: 'common.close'})}
         </Button>,
       ]}
       {...restProps}

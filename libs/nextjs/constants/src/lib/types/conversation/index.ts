@@ -1,6 +1,6 @@
-import type { Organization } from '../organization';
-import type { Spaces } from '../space';
-import type { Thread } from '../thread';
+import type {Organization} from '../organization';
+import type {Spaces} from '../space';
+import type {Thread} from '../thread';
 
 export type Conversation = Thread & {
   user?: {

@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
 type AppAnimateGroupProps = {
   children?: ReactNode;
   [key: string]: unknown;
 };
 
-function AppAnimateGroup({ children }: AppAnimateGroupProps) {
+function AppAnimateGroup({children}: AppAnimateGroupProps) {
   return <>{children}</>;
 }
 

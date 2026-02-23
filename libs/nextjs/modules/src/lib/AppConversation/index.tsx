@@ -1,6 +1,6 @@
 'use client';
-import type { Dispatch, RefObject, SetStateAction } from 'react';
-import { Spin } from 'antd';
+import type {Dispatch, RefObject, SetStateAction} from 'react';
+import {Spin} from 'antd';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import {
@@ -14,9 +14,9 @@ import {
 } from './index.styled';
 import dayjs from 'dayjs';
 import AgentView from '../AppPost/AgentView';
-import { VoiceOverlay } from '../AppPost/index.styled';
-import { useIntl } from 'react-intl';
-import { useConversation } from './useConversation';
+import {VoiceOverlay} from '../AppPost/index.styled';
+import {useIntl} from 'react-intl';
+import {useConversation} from './useConversation';
 import UnpodLogoAnimation from '@unpod/components/common/UnpodLogoAnimation';
 
 type CurrentPost = {
@@ -62,19 +62,19 @@ type AppConversationProps = {
 };
 
 const AppConversation = ({
-  currentPost,
-  lastMessage,
-  thinking,
-  setThinking,
-  setStreaming,
-  setDataLoading,
-  sendJsonMessage,
-  onStartVoice,
-  voiceAssistant,
-  onLocationResponse,
-  isGeneratingToken,
-}: AppConversationProps) => {
-  const { formatMessage } = useIntl();
+                           currentPost,
+                           lastMessage,
+                           thinking,
+                           setThinking,
+                           setStreaming,
+                           setDataLoading,
+                           sendJsonMessage,
+                           onStartVoice,
+                           voiceAssistant,
+                           onLocationResponse,
+                           isGeneratingToken,
+                         }: AppConversationProps) => {
+  const {formatMessage} = useIntl();
 
   // Use custom hook for all business logic
   const {
@@ -127,9 +127,9 @@ const AppConversation = ({
     const yesterday = today.subtract(1, 'day');
 
     if (messageDate.isSame(today, 'day')) {
-      return formatMessage({ id: 'day.today' });
+      return formatMessage({id: 'day.today'});
     } else if (messageDate.isSame(yesterday, 'day')) {
-      return formatMessage({ id: 'day.yesterday' });
+      return formatMessage({id: 'day.yesterday'});
     } else if (messageDate.isAfter(today.subtract(7, 'days'))) {
       // Within last week - show day name
       return messageDate.format('dddd');
@@ -153,9 +153,9 @@ const AppConversation = ({
     <ConversationContainer>
       {/* Header */}
       <ConversationHeader>
-        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
+        <h3 style={{margin: 0, fontSize: '16px', fontWeight: 600}}>
           {currentPost.title ||
-            formatMessage({ id: 'conversation.conversation' })}
+            formatMessage({id: 'conversation.conversation'})}
         </h3>
       </ConversationHeader>
 
@@ -208,16 +208,16 @@ const AppConversation = ({
                   }}
                 />
               )}
-              <span style={{ visibility: loadingMore ? 'hidden' : 'visible' }}>
-                {formatMessage({ id: 'common.loadOlderMessages' })}
+              <span style={{visibility: loadingMore ? 'hidden' : 'visible'}}>
+                {formatMessage({id: 'common.loadOlderMessages'})}
               </span>
             </LoadMoreButton>
           )}
 
           {/* Loading Spinner */}
           {loading && items.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '40px' }}>
-              <Spin />
+            <div style={{textAlign: 'center', padding: '40px'}}>
+              <Spin/>
             </div>
           )}
 
@@ -262,10 +262,10 @@ const AppConversation = ({
           })}
           {/* Thinking Indicator */}
           {(thinking || isGeneratingToken) && streamItems.length === 0 && (
-            <UnpodLogoAnimation size={80} showOrbits={false} showGlow={true} />
+            <UnpodLogoAnimation size={80} showOrbits={false} showGlow={true}/>
           )}
 
-          <div ref={messagesEndRef} />
+          <div ref={messagesEndRef}/>
         </ConversationMessagesInner>
       </ConversationMessages>
 
@@ -280,7 +280,7 @@ const AppConversation = ({
         >
           {roomToken && connectionMode === 'voice' && (
             <VoiceOverlay show={!!roomToken}>
-              <AgentView spaceView={true} />
+              <AgentView spaceView={true}/>
             </VoiceOverlay>
           )}
         </ChatInput>

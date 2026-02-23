@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { TagWrapper, TonePersonalityContainer } from './index.styled';
-import { Typography } from 'antd';
+import {useEffect, useState} from 'react';
+import {TagWrapper, TonePersonalityContainer} from './index.styled';
+import {Typography} from 'antd';
 import CheckboxCard from './FeatureCard';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 type KeyFeatureProps = {
   apiFeatures?: Array<string | { label?: string }>;
@@ -13,11 +13,11 @@ type KeyFeatureProps = {
 };
 
 const KeyFeature = ({
-  apiFeatures = [],
-  label,
-  onChange,
-  initialSelected = [],
-}: KeyFeatureProps) => {
+                      apiFeatures = [],
+                      label,
+                      onChange,
+                      initialSelected = [],
+                    }: KeyFeatureProps) => {
   const [selected, setSelected] = useState<string[]>(initialSelected);
 
   const toggleFeature = (labelText: string) => {

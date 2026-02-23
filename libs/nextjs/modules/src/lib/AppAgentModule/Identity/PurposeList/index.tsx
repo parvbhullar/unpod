@@ -1,8 +1,8 @@
-import { Typography } from 'antd';
-import { TagWrapper, TonePersonalityContainer } from './index.styled';
+import {Typography} from 'antd';
+import {TagWrapper, TonePersonalityContainer} from './index.styled';
 import CheckboxCard from '../../../AppIdentityAgentModule/CheckboxCard';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 type PurposeItem = {
   key: string;
@@ -19,12 +19,12 @@ type PurposeListProps = {
 };
 
 const PurposeList = ({
-  value,
-  onChange,
-  items,
-  label,
-  title = true,
-}: PurposeListProps) => {
+                       value,
+                       onChange,
+                       items,
+                       label,
+                       title = true,
+                     }: PurposeListProps) => {
   const isChecked = (labelToCheck: string) => {
     const found = items.find((item) => item.label === labelToCheck);
     return found?.key === value;

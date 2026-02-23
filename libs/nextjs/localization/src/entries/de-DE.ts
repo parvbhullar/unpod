@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import deMessages from '../locales/de_DE.json';
 import deDE from 'antd/lib/locale/de_DE';
 

@@ -1,34 +1,26 @@
-import type { MouseEvent } from 'react';
+import type {MouseEvent} from 'react';
 
-import { Badge, Space, Tooltip, Typography } from 'antd';
-import { FaPlay } from 'react-icons/fa';
+import {Badge, Space, Tooltip, Typography} from 'antd';
+import {FaPlay} from 'react-icons/fa';
 import AppImage from '../../../next/AppImage';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
-import { getImageUrl } from '@unpod/helpers/UrlHelper';
-import {
-  StyledMeta,
-  StyledPlayWrapper,
-  StyledPostMedia,
-  StyledRoot,
-  StyledThumbnailWrapper,
-} from './index.styled';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
+import {getImageUrl} from '@unpod/helpers/UrlHelper';
+import {StyledMeta, StyledPlayWrapper, StyledPostMedia, StyledRoot, StyledThumbnailWrapper,} from './index.styled';
 import AppLink from '../../../next/AppLink';
-import { useIntl } from 'react-intl';
-import type { Thread } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {Thread} from '@unpod/constants/types';
 
-const { Paragraph, Text, Title } = Typography;
+const {Paragraph, Text, Title} = Typography;
 
 type AppPostCardProps = {
   thread: Thread;
-  onThreadClick: (thread: Thread) => void;};
+  onThreadClick: (thread: Thread) => void;
+};
 
-const AppPostCard = ({ thread, onThreadClick }: AppPostCardProps) => {
-  const { formatMessage } = useIntl();
+const AppPostCard = ({thread, onThreadClick}: AppPostCardProps) => {
+  const {formatMessage} = useIntl();
   const onTitleClick = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
@@ -39,9 +31,9 @@ const AppPostCard = ({ thread, onThreadClick }: AppPostCardProps) => {
   );
 
   const postTitle =
-    thread.title === formatMessage({ id: 'thread.noTitle' }) ||
-    thread.title === formatMessage({ id: 'thread.writeTitle' }) ||
-    thread.title === formatMessage({ id: 'thread.uploadTitle' })
+    thread.title === formatMessage({id: 'thread.noTitle'}) ||
+    thread.title === formatMessage({id: 'thread.writeTitle'}) ||
+    thread.title === formatMessage({id: 'thread.uploadTitle'})
       ? getStringFromHtml(thread.content || thread.block?.data?.content)
       : thread.title;
 
@@ -65,18 +57,18 @@ const AppPostCard = ({ thread, onThreadClick }: AppPostCardProps) => {
           </Title>
         </AppLink>
 
-        <Paragraph className="mb-0" type="secondary" ellipsis={{ rows: 2 }}>
+        <Paragraph className="mb-0" type="secondary" ellipsis={{rows: 2}}>
           {getStringFromHtml(thread.content || thread.block?.data?.content)}
         </Paragraph>
-        <Paragraph style={{ fontSize: 13, marginBottom: 0 }}>
+        <Paragraph style={{fontSize: 13, marginBottom: 0}}>
           <Space align="center" wrap={true}>
             <Text className="text-capitalize">{thread?.user?.full_name}</Text>
             <Tooltip title={thread?.privacy_type}>
-              <span style={{ display: 'inline-flex', marginTop: 6 }}>
+              <span style={{display: 'inline-flex', marginTop: 6}}>
                 {getPostIcon(thread?.privacy_type || '')}
               </span>
             </Tooltip>
-            {thread.seen ? null : <Badge color="#796cff" />}
+            {thread.seen ? null : <Badge color="#796cff"/>}
 
             {thread.created ? (
               <Tooltip
@@ -86,7 +78,7 @@ const AppPostCard = ({ thread, onThreadClick }: AppPostCardProps) => {
                   'hh:mm A . DD MMM, YYYY',
                 )}
               >
-                <Text type="secondary" style={{ fontSize: 12 }}>
+                <Text type="secondary" style={{fontSize: 12}}>
                   {getTimeFromNow(thread.created)}
                 </Text>
               </Tooltip>
@@ -114,7 +106,7 @@ const AppPostCard = ({ thread, onThreadClick }: AppPostCardProps) => {
                 objectFit="cover"
               />
               <StyledPlayWrapper>
-                <FaPlay />
+                <FaPlay/>
               </StyledPlayWrapper>
             </StyledThumbnailWrapper>
           ) : (

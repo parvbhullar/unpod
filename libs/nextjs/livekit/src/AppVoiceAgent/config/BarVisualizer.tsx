@@ -1,11 +1,11 @@
-import React, { forwardRef, ReactNode } from 'react';
-import styled, { css } from 'styled-components';
+import React, {forwardRef, ReactNode} from 'react';
+import styled, {css} from 'styled-components';
 import {
   TrackReferenceOrPlaceholder,
   useMaybeTrackRefContext,
   useMultibandTrackVolume,
 } from '@livekit/components-react';
-import { useBarAnimator } from './useBarAnimator';
+import {useBarAnimator} from './useBarAnimator';
 
 const Container = styled.div`
   display: flex;
@@ -19,13 +19,13 @@ const Bar = styled.span.withConfig({
     prop !== 'highlighted' && prop !== 'height' && prop !== 'theme',
 })<{ highlighted?: boolean; height?: number }>`
   width: 4px;
-  background-color: ${({ highlighted, theme }) =>
-    highlighted ? theme?.palette.secondary : '#6b7280'};
+  background-color: ${({highlighted, theme}) =>
+  highlighted ? theme?.palette.secondary : '#6b7280'};
   border-radius: 2px;
   transition:
     height 0.2s ease,
     background-color 0.3s ease;
-  ${({ height }) => css`
+  ${({height}) => css`
     height: ${height}%;
   `}
 `;
@@ -50,7 +50,7 @@ const cloneSingleChild = (
 ) => {
   return React.Children.map(children, (child) => {
     if (React.isValidElement(child) && React.Children.only(children)) {
-      return React.cloneElement(child, { ...props, key });
+      return React.cloneElement(child, {...props, key});
     }
     return child;
   });
@@ -70,7 +70,7 @@ type BarVisualizerProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 export const BarVisualizer = forwardRef<HTMLDivElement, BarVisualizerProps>(
-  ({ state, options, barCount = 15, trackRef, children, ...props }, ref) => {
+  ({state, options, barCount = 15, trackRef, children, ...props}, ref) => {
     let trackReference: TrackReferenceOrPlaceholder | undefined =
       useMaybeTrackRefContext();
 
@@ -106,7 +106,7 @@ export const BarVisualizer = forwardRef<HTMLDivElement, BarVisualizerProps>(
               {
                 'data-lk-highlighted': highlighted,
                 'data-lk-bar-index': idx,
-                style: { height: `${height}%` },
+                style: {height: `${height}%`},
               },
               idx,
             );

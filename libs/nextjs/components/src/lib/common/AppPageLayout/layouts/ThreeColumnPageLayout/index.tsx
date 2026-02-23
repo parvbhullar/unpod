@@ -1,24 +1,21 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type {HTMLAttributes, ReactNode} from 'react';
 
-import {
-  type LayoutType,
-  StyledMainContainer,
-  StyledPageRoot,
-} from './index.styled';
+import {type LayoutType, StyledMainContainer, StyledPageRoot,} from './index.styled';
 
 type ThreeColumnPageLayoutProps = HTMLAttributes<HTMLDivElement> & {
   sidebar?: ReactNode;
   children?: ReactNode;
   rightSidebar?: ReactNode;
-  layoutType?: LayoutType;};
+  layoutType?: LayoutType;
+};
 
 const ThreeColumnPageLayout = ({
-  sidebar,
-  children,
-  rightSidebar,
-  layoutType = 'three-columns',
-  ...restProps
-}: ThreeColumnPageLayoutProps) => {
+                                 sidebar,
+                                 children,
+                                 rightSidebar,
+                                 layoutType = 'three-columns',
+                                 ...restProps
+                               }: ThreeColumnPageLayoutProps) => {
   return (
     <StyledPageRoot $layoutType={layoutType} {...restProps}>
       {sidebar}

@@ -1,13 +1,10 @@
 import React from 'react';
-import {
-  selectConnectionQualityByPeerID,
-  useHMSStore,
-} from '@100mslive/react-sdk';
+import {selectConnectionQualityByPeerID, useHMSStore,} from '@100mslive/react-sdk';
 
-import { getColor, getTooltipText } from './connectionQualityUtils';
-import { Tooltip } from 'antd';
+import {getColor, getTooltipText} from './connectionQualityUtils';
+import {Tooltip} from 'antd';
 import styled from 'styled-components';
-import { MdOutlineNetworkLocked } from 'react-icons/md';
+import {MdOutlineNetworkLocked} from 'react-icons/md';
 
 const Wrapper = styled.span`
   display: flex;
@@ -15,7 +12,7 @@ const Wrapper = styled.span`
   justify-content: center;
 `;
 
-export const ConnectionIndicator = ({ peerId, isTile = false }) => {
+export const ConnectionIndicator = ({peerId, isTile = false}) => {
   const downlinkQuality = useHMSStore(
     selectConnectionQualityByPeerID(peerId)
   )?.downlinkQuality;
@@ -28,10 +25,10 @@ export const ConnectionIndicator = ({ peerId, isTile = false }) => {
       <Tooltip title={getTooltipText(downlinkQuality)}>
         <Wrapper
           isTile={isTile}
-          css={{ color: '#ED4C5A' }}
+          css={{color: '#ED4C5A'}}
           data-testid="tile_network"
         >
-          <MdOutlineNetworkLocked />
+          <MdOutlineNetworkLocked/>
         </Wrapper>
       </Tooltip>
     );

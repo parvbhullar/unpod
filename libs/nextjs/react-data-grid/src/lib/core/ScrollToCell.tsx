@@ -1,17 +1,18 @@
-import { useRef } from 'react';
+import {useRef} from 'react';
 
-import { useLayoutEffect } from './hooks';
-import { scrollIntoView } from './utils';
+import {useLayoutEffect} from './hooks';
+import {scrollIntoView} from './utils';
 
 export type PartialPosition = {
   readonly idx?: number | undefined;
-  readonly rowIdx?: number | undefined;};
+  readonly rowIdx?: number | undefined;
+};
 
 export default function ScrollToCell({
-  scrollToPosition: { idx, rowIdx },
-  gridElement,
-  setScrollToCellPosition,
-}: {
+                                       scrollToPosition: {idx, rowIdx},
+                                       gridElement,
+                                       setScrollToCellPosition,
+                                     }: {
   scrollToPosition: PartialPosition;
   gridElement: HTMLDivElement;
   setScrollToCellPosition: (cell: null) => void;

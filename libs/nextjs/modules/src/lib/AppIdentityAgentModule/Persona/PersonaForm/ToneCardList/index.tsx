@@ -1,8 +1,8 @@
-import { Typography } from 'antd';
-import { TagWrapper, TonePersonalityContainer } from './index.styled';
+import {Typography} from 'antd';
+import {TagWrapper, TonePersonalityContainer} from './index.styled';
 import ToneCard from './ToneCard';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 type ToneItem = {
   key: string;
@@ -18,7 +18,7 @@ type ToneCardListProps = {
   label: string;
 };
 
-const ToneCardList = ({ value, onChange, items, label }: ToneCardListProps) => {
+const ToneCardList = ({value, onChange, items, label}: ToneCardListProps) => {
   const onChangePersonality = (selectedKey: string) => {
     const newValue = value === selectedKey ? '' : selectedKey;
     onChange?.(newValue);

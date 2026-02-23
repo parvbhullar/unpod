@@ -1,9 +1,9 @@
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { useRef, useState } from 'react';
-import { Button, Tooltip } from 'antd';
-import { MdOutlinePause, MdOutlinePlayArrow } from 'react-icons/md';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {useRef, useState} from 'react';
+import {Button, Tooltip} from 'antd';
+import {MdOutlinePause, MdOutlinePlayArrow} from 'react-icons/md';
 
-const PlayButton = ({ item }: { item: any }) => {
+const PlayButton = ({item}: { item: any }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -52,9 +52,9 @@ const PlayButton = ({ item }: { item: any }) => {
       <Button
         shape="circle"
         size="small"
-        icon={<MdOutlinePause fontSize={18} />}
+        icon={<MdOutlinePause fontSize={18}/>}
         onClick={onPlaySound}
-        style={{ color: 'red' }} // Change color to indicate pause state
+        style={{color: 'red'}} // Change color to indicate pause state
       />
     </Tooltip>
   ) : (
@@ -62,7 +62,7 @@ const PlayButton = ({ item }: { item: any }) => {
       <Button
         shape="circle"
         size="small"
-        icon={<MdOutlinePlayArrow fontSize={18} />}
+        icon={<MdOutlinePlayArrow fontSize={18}/>}
         onClick={onPlaySound}
         loading={loading}
       />

@@ -1,9 +1,6 @@
-import React, { MouseEventHandler, ReactNode } from 'react';
-import { Button, Spin } from 'antd';
-import {
-  StyledEmptyListContainer,
-  StyledEmptyListContainerFlex,
-} from './index.styled';
+import React, {MouseEventHandler, ReactNode} from 'react';
+import {Button, Spin} from 'antd';
+import {StyledEmptyListContainer, StyledEmptyListContainerFlex,} from './index.styled';
 
 type ListEmptyResultProps = {
   loading?: boolean;
@@ -14,25 +11,26 @@ type ListEmptyResultProps = {
   data?: unknown[];
   emptyContainerStyle?: React.CSSProperties;
   hideNoDataMessage?: boolean;
-  initialLoader?: ReactNode;};
+  initialLoader?: ReactNode;
+};
 
 const ListEmptyResult: React.FC<ListEmptyResultProps> = ({
-  loading,
-  title,
-  actionTitle,
-  noDataMessage = 'No data found',
-  onClick,
-  data,
-  emptyContainerStyle,
-  hideNoDataMessage,
-  initialLoader,
-}) => {
+                                                           loading,
+                                                           title,
+                                                           actionTitle,
+                                                           noDataMessage = 'No data found',
+                                                           onClick,
+                                                           data,
+                                                           emptyContainerStyle,
+                                                           hideNoDataMessage,
+                                                           initialLoader,
+                                                         }) => {
   if (loading && initialLoader && data?.length === 0) {
     return <>{initialLoader}</>;
   } else if (loading) {
     return (
       <StyledEmptyListContainer style={emptyContainerStyle}>
-        <Spin />
+        <Spin/>
       </StyledEmptyListContainer>
     );
   } else {
@@ -44,7 +42,7 @@ const ListEmptyResult: React.FC<ListEmptyResultProps> = ({
         {actionTitle ? (
           <Button
             type="primary"
-            style={{ marginTop: 30, minWidth: 150 }}
+            style={{marginTop: 30, minWidth: 150}}
             onClick={onClick}
           >
             {actionTitle}

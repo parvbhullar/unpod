@@ -4,7 +4,7 @@ import ContentWrapper from '../../components/ContentWrapper';
 const PeopleOverview = () => {
   return (
     <ContentWrapper>
-      <Summary />
+      <Summary/>
     </ContentWrapper>
   );
 };

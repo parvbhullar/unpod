@@ -1,5 +1,5 @@
-import { Card, Divider, Skeleton } from 'antd';
-import { SkeletonInput } from './common/SkeletonInput';
+import {Card, Divider, Skeleton} from 'antd';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from './common/SkeletonButton';
 
 const SettingSkeleton = () => {
@@ -12,11 +12,11 @@ const SettingSkeleton = () => {
         borderRadius: 12,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-        <SkeletonInput style={{ width: 120 }} />
-        <SkeletonInput style={{ width: 120 }} />
+      <div style={{display: 'flex', alignItems: 'center', gap: 20}}>
+        <SkeletonInput style={{width: 120}}/>
+        <SkeletonInput style={{width: 120}}/>
       </div>
-      <Divider />
+      <Divider/>
 
       <div
         style={{
@@ -25,7 +25,7 @@ const SettingSkeleton = () => {
           flexDirection: 'column',
         }}
       >
-        <div style={{ display: 'flex', gap: 20 }}>
+        <div style={{display: 'flex', gap: 20}}>
           <div
             style={{
               display: 'flex',
@@ -33,7 +33,7 @@ const SettingSkeleton = () => {
               flexDirection: 'column',
             }}
           >
-            {Array.from({ length: 2 }).map((_, idx) => (
+            {Array.from({length: 2}).map((_, idx) => (
               <div
                 style={{
                   display: 'flex',
@@ -41,20 +41,20 @@ const SettingSkeleton = () => {
                   gap: 24,
                 }}
               >
-                <SkeletonInput style={{ height: 40, width: 200 }} />
-                <SkeletonInput style={{ height: 40, width: 200 }} />
+                <SkeletonInput style={{height: 40, width: 200}}/>
+                <SkeletonInput style={{height: 40, width: 200}}/>
               </div>
             ))}
 
-            <SkeletonInput style={{ width: 422, height: 80, margin: '0' }} />
+            <SkeletonInput style={{width: 422, height: 80, margin: '0'}}/>
           </div>
 
-          <Skeleton.Image active style={{ height: 150, width: 150 }} />
+          <Skeleton.Image active style={{height: 150, width: 150}}/>
         </div>
-        <SkeletonButton size="large" style={{ width: 120 }} />
+        <SkeletonButton size="large" style={{width: 120}}/>
       </div>
     </Card>
   );
 };
 
-export { SettingSkeleton };
+export {SettingSkeleton};

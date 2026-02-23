@@ -1,14 +1,14 @@
 'use client';
-import { Fragment, useState } from 'react';
+import {Fragment, useState} from 'react';
 
-import { MdOutlineArrowDropDown } from 'react-icons/md';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { consoleLog } from '@unpod/helpers/GlobalHelper';
-import { convertMachineNameToName } from '@unpod/helpers/StringHelper';
+import {MdOutlineArrowDropDown} from 'react-icons/md';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {consoleLog} from '@unpod/helpers/GlobalHelper';
+import {convertMachineNameToName} from '@unpod/helpers/StringHelper';
 import AppDrawer from '../../antd/AppDrawer';
 import AppSettings from './AppSettings';
-import { StyledConnector, StyledConnectorTitle } from './index.style';
-import { useIntl } from 'react-intl';
+import {StyledConnector, StyledConnectorTitle} from './index.style';
+import {useIntl} from 'react-intl';
 
 type ConnectedApp = {
   id: string | number;
@@ -19,16 +19,18 @@ type ConnectedApp = {
 
 type AppConnectorsSettingData = {
   connected_apps?: ConnectedApp[];
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 type AppConnectorsSettingProps = {
   data?: AppConnectorsSettingData;
-  setData: (data: AppConnectorsSettingData) => void;};
+  setData: (data: AppConnectorsSettingData) => void;
+};
 
-const AppConnectorsSetting = ({ data, setData }: AppConnectorsSettingProps) => {
+const AppConnectorsSetting = ({data, setData}: AppConnectorsSettingProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [open, setOpen] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [connector] = data?.connected_apps || [];
 
@@ -68,11 +70,11 @@ const AppConnectorsSetting = ({ data, setData }: AppConnectorsSettingProps) => {
         <StyledConnectorTitle>
           {convertMachineNameToName(connector.app_slug)}
         </StyledConnectorTitle>
-        <MdOutlineArrowDropDown fontSize={20} />
+        <MdOutlineArrowDropDown fontSize={20}/>
       </StyledConnector>
 
       <AppDrawer
-        title={formatMessage({ id: 'appConnectorsSetting.title' })}
+        title={formatMessage({id: 'appConnectorsSetting.title'})}
         open={open}
         onClose={() => setOpen(false)}
         size={560}

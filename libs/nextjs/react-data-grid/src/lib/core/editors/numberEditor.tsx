@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { InputNumber } from 'antd';
+import {InputNumber} from 'antd';
 
-import type { RenderEditCellProps } from '../models/data-grid';
+import type {RenderEditCellProps} from '../models/data-grid';
 
 const StyledInput = styled(InputNumber)`
   border-width: 2px;
@@ -25,18 +25,18 @@ function autoFocusAndSelect(input: HTMLInputElement | null) {
 }
 
 export default function numberEditor<TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-}: RenderEditCellProps<TRow, TSummaryRow>) {
+                                                          row,
+                                                          column,
+                                                          onRowChange,
+                                                          onClose,
+                                                        }: RenderEditCellProps<TRow, TSummaryRow>) {
   return (
     <StyledInput
       size="small"
       ref={autoFocusAndSelect}
       value={row[column.dataIndex as keyof TRow] as unknown as number}
       onChange={(newValue) =>
-        onRowChange({ ...row, [column.dataIndex]: newValue })
+        onRowChange({...row, [column.dataIndex]: newValue})
       }
       onBlur={() => onClose(true, false)}
     />

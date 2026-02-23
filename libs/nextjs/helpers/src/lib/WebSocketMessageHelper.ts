@@ -4,7 +4,7 @@
  * Also includes LiveKit data channel and text stream message handling
  */
 
-import { getLocalLocalTimeFromUTC } from './DateHelper';
+import {getLocalLocalTimeFromUTC} from './DateHelper';
 
 export type WebSocketParticipant = {
   identity?: string;
@@ -111,12 +111,12 @@ type CreateLiveKitMessageOptions = {
 };
 
 const createLiveKitMessage = ({
-  data,
-  source,
-  topic = null,
-  streamInfo = null,
-  kind = null,
-}: CreateLiveKitMessageOptions): WebSocketMessage & {
+                                data,
+                                source,
+                                topic = null,
+                                streamInfo = null,
+                                kind = null,
+                              }: CreateLiveKitMessageOptions): WebSocketMessage & {
   topic?: string;
   streamInfo?: StreamInfo;
   kind?: string;
@@ -128,9 +128,9 @@ const createLiveKitMessage = ({
       getLocalLocalTimeFromUTC(Date.now())?.format?.('YYYY-MM-DD HH:mm:ss') ||
       new Date().toISOString(),
     source,
-    ...(topic && { topic }),
-    ...(streamInfo && { streamInfo }),
-    ...(kind && { kind }),
+    ...(topic && {topic}),
+    ...(streamInfo && {streamInfo}),
+    ...(kind && {kind}),
   };
 };
 
@@ -171,7 +171,7 @@ const getMessageRole = (
   const msgRole = data.user?.role || (isAgent ? 'assistant' : 'user');
   const isAssistantMsg =
     msgRole === 'assistant' || msgRole === 'agent' || msgRole === 'system';
-  return { msgRole, isAssistantMsg };
+  return {msgRole, isAssistantMsg};
 };
 
 /**
@@ -226,9 +226,9 @@ export type WebSocketUpdateResult = {
   streamItemsUpdate?:
     | ((prevState: MessageData[]) => MessageData[])
     | ((prevState: MessageData[]) => {
-        newStreamItems: MessageData[];
-        finalizedMessage: MessageData;
-      });
+    newStreamItems: MessageData[];
+    finalizedMessage: MessageData;
+  });
   thinking?: boolean;
   streaming?: boolean;
   shouldScroll?: boolean;
@@ -252,7 +252,7 @@ const handleBlockEvent = (
   const participantMetadata = parseParticipantMetadata(participant);
   const isAgent = isAgentParticipant(participant, participantMetadata);
 
-  const { msgRole, isAssistantMsg } = getMessageRole(data, isAgent);
+  const {msgRole, isAssistantMsg} = getMessageRole(data, isAgent);
   const color = isAssistantMsg ? agentColor : userColor;
 
   // Check if this is a call type with ended status
@@ -279,7 +279,7 @@ const handleBlockEvent = (
           ...data.data.cards,
           items: data.data.cards.items.map((item) =>
             item.status === 'ended' && item.id && !item.id.endsWith('-ended')
-              ? { ...item, id: `${item.id}-ended` }
+              ? {...item, id: `${item.id}-ended`}
               : item,
           ),
         },
@@ -345,13 +345,13 @@ const handleBlockEvent = (
           prevItems.map((item) =>
             item.block_id === blockId
               ? {
-                  ...item,
-                  data: {
-                    ...item.data,
-                    content: data.data?.content,
-                    final: data.data?.final,
-                  },
-                }
+                ...item,
+                data: {
+                  ...item.data,
+                  content: data.data?.content,
+                  final: data.data?.final,
+                },
+              }
               : item,
           ),
         thinking: false,
@@ -359,7 +359,7 @@ const handleBlockEvent = (
         shouldScroll: true,
       };
     }
-    return { type: 'NO_UPDATE' };
+    return {type: 'NO_UPDATE'};
   }
 
   // Message exists in streamItems
@@ -396,13 +396,13 @@ const handleBlockEvent = (
           prevState.map((item) =>
             item.block_id === blockId
               ? {
-                  ...item,
-                  data: {
-                    ...item.data,
-                    content: data.data?.content,
-                    final: data.data?.final,
-                  },
-                }
+                ...item,
+                data: {
+                  ...item.data,
+                  content: data.data?.content,
+                  final: data.data?.final,
+                },
+              }
               : item,
           ),
         thinking: false,
@@ -502,7 +502,7 @@ export const processWebSocketMessage = (
     const participantMetadata = parseParticipantMetadata(participant);
     const isAgent = isAgentParticipant(participant, participantMetadata);
 
-    const { msgRole } = getMessageRole(data, isAgent);
+    const {msgRole} = getMessageRole(data, isAgent);
     const color = agentColor; // Location requests are always from agent
 
     const messageData = transformToMessageData(
@@ -534,14 +534,14 @@ export const processWebSocketMessage = (
         prevItems.map((item) =>
           item.block_id === blockId
             ? {
-                ...item,
+              ...item,
+              block_type: 'location_success',
+              data: {
+                ...item.data,
+                ...data.data,
                 block_type: 'location_success',
-                data: {
-                  ...item.data,
-                  ...data.data,
-                  block_type: 'location_success',
-                },
-              }
+              },
+            }
             : item,
         ),
       thinking: false,
@@ -560,13 +560,13 @@ export const processWebSocketMessage = (
         prevItems.map((item) =>
           item.block_id === blockId
             ? {
-                ...item,
+              ...item,
+              block_type: 'location_declined',
+              data: {
+                ...item.data,
                 block_type: 'location_declined',
-                data: {
-                  ...item.data,
-                  block_type: 'location_declined',
-                },
-              }
+              },
+            }
             : item,
         ),
       thinking: false,
@@ -735,7 +735,7 @@ export const processLiveKitDataPacket = (
   kind: number,
   options: ProcessLiveKitOptions = {},
 ): (WebSocketMessage & { source: string; kind?: string }) | null => {
-  const { validator } = options;
+  const {validator} = options;
 
   try {
     // Decode binary payload to text
@@ -753,7 +753,7 @@ export const processLiveKitDataPacket = (
       const hasCards = (parsedData as MessageData)?.data?.cards;
       console.log(
         `🚫 [DataPacket] Message rejected - ${hasCards ? 'validation failed' : 'no cards found'}`,
-        { hasCards, data: parsedData?.data, strData, parsedData },
+        {hasCards, data: parsedData?.data, strData, parsedData},
       );
       return null;
     }
@@ -786,12 +786,12 @@ export const processLiveKitTextStream = (
   options: ProcessLiveKitOptions = {},
 ):
   | (WebSocketMessage & {
-      source: string;
-      topic?: string;
-      streamInfo?: StreamInfo;
-    })
+  source: string;
+  topic?: string;
+  streamInfo?: StreamInfo;
+})
   | null => {
-  const { validator } = options;
+  const {validator} = options;
 
   try {
     console.log(
@@ -799,9 +799,9 @@ export const processLiveKitTextStream = (
     );
     console.log(
       `  Topic: ${streamInfo.topic}\n` +
-        `  Timestamp: ${streamInfo.timestamp}\n` +
-        `  ID: ${streamInfo.id}` +
-        (streamInfo.size ? `\n  Size: ${streamInfo.size} bytes` : ''),
+      `  Timestamp: ${streamInfo.timestamp}\n` +
+      `  ID: ${streamInfo.id}` +
+      (streamInfo.size ? `\n  Size: ${streamInfo.size} bytes` : ''),
     );
 
     console.log(`📩 [${topic}] Content:`, text);

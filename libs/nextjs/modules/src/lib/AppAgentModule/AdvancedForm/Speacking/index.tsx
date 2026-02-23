@@ -1,17 +1,12 @@
-import { Form } from 'antd';
+import {Form} from 'antd';
 import TemperatureSlider from '../../ModelForm/TemperatureSlider';
-import {
-  StyledContainer,
-  StyledHelpText,
-  StyledLabel,
-  StyledlableWrapper,
-} from './index.styled';
-import { useIntl } from 'react-intl';
+import {StyledContainer, StyledHelpText, StyledLabel, StyledlableWrapper,} from './index.styled';
+import {useIntl} from 'react-intl';
 
-const { Item } = Form;
+const {Item} = Form;
 
 const StopSpeakingPlan = () => {
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   return (
     <StyledContainer>
@@ -20,10 +15,10 @@ const StopSpeakingPlan = () => {
         label={
           <StyledlableWrapper>
             <StyledLabel>
-              {formatMessage({ id: 'advanced.numWords' })}
+              {formatMessage({id: 'advanced.numWords'})}
             </StyledLabel>
             <StyledHelpText>
-              {formatMessage({ id: 'advanced.numWordsDesc' })}
+              {formatMessage({id: 'advanced.numWordsDesc'})}
             </StyledHelpText>
           </StyledlableWrapper>
         }
@@ -31,11 +26,11 @@ const StopSpeakingPlan = () => {
         <TemperatureSlider
           marks={{
             0: {
-              style: { fontSize: 12 },
+              style: {fontSize: 12},
               label: '0',
             },
             10: {
-              style: { fontSize: 12, transform: 'translateX(-75%)' },
+              style: {fontSize: 12, transform: 'translateX(-75%)'},
               label: '10',
             },
           }}
@@ -50,10 +45,10 @@ const StopSpeakingPlan = () => {
         label={
           <StyledlableWrapper>
             <StyledLabel>
-              {formatMessage({ id: 'advanced.voiceSec' })}
+              {formatMessage({id: 'advanced.voiceSec'})}
             </StyledLabel>
             <StyledHelpText>
-              {formatMessage({ id: 'advanced.voiceSecDesc' })}
+              {formatMessage({id: 'advanced.voiceSecDesc'})}
             </StyledHelpText>
           </StyledlableWrapper>
         }
@@ -61,7 +56,7 @@ const StopSpeakingPlan = () => {
         <TemperatureSlider
           marks={{
             0: {
-              style: { fontSize: 12, marginLeft: 16 },
+              style: {fontSize: 12, marginLeft: 16},
               label: '0 (sec)',
             },
             5: {
@@ -84,10 +79,10 @@ const StopSpeakingPlan = () => {
         label={
           <StyledlableWrapper>
             <StyledLabel>
-              {formatMessage({ id: 'advanced.backOffSec' })}
+              {formatMessage({id: 'advanced.backOffSec'})}
             </StyledLabel>
             <StyledHelpText>
-              {formatMessage({ id: 'advanced.backOffSecDesc' })}
+              {formatMessage({id: 'advanced.backOffSecDesc'})}
             </StyledHelpText>
           </StyledlableWrapper>
         }
@@ -95,7 +90,7 @@ const StopSpeakingPlan = () => {
         <TemperatureSlider
           marks={{
             0: {
-              style: { fontSize: 12, marginLeft: 16 },
+              style: {fontSize: 12, marginLeft: 16},
               label: '0 (sec)',
             },
             10: {

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Space } from 'antd';
+import {Button, Space} from 'antd';
 
 export const StyledSpace = styled(Space)`
   padding: 3px 8px;
