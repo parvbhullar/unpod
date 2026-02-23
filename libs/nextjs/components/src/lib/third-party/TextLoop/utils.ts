@@ -21,7 +21,8 @@ const cancelAnimFrame = (handle: number) => {
  * @param {int} delay The delay in milliseconds
  */
 type RequestTimeoutHandle = {
-  value: number;};
+  value: number;
+};
 
 export const requestTimeout = function (fn: () => void, delay: number) {
   if (!isBrowser || !window.requestAnimationFrame) {
@@ -30,7 +31,7 @@ export const requestTimeout = function (fn: () => void, delay: number) {
 
   const start = new Date().getTime();
 
-  const handle: RequestTimeoutHandle = { value: 0 };
+  const handle: RequestTimeoutHandle = {value: 0};
 
   function loop() {
     const current = new Date().getTime();

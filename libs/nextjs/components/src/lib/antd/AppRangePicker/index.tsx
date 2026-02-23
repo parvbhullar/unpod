@@ -1,16 +1,10 @@
 'use client';
-import React, {
-  CSSProperties,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {CSSProperties, useEffect, useMemo, useRef, useState,} from 'react';
 import AppFloatingOutline from '../AppFloatingOutline';
-import { DatePicker } from 'antd';
-import { Dayjs } from 'dayjs';
-import type { RangePickerProps } from 'antd/es/date-picker';
-import type { RangePickerRef } from '@rc-component/picker/es/interface';
+import {DatePicker} from 'antd';
+import {Dayjs} from 'dayjs';
+import type {RangePickerProps} from 'antd/es/date-picker';
+import type {RangePickerRef} from '@rc-component/picker/es/interface';
 
 type AppRangePickerProps = {
   placeholder?: string | [string, string, string];
@@ -26,20 +20,21 @@ type AppRangePickerProps = {
   asterisk?: boolean;
   format?: string;
   id?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppRangePicker: React.FC<AppRangePickerProps> = ({
-  placeholder = ['Date', 'Start', 'End'],
-  className = '',
-  style,
-  defaultValue,
-  value,
-  disabled = false,
-  onChange,
-  asterisk,
-  format,
-  ...restProps
-}) => {
+                                                         placeholder = ['Date', 'Start', 'End'],
+                                                         className = '',
+                                                         style,
+                                                         defaultValue,
+                                                         value,
+                                                         disabled = false,
+                                                         onChange,
+                                                         asterisk,
+                                                         format,
+                                                         ...restProps
+                                                       }) => {
   const [inputVal, setInputVal] = useState<
     string | [string, string] | undefined
   >(undefined);

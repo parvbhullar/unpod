@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { useHMSVanillaStore } from '@100mslive/react-sdk';
+import {useEffect, useRef, useState} from 'react';
+import {useHMSVanillaStore} from '@100mslive/react-sdk';
 import PeersSorter from './PeersSorter';
-import { useActiveSpeakerSorting } from '../AppData/useUISettings';
+import {useActiveSpeakerSorting} from '../AppData/useUISettings';
 
-function useSortedPeers({ peers, maxTileCount = 9 }) {
+function useSortedPeers({peers, maxTileCount = 9}) {
   const [sortedPeers, setSortedPeers] = useState([]);
   const store = useHMSVanillaStore();
   const activeSpeakerSorting = useActiveSpeakerSorting();

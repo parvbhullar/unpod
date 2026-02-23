@@ -6,11 +6,11 @@ export const StyledItemRow = styled.div`
   gap: 12px;
 `;
 export const StyledMainContainer = styled.div`
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto !important;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     width: 100%;
   }
 `;

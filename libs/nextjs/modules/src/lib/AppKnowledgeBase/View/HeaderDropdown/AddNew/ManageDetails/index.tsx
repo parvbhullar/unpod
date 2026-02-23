@@ -1,23 +1,23 @@
 import React from 'react';
-import { Button, Form, Modal, Row } from 'antd';
-import { StyledChoicesContainer } from './index.styled';
-import { AppInput, AppSelect, AppTextArea } from '@unpod/components/antd';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { useIntl } from 'react-intl';
+import {Button, Form, Modal, Row} from 'antd';
+import {StyledChoicesContainer} from './index.styled';
+import {AppInput, AppSelect, AppTextArea} from '@unpod/components/antd';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {useIntl} from 'react-intl';
 
-const { Item } = Form;
+const {Item} = Form;
 
 const ManageDetails = ({
-  selectedItem,
-  onFinish,
-  initialValues,
-  ...restProps
-}) => {
-  const { formatMessage } = useIntl();
+                         selectedItem,
+                         onFinish,
+                         initialValues,
+                         ...restProps
+                       }) => {
+  const {formatMessage} = useIntl();
 
   return (
     <Modal
-      title={formatMessage({ id: 'schema.manageDetails' })}
+      title={formatMessage({id: 'schema.manageDetails'})}
       footer={null}
       destroyOnHidden
       centered
@@ -26,7 +26,7 @@ const ManageDetails = ({
       <StyledChoicesContainer>
         <Form
           layout="vertical"
-          initialValues={initialValues || { choices: [] }}
+          initialValues={initialValues || {choices: []}}
           onFinish={onFinish}
         >
           <Item
@@ -34,7 +34,7 @@ const ManageDetails = ({
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.fieldRequired' }),
+                message: formatMessage({id: 'validation.fieldRequired'}),
               },
               (form) => ({
                 validator(_, title) {
@@ -61,7 +61,7 @@ const ManageDetails = ({
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.fieldRequired' }),
+                message: formatMessage({id: 'validation.fieldRequired'}),
               },
               (form) => ({
                 validator(_, name) {
@@ -88,7 +88,7 @@ const ManageDetails = ({
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.fieldRequired' }),
+                message: formatMessage({id: 'validation.fieldRequired'}),
               },
             ]}
           >
@@ -96,7 +96,7 @@ const ManageDetails = ({
               placeholder={formatMessage({
                 id: 'schema.enterFieldDescription',
               })}
-              autoSize={{ minRows: 3, maxRows: 10 }}
+              autoSize={{minRows: 3, maxRows: 10}}
               asterisk
             />
           </Item>
@@ -109,12 +109,12 @@ const ManageDetails = ({
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.fieldRequired' }),
+                  message: formatMessage({id: 'validation.fieldRequired'}),
                 },
               ]}
             >
               <AppSelect
-                placeholder={formatMessage({ id: 'schema.enterChoices' })}
+                placeholder={formatMessage({id: 'schema.enterChoices'})}
                 mode="tags"
                 asterisk
               />
@@ -123,7 +123,7 @@ const ManageDetails = ({
 
           <Row justify="end">
             <Button type="primary" size="small" shape="round" htmlType="submit">
-              {formatMessage({ id: 'common.save' })}
+              {formatMessage({id: 'common.save'})}
             </Button>
           </Row>
         </Form>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { selectPeers, selectRoomID, useHMSStore } from '@100mslive/react-sdk';
-import { SidePane } from '../screenShareView';
-import { Whiteboard } from '../../../plugin/whiteboard';
+import {selectPeers, selectRoomID, useHMSStore} from '@100mslive/react-sdk';
+import {SidePane} from '../screenShareView';
+import {Whiteboard} from '../../../plugin/whiteboard';
 
-const Editor = React.memo(({ roomId }) => {
+const Editor = React.memo(({roomId}) => {
   return (
     <div
       style={{
@@ -17,8 +17,8 @@ const Editor = React.memo(({ roomId }) => {
         },
       }}
     >
-      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-        <Whiteboard roomId={roomId} />
+      <div style={{position: 'relative', width: '100%', height: '100%'}}>
+        <Whiteboard roomId={roomId}/>
       </div>
     </div>
   );
@@ -30,8 +30,8 @@ const WhiteboardView = () => {
   const peers = useHMSStore(selectPeers);
   const roomId = useHMSStore(selectRoomID);
   return (
-    <div style={{ display: 'flex', width: '100%', height: '100%' }}>
-      <Editor roomId={roomId} />
+    <div style={{display: 'flex', width: '100%', height: '100%'}}>
+      <Editor roomId={roomId}/>
       <div
         style={{
           display: 'flex',

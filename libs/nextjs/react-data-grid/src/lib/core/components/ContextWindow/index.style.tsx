@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
-import { rgba } from 'polished';
+import {Typography} from 'antd';
+import {rgba} from 'polished';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledInfoWrapper = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ export const StyledInfoWrapper = styled.div`
 
 export const StyledSumResult = styled(Paragraph)`
   padding: 7px 16px;
-  background-color: ${({ theme }) => rgba(theme.primaryColor, 0.2)};
+  background-color: ${({theme}) => rgba(theme.primaryColor, 0.2)};
 `;
 
 export const StyledMenu = styled.menu`
@@ -35,7 +35,7 @@ export const StyledMenuItem = styled.li`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: ${({ theme }) => theme.text.heading};
+  color: ${({theme}) => theme.text.heading};
   padding: 7px 10px;
   // border-radius: 8px;
   width: 100%;
@@ -43,6 +43,6 @@ export const StyledMenuItem = styled.li`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => rgba(theme.primaryColor, 0.2)};
+    background-color: ${({theme}) => rgba(theme.primaryColor, 0.2)};
   }
 `;

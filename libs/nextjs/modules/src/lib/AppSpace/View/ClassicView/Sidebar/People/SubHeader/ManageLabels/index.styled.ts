@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Tabs } from 'antd';
+import {Tabs} from 'antd';
 
 export const StyledTabs = styled(Tabs)`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   position: sticky;
   top: 0;
   z-index: 10;
@@ -22,12 +22,12 @@ export const StyledTagContainer = styled.div`
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
-  background-color: ${({ theme }) => theme.palette.background.component};
-  border-bottom: 1px solid ${({ theme }) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.component};
+  border-bottom: 1px solid ${({theme}) => theme.border.color};
   padding: 8px 16px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 `;
 export const StyledRoot = styled.div`
@@ -35,7 +35,7 @@ export const StyledRoot = styled.div`
 `;
 
 export const StyledWrapper = styled.div`
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 10px;
   overflow: hidden;
 

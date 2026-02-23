@@ -1,11 +1,8 @@
-import type { CSSProperties } from 'react';
+import type {CSSProperties} from 'react';
 import React from 'react';
 import clsx from 'clsx';
 
-import type {
-  CalculatedColumn,
-  CalculatedColumnOrColumnGroup,
-} from '../models/data-grid';
+import type {CalculatedColumn, CalculatedColumnOrColumnGroup,} from '../models/data-grid';
 import {
   cellClassname,
   cellFrozenClassname,
@@ -21,7 +18,7 @@ export function getRowStyle(rowIdx: number, height?: number): CSSProperties {
       '--rdg-row-height': `${height}px`,
     } as unknown as CSSProperties;
   }
-  return { '--rdg-grid-row-start': rowIdx } as unknown as CSSProperties;
+  return {'--rdg-grid-row-start': rowIdx} as unknown as CSSProperties;
 }
 
 export function getHeaderCellStyle<R, SR>(

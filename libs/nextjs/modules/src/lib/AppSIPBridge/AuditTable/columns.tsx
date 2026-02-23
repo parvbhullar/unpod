@@ -1,14 +1,14 @@
-import { formatSecToTime, getFormattedDate } from '@unpod/helpers/DateHelper';
-import { CALL_STATUS } from '@unpod/constants/BridgeConst';
-import { capitalizedString } from '@unpod/helpers/StringHelper';
+import {formatSecToTime, getFormattedDate} from '@unpod/helpers/DateHelper';
+import {CALL_STATUS} from '@unpod/constants/BridgeConst';
+import {capitalizedString} from '@unpod/helpers/StringHelper';
 import {
   getColumnDateTimeProps,
   getColumnSearchProps,
   getColumnSelectBoxProps,
   onSortOrder,
 } from '@unpod/helpers/TableHelper';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
-import { localizeCallStatusLabels } from '@unpod/helpers/LocalizationFormatHelper';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
+import {localizeCallStatusLabels} from '@unpod/helpers/LocalizationFormatHelper';
 
 export const callStatusArray = [
   {
@@ -56,20 +56,20 @@ type FormatMessage = (descriptor: { id: string }) => string;
 
 export const getColumns = (formatMessage: FormatMessage) => {
   const callDetailsLabels = {
-    bridgeName: formatMessage({ id: 'common.bridgeName' }),
-    callType: formatMessage({ id: 'common.callType' }),
-    callingNumber: formatMessage({ id: 'common.callingNumber' }),
-    customerNumber: formatMessage({ id: 'common.customerNumber' }),
-    callStartTime: formatMessage({ id: 'common.callStartTime' }),
-    callEndTime: formatMessage({ id: 'common.callEndTime' }),
-    duration: formatMessage({ id: 'common.duration' }),
-    status: formatMessage({ id: 'common.status' }),
-    endReason: formatMessage({ id: 'common.endReason' }),
+    bridgeName: formatMessage({id: 'common.bridgeName'}),
+    callType: formatMessage({id: 'common.callType'}),
+    callingNumber: formatMessage({id: 'common.callingNumber'}),
+    customerNumber: formatMessage({id: 'common.customerNumber'}),
+    callStartTime: formatMessage({id: 'common.callStartTime'}),
+    callEndTime: formatMessage({id: 'common.callEndTime'}),
+    duration: formatMessage({id: 'common.duration'}),
+    status: formatMessage({id: 'common.status'}),
+    endReason: formatMessage({id: 'common.endReason'}),
   };
 
   return [
     {
-      title: formatMessage({ id: 'callLogs.callId' }),
+      title: formatMessage({id: 'callLogs.callId'}),
       dataIndex: 'id',
     },
     {

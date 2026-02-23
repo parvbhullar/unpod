@@ -1,24 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Progress, Space, Typography } from 'antd';
-import { MdArrowUpward, MdEdit, MdVideoLibrary } from 'react-icons/md';
-import { RiEyeLine } from 'react-icons/ri';
+import {Button, Modal, Progress, Space, Typography} from 'antd';
+import {MdArrowUpward, MdEdit, MdVideoLibrary} from 'react-icons/md';
+import {RiEyeLine} from 'react-icons/ri';
 import * as UpChunk from '@mux/upchunk';
 import AppMediaPlayer from '@unpod/components/common/AppMediaPlayer';
-import {
-  getDataApi,
-  postDataApi,
-  putDataApi,
-  uploadDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { PERMISSION_TYPES } from '@unpod/constants';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
+import {getDataApi, postDataApi, putDataApi, uploadDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {PERMISSION_TYPES} from '@unpod/constants';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
 import CommonFields from './CommonFields';
 import {
   StyledContainer,
@@ -32,9 +22,9 @@ import {
 const ANONYMOUS_TITLE = 'Upload Title';
 const acceptMediaTypes = 'audio/*,video/*';
 
-const { Text, Title } = Typography;
+const {Text, Title} = Typography;
 
-const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
+const UploadThread = ({post, tagsData, currentSpace, onDataSaved}) => {
   const infoViewActionsContext = useInfoViewActionsContext();
 
   const [queryTitle, setQueryTitle] = useState(null);
@@ -239,7 +229,7 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
         };
 
         if (coverImage) {
-          uploadCoverImage(({ media_id }) => {
+          uploadCoverImage(({media_id}) => {
             payload.cover_image = {
               media_id: media_id,
               file_name: coverImage.name,
@@ -252,7 +242,7 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
       });
     } else {
       if (coverImage) {
-        uploadCoverImage(({ media_id }) => {
+        uploadCoverImage(({media_id}) => {
           payload.cover_image = {
             media_id: media_id,
             file_name: coverImage.name,
@@ -276,7 +266,7 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
         {!media && post?.media && (
           <StyledMediaList>
             <Space size={12}>
-              <MdVideoLibrary fontSize={16} />
+              <MdVideoLibrary fontSize={16}/>
 
               <Text>{post.media.name}</Text>
             </Space>
@@ -284,11 +274,11 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
             {post?.post_status === 'draft' && (
               <Space size={12}>
                 <StyledIconWrapper onClick={() => setPreview(true)}>
-                  <RiEyeLine fontSize={16} />
+                  <RiEyeLine fontSize={16}/>
                 </StyledIconWrapper>
 
                 <StyledIconWrapper onClick={() => setEditMedia(!editMedia)}>
-                  <MdEdit fontSize={16} />
+                  <MdEdit fontSize={16}/>
                 </StyledIconWrapper>
               </Space>
             )}
@@ -301,7 +291,7 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
               <Title level={4} type="secondary" className="mb-0">
                 Upload Media
               </Title>
-              <Progress percent={mediaUploadPercent} />
+              <Progress percent={mediaUploadPercent}/>
             </StyledMediaWrapper>
           ) : (
             <StyledMediaWrapper>
@@ -317,7 +307,7 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
                 <Space direction="vertical" size={4}>
                   <Button
                     shape="circle"
-                    icon={<MdArrowUpward fontSize={21} />}
+                    icon={<MdArrowUpward fontSize={21}/>}
                     css={`
                       margin-bottom: 8px;
                     `}
@@ -373,7 +363,7 @@ const UploadThread = ({ post, tagsData, currentSpace, onDataSaved }) => {
   );
 };
 
-const { func, object } = PropTypes;
+const {func, object} = PropTypes;
 
 UploadThread.propTypes = {
   post: object,

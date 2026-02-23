@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   HMSRoomState,
   selectAvailableRoleNames,
@@ -12,18 +12,10 @@ import {
   useHMSStore,
   useRecordingStreaming,
 } from '@100mslive/react-sdk';
-import {
-  UserPreferencesKeys,
-  useUserPreferences,
-} from '../hooks/useUserPreferences';
-import {
-  useIsSidepaneTypeOpen,
-  useSidepaneReset,
-  useSidepaneState,
-  useSidepaneToggle,
-} from './useSidepane';
-import { useSetAppDataByKey } from './useUISettings';
-import { getMetadata, normalizeAppPolicyConfig } from '../common/utils';
+import {UserPreferencesKeys, useUserPreferences,} from '../hooks/useUserPreferences';
+import {useIsSidepaneTypeOpen, useSidepaneReset, useSidepaneState, useSidepaneToggle,} from './useSidepane';
+import {useSetAppDataByKey} from './useUISettings';
+import {getMetadata, normalizeAppPolicyConfig} from '../common/utils';
 import {
   APP_DATA,
   CHAT_SELECTOR,
@@ -78,7 +70,7 @@ const initialAppData = {
 };
 
 export const AppData = React.memo(
-  ({ appDetails, logo, recordingUrl, tokenEndpoint, policyConfig, uiMode }) => {
+  ({appDetails, logo, recordingUrl, tokenEndpoint, policyConfig, uiMode}) => {
     const hmsActions = useHMSActions();
     const isConnected = useHMSStore(selectIsConnectedToRoom);
     const sidePane = useSidepaneState();
@@ -155,7 +147,7 @@ export const AppData = React.memo(
       }
     }, [roleNames, policyConfig, rolesMap, localPeerRole, hmsActions]);
 
-    return <ResetStreamingStart />;
+    return <ResetStreamingStart/>;
   }
 );
 
@@ -163,7 +155,7 @@ export const AppData = React.memo(
  * reset hlsStarted, rtmpStarted values when streaming starts
  */
 const ResetStreamingStart = () => {
-  const { isHLSRunning, isRTMPRunning, isBrowserRecordingOn } =
+  const {isHLSRunning, isRTMPRunning, isBrowserRecordingOn} =
     useRecordingStreaming();
   const hlsError = useHMSStore(selectHLSState).error;
   const rtmpError = useHMSStore(selectRTMPState).error;

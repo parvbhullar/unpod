@@ -1,25 +1,25 @@
 'use client';
 import React from 'react';
 import styled from 'styled-components';
-import { Divider } from 'antd';
-import { SidebarAgentList } from '../SidebarAgentList';
-import { BridgeStudioSkeleton } from '../BridgeStudio';
+import {Divider} from 'antd';
+import {SidebarAgentList} from '../SidebarAgentList';
+import {BridgeStudioSkeleton} from '../BridgeStudio';
 import SkeletonAvatar from '../common/SkeletonAvatar';
-import { SkeletonInput } from '../common/SkeletonInput';
-import { LayoutSidebarSkeleton } from './Sidebar';
+import {SkeletonInput} from '../common/SkeletonInput';
+import {LayoutSidebarSkeleton} from './Sidebar';
 
 const StyledSidebarContainer = styled.div`
   width: 320px;
   display: flex;
   flex-direction: column;
-  border: 6px ${({ theme }) => theme.border.style}
-    ${({ theme }) => theme.border.color};
+  border: 6px ${({theme}) => theme.border.style}
+    ${({theme}) => theme.border.color};
   border-right-width: 3px;
-  border-top-left-radius: ${({ theme }) => theme.radius.base}px;
-  border-top-right-radius: ${({ theme }) => theme.radius.base}px;
+  border-top-left-radius: ${({theme}) => theme.radius.base}px;
+  border-top-right-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     display: none;
   }
 `;
@@ -35,11 +35,11 @@ const StyledBridgeContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: 6px ${({ theme }) => theme.border.style}
-    ${({ theme }) => theme.border.color};
+  border: 6px ${({theme}) => theme.border.style}
+    ${({theme}) => theme.border.color};
   border-left-width: 3px;
-  border-top-left-radius: ${({ theme }) => theme.radius.base}px;
-  border-top-right-radius: ${({ theme }) => theme.radius.base}px;
+  border-top-left-radius: ${({theme}) => theme.radius.base}px;
+  border-top-right-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;
 `;
 
@@ -63,8 +63,8 @@ const BridgePageSkeleton: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      <LayoutSidebarSkeleton />
-      <div style={{ display: 'flex', flex: 1 }}>
+      <LayoutSidebarSkeleton/>
+      <div style={{display: 'flex', flex: 1}}>
         <StyledSidebarContainer>
           <div
             style={{
@@ -74,27 +74,27 @@ const BridgePageSkeleton: React.FC = () => {
               padding: '14px',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <SkeletonAvatar active size={32} shape="circle" />
-              <SkeletonInput active style={{ width: 100, height: 20 }} />
+            <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+              <SkeletonAvatar active size={32} shape="circle"/>
+              <SkeletonInput active style={{width: 100, height: 20}}/>
             </div>
-            <SkeletonAvatar active size={28} shape="circle" />
+            <SkeletonAvatar active size={28} shape="circle"/>
           </div>
 
-          <Divider style={{ margin: 0 }} />
+          <Divider style={{margin: 0}}/>
 
-          <div style={{ padding: '16px' }}>
-            <SkeletonInput active style={{ width: 280, height: 28 }} />
+          <div style={{padding: '16px'}}>
+            <SkeletonInput active style={{width: 280, height: 28}}/>
           </div>
 
           <SidebarScroll>
-            <SidebarAgentList />
+            <SidebarAgentList/>
           </SidebarScroll>
         </StyledSidebarContainer>
 
         <StyledBridgeContainer>
           <BridgeScroll>
-            <BridgeStudioSkeleton />
+            <BridgeStudioSkeleton/>
           </BridgeScroll>
         </StyledBridgeContainer>
       </div>
@@ -102,4 +102,4 @@ const BridgePageSkeleton: React.FC = () => {
   );
 };
 
-export { BridgePageSkeleton };
+export {BridgePageSkeleton};

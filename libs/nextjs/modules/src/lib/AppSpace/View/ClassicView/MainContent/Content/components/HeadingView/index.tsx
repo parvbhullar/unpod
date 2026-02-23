@@ -1,11 +1,11 @@
-import { Flex } from 'antd';
-import { StyledPageHeader } from '../../Calls/Overview/Summary/index.styled';
+import {Flex} from 'antd';
+import {StyledPageHeader} from '../../Calls/Overview/Summary/index.styled';
 
 const HeadingView = ({
-  name,
-  icon,
-  extra,
-}: {
+                       name,
+                       icon,
+                       extra,
+                     }: {
   name: any;
   icon: any;
   extra?: any;

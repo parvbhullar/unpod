@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledRoot = styled.div`
   padding: 0;

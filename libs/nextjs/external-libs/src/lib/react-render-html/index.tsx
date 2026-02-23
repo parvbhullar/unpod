@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { DefaultTreeAdapterMap, parseFragment } from 'parse5';
+import React, {ReactNode} from 'react';
+import {DefaultTreeAdapterMap, parseFragment} from 'parse5';
 import convertAttr from './react-attr-converter';
 import styleParser from './style-parser';
 
@@ -13,7 +13,8 @@ type ElementAttrs = {
   key: number;
   dangerouslySetInnerHTML?: { __html: string };
 
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const renderNode = (node: Node, key: number): ReactNode => {
   if (node.nodeName === '#text') {
@@ -32,7 +33,7 @@ const renderNode = (node: Node, key: number): ReactNode => {
         name === 'style' ? styleParser(attrItem.value) : attrItem.value;
       return result;
     },
-    { key },
+    {key},
   );
 
   if (element.childNodes.length === 0) {
@@ -41,7 +42,7 @@ const renderNode = (node: Node, key: number): ReactNode => {
 
   if (element.nodeName === 'script') {
     const textNode = element.childNodes[0] as TextNode;
-    attr.dangerouslySetInnerHTML = { __html: textNode.value };
+    attr.dangerouslySetInnerHTML = {__html: textNode.value};
     return React.createElement('script', attr);
   }
 

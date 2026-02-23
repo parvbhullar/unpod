@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { HMSVirtualBackgroundTypes } from '@100mslive/hms-virtual-background';
+import {HMSVirtualBackgroundTypes} from '@100mslive/hms-virtual-background';
 
 export function getRandomVirtualBackground() {
   const backgroundList = [

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Title, Paragraph } = Typography;
+const {Title, Paragraph} = Typography;
 
 export const StyledRootContainer = styled.div`
   padding: 16px 24px;
@@ -13,21 +13,21 @@ export const StyledRootContainer = styled.div`
 export const StyledDocContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
+  background-color: ${({theme}) => theme.palette.background.default};
   padding: 16px;
   transition:
     background-color 0.2s ease-in-out,
     border-color 0.2s ease-in-out;
 
   &.highlight {
-    border-color: ${({ theme }) => theme.palette.primaryActive};
-    background-color: ${({ theme }) => theme.palette.background.component};
+    border-color: ${({theme}) => theme.palette.primaryActive};
+    background-color: ${({theme}) => theme.palette.background.component};
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.background.component};
+    background-color: ${({theme}) => theme.palette.background.component};
   }
 `;
 
@@ -42,16 +42,16 @@ export const StyledHighlight = styled(Paragraph)`
 export const StyledListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;
 `;
 
 export const StyledListItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid ${({ theme }) => theme.border.color};
-  background-color: ${({ theme }) => theme.palette.background.default};
+  border-bottom: 1px solid ${({theme}) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
   transition: background-color 0.2s ease;
 
   &:last-child {
@@ -59,7 +59,7 @@ export const StyledListItem = styled.div`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.background.component};
+    background-color: ${({theme}) => theme.palette.background.component};
   }
 `;
 
@@ -68,7 +68,7 @@ export const StyledLabel = styled(Paragraph)`
   padding: 10px;
   text-transform: capitalize;
   margin-bottom: 0 !important;
-  border-right: 1px solid ${({ theme }) => theme.border.color};
+  border-right: 1px solid ${({theme}) => theme.border.color};
   display: flex;
   align-items: center;
 `;
@@ -83,7 +83,7 @@ export const StyledZoomContainer = styled(Paragraph)`
   right: 0;
   bottom: 0;
   padding: 2px 4px;
-  background: ${({ theme }) => theme.palette.background.component};
+  background: ${({theme}) => theme.palette.background.component};
   border-radius: 10px;
   margin-bottom: 0 !important;
   cursor: pointer;
@@ -99,7 +99,7 @@ export const StyledCellContent = styled.div`
   }
 
   & a.ant-typography {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 `;
 
@@ -111,8 +111,8 @@ export const StyledCopyWrapper = styled.div`
   left: auto;
   z-index: 1;
   opacity: 0;
-  background: ${({ theme }) => theme.palette.background.component};
-  border-radius: ${({ theme }) => theme.radius.circle};
+  background: ${({theme}) => theme.palette.background.component};
+  border-radius: ${({theme}) => theme.radius.circle};
   transition: opacity 0.3s;
 `;
 
@@ -122,7 +122,7 @@ export const StyledFullContent = styled(StyledRootContainer)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
   opacity: 0;
   transform: scale(0);
   transition:
@@ -147,13 +147,13 @@ export const StyledFullContent = styled(StyledRootContainer)`
 export const StyledContentContainer = styled.div`
   padding: 16px;
   height: 100%;
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   position: relative;
   overflow: hidden;
 
   &.json-content {
-    background: ${({ theme }) => theme.palette.background.component};
+    background: ${({theme}) => theme.palette.background.component};
   }
 
   & pre {
@@ -172,10 +172,10 @@ export const StyledContentWrapper = styled.div`
   overflow-y: auto;
   height: 100%;
 
-  /*font-family: ${({ theme }) => theme.font.family};
+  /*font-family: ${({theme}) => theme.font.family};
   font-size: 16px;
   line-height: 1.6;
-  color: ${({ theme }) => theme.palette.text.content};
+  color: ${({theme}) => theme.palette.text.content};
 
   & ol,
   & ul,
@@ -189,7 +189,7 @@ export const StyledRefRow = styled.div`
   position: relative;
 
   &.json-content {
-    background: ${({ theme }) => theme.palette.background.component};
+    background: ${({theme}) => theme.palette.background.component};
   }
 
   &:hover ${StyledCopyWrapper} {
@@ -208,7 +208,7 @@ export const StyledDocWrapper = styled.div`
 export const StyledIframeContainer = styled.div`
   // flex: 1;
   height: 100%;
-  border: 1px solid ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: 1px solid ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;
 `;

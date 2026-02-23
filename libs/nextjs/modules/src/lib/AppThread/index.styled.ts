@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Row } from 'antd';
+import {Button, Row} from 'antd';
 
 export const StyledRoot = styled.div`
   height: 100%;
@@ -14,7 +14,7 @@ export const StyledThreadContainer = styled.div`
   flex-direction: column;
   margin: 0 auto;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     .SplitPane.vertical {
       flex-wrap: wrap;
 
@@ -40,13 +40,13 @@ export const StyledContainer = styled.div`
   gap: 24px;
   height: 100%;
   width: 100%;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   border-radius: 12px 12px 0 0;
 `;
 
 export const StyledDetailsRoot = styled.div`
-  width: calc(${({ theme }) => theme.sizes.mainContentWidth} + 128px);
-  background-color: ${({ theme }) => theme.palette.background.default};
+  width: calc(${({theme}) => theme.sizes.mainContentWidth} + 128px);
+  background-color: ${({theme}) => theme.palette.background.default};
   max-width: 100%;
   margin: 0 auto;
   display: flex;

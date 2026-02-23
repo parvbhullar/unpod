@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Col, Divider, Flex, Row, Skeleton } from 'antd';
+import {Card, Col, Divider, Flex, Row, Skeleton} from 'antd';
 import styled from 'styled-components';
 import SkeletonButton from './common/SkeletonButton';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonAvatar from './common/SkeletonAvatar';
 
 const StickyHeader = styled.div`
@@ -11,7 +11,7 @@ const StickyHeader = styled.div`
   z-index: 99;
   background: #fff;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     position: static;
   }
 `;
@@ -19,11 +19,11 @@ const StickyHeader = styled.div`
 const TopActionButtons = styled(Col)`
   margin: 0 auto;
   width: 100% !important;
-  max-width: ${({ theme }) => theme.sizes.mainContentWidth} !important;
+  max-width: ${({theme}) => theme.sizes.mainContentWidth} !important;
   display: flex;
   gap: 16px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     max-width: 100%;
     padding-left: 0;
   }
@@ -31,17 +31,17 @@ const TopActionButtons = styled(Col)`
 
 const SkeletonRow = styled(Row)`
   width: 100%;
-  max-width: ${({ theme }) => theme.sizes.mainContentWidth} !important;
+  max-width: ${({theme}) => theme.sizes.mainContentWidth} !important;
   gap: 10px;
   justify-content: center;
   padding-left: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     max-width: 100%;
     padding-left: 0;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding: 0 16px;
     justify-content: flex-start;
   }
@@ -55,11 +55,11 @@ const MainContainer = styled.div`
   flex-direction: column;
   gap: 20px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     width: 90%;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
     padding: 12px;
   }
@@ -71,7 +71,7 @@ const TwoColumnBlock = styled.div`
   width: 100%;
   margin-bottom: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     flex-direction: column;
   }
 `;
@@ -93,7 +93,7 @@ const SkeletonImageBox = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     width: 100%;
     height: 160px;
   }
@@ -104,7 +104,7 @@ const FooterActions = styled.div`
   justify-content: flex-end;
   margin-bottom: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     justify-content: center;
   }
 `;
@@ -150,7 +150,7 @@ const AiIdentityStudioSkeleton: React.FC = () => {
   return (
     <>
       <StickyHeader>
-        <Row justify="space-between" align="middle" style={{ padding: 16 }}>
+        <Row justify="space-between" align="middle" style={{padding: 16}}>
           <Col
             style={{
               display: 'flex',
@@ -160,60 +160,60 @@ const AiIdentityStudioSkeleton: React.FC = () => {
             }}
           >
             <StyledFlex align="center" gap={10}>
-              <SkeletonAvatar size="default" />
-              <SkeletonInput block style={{ width: '70%', height: 25 }} />
-              <SkeletonAvatar size="default" />
+              <SkeletonAvatar size="default"/>
+              <SkeletonInput block style={{width: '70%', height: 25}}/>
+              <SkeletonAvatar size="default"/>
             </StyledFlex>
           </Col>
 
           <TopActionButtons>
             {[1, 2, 3].map((i) => (
-              <SkeletonButton key={i} style={{ width: 140, height: 30 }} />
+              <SkeletonButton key={i} style={{width: 140, height: 30}}/>
             ))}
-            <SkeletonAvatar size="default" />
+            <SkeletonAvatar size="default"/>
           </TopActionButtons>
         </Row>
 
-        <Divider style={{ marginTop: 0 }} />
+        <Divider style={{marginTop: 0}}/>
 
         <SkeletonRow gutter={16}>
           {[1, 2, 3].map((i) => (
             <Col key={i}>
-              <SkeletonButton style={{ width: 90, height: 30 }} />
+              <SkeletonButton style={{width: 90, height: 30}}/>
             </Col>
           ))}
         </SkeletonRow>
 
-        <Divider style={{ marginTop: 24 }} />
+        <Divider style={{marginTop: 24}}/>
       </StickyHeader>
 
       <MainContainer>
         <TwoColumnBlock>
           <LeftColumn>
-            <SkeletonInput style={{ width: '100%', height: 40 }} />
+            <SkeletonInput style={{width: '100%', height: 40}}/>
 
             <StyledCard
-              title={<SkeletonInput block style={{ width: 80, height: 20 }} />}
+              title={<SkeletonInput block style={{width: 80, height: 20}}/>}
             >
-              <SkeletonInput block style={{ width: '100%', height: 40 }} />
+              <SkeletonInput block style={{width: '100%', height: 40}}/>
             </StyledCard>
           </LeftColumn>
 
           <SkeletonImageBox>
-            <Skeleton.Image active style={{ width: '100%', height: '100%' }} />
+            <Skeleton.Image active style={{width: '100%', height: '100%'}}/>
           </SkeletonImageBox>
         </TwoColumnBlock>
 
-        <SkeletonInput block style={{ width: 80, height: 20 }} />
+        <SkeletonInput block style={{width: 80, height: 20}}/>
 
         <Row gutter={[24, 24]}>
-          {Array.from({ length: 3 }).map((_, idx) => (
+          {Array.from({length: 3}).map((_, idx) => (
             <Col xs={24} sm={12} md={8} key={idx}>
               <PurposeCard>
-                <SkeletonAvatar size={36} />
-                <SkeletonInput block style={{ width: '70%', height: 18 }} />
-                <SkeletonInput block style={{ width: '100%', height: 16 }} />
-                <Skeleton.Input block style={{ width: '80%', height: 14 }} />
+                <SkeletonAvatar size={36}/>
+                <SkeletonInput block style={{width: '70%', height: 18}}/>
+                <SkeletonInput block style={{width: '100%', height: 16}}/>
+                <Skeleton.Input block style={{width: '80%', height: 14}}/>
               </PurposeCard>
             </Col>
           ))}
@@ -221,17 +221,17 @@ const AiIdentityStudioSkeleton: React.FC = () => {
 
         <SkeletonInput
           block
-          style={{ width: '100%', height: 100, marginTop: 32 }}
+          style={{width: '100%', height: 100, marginTop: 32}}
         />
 
-        <Divider />
+        <Divider/>
 
         <FooterActions>
-          <SkeletonButton size="large" style={{ width: 120 }} />
+          <SkeletonButton size="large" style={{width: 120}}/>
         </FooterActions>
       </MainContainer>
     </>
   );
 };
 
-export { AiIdentityStudioSkeleton };
+export {AiIdentityStudioSkeleton};

@@ -1,7 +1,7 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, {useEffect, useImperativeHandle, useState} from 'react';
 
-import { usePaginatedDataApi } from '@unpod/providers';
-import { tablePageSize } from '@unpod/constants';
+import {usePaginatedDataApi} from '@unpod/providers';
+import {tablePageSize} from '@unpod/constants';
 import EmailListItem from './EmailListItem';
 import GeneralListItem from './GeneralListItem';
 import ContactListItem from './ContactListItem';
@@ -16,27 +16,27 @@ const LIST_COMPONENTS = {
 const pageLimit = tablePageSize * 2;
 
 const AppDocuments = ({
-  search,
-  records,
-  setRecords,
-  currentSpace,
-  activeDocument,
-  onDocumentClick,
-  allowSelection,
-  selectedDocs,
-  setSelectedDocs,
-  setDocsLoading,
-  spaceSchema,
-  activeTag,
-  // setSelectedDoc,
-  newSourceRef,
-  ref,
-}) => {
+                        search,
+                        records,
+                        setRecords,
+                        currentSpace,
+                        activeDocument,
+                        onDocumentClick,
+                        allowSelection,
+                        selectedDocs,
+                        setSelectedDocs,
+                        setDocsLoading,
+                        spaceSchema,
+                        activeTag,
+                        // setSelectedDoc,
+                        newSourceRef,
+                        ref,
+                      }) => {
   // const [addNewDoc, setAddNewDoc] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [
-    { apiData, loading, isLoadingMore, hasMoreRecord, page },
-    { setLoadingMore, setPage, setData, setQueryParams, updateInitialUrl },
+    {apiData, loading, isLoadingMore, hasMoreRecord, page},
+    {setLoadingMore, setPage, setData, setQueryParams, updateInitialUrl},
   ] = usePaginatedDataApi(
     `knowledge_base/${currentSpace.token}/connector-data/`,
     [],
@@ -52,7 +52,7 @@ const AppDocuments = ({
 
   useEffect(() => {
     if (currentSpace.token) {
-      setQueryParams({ page: 1, search: '' });
+      setQueryParams({page: 1, search: ''});
       updateInitialUrl(`knowledge_base/${currentSpace.token}/connector-data/`);
     }
   }, [currentSpace.token]);

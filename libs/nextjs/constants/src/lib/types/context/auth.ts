@@ -1,15 +1,11 @@
-import type { ReactNode } from 'react';
-import type { Organization } from '../organization';
-import type { User } from '../user';
+import type {ReactNode} from 'react';
+import type {Organization} from '../organization';
+import type {User} from '../user';
 
 export type GlobalData = {
   permissions: unknown | null;
   roles: unknown | null;
   profile_roles: unknown | null;
-};
-
-export type Subscription = {
-  [key: string]: unknown;
 };
 
 export type AuthState = {
@@ -18,7 +14,6 @@ export type AuthState = {
   isAuthenticated: boolean;
   isLoading: boolean;
   visitorId: string | null;
-  subscription: Subscription | null;
   currency: string | undefined;
   globalData: GlobalData;
 };
@@ -40,7 +35,6 @@ export type AuthActionsContextType = {
   onSuccessAuthenticate: (user: User) => void;
   storeToken: (token: string) => Promise<unknown>;
   setActiveOrg: (org: Organization | null) => void;
-  getSubscription: () => void;
   getAuthUser: () => Promise<unknown>;
   updateAuthUser: (user: User | null) => void;
   signInUser: (payload: unknown) => Promise<unknown>;

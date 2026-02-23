@@ -1,8 +1,8 @@
-import type { RenderCheckboxProps } from '../models/data-grid';
-import { Checkbox, Radio } from 'antd';
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type {RenderCheckboxProps} from '../models/data-grid';
+import {Checkbox, Radio} from 'antd';
+import {CheckboxChangeEvent} from 'antd/es/checkbox';
 
-export function renderCheckbox({ onChange, ...props }: RenderCheckboxProps) {
+export function renderCheckbox({onChange, ...props}: RenderCheckboxProps) {
   function handleChange(e: CheckboxChangeEvent) {
     onChange(e.target.checked, (e.nativeEvent as MouseEvent).shiftKey);
   }

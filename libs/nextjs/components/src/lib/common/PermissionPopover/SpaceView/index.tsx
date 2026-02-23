@@ -1,5 +1,5 @@
 const SpaceView = () => {
-  return <div />;
+  return <div/>;
 };
 
 export default SpaceView;

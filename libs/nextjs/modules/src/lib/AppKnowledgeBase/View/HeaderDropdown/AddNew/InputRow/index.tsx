@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Col, Row, Select, Tooltip } from 'antd';
-import { useDrag, useDrop } from 'react-dnd';
-import {
-  MdDelete,
-  MdFormatListBulleted,
-  MdOutlineDragIndicator,
-  MdOutlineMoreVert,
-} from 'react-icons/md';
-import { AppPopconfirm } from '@unpod/components/antd';
+import React, {useEffect, useRef, useState} from 'react';
+import {Col, Row, Select, Tooltip} from 'antd';
+import {useDrag, useDrop} from 'react-dnd';
+import {MdDelete, MdFormatListBulleted, MdOutlineDragIndicator, MdOutlineMoreVert,} from 'react-icons/md';
+import {AppPopconfirm} from '@unpod/components/antd';
 import {
   StyledActions,
   StyledButton,
@@ -21,36 +16,36 @@ import {
   StyledSelect,
   StyledTimePicker,
 } from './index.styled';
-import { getDateObject } from '@unpod/helpers/DateHelper';
-import { INPUT_TYPE_ICONS } from '@unpod/constants';
-import { useIntl } from 'react-intl';
+import {getDateObject} from '@unpod/helpers/DateHelper';
+import {INPUT_TYPE_ICONS} from '@unpod/constants';
+import {useIntl} from 'react-intl';
 
-const { Option } = Select;
+const {Option} = Select;
 
-const PickerWithType = ({ type, onChange, ...props }) => {
+const PickerWithType = ({type, onChange, ...props}) => {
   if (type === 'time')
     return <StyledTimePicker onChange={onChange} {...props} />;
   if (type === 'date')
     return <StyledDatePicker onChange={onChange} {...props} />;
-  return <StyledDatePicker onChange={onChange} {...props} showTime />;
+  return <StyledDatePicker onChange={onChange} {...props} showTime/>;
 };
 
 const InputRow = ({
-  item,
-  handleInputChange,
-  handleDefaultValueChange,
-  setSelectedItem,
-  setOpenDetail,
-  handleDeleteInput,
-  handleRequiredChange,
-  onRowReorder,
-  index,
-}) => {
+                    item,
+                    handleInputChange,
+                    handleDefaultValueChange,
+                    setSelectedItem,
+                    setOpenDetail,
+                    handleDeleteInput,
+                    handleRequiredChange,
+                    onRowReorder,
+                    index,
+                  }) => {
   const [openDelTooltip, setDelTooltip] = useState(false);
   const [inputVal, setInputVal] = useState(null);
   const [defaultVal, setDefaultVal] = useState(null);
   const ref = useRef(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (item.title) setInputVal(item.title);
@@ -60,7 +55,7 @@ const InputRow = ({
     if (item.defaultValue) setDefaultVal(item.defaultValue);
   }, [item.defaultValue]);
 
-  const [{ isOver }, drop] = useDrop({
+  const [{isOver}, drop] = useDrop({
     accept: 'row',
     drop: (item) => {
       onRowReorder(item.index, index);
@@ -71,10 +66,10 @@ const InputRow = ({
     }),
   });
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{isDragging}, drag] = useDrag({
     type: 'row',
     item: () => {
-      return { index };
+      return {index};
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -85,9 +80,9 @@ const InputRow = ({
   drag(drop(ref));
 
   return (
-    <StyledContainer isOver={isOver} style={{ opacity }}>
+    <StyledContainer isOver={isOver} style={{opacity}}>
       <StyledDragHandle ref={ref}>
-        <MdOutlineDragIndicator fontSize={18} />
+        <MdOutlineDragIndicator fontSize={18}/>
       </StyledDragHandle>
 
       <Row gutter={[12, 12]}>
@@ -116,7 +111,7 @@ const InputRow = ({
             item.type === 'checkboxes' ? (
               <StyledSelect
                 variant="filled"
-                placeholder={formatMessage({ id: 'form.defaultValue' })}
+                placeholder={formatMessage({id: 'form.defaultValue'})}
                 value={defaultVal}
                 onChange={(value) => handleDefaultValueChange(value, item)}
                 mode={
@@ -134,7 +129,7 @@ const InputRow = ({
             ) : item.type === 'date' ? (
               <PickerWithType
                 variant="filled"
-                placeholder={formatMessage({ id: 'form.defaultValue' })}
+                placeholder={formatMessage({id: 'form.defaultValue'})}
                 type={item.type}
                 value={getDateObject(defaultVal, 'YYYY-MM-DD')}
                 onChange={(value, dateString) => {
@@ -144,7 +139,7 @@ const InputRow = ({
             ) : item.type === 'time' ? (
               <PickerWithType
                 variant="filled"
-                placeholder={formatMessage({ id: 'form.defaultValue' })}
+                placeholder={formatMessage({id: 'form.defaultValue'})}
                 type={item.type}
                 value={getDateObject(defaultVal, 'HH:mm:ss')}
                 onChange={(value, dateString) => {
@@ -154,7 +149,7 @@ const InputRow = ({
             ) : item.type === 'datetime' ? (
               <PickerWithType
                 variant="filled"
-                placeholder={formatMessage({ id: 'form.defaultValue' })}
+                placeholder={formatMessage({id: 'form.defaultValue'})}
                 type={item.type}
                 value={getDateObject(defaultVal, 'YYYY-MM-DD  HH:mm:ss')}
                 onChange={(value, dateString) => {
@@ -164,7 +159,7 @@ const InputRow = ({
             ) : (
               <StyledInput
                 variant="filled"
-                placeholder={formatMessage({ id: 'form.defaultValue' })}
+                placeholder={formatMessage({id: 'form.defaultValue'})}
                 value={defaultVal}
                 onChange={(e) => setDefaultVal(e.target.value)}
                 onBlur={() => {
@@ -193,38 +188,38 @@ const InputRow = ({
                       setOpenDetail(true);
                     }}
                   >
-                    <MdFormatListBulleted fontSize={18} />
+                    <MdFormatListBulleted fontSize={18}/>
                   </StyledButton>
                 </Tooltip>
               )}
 
               <AppPopconfirm
-                title={formatMessage({ id: 'schema.deleteInput' })}
-                description={formatMessage({ id: 'schema.deleteInputConfirm' })}
+                title={formatMessage({id: 'schema.deleteInput'})}
+                description={formatMessage({id: 'schema.deleteInputConfirm'})}
                 onConfirm={() => handleDeleteInput(item)}
-                okText={formatMessage({ id: 'common.yes' })}
-                cancelText={formatMessage({ id: 'common.no' })}
+                okText={formatMessage({id: 'common.yes'})}
+                cancelText={formatMessage({id: 'common.no'})}
                 onOpenChange={(open) => setDelTooltip(!open)}
               >
                 <Tooltip
-                  title={formatMessage({ id: 'common.delete' })}
+                  title={formatMessage({id: 'common.delete'})}
                   open={openDelTooltip}
                   onOpenChange={(open) => setDelTooltip(open)}
                 >
                   <StyledButton type="text" size="small">
-                    <MdDelete fontSize={18} />
+                    <MdDelete fontSize={18}/>
                   </StyledButton>
                 </Tooltip>
               </AppPopconfirm>
 
-              <Tooltip title={formatMessage({ id: 'common.required' })}>
+              <Tooltip title={formatMessage({id: 'common.required'})}>
                 <StyledCheckbox
                   checked={item.required}
                   onChange={(e) => handleRequiredChange(e.target.checked, item)}
                 />
               </Tooltip>
 
-              <Tooltip title={formatMessage({ id: 'common.moreInfo' })}>
+              <Tooltip title={formatMessage({id: 'common.moreInfo'})}>
                 <StyledButton
                   type="text"
                   size="small"
@@ -233,7 +228,7 @@ const InputRow = ({
                     setOpenDetail(true);
                   }}
                 >
-                  <MdOutlineMoreVert fontSize={18} />
+                  <MdOutlineMoreVert fontSize={18}/>
                 </StyledButton>
               </Tooltip>
             </StyledActions>
@@ -244,7 +239,7 @@ const InputRow = ({
   );
 };
 
-const { object, func } = PropTypes;
+const {object, func} = PropTypes;
 
 InputRow.propTypes = {
   item: object,

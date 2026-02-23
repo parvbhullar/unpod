@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const StylesImageWrapper = styled.div`
   width: 110px;
   height: 110px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -20,7 +20,7 @@ export const StyledItemWrapper = styled.div`
   display: flex;
   gap: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     gap: 12px;
   }
 `;

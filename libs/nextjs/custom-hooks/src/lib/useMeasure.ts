@@ -1,6 +1,6 @@
 'use client';
 
-import { DependencyList, RefObject, useEffect, useRef, useState } from 'react';
+import {DependencyList, RefObject, useEffect, useRef, useState} from 'react';
 
 export type Boundary = {
   width: number;
@@ -10,7 +10,8 @@ export type Boundary = {
   right?: number;
   bottom?: number;
   x?: number;
-  y?: number;};
+  y?: number;
+};
 
 export type UseMeasureResult<T extends HTMLElement = HTMLElement> = [
   Boundary,
@@ -20,7 +21,7 @@ export type UseMeasureResult<T extends HTMLElement = HTMLElement> = [
 export const useMeasure = <T extends HTMLElement = HTMLElement>(
   deps: DependencyList = [],
 ): UseMeasureResult<T> => {
-  const [boundary, setBoundary] = useState<Boundary>({ width: 0, height: 0 });
+  const [boundary, setBoundary] = useState<Boundary>({width: 0, height: 0});
   const elementRef = useRef<T | null>(null);
 
   useEffect(() => {

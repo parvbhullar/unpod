@@ -1,6 +1,6 @@
-import { createContext, useContext } from 'react';
+import {createContext, useContext} from 'react';
 
-import type { Maybe, Renderers } from './models/data-grid';
+import type {Maybe, Renderers} from './models/data-grid';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataGridDefaultRenderersContext =

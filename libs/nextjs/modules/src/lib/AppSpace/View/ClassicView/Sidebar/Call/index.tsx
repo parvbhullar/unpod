@@ -1,15 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import {useEffect, useMemo, useState} from 'react';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 import AppList from '@unpod/components/common/AppList';
-import { AppDocumentsSkeleton } from '@unpod/skeleton/AppDocumentsSkeleton';
+import {AppDocumentsSkeleton} from '@unpod/skeleton/AppDocumentsSkeleton';
 import CallItem from './Item';
 import SubHeader from './SubHeader';
-import { StyledSearchBoxWrapper } from './index.styled';
-import { getUtcTimestamp } from '@unpod/helpers/DateHelper';
-import type { Dayjs } from 'dayjs';
+import {StyledSearchBoxWrapper} from './index.styled';
+import {getUtcTimestamp} from '@unpod/helpers/DateHelper';
+import type {Dayjs} from 'dayjs';
 
 type FiltersState = {
   call_type?: string;
@@ -23,8 +20,8 @@ const Call = () => {
   const [isDocsLoading, setDocsLoading] = useState(false);
   const [filters, setFilters] = useState<FiltersState>({});
 
-  const { callsActions, setSelectedDocs } = useAppSpaceActionsContext();
-  const { currentSpace, callsData, selectedDocs } = useAppSpaceContext();
+  const {callsActions, setSelectedDocs} = useAppSpaceActionsContext();
+  const {currentSpace, callsData, selectedDocs} = useAppSpaceContext();
 
   const {
     apiData = [],
@@ -113,9 +110,9 @@ const Call = () => {
           height: 'calc(100vh - 125px)',
         }}
         data={apiData}
-        initialLoader={<AppDocumentsSkeleton time={true} />}
+        initialLoader={<AppDocumentsSkeleton time={true}/>}
         loading={loading}
-        renderItem={(data, index) => <CallItem key={index} data={data} />}
+        renderItem={(data, index) => <CallItem key={index} data={data}/>}
         onEndReached={onEndReached}
         footerProps={{
           loading: isLoadingMore,

@@ -1,20 +1,9 @@
-import type { Dispatch, SetStateAction } from 'react';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
-import {
-  getDataApi,
-  useAuthContext,
-  useGetDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { tablePageSize } from '@unpod/constants';
-import { applyWebSocketUpdates, processWebSocketMessage } from '@unpod/helpers';
-import { useAgentConnection } from '@unpod/livekit/hooks/useAgentConnection';
+import type {Dispatch, SetStateAction} from 'react';
+import {useCallback, useEffect, useLayoutEffect, useRef, useState,} from 'react';
+import {getDataApi, useAuthContext, useGetDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {tablePageSize} from '@unpod/constants';
+import {applyWebSocketUpdates, processWebSocketMessage} from '@unpod/helpers';
+import {useAgentConnection} from '@unpod/livekit/hooks/useAgentConnection';
 
 type MessageData = {
   block_id?: string | number;
@@ -42,16 +31,16 @@ type UseConversationParams = {
 };
 
 export const useConversation = ({
-  currentPost,
-  lastMessage,
-  setThinking,
-  setStreaming,
-  setDataLoading,
-  sendJsonMessage,
-  onStartVoice,
-  voiceAssistant,
-}: UseConversationParams) => {
-  const { isLoading, visitorId, isAuthenticated } = useAuthContext();
+                                  currentPost,
+                                  lastMessage,
+                                  setThinking,
+                                  setStreaming,
+                                  setDataLoading,
+                                  sendJsonMessage,
+                                  onStartVoice,
+                                  voiceAssistant,
+                                }: UseConversationParams) => {
+  const {isLoading, visitorId, isAuthenticated} = useAuthContext();
   const {
     roomToken,
     connectionMode,
@@ -80,11 +69,11 @@ export const useConversation = ({
   const [hasInitialLoad, setHasInitialLoad] = useState(false);
 
   // Fetch initial messages
-  const [{ apiData, loading }, { setData, updateInitialUrl, setQueryParams }] =
+  const [{apiData, loading}, {setData, updateInitialUrl, setQueryParams}] =
     useGetDataApi(
       `conversation/${currentPost.post_id}/messages/`,
-      { data: [] },
-      { page: 1, page_size: tablePageSize },
+      {data: []},
+      {page: 1, page_size: tablePageSize},
       false,
     ) as any;
 
@@ -95,7 +84,7 @@ export const useConversation = ({
       setPage(1);
 
       if (isAuthenticated) {
-        setQueryParams({ page: 1, page_size: tablePageSize });
+        setQueryParams({page: 1, page_size: tablePageSize});
       } else {
         setQueryParams({
           page: 1,
@@ -107,7 +96,7 @@ export const useConversation = ({
 
     return () => {
       setItems([]);
-      setData({ data: [] });
+      setData({data: []});
       setHasInitialLoad(false);
     };
   }, [currentPost.post_id, isLoading, isAuthenticated, visitorId]);
@@ -165,7 +154,7 @@ export const useConversation = ({
   // Restore scroll position after loading older messages
   useLayoutEffect(() => {
     if (scrollRestoreInfo && !loadingMore) {
-      const { previousScrollHeight, previousScrollTop } = scrollRestoreInfo;
+      const {previousScrollHeight, previousScrollTop} = scrollRestoreInfo;
       const messagesContainer = messagesContainerRef.current;
 
       if (messagesContainer) {
@@ -397,8 +386,8 @@ export const useConversation = ({
 
       if (infoViewActionsContext?.fetchError) {
         infoViewActionsContext.fetchError(
-          formatMessage({ id: 'error.loadingMessages' }) ||
-            'Failed to load older messages',
+          formatMessage({id: 'error.loadingMessages'}) ||
+          'Failed to load older messages',
         );
       }
 
@@ -434,7 +423,7 @@ export const useConversation = ({
           data: {
             content: message,
             final: true,
-            ...(files ? { files } : {}),
+            ...(files ? {files} : {}),
           },
           created: new Date().toISOString(),
           block_type: 'text',
@@ -462,7 +451,7 @@ export const useConversation = ({
           data: {
             content: message,
             block_type: 'text',
-            ...(files ? { files } : {}),
+            ...(files ? {files} : {}),
           },
         };
 

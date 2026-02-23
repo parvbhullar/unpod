@@ -1,23 +1,19 @@
-import { Fragment, useEffect } from 'react';
-import { Spin } from 'antd';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useGetDataApi,
-} from '@unpod/providers';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {Fragment, useEffect} from 'react';
+import {Spin} from 'antd';
+import {useAppSpaceActionsContext, useAppSpaceContext, useGetDataApi,} from '@unpod/providers';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import DocumentFooter from '../DocumentFooter';
 import DocumentView from './DocumentView';
-import { StyledDetailsRoot, StyledRow } from './index.styled';
-import type { Document } from '@unpod/constants/types';
+import {StyledDetailsRoot, StyledRow} from './index.styled';
+import type {Document} from '@unpod/constants/types';
 
 const GeneralDocView = () => {
-  const { currentSpace, activeDocument } = useAppSpaceContext();
-  const { setActiveTab } = useAppSpaceActionsContext();
+  const {currentSpace, activeDocument} = useAppSpaceContext();
+  const {setActiveTab} = useAppSpaceActionsContext();
 
-  const [{ apiData, loading }, { setData, updateInitialUrl }] = useGetDataApi(
+  const [{apiData, loading}, {setData, updateInitialUrl}] = useGetDataApi(
     `knowledge_base/${currentSpace?.token}/connector-doc-data/${activeDocument?.document_id}/`,
-    { data: undefined as Document | undefined },
+    {data: undefined as Document | undefined},
     {},
     false,
   ) as [
@@ -27,7 +23,7 @@ const GeneralDocView = () => {
 
   useEffect(() => {
     if (currentSpace?.token && activeDocument?.document_id) {
-      setData({ data: undefined });
+      setData({data: undefined});
       updateInitialUrl(
         `knowledge_base/${currentSpace.token}/connector-doc-data/${activeDocument.document_id}/`,
       );
@@ -59,12 +55,12 @@ const GeneralDocView = () => {
     <StyledDetailsRoot>
       {loading ? (
         <StyledRow align="middle" justify="center">
-          <Spin />
+          <Spin/>
         </StyledRow>
       ) : (
         <Fragment>
-          <DocumentView document={apiData?.data || ({} as Document)} />
-          <DocumentFooter onSuggestionsClick={onSuggestionsClick} />
+          <DocumentView document={apiData?.data || ({} as Document)}/>
+          <DocumentFooter onSuggestionsClick={onSuggestionsClick}/>
         </Fragment>
       )}
     </StyledDetailsRoot>

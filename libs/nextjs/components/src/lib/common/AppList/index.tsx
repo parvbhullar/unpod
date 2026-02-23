@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import {ReactNode} from 'react';
 import ListView from './ListView';
 import ListFooter from './ListFooter';
 import ListEmptyResult from './ListEmptyResult';
@@ -20,10 +20,10 @@ type AppListProps<T> = {
   [key: string]: unknown;
 };
 
-const AppList = <T,>({
-  footerProps,
-  ...props
-}: AppListProps<T>) => {
+const AppList = <T, >({
+                        footerProps,
+                        ...props
+                      }: AppListProps<T>) => {
   return (
     <ListView<T>
       {...props}

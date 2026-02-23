@@ -1,12 +1,8 @@
-import React, { useRef } from 'react';
-import {
-  selectDominantSpeaker,
-  selectPeers,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import { GridSidePaneView } from '../MainGridView/GridView';
+import React, {useRef} from 'react';
+import {selectDominantSpeaker, selectPeers, useHMSStore,} from '@100mslive/react-sdk';
+import {GridSidePaneView} from '../MainGridView/GridView';
 import VideoTile from '../VideoTile';
-import { StyledContainer, StyledVideoContainer } from './index.styled';
+import {StyledContainer, StyledVideoContainer} from './index.styled';
 
 const ActiveSpeakerView = () => {
   const dominantSpeaker = useHMSStore(selectDominantSpeaker);
@@ -29,7 +25,7 @@ const ActiveSpeakerView = () => {
   return (
     <StyledContainer>
       <StyledVideoContainer>
-        <VideoTile peerId={activeSpeaker.id} width="100%" height="100%" />
+        <VideoTile peerId={activeSpeaker.id} width="100%" height="100%"/>
       </StyledVideoContainer>
       {showSidePane && (
         <GridSidePaneView

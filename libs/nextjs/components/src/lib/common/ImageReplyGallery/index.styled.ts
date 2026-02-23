@@ -20,14 +20,14 @@ export const StyledActionsWrapper = styled.div`
 
   & .download-btn {
     opacity: 0;
-    color: ${({ theme }) => theme.palette.background.default};
+    color: ${({theme}) => theme.palette.background.default};
   }
 `;
 
 export const StyledGalleryItem = styled.div`
   overflow: hidden;
   border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.palette.primary}33;
+  border: 1px solid ${({theme}) => theme.palette.primary}33;
   cursor: pointer;
   position: relative;
 

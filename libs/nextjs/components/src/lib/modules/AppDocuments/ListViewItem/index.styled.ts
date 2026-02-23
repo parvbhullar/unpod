@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
   padding: 16px;
-  border-block-end: 1px solid ${({ theme }) => theme.border.color};
+  border-block-end: 1px solid ${({theme}) => theme.border.color};
 
   &:hover {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -16,7 +16,7 @@ export const StyledRoot = styled.div`
 
   &.active,
   &.selected {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   }
 `;

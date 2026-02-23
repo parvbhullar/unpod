@@ -1,12 +1,12 @@
 'use client';
-import React, { useCallback, useEffect } from 'react';
-import { LiveKitRoom } from '@livekit/components-react';
-import { useInfoViewActionsContext } from '@unpod/providers';
+import React, {useCallback, useEffect} from 'react';
+import {LiveKitRoom} from '@livekit/components-react';
+import {useInfoViewActionsContext} from '@unpod/providers';
 import VoiceAgent from './VoiceAgent';
-import { useAgentConnection } from '@unpod/livekit/hooks/useAgentConnection';
+import {useAgentConnection} from '@unpod/livekit/hooks/useAgentConnection';
 
-const AgentView = ({ token, config }) => {
-  const { shouldConnect, wsUrl, mode, connect, disconnect } =
+const AgentView = ({token, config}) => {
+  const {shouldConnect, wsUrl, mode, connect, disconnect} =
     useAgentConnection();
   const infoViewActionsContext = useInfoViewActionsContext();
 

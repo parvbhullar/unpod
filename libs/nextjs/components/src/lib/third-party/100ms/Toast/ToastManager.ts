@@ -1,11 +1,11 @@
-import { v4 } from 'uuid';
+import {v4} from 'uuid';
 
 export const ToastManager = {
   toasts: new Map(),
   listeners: new Map(),
   addToast(toast) {
     const id = toast.id ? toast.id : v4();
-    this.toasts.set(id, { ...toast, id });
+    this.toasts.set(id, {...toast, id});
     this.onChange();
     return id;
   },
@@ -21,7 +21,7 @@ export const ToastManager = {
   },
   replaceToast(id, toast) {
     if (this.isActive(id)) {
-      this.toasts.set(id, { ...this.toasts.get(id), ...toast });
+      this.toasts.set(id, {...this.toasts.get(id), ...toast});
       this.onChange();
       return id;
     } else {

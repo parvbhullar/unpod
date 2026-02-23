@@ -1,14 +1,14 @@
-import { List } from 'antd';
-import { StyledListItem, StyledListMeta } from './index.styled';
+import {List} from 'antd';
+import {StyledListItem, StyledListMeta} from './index.styled';
 
 const ListItems = ({
-  title,
-  description,
-  avatar,
-  recordingButton = null,
-  contentStart = false,
-  ...props
-}: {
+                     title,
+                     description,
+                     avatar,
+                     recordingButton = null,
+                     contentStart = false,
+                     ...props
+                   }: {
   title?: any;
   description?: any;
   avatar?: any;

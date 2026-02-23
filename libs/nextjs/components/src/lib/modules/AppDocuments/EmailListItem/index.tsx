@@ -1,12 +1,8 @@
-
-import { Badge, Button, Space, Tooltip, Typography } from 'antd';
-import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
+import {Badge, Button, Space, Tooltip, Typography} from 'antd';
+import {MdCheckBoxOutlineBlank, MdOutlineCheckBox} from 'react-icons/md';
 import clsx from 'clsx';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import UserAvatar from '../../../common/UserAvatar';
 import {
   StyledHeaderExtra,
@@ -16,13 +12,10 @@ import {
   StyledMeta,
   StyledRoot,
 } from './index.styled';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
-import { useRouter } from 'next/navigation';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
+import {useRouter} from 'next/navigation';
 
-const { Paragraph, Title, Text } = Typography;
+const {Paragraph, Title, Text} = Typography;
 
 type EmailDocument = {
   document_id: string;
@@ -36,12 +29,13 @@ type EmailDocument = {
 
 type EmailListItemProps = {
   data: EmailDocument;
-  showTimeFrom?: boolean;};
+  showTimeFrom?: boolean;
+};
 
-const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
-  const { setActiveDocument, setBreadcrumb, setActiveTab, setSelectedDocs } =
+const EmailListItem = ({data, showTimeFrom}: EmailListItemProps) => {
+  const {setActiveDocument, setBreadcrumb, setActiveTab, setSelectedDocs} =
     useAppSpaceActionsContext();
-  const { currentSpace, activeDocument, activeTab, selectedDocs } =
+  const {currentSpace, activeDocument, activeTab, selectedDocs} =
     useAppSpaceContext();
   const allowSelection = activeTab === 'logs';
   const router = useRouter();
@@ -84,7 +78,7 @@ const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
       onClick={onClick}
     >
       <StyledItem>
-        <UserAvatar user={{ full_name: data?.user?.name }} />
+        <UserAvatar user={{full_name: data?.user?.name}}/>
       </StyledItem>
 
       <StyledInnerRoot>
@@ -92,7 +86,7 @@ const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
           <StyledMeta>
             <Title
               level={5}
-              className={clsx({ 'font-weight-normal': data.seen })}
+              className={clsx({'font-weight-normal': data.seen})}
               ellipsis
             >
               {data.title}
@@ -101,7 +95,7 @@ const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
 
           <StyledHeaderExtra>
             <Space>
-              {data.seen ? null : <Badge color="#796cff" />}
+              {data.seen ? null : <Badge color="#796cff"/>}
 
               <Tooltip
                 title={changeDateStringFormat(
@@ -114,10 +108,10 @@ const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
                   {showTimeFrom
                     ? getTimeFromNow(data.date)
                     : changeDateStringFormat(
-                        data.date,
-                        'YYYY-MM-DD HH:mm:ss',
-                        'DD MMM',
-                      )}
+                      data.date,
+                      'YYYY-MM-DD HH:mm:ss',
+                      'DD MMM',
+                    )}
                 </Text>
               </Tooltip>
             </Space>
@@ -129,9 +123,9 @@ const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
                 size="small"
                 icon={
                   selectedDocs.includes(data.document_id) ? (
-                    <MdOutlineCheckBox fontSize={21} />
+                    <MdOutlineCheckBox fontSize={21}/>
                   ) : (
-                    <MdCheckBoxOutlineBlank fontSize={21} />
+                    <MdCheckBoxOutlineBlank fontSize={21}/>
                   )
                 }
               />
@@ -143,7 +137,7 @@ const EmailListItem = ({ data, showTimeFrom }: EmailListItemProps) => {
           <Paragraph
             type="secondary"
             className="mb-0"
-            style={{ maxWidth: '90%' }}
+            style={{maxWidth: '90%'}}
             ellipsis
           >
             {getStringFromHtml(data.description)}

@@ -1,19 +1,15 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { Button, Checkbox, Typography } from 'antd';
-import type { DraggableData, DraggableEvent } from 'react-draggable';
+import React, {useMemo, useRef, useState} from 'react';
+import {Button, Checkbox, Typography} from 'antd';
+import type {DraggableData, DraggableEvent} from 'react-draggable';
 import Draggable from 'react-draggable';
 import AppInput from '../AppInput';
-import { EditCellState, SelectCellState } from '../../DataGrid';
-import {
-  CalculatedColumn,
-  Maybe,
-  RowsChangeData,
-} from '../../models/data-grid';
+import {EditCellState, SelectCellState} from '../../DataGrid';
+import {CalculatedColumn, Maybe, RowsChangeData,} from '../../models/data-grid';
 import ModalWindow from '../ModalWindow';
-import { StyledActions, StyledContainer, StyledTitle } from './index.styled';
-import { PartialPosition } from '../../ScrollToCell';
+import {StyledActions, StyledContainer, StyledTitle} from './index.styled';
+import {PartialPosition} from '../../ScrollToCell';
 
-const { Group: CheckboxGroup } = Checkbox;
+const {Group: CheckboxGroup} = Checkbox;
 export type CheckboxValueType = string | number | boolean;
 
 type Props<R> = {
@@ -40,16 +36,16 @@ type FoundRecords = {
 }[];
 
 function FindAndReplace<R>({
-  open,
-  findString,
-  rows,
-  columns,
-  onClose,
-  setSelectedPosition,
-  setScrollToPosition,
-  onRowsChange,
-  rowKeyId,
-}: Props<R>) {
+                             open,
+                             findString,
+                             rows,
+                             columns,
+                             onClose,
+                             setSelectedPosition,
+                             setScrollToPosition,
+                             onRowsChange,
+                             rowKeyId,
+                           }: Props<R>) {
   const [findStr, setFindStr] = useState(findString || '');
   const [replaceStr, setReplaceStr] = useState('');
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -125,7 +121,7 @@ function FindAndReplace<R>({
       rowKey: rows[rowIdx]?.[rowKeyId as keyof R] as string | number,
       colKey: columns[idx].dataIndex,
     });
-    setScrollToPosition({ idx: idx, rowIdx });
+    setScrollToPosition({idx: idx, rowIdx});
   };
 
   const onFind = () => {
@@ -248,10 +244,10 @@ function FindAndReplace<R>({
   };
   const onReplaceAll = () => {
     if (foundRecordsRef.current) {
-      const { current: records } = foundRecordsRef;
+      const {current: records} = foundRecordsRef;
       const foundData = records.reduce(
         (acc: { columnKey: string; rowIdx: number }[], item) => {
-          acc.push({ columnKey: item.columnKey, rowIdx: item.rowIdx });
+          acc.push({columnKey: item.columnKey, rowIdx: item.rowIdx});
           return acc;
         },
         [],
@@ -273,7 +269,7 @@ function FindAndReplace<R>({
   };
 
   const onStart = (_event: DraggableEvent, uiData: DraggableData) => {
-    const { clientWidth, clientHeight } = window.document.documentElement;
+    const {clientWidth, clientHeight} = window.document.documentElement;
     const targetRect = draggleRef.current?.getBoundingClientRect();
     if (!targetRect) {
       return;
@@ -302,7 +298,7 @@ function FindAndReplace<R>({
           Find And Replace
         </StyledTitle>
       }
-      style={{ top: 20 }}
+      style={{top: 20}}
       open={open}
       onCancel={onClose}
       mask={false}
@@ -348,7 +344,7 @@ function FindAndReplace<R>({
         {(showLoopMsg || findReplaceMsg) && (
           <Typography>
             {showLoopMsg && (
-              <Typography.Paragraph style={{ margin: 0 }} strong>
+              <Typography.Paragraph style={{margin: 0}} strong>
                 No more results found, looping around
               </Typography.Paragraph>
             )}

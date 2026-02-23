@@ -1,21 +1,14 @@
 'use client';
-import { CSSProperties, useEffect, useState } from 'react';
-import { Button, Form, Modal, Row, Select } from 'antd';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import {
-  AppDate,
-  AppDateTime,
-  AppInput,
-  AppSelect,
-  AppTextArea,
-  AppTime,
-} from '../../../antd';
-import { StyledChoicesContainer } from './index.styled';
-import { REQUIRED_CONTACT_FIELDS } from '@unpod/constants';
-import { useIntl } from 'react-intl';
+import {CSSProperties, useEffect, useState} from 'react';
+import {Button, Form, Modal, Row, Select} from 'antd';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {AppDate, AppDateTime, AppInput, AppSelect, AppTextArea, AppTime,} from '../../../antd';
+import {StyledChoicesContainer} from './index.styled';
+import {REQUIRED_CONTACT_FIELDS} from '@unpod/constants';
+import {useIntl} from 'react-intl';
 
-const { Item } = Form;
-const { Option } = Select;
+const {Item} = Form;
+const {Option} = Select;
 
 const DEFAULT_VALUE_PLACEHOLDER = 'schema.enterDefaultValue';
 
@@ -37,15 +30,15 @@ type ManageDetailsProps = {
 };
 
 const ManageDetails = ({
-  selectedItem,
-  onFinish,
-  initialValues,
-  contentType,
-  overflowY = 'hidden',
-  ...restProps
-}: ManageDetailsProps) => {
+                         selectedItem,
+                         onFinish,
+                         initialValues,
+                         contentType,
+                         overflowY = 'hidden',
+                         ...restProps
+                       }: ManageDetailsProps) => {
   const [choices, setChoices] = useState<string[]>([]);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (selectedItem?.choices) {
@@ -58,17 +51,17 @@ const ManageDetails = ({
   };
   return (
     <Modal
-      title={formatMessage({ id: 'schema.manageDetails' })}
+      title={formatMessage({id: 'schema.manageDetails'})}
       footer={null}
       destroyOnHidden
       centered
       {...restProps}
-      style={{ overflowY: overflowY }}
+      style={{overflowY: overflowY}}
     >
       <StyledChoicesContainer>
         <Form
           layout="vertical"
-          initialValues={initialValues || { choices: [] }}
+          initialValues={initialValues || {choices: []}}
           onFinish={onFinish}
         >
           <Item
@@ -76,7 +69,7 @@ const ManageDetails = ({
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.fieldRequired' }),
+                message: formatMessage({id: 'validation.fieldRequired'}),
               },
               (form) => ({
                 validator(_, title) {
@@ -91,7 +84,7 @@ const ManageDetails = ({
             ]}
           >
             <AppInput
-              placeholder={formatMessage({ id: 'schema.enterFieldTitle' })}
+              placeholder={formatMessage({id: 'schema.enterFieldTitle'})}
               asterisk
             />
           </Item>
@@ -105,7 +98,7 @@ const ManageDetails = ({
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.fieldRequired' }),
+                  message: formatMessage({id: 'validation.fieldRequired'}),
                 },
                 (form) => ({
                   validator(_, name) {
@@ -120,7 +113,7 @@ const ManageDetails = ({
               ]}
             >
               <AppInput
-                placeholder={formatMessage({ id: 'schema.enterFieldTitle' })}
+                placeholder={formatMessage({id: 'schema.enterFieldTitle'})}
                 asterisk
               />
             </Item>
@@ -134,12 +127,12 @@ const ManageDetails = ({
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.fieldRequired' }),
+                  message: formatMessage({id: 'validation.fieldRequired'}),
                 },
               ]}
             >
               <AppSelect
-                placeholder={formatMessage({ id: 'form.enterChoices' })}
+                placeholder={formatMessage({id: 'form.enterChoices'})}
                 onChange={handleChoicesChange}
                 mode="tags"
                 asterisk
@@ -152,7 +145,7 @@ const ManageDetails = ({
             rules={[
               {
                 required: false,
-                message: formatMessage({ id: 'validation.fieldRequired' }),
+                message: formatMessage({id: 'validation.fieldRequired'}),
               },
             ]}
           >
@@ -160,7 +153,7 @@ const ManageDetails = ({
             selectedItem?.type === 'multi-select' ||
             selectedItem?.type === 'checkboxes' ? (
               <AppSelect
-                placeholder={formatMessage({ id: DEFAULT_VALUE_PLACEHOLDER })}
+                placeholder={formatMessage({id: DEFAULT_VALUE_PLACEHOLDER})}
                 mode={
                   selectedItem?.type === 'multi-select' ||
                   selectedItem?.type === 'checkboxes'
@@ -176,19 +169,19 @@ const ManageDetails = ({
               </AppSelect>
             ) : selectedItem?.type === 'date' ? (
               <AppDate
-                placeholder={formatMessage({ id: DEFAULT_VALUE_PLACEHOLDER })}
+                placeholder={formatMessage({id: DEFAULT_VALUE_PLACEHOLDER})}
               />
             ) : selectedItem?.type === 'time' ? (
               <AppTime
-                placeholder={formatMessage({ id: DEFAULT_VALUE_PLACEHOLDER })}
+                placeholder={formatMessage({id: DEFAULT_VALUE_PLACEHOLDER})}
               />
             ) : selectedItem?.type === 'date-time' ? (
               <AppDateTime
-                placeholder={formatMessage({ id: DEFAULT_VALUE_PLACEHOLDER })}
+                placeholder={formatMessage({id: DEFAULT_VALUE_PLACEHOLDER})}
               />
             ) : (
               <AppInput
-                placeholder={formatMessage({ id: DEFAULT_VALUE_PLACEHOLDER })}
+                placeholder={formatMessage({id: DEFAULT_VALUE_PLACEHOLDER})}
               />
             )}
           </Item>
@@ -198,7 +191,7 @@ const ManageDetails = ({
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.fieldRequired' }),
+                message: formatMessage({id: 'validation.fieldRequired'}),
               },
             ]}
           >
@@ -206,14 +199,14 @@ const ManageDetails = ({
               placeholder={formatMessage({
                 id: 'schema.enterFieldDescription',
               })}
-              autoSize={{ minRows: 3, maxRows: 10 }}
+              autoSize={{minRows: 3, maxRows: 10}}
               asterisk
             />
           </Item>
 
           <Row justify="end">
             <Button type="primary" size="small" shape="round" htmlType="submit">
-              {formatMessage({ id: 'common.save' })}
+              {formatMessage({id: 'common.save'})}
             </Button>
           </Row>
         </Form>

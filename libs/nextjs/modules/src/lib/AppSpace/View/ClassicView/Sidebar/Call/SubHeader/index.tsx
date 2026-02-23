@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import type { MenuProps } from 'antd';
-import { Badge, Button, Dropdown, Tooltip } from 'antd';
+import {useState} from 'react';
+import type {MenuProps} from 'antd';
+import {Badge, Button, Dropdown, Tooltip} from 'antd';
 import {
   MdAdd,
   MdOutlineCheckBox,
@@ -10,40 +10,32 @@ import {
   MdOutlineMoreVert,
   MdRefresh,
 } from 'react-icons/md';
-import type { Spaces } from '@unpod/constants/types';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import type {Spaces} from '@unpod/constants/types';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 import SearchBox from './SearchBox';
-import {
-  StyledContent,
-  StyledFilterContent,
-  StyledRoot,
-  StyledSpace,
-} from './index.styled';
-import { clsx } from 'clsx';
+import {StyledContent, StyledFilterContent, StyledRoot, StyledSpace,} from './index.styled';
+import {clsx} from 'clsx';
 import FilterForm from './FilterForm';
-import { cleanObject } from '@unpod/helpers/GlobalHelper';
-import { useIntl } from 'react-intl';
+import {cleanObject} from '@unpod/helpers/GlobalHelper';
+import {useIntl} from 'react-intl';
 
 const getMenuItems = (formatMessage: (msg: { id: string }) => string) => {
   return [
     {
       key: 'refresh',
-      label: formatMessage({ id: 'common.refresh' }),
+      label: formatMessage({id: 'common.refresh'}),
       icon: (
         <span className="ant-icon edit-icon">
-          <MdRefresh fontSize={18} />
+          <MdRefresh fontSize={18}/>
         </span>
       ),
     },
     {
       key: 'add-call',
-      label: formatMessage({ id: 'sidebarMenu.addCall' }),
+      label: formatMessage({id: 'sidebarMenu.addCall'}),
       icon: (
         <span className="ant-icon edit-icon">
-          <MdAdd fontSize={18} />
+          <MdAdd fontSize={18}/>
         </span>
       ),
     },
@@ -61,17 +53,17 @@ type SubHeaderProps = {
 };
 
 const SubHeader = ({
-  isDocsLoading,
-  onToggleCheck,
-  checkedType = 'none',
-  search,
-  setSearch,
-  filters,
-  setFilters,
-}: SubHeaderProps) => {
-  const { callsActions } = useAppSpaceActionsContext();
-  const { activeTab, currentSpace } = useAppSpaceContext();
-  const { formatMessage } = useIntl();
+                     isDocsLoading,
+                     onToggleCheck,
+                     checkedType = 'none',
+                     search,
+                     setSearch,
+                     filters,
+                     setFilters,
+                   }: SubHeaderProps) => {
+  const {callsActions} = useAppSpaceActionsContext();
+  const {activeTab, currentSpace} = useAppSpaceContext();
+  const {formatMessage} = useIntl();
 
   const [openFilter, setOpenFilter] = useState(false);
   const [searchCount] = useState(0);
@@ -82,13 +74,13 @@ const SubHeader = ({
     setOpenFilter(false);
   };
 
-  const onMenuClick: MenuProps['onClick'] = ({ key }) => {
+  const onMenuClick: MenuProps['onClick'] = ({key}) => {
     if (key === 'refresh') {
       (
         callsActions as {
           setQueryParams: (params: Record<string, unknown>) => void;
         }
-      ).setQueryParams({ page: 1, page_size: 50 });
+      ).setQueryParams({page: 1, page_size: 50});
     } else if (key === 'add-call') {
       // Handle add call logic
       console.log('Add call clicked');
@@ -115,11 +107,11 @@ const SubHeader = ({
               size="small"
               icon={
                 checkedType === 'all' ? (
-                  <MdOutlineCheckBox fontSize={21} />
+                  <MdOutlineCheckBox fontSize={21}/>
                 ) : checkedType === 'none' ? (
-                  <MdOutlineCheckBoxOutlineBlank fontSize={21} />
+                  <MdOutlineCheckBoxOutlineBlank fontSize={21}/>
                 ) : (
-                  <MdOutlineIndeterminateCheckBox fontSize={21} />
+                  <MdOutlineIndeterminateCheckBox fontSize={21}/>
                 )
               }
               loading={isDocsLoading}
@@ -142,7 +134,7 @@ const SubHeader = ({
                 }
                 size="small"
               >
-                <MdOutlineFilterList fontSize={21} />
+                <MdOutlineFilterList fontSize={21}/>
               </Badge>
             }
             onClick={() => setOpenFilter(!openFilter)}
@@ -161,7 +153,7 @@ const SubHeader = ({
               type="text"
               shape="circle"
               size="small"
-              icon={<MdOutlineMoreVert fontSize={21} />}
+              icon={<MdOutlineMoreVert fontSize={21}/>}
               onClick={(e) => e.stopPropagation()}
             />
           </Dropdown>

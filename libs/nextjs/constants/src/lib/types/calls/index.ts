@@ -79,9 +79,9 @@ export type Call = {
       | string
       | TranscriptMessage[]
       | {
-          messages?: TranscriptMessage[];
-          [key: string]: unknown;
-        };
+      messages?: TranscriptMessage[];
+      [key: string]: unknown;
+    };
     post_call_data?: PostCallData;
     [key: string]: unknown;
   };

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AppMiniWindow from '../../common/AppMiniWindow';
 import AddForm from './AddForm';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const AppNewKb = ({ onCreated, addNew, setAddNew }) => {
+const AppNewKb = ({onCreated, addNew, setAddNew}) => {
   const {formatMessage} = useIntl();
   const onSaved = (response) => {
     localStorage.removeItem(`save-kb`);
@@ -19,10 +19,10 @@ const AppNewKb = ({ onCreated, addNew, setAddNew }) => {
   return (
     <AppMiniWindow
       open={addNew}
-      title={formatMessage({ id: 'knowledgeBase.createKnowledgeBase' })}
+      title={formatMessage({id: 'knowledgeBase.createKnowledgeBase'})}
       onClose={onCloseClick}
     >
-      {addNew && <AddForm onSaved={onSaved} />}
+      {addNew && <AddForm onSaved={onSaved}/>}
     </AppMiniWindow>
   );
 };

@@ -1,32 +1,15 @@
-import type { CSSProperties } from 'react';
-import { Fragment, memo, useEffect, useState } from 'react';
+import type {CSSProperties} from 'react';
+import {Fragment, memo, useEffect, useState} from 'react';
 
-import type { MenuProps } from 'antd';
-import {
-  Badge,
-  Button,
-  Divider,
-  Dropdown,
-  Grid,
-  Image,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd';
-import { MdMoreVert, MdOutlineAccessTime } from 'react-icons/md';
+import type {MenuProps} from 'antd';
+import {Badge, Button, Divider, Dropdown, Grid, Image, Space, Tooltip, Typography,} from 'antd';
+import {MdMoreVert, MdOutlineAccessTime} from 'react-icons/md';
 import AppImage from '../../next/AppImage';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getThreadMenu } from '@unpod/helpers/PermissionHelper';
-import {
-  getDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { POST_TYPE } from '@unpod/constants/AppEnums';
-import { downloadFile } from '@unpod/helpers/FileHelper';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getThreadMenu} from '@unpod/helpers/PermissionHelper';
+import {getDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {POST_TYPE} from '@unpod/constants/AppEnums';
+import {downloadFile} from '@unpod/helpers/FileHelper';
 import UserAvatar from '../../common/UserAvatar';
 import AppMediaPlayer from '../../common/AppMediaPlayer';
 import AppPostFooter from '../AppPostFooter';
@@ -49,9 +32,9 @@ import {
   StyledTitleRow,
 } from './index.styled';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
-const { useBreakpoint } = Grid;
+const {useBreakpoint} = Grid;
 
 const iconSizeByBreakpoint = {
   xs: 12,
@@ -70,20 +53,21 @@ type AppPostViewProps = {
   isStreamView?: boolean;
   rootStyle?: CSSProperties;
   lastMessage?: any;
-  setCurrentPost?: (post: any) => void;};
+  setCurrentPost?: (post: any) => void;
+};
 
 const AppPostView = ({
-  post,
-  onClapClick,
-  onMenuClick,
-  onReplyPost,
-  isStreamView,
-  rootStyle,
-  lastMessage,
-  setCurrentPost,
-}: AppPostViewProps) => {
+                       post,
+                       onClapClick,
+                       onMenuClick,
+                       onReplyPost,
+                       isStreamView,
+                       rootStyle,
+                       lastMessage,
+                       setCurrentPost,
+                     }: AppPostViewProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { user } = useAuthContext();
+  const {user} = useAuthContext();
   const items = (getThreadMenu(post, user) as MenuProps['items']) || [];
   const [visible, setVisible] = useState(false);
   const screens = useBreakpoint();
@@ -155,7 +139,7 @@ const AppPostView = ({
             />
 
             <Image
-              style={{ display: 'none' }}
+              style={{display: 'none'}}
               src={`${post.cover_image?.url}?tr=w-1080,h-180`}
               preview={{
                 visible: visible,
@@ -179,7 +163,7 @@ const AppPostView = ({
       <StyledTitleRow>
         <StyledAvatarWrapper>
           <Tooltip title={post.user.full_name}>
-            <UserAvatar user={post.user} />
+            <UserAvatar user={post.user}/>
           </Tooltip>
         </StyledAvatarWrapper>
         <StyledTitleContainer>
@@ -226,7 +210,7 @@ const AppPostView = ({
             </StyledMeta>
           </StyledCollapsedHeader>*/}
 
-        <ReferenceDataView post={post} />
+        <ReferenceDataView post={post}/>
 
         <StyledContent>
           {post.content &&
@@ -234,7 +218,7 @@ const AppPostView = ({
               post.post_type === POST_TYPE.ASK
             ) && (
               <StyledContentWrapper>
-                <AppMarkdownViewer markdown={post.content} />
+                <AppMarkdownViewer markdown={post.content}/>
               </StyledContentWrapper>
             )}
 
@@ -249,7 +233,7 @@ const AppPostView = ({
 
           {attachmentFiles.length > 0 && (
             <Fragment>
-              <Divider type="horizontal" style={{ margin: 0 }} />
+              <Divider type="horizontal" style={{margin: 0}}/>
               <AppAttachments
                 attachments={(attachmentFiles || []) as any}
                 onDownload={onDownloadClick}
@@ -310,7 +294,7 @@ const AppPostView = ({
           <StyledActionsWrapper>
             <Paragraph className="user-sub-title mb-0">
               <Space align="center">
-                <MdOutlineAccessTime fontSize={iconSize} />
+                <MdOutlineAccessTime fontSize={iconSize}/>
 
                 <Tooltip
                   title={changeDateStringFormat(
@@ -323,7 +307,7 @@ const AppPostView = ({
                     {getTimeFromNow(post.created)}
                   </StyledTimeText>
                 </Tooltip>
-                {post.seen ? null : <Badge color="#796cff" />}
+                {post.seen ? null : <Badge color="#796cff"/>}
               </Space>
             </Paragraph>
 
@@ -359,7 +343,7 @@ const AppPostView = ({
                     onClick={(e) => e.stopPropagation()}
                     type={'link'}
                     shape="circle"
-                    icon={<MdMoreVert fontSize={24} />}
+                    icon={<MdMoreVert fontSize={24}/>}
                   />
                 </Dropdown>
               )}

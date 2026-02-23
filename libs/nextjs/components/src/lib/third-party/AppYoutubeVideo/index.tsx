@@ -1,15 +1,9 @@
-
-import { useState } from 'react';
-import { AiFillYoutube } from 'react-icons/ai';
-import YouTube, { YouTubeProps } from 'react-youtube';
+import {useState} from 'react';
+import {AiFillYoutube} from 'react-icons/ai';
+import YouTube, {YouTubeProps} from 'react-youtube';
 import AppImage from '../../next/AppImage';
 
-import {
-  StyledImageContainer,
-  StyledIPlayBtnWrapper,
-  StyledVideoContainer,
-  StyledVideoWrapper,
-} from './index.styled';
+import {StyledImageContainer, StyledIPlayBtnWrapper, StyledVideoContainer, StyledVideoWrapper,} from './index.styled';
 
 const opts: YouTubeProps['opts'] = {
   height: '315',
@@ -23,14 +17,15 @@ type YouTubeDimension = NonNullable<
 type AppYoutubeVideoProps = YouTubeProps & {
   videoId: string;
   height?: YouTubeDimension;
-  width?: YouTubeDimension;};
+  width?: YouTubeDimension;
+};
 
 const AppYoutubeVideo: React.FC<AppYoutubeVideoProps> = ({
-  videoId,
-  height,
-  width,
-  ...restProps
-}) => {
+                                                           videoId,
+                                                           height,
+                                                           width,
+                                                           ...restProps
+                                                         }) => {
   const [showVideo, setShowVideo] = useState(false);
   const videoThumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`;
 
@@ -42,7 +37,7 @@ const AppYoutubeVideo: React.FC<AppYoutubeVideoProps> = ({
   const imageWidth = typeof width === 'string' ? Number(width) : width;
 
   return (
-    <StyledVideoContainer style={{ width }}>
+    <StyledVideoContainer style={{width}}>
       <StyledImageContainer>
         <AppImage
           src={videoThumbnail}
@@ -67,7 +62,7 @@ const AppYoutubeVideo: React.FC<AppYoutubeVideoProps> = ({
           <YouTube
             loading="lazy"
             videoId={videoId}
-            opts={{ ...opts, height, width }}
+            opts={{...opts, height, width}}
             onReady={onReady}
             {...restProps}
           />

@@ -1,11 +1,11 @@
 import React from 'react';
-import type { MenuProps } from 'antd';
-import { Button, Dropdown, Row, Space, Typography } from 'antd';
-import { RiArrowDownSFill } from 'react-icons/ri';
+import type {MenuProps} from 'antd';
+import {Button, Dropdown, Row, Space, Typography} from 'antd';
+import {RiArrowDownSFill} from 'react-icons/ri';
 import UserAvatar from '../UserAvatar';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import { maskEmail } from '@unpod/helpers/StringHelper';
-import type { InviteMember } from '@unpod/constants/types';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import {maskEmail} from '@unpod/helpers/StringHelper';
+import type {InviteMember} from '@unpod/constants/types';
 
 
 type MemberItemProps = {
@@ -15,15 +15,15 @@ type MemberItemProps = {
 };
 
 const MemberItem: React.FC<MemberItemProps> = ({
-  member,
-  onRemoveInvitedMember,
-  onUpdateInvitedMember,
-}) => {
+                                                 member,
+                                                 onRemoveInvitedMember,
+                                                 onUpdateInvitedMember,
+                                               }) => {
   const onRoleChange: MenuProps['onClick'] = (item) => {
     if (item.key === 'remove-access') {
       onRemoveInvitedMember(member?.email as string);
     } else if (item.key !== 'divider') {
-      onUpdateInvitedMember({ ...member, role_code: item.key });
+      onUpdateInvitedMember({...member, role_code: item.key});
     }
   };
 
@@ -31,15 +31,15 @@ const MemberItem: React.FC<MemberItemProps> = ({
     <Row
       justify="space-between"
       align="middle"
-      style={{ marginTop: 6, marginBottom: 12 }}
+      style={{marginTop: 6, marginBottom: 12}}
     >
       <Space>
-        <UserAvatar user={member} />
+        <UserAvatar user={member}/>
         <Space orientation="vertical" size={0}>
           {member?.full_name && (
             <Typography.Text
               type={member?.joined ? undefined : 'secondary'}
-              style={{ marginBottom: -4, display: 'block' }}
+              style={{marginBottom: -4, display: 'block'}}
             >
               {member?.full_name}
             </Typography.Text>
@@ -51,7 +51,7 @@ const MemberItem: React.FC<MemberItemProps> = ({
       </Space>
 
       {member?.role === ACCESS_ROLE.OWNER ? (
-        <Typography.Text style={{ marginRight: 24 }}> Owner </Typography.Text>
+        <Typography.Text style={{marginRight: 24}}> Owner </Typography.Text>
       ) : (
         <Dropdown
           menu={{
@@ -78,9 +78,9 @@ const MemberItem: React.FC<MemberItemProps> = ({
           }}
           trigger={['click']}
         >
-          <Button style={{ textTransform: 'capitalize' }}>
+          <Button style={{textTransform: 'capitalize'}}>
             {member?.role_code}
-            <RiArrowDownSFill fontSize={20} style={{ marginRight: -5 }} />
+            <RiArrowDownSFill fontSize={20} style={{marginRight: -5}}/>
           </Button>
         </Dropdown>
       )}

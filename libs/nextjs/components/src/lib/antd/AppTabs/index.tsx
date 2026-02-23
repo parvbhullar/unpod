@@ -1,20 +1,21 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { StyledTabs } from './styled';
-import { TabsProps } from 'antd';
+import {useEffect, useMemo, useState} from 'react';
+import {useRouter, useSearchParams} from 'next/navigation';
+import {StyledTabs} from './styled';
+import {TabsProps} from 'antd';
 
 type AppTabsProps = TabsProps & {
-  routePath?: string;};
+  routePath?: string;
+};
 
 const AppTabs: React.FC<AppTabsProps> = ({
-  size = 'middle',
-  activeKey,
-  items,
-  onChange,
-  routePath,
-  ...restProps
-}) => {
+                                           size = 'middle',
+                                           activeKey,
+                                           items,
+                                           onChange,
+                                           routePath,
+                                           ...restProps
+                                         }) => {
   const [activeTab, setActiveTab] = useState<string | undefined>(
     activeKey ? String(activeKey) : undefined,
   );

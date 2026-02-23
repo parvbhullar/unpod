@@ -1,16 +1,13 @@
-import React, { ReactNode, useEffect, useMemo } from 'react';
-import { useGetDataApi } from '@unpod/providers';
-import { Button, Flex, Form, Space, Spin } from 'antd';
-import { isPlainObject } from 'lodash';
+import React, {ReactNode, useEffect, useMemo} from 'react';
+import {useGetDataApi} from '@unpod/providers';
+import {Button, Flex, Form, Space, Spin} from 'antd';
+import {isPlainObject} from 'lodash';
 import FormItem from './FormItem';
 import FormControl from './FormControl';
 import FormList from './FormList';
-import {
-  FieldDependency,
-  isFieldDependencyResolved,
-} from '@unpod/helpers/FormHelper';
-import { useIntl } from 'react-intl';
-import { FormInstance } from 'antd/es/form';
+import {FieldDependency, isFieldDependencyResolved,} from '@unpod/helpers/FormHelper';
+import {useIntl} from 'react-intl';
+import {FormInstance} from 'antd/es/form';
 
 type FormField = {
   id: string | number;
@@ -18,7 +15,8 @@ type FormField = {
   name?: string | (string | number)[];
   title?: string;
   dependencies?: FieldDependency[];
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const getFieldComponent = (field: FormField) => {
   if (field.type === 'json') {
@@ -26,14 +24,14 @@ const getFieldComponent = (field: FormField) => {
     return (
       <FormList
         key={field.id}
-        field={{ name: field.name as string, title: field.title }}
+        field={{name: field.name as string, title: field.title}}
       />
     );
   }
   if (!field.name) return null;
   return (
-    <FormItem key={field.id} field={{ ...field, name: field.name }}>
-      <FormControl field={field} />
+    <FormItem key={field.id} field={{...field, name: field.name}}>
+      <FormControl field={field}/>
     </FormItem>
   );
 };
@@ -49,25 +47,26 @@ type AppFormProps = {
   loading?: boolean;
   renderFormItem?: (field: FormField, formItem: ReactNode) => ReactNode;
   onCancel?: () => void;
-  initialValues?: any;};
+  initialValues?: any;
+};
 
 const AppForm: React.FC<AppFormProps> = ({
-  formSlug,
-  form: externalForm,
-  onFinish,
-  children,
-  submitBtnText = 'Submit',
-  resetBtn = false,
-  formLayout = 'vertical',
-  loading = false,
-  renderFormItem,
-  onCancel,
-  initialValues,
-}) => {
-  const { formatMessage } = useIntl();
-  const [{ apiData, loading: formLoading }] = useGetDataApi<{
+                                           formSlug,
+                                           form: externalForm,
+                                           onFinish,
+                                           children,
+                                           submitBtnText = 'Submit',
+                                           resetBtn = false,
+                                           formLayout = 'vertical',
+                                           loading = false,
+                                           renderFormItem,
+                                           onCancel,
+                                           initialValues,
+                                         }) => {
+  const {formatMessage} = useIntl();
+  const [{apiData, loading: formLoading}] = useGetDataApi<{
     form_fields?: FormField[];
-  }>(`dynamic-forms/${formSlug}/`, { data: { form_fields: [] } });
+  }>(`dynamic-forms/${formSlug}/`, {data: {form_fields: []}});
   const [internalForm] = Form.useForm();
   const form = externalForm || internalForm;
 
@@ -78,7 +77,7 @@ const AppForm: React.FC<AppFormProps> = ({
   }, [initialValues, form, formLoading]);
 
   const formFields = useMemo(() => {
-    const formData = apiData?.data || { form_fields: [] };
+    const formData = apiData?.data || {form_fields: []};
     if (formData?.form_fields?.length === 0) {
       return null;
     }
@@ -92,7 +91,7 @@ const AppForm: React.FC<AppFormProps> = ({
             key={`${field.id}-${index}`}
             dependencies={field?.dependencies?.map((item) => item.depends_on)}
           >
-            {({ getFieldValue }) =>
+            {({getFieldValue}) =>
               isFieldDependencyResolved(field.dependencies ?? [], getFieldValue)
                 ? getFieldComponent(field)
                 : null
@@ -112,7 +111,7 @@ const AppForm: React.FC<AppFormProps> = ({
   }, [apiData, renderFormItem]);
 
   if (formLoading) {
-    return <Spin spinning={formLoading} size="small" />;
+    return <Spin spinning={formLoading} size="small"/>;
   }
   return (
     <Form
@@ -121,7 +120,7 @@ const AppForm: React.FC<AppFormProps> = ({
       layout={formLayout}
       onFinish={onFinish}
     >
-      {formFields || <p>{formatMessage({ id: 'form.fieldsDes' })}</p>}
+      {formFields || <p>{formatMessage({id: 'form.fieldsDes'})}</p>}
       <Flex justify={'flex-end'}>
         {!formLoading &&
           (children ? (
@@ -130,7 +129,7 @@ const AppForm: React.FC<AppFormProps> = ({
             <Space size={'middle'}>
               {onCancel && (
                 <Button onClick={onCancel}>
-                  {formatMessage({ id: 'common.cancel' })}
+                  {formatMessage({id: 'common.cancel'})}
                 </Button>
               )}
               <Button
@@ -143,7 +142,7 @@ const AppForm: React.FC<AppFormProps> = ({
               </Button>
               {resetBtn && (
                 <Button htmlType="reset" onClick={() => form.resetFields()}>
-                  {formatMessage({ id: 'common.reset' })}
+                  {formatMessage({id: 'common.reset'})}
                 </Button>
               )}
             </Space>

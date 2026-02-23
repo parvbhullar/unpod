@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { Button, Typography } from 'antd';
+import {Button, Typography} from 'antd';
 import AppList from '../../common/AppList';
-import { GlobalTheme } from '@unpod/constants';
+import {GlobalTheme} from '@unpod/constants';
 
-const { Link, Paragraph, Text } = Typography;
+const {Link, Paragraph, Text} = Typography;
 
 export const StyledRootContainer = styled.div`
   display: flex;
@@ -25,8 +25,8 @@ export const StyledMoreContainer = styled.div`
   justify-content: center;
   padding-top: 24px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     padding-top: 0;
   }
 `;
@@ -35,9 +35,9 @@ export const StyledMsgChat = styled.div`
   display: flex;
   padding: 12px 20px;
   margin-top: 8px;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
-  border-radius: ${({ theme }: { theme: GlobalTheme }) => theme.radius.base}px;
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
+  border-radius: ${({theme}: { theme: GlobalTheme }) => theme.radius.base}px;
   max-width: calc(100% - 128px);
   margin-left: 44px;
 `;
@@ -45,8 +45,8 @@ export const StyledMsgChat = styled.div`
 export const StyledSystemMessage = styled.div`
   margin-top: 10px;
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary}55;
-  border-radius: ${({ theme }: { theme: GlobalTheme }) => theme.radius.base}px;
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primary}55;
+  border-radius: ${({theme}: { theme: GlobalTheme }) => theme.radius.base}px;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -57,8 +57,8 @@ export const StyledContainer = styled.div`
   margin: 24px 0 0;
   padding: 20px 10px 0 20px;
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary}55;
-  border-radius: ${({ theme }: { theme: GlobalTheme }) => theme.radius.base}px;
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primary}55;
+  border-radius: ${({theme}: { theme: GlobalTheme }) => theme.radius.base}px;
 
   .ant-timeline .ant-timeline-item {
     padding-bottom: 10px;
@@ -90,13 +90,13 @@ export const StyledContent = styled.div`
   flex: 1;
   max-width: calc(100% - 150px);
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     max-width: 100% !important;
   }
 
-  //border-bottom: 1px solid ${({ theme }: { theme: GlobalTheme }) =>
-    theme.border.color};
+  //border-bottom: 1px solid ${({theme}: { theme: GlobalTheme }) =>
+  theme.border.color};
 `;
 export const StyledUserContent = styled.div`
   margin: 0;
@@ -106,16 +106,16 @@ export const StyledUserContent = styled.div`
   flex-direction: column;
   gap: 4px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     max-width: 100%;
 
     display: flex;
     flex-direction: column;
     gap: 0 !important;
   }
-  //border-bottom: 1px solid ${({ theme }: { theme: GlobalTheme }) =>
-    theme.border.color};
+  //border-bottom: 1px solid ${({theme}: { theme: GlobalTheme }) =>
+  theme.border.color};
 `;
 
 export const StyledAvatar = styled.div`
@@ -141,7 +141,7 @@ export const StyledUserMeta = styled.div`
   margin-left: auto;
 
   background-color: rgba(152, 128, 255, 0.1);
-  border-radius: ${({ theme }: { theme: GlobalTheme }) => theme.radius.base}px;
+  border-radius: ${({theme}: { theme: GlobalTheme }) => theme.radius.base}px;
   padding: 8px 12px;
 
   .app-post-viewer {
@@ -149,11 +149,11 @@ export const StyledUserMeta = styled.div`
     padding: 10px 0 0;
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     padding: 2px 10px;
-    border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.radius.base - 6}px;
+    border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.radius.base - 6}px;
   }
 `;
 
@@ -191,8 +191,8 @@ export const StyledTime = styled(Text)`
   align-items: center;
   gap: 8px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     font-size: 10px;
     margin-left: 9px;
     margin-right: 15px;
@@ -213,25 +213,25 @@ export const StyledActions = styled.div`
     align-items: center;
     text-align: center;
 
-    @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.breakpoints.md}px) {
+    @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.md}px) {
       position: absolute;
       bottom: 7px;
       right: 0;
-      background-color: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.palette.background.default};
+      background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
       padding-inline-start: 5px;
     }
 
-    @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.breakpoints.sm}px) {
+    @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
       flex: 1 !important;
       gap: 0 !important;
     }
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
@@ -259,19 +259,19 @@ export const StyledUserActions = styled.div`
     align-items: center;
     text-align: center;
 
-    @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.breakpoints.md}px) {
+    @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.md}px) {
       position: absolute;
       bottom: 7px;
       right: 0;
-      background-color: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.palette.background.default};
+      background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
       padding-inline-start: 5px;
     }
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-end;
@@ -300,10 +300,10 @@ export const StyledReplyParent = styled.div`
 export const StyledUserQuestion = styled(Text)`
   font-size: 14px;
   line-height: 1.6;
-  color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.text.primary};
+  color: ${({theme}: { theme: GlobalTheme }) => theme.palette.text.primary};
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     font-size: 12px;
   }
 `;
@@ -325,9 +325,9 @@ export const StyledContentWrapper = styled.div`
     display: inline-flex;
     align-items: center;
     padding: 4px 8px;
-    color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary};
-    background-color: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.palette.primaryHover};
+    color: ${({theme}: { theme: GlobalTheme }) => theme.palette.primary};
+    background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primaryHover};
     border-radius: 20px;
     font-size: 11px;
     margin-left: 2px;
@@ -335,13 +335,13 @@ export const StyledContentWrapper = styled.div`
     &:hover,
     &.active {
       text-decoration: underline;
-      background-color: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.palette.primaryActive};
+      background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primaryActive};
     }
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     font-size: 12px !important;
   }
 
@@ -386,8 +386,8 @@ export const StyledReplyContainer = styled.div`
     }
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     padding: 10px 20px 0 20px;
     flex-direction: column;
   }
@@ -419,8 +419,8 @@ export const StyledUserContainer = styled.div`
     }
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     padding: 10px 20px 0 20px;
     margin-left: 0;
   }
@@ -447,8 +447,8 @@ export const StyledNoteButton = styled(Button)`
   align-items: center;
   gap: 6px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     height: 25px !important;
     font-size: 10px !important;
     padding: 6px 4px !important;

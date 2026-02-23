@@ -1,32 +1,29 @@
-import { memo } from 'react';
+import {memo} from 'react';
 
-import type {
-  CalculatedColumn,
-  CalculatedColumnParent,
-  Position,
-} from './models/data-grid';
+import type {CalculatedColumn, CalculatedColumnParent, Position,} from './models/data-grid';
 import GroupedColumnHeaderCell from './GroupedColumnHeaderCell';
-import { StyledHeaderRow } from './HeaderRow';
+import {StyledHeaderRow} from './HeaderRow';
 
 export type GroupedColumnHeaderRowProps<R, SR> = {
   rowIdx: number;
   level: number;
   columns: readonly CalculatedColumn<R, SR>[];
   selectCell: (position: Position) => void;
-  selectedCellIdx: number | undefined;};
+  selectedCellIdx: number | undefined;
+};
 
 function GroupedColumnHeaderRow<R, SR>({
-  rowIdx,
-  level,
-  columns,
-  selectedCellIdx,
-  selectCell,
-}: GroupedColumnHeaderRowProps<R, SR>) {
+                                         rowIdx,
+                                         level,
+                                         columns,
+                                         selectedCellIdx,
+                                         selectCell,
+                                       }: GroupedColumnHeaderRowProps<R, SR>) {
   const cells = [];
   const renderedParents = new Set<CalculatedColumnParent<R, SR>>();
 
   for (const column of columns) {
-    let { parent } = column;
+    let {parent} = column;
 
     if (parent === undefined) continue;
 
@@ -37,7 +34,7 @@ function GroupedColumnHeaderRow<R, SR>({
 
     if (parent.level === level && !renderedParents.has(parent)) {
       renderedParents.add(parent);
-      const { idx } = parent;
+      const {idx} = parent;
       cells.push(
         <GroupedColumnHeaderCell<R, SR>
           key={idx}

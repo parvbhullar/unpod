@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useState,
-} from 'react';
+import React, {createContext, type ReactNode, useCallback, useState,} from 'react';
 
 type AgentConnectionMode = 'chat' | 'voice' | 'env' | null;
 
@@ -22,8 +17,8 @@ const AgentConnectionContext =
   createContext<AgentConnectionContextValue | null>(null);
 
 export const AgentConnectionProvider = ({
-  children,
-}: {
+                                          children,
+                                        }: {
   children: ReactNode;
 }) => {
   const [connectionDetails, setAgentConnectionDetails] = useState<{
@@ -45,7 +40,7 @@ export const AgentConnectionProvider = ({
   });
   const updateRoomToken = (roomToken: string | null) => {
     // console.log("updateRoomToken roomToken",roomToken);
-    setAgentConnectionDetails((prev) => ({ ...prev, roomToken: roomToken }));
+    setAgentConnectionDetails((prev) => ({...prev, roomToken: roomToken}));
   };
 
   const setConnectionMode = useCallback(
@@ -58,7 +53,7 @@ export const AgentConnectionProvider = ({
       }
 
       console.log('🔄 Connection mode changed to:', connectionMode);
-      setAgentConnectionDetails((prev) => ({ ...prev, connectionMode }));
+      setAgentConnectionDetails((prev) => ({...prev, connectionMode}));
     },
     [],
   );

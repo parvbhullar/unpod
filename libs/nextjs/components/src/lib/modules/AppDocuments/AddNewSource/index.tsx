@@ -1,8 +1,8 @@
-import { Fragment, useState } from 'react';
+import {Fragment, useState} from 'react';
 
-import { Button, Collapse, Form, Progress, Space, Typography } from 'antd';
-import { MdAdd, MdArrowUpward, MdDelete } from 'react-icons/md';
-import { allowedFileTypes } from '@unpod/constants';
+import {Button, Collapse, Form, Progress, Space, Typography} from 'antd';
+import {MdAdd, MdArrowUpward, MdDelete} from 'react-icons/md';
+import {allowedFileTypes} from '@unpod/constants';
 import {
   postDataApi,
   uploadDataApi,
@@ -10,36 +10,30 @@ import {
   useInfoViewActionsContext,
   useInfoViewContext,
 } from '@unpod/providers';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
 import AppInput from '../../../antd/AppInput';
-import {
-  StyledActions,
-  StyledContainer,
-  StyledDragger,
-  StyledItemRow,
-  StyledLabel,
-  StyledRoot,
-} from './index.styled';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { useIntl } from 'react-intl';
+import {StyledActions, StyledContainer, StyledDragger, StyledItemRow, StyledLabel, StyledRoot,} from './index.styled';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {useIntl} from 'react-intl';
 
-const { Item, List, useForm } = Form;
-const { Text } = Typography;
-const { Panel } = Collapse;
+const {Item, List, useForm} = Form;
+const {Text} = Typography;
+const {Panel} = Collapse;
 
 const mainDocExtension = allowedFileTypes['document'];
 const acceptMediaTypes = allowedFileTypes['document'];
 
 type AddNewSourceProps = {
   setAddNewDoc?: (open: boolean) => void;
-  onDocumentAdded?: (data: any) => void;};
+  onDocumentAdded?: (data: any) => void;
+};
 
-const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
-  const { currentSpace } = useAppSpaceContext();
+const AddNewSource = ({setAddNewDoc, onDocumentAdded}: AddNewSourceProps) => {
+  const {currentSpace} = useAppSpaceContext();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { loading } = useInfoViewContext();
+  const {loading} = useInfoViewContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [uploadPercent, setUploadPercent] = useState(0);
   const [contentFile, setContentFile] = useState<any | null>(null);
@@ -86,7 +80,7 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
           !mainDocExtension?.includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setContentFile(file);
@@ -109,7 +103,7 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
           !acceptMediaTypes?.includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -197,20 +191,20 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
           }}
         >
           {uploadPercent > 0 && uploadPercent < 100 ? (
-            <Item label={formatMessage({ id: 'common.uploading' })}>
-              <Progress percent={uploadPercent} />
+            <Item label={formatMessage({id: 'common.uploading'})}>
+              <Progress percent={uploadPercent}/>
             </Item>
           ) : (
             <Fragment>
               <StyledLabel>
-                {formatMessage({ id: 'addNewSource.uploadDocument' })}
+                {formatMessage({id: 'addNewSource.uploadDocument'})}
               </StyledLabel>
               <Item
                 name="file"
                 rules={[
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.chooseFile' }),
+                    message: formatMessage({id: 'validation.chooseFile'}),
                   },
                 ]}
                 required={false}
@@ -227,27 +221,27 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
                   <Space orientation="vertical" size={4}>
                     <Button
                       shape="circle"
-                      icon={<MdArrowUpward fontSize={21} />}
-                      style={{ marginBottom: 8 }}
+                      icon={<MdArrowUpward fontSize={21}/>}
+                      style={{marginBottom: 8}}
                     />
 
-                    <Text>{formatMessage({ id: 'upload.dragDropFiles' })}</Text>
+                    <Text>{formatMessage({id: 'upload.dragDropFiles'})}</Text>
                   </Space>
                 </StyledDragger>
               </Item>
 
-              <Collapse expandIconPosition="end" style={{ marginBottom: 24 }}>
+              <Collapse expandIconPosition="end" style={{marginBottom: 24}}>
                 <Panel
-                  header={formatMessage({ id: 'addNewSource.advancedOptions' })}
+                  header={formatMessage({id: 'addNewSource.advancedOptions'})}
                   key="1"
                 >
                   <StyledLabel>
-                    {formatMessage({ id: 'addNewSource.metadataOptions' })}
+                    {formatMessage({id: 'addNewSource.metadataOptions'})}
                   </StyledLabel>
                   <List name="items">
-                    {(fields, { add, remove }) => (
+                    {(fields, {add, remove}) => (
                       <>
-                        {fields.map(({ key, name, ...restField }) => (
+                        {fields.map(({key, name, ...restField}) => (
                           <StyledItemRow key={key}>
                             <Item
                               {...restField}
@@ -306,7 +300,7 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
                               <Button
                                 type="primary"
                                 onClick={() => remove(name)}
-                                icon={<MdDelete fontSize={18} />}
+                                icon={<MdDelete fontSize={18}/>}
                                 danger
                                 ghost
                               />
@@ -319,9 +313,9 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
                             type="dashed"
                             onClick={() => add()}
                             block
-                            icon={<MdAdd />}
+                            icon={<MdAdd/>}
                           >
-                            {formatMessage({ id: 'common.addField' })}
+                            {formatMessage({id: 'common.addField'})}
                           </Button>
                         </Item>
                       </>
@@ -329,7 +323,7 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
                   </List>
 
                   <StyledLabel>
-                    {formatMessage({ id: 'addNewSource.additionalFiles' })}
+                    {formatMessage({id: 'addNewSource.additionalFiles'})}
                   </StyledLabel>
                   <Item name="files" className="mb-0">
                     <StyledDragger
@@ -344,12 +338,12 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
                       <Space orientation="vertical" size={4}>
                         <Button
                           shape="circle"
-                          icon={<MdArrowUpward fontSize={21} />}
-                          style={{ marginBottom: 8 }}
+                          icon={<MdArrowUpward fontSize={21}/>}
+                          style={{marginBottom: 8}}
                         />
 
                         <Text>
-                          {formatMessage({ id: 'upload.dragDropFiles' })}
+                          {formatMessage({id: 'upload.dragDropFiles'})}
                         </Text>
                       </Space>
                     </StyledDragger>
@@ -360,7 +354,7 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
               <StyledActions>
                 {setAddNewDoc && (
                   <Button onClick={() => setAddNewDoc(false)} block>
-                    {formatMessage({ id: 'common.cancel' })}
+                    {formatMessage({id: 'common.cancel'})}
                   </Button>
                 )}
 
@@ -370,7 +364,7 @@ const AddNewSource = ({ setAddNewDoc, onDocumentAdded }: AddNewSourceProps) => {
                   loading={loading}
                   block
                 >
-                  {formatMessage({ id: 'common.save' })}
+                  {formatMessage({id: 'common.save'})}
                 </Button>
               </StyledActions>
             </Fragment>

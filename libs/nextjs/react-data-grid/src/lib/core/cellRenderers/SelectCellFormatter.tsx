@@ -1,5 +1,5 @@
-import type { RenderCheckboxProps } from '../models/data-grid';
-import { useDefaultRenderers } from '../DataGridDefaultRenderersProvider';
+import type {RenderCheckboxProps} from '../models/data-grid';
+import {useDefaultRenderers} from '../DataGridDefaultRenderersProvider';
 
 type SharedInputProps = Pick<
   RenderCheckboxProps,
@@ -9,17 +9,18 @@ type SharedInputProps = Pick<
 type SelectCellFormatterProps = SharedInputProps & {
   value: boolean;
   onChange: (value: boolean, isShiftClick: boolean) => void;
-  type?: 'radio' | 'checkbox';};
+  type?: 'radio' | 'checkbox';
+};
 
 export function SelectCellFormatter({
-  value,
-  tabIndex,
-  disabled,
-  type,
-  onChange,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledBy,
-}: SelectCellFormatterProps) {
+                                      value,
+                                      tabIndex,
+                                      disabled,
+                                      type,
+                                      onChange,
+                                      'aria-label': ariaLabel,
+                                      'aria-labelledby': ariaLabelledBy,
+                                    }: SelectCellFormatterProps) {
   const renderCheckbox = useDefaultRenderers()!.renderCheckbox!;
 
   return renderCheckbox({

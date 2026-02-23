@@ -1,18 +1,14 @@
-import { memo } from 'react';
+import {memo} from 'react';
 import styled from 'styled-components';
 import clsx from 'clsx';
 
-import { RowSelectionProvider } from './hooks';
-import { getRowStyle } from './utils';
-import type { BaseRenderRowProps, GroupRow } from './models/data-grid';
-import { SELECT_COLUMN_KEY } from './constants/AppConst';
+import {RowSelectionProvider} from './hooks';
+import {getRowStyle} from './utils';
+import type {BaseRenderRowProps, GroupRow} from './models/data-grid';
+import {SELECT_COLUMN_KEY} from './constants/AppConst';
 import GroupCell from './GroupCell';
-import { CellFrozenLast, StyledCellWrapper } from './style/cell';
-import {
-  rowClassname,
-  rowSelectedClassname,
-  StyledRowWrapper,
-} from './style/row';
+import {CellFrozenLast, StyledCellWrapper} from './style/cell';
+import {rowClassname, rowSelectedClassname, StyledRowWrapper,} from './style/row';
 
 const StyledGroupRow = styled(StyledRowWrapper)`
   > ${StyledCellWrapper}:not(:last-child):not(${CellFrozenLast}) {
@@ -24,23 +20,24 @@ type GroupRowRendererProps<R, SR> = BaseRenderRowProps<R, SR> & {
   row: GroupRow<R>;
   groupBy: readonly string[];
   toggleGroup: (expandedGroupId: unknown) => void;
-  rowKeyId: string;};
+  rowKeyId: string;
+};
 
 function GroupedRow<R, SR>({
-  className,
-  row,
-  rowIdx,
-  viewportColumns,
-  selectedCellIdx,
-  isRowSelected,
-  selectCell,
-  gridRowStart,
-  height,
-  groupBy,
-  toggleGroup,
-  rowKeyId,
-  ...props
-}: GroupRowRendererProps<R, SR>) {
+                             className,
+                             row,
+                             rowIdx,
+                             viewportColumns,
+                             selectedCellIdx,
+                             isRowSelected,
+                             selectCell,
+                             gridRowStart,
+                             height,
+                             groupBy,
+                             toggleGroup,
+                             rowKeyId,
+                             ...props
+                           }: GroupRowRendererProps<R, SR>) {
   // Select is always the first column
   const idx =
     viewportColumns[0].key === SELECT_COLUMN_KEY ? row.level + 1 : row.level;

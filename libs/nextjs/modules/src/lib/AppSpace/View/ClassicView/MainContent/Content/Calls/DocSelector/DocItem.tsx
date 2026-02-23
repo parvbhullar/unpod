@@ -1,25 +1,15 @@
-import { Checkbox, Flex, Typography } from 'antd';
+import {Checkbox, Flex, Typography} from 'antd';
 import clsx from 'clsx';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
-import {
-  StyledInnerRoot,
-  StyledItem,
-  StyledListHeader,
-  StyledMeta,
-  StyledParagraph,
-  StyledRoot,
-} from './index.styled';
-import { IoCallOutline } from 'react-icons/io5';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
+import {StyledInnerRoot, StyledItem, StyledListHeader, StyledMeta, StyledParagraph, StyledRoot,} from './index.styled';
+import {IoCallOutline} from 'react-icons/io5';
 import UserAvatar from '@unpod/components/common/UserAvatar';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
-const DocItem = ({ data }: { data: any }) => {
-  const { setSelectedDocs } = useAppSpaceActionsContext();
-  const { selectedDocs } = useAppSpaceContext();
+const DocItem = ({data}: { data: any }) => {
+  const {setSelectedDocs} = useAppSpaceActionsContext();
+  const {selectedDocs} = useAppSpaceContext();
 
   const onClick = () => {
     setSelectedDocs((prev: any[]) => {
@@ -40,7 +30,7 @@ const DocItem = ({ data }: { data: any }) => {
         onClick={onClick}
       >
         <StyledItem>
-          <UserAvatar user={{ full_name: data.name }} size={36} />
+          <UserAvatar user={{full_name: data.name}} size={36}/>
         </StyledItem>
 
         <StyledInnerRoot>
@@ -56,12 +46,12 @@ const DocItem = ({ data }: { data: any }) => {
                 {data.name}
               </Title>
             </StyledMeta>
-            <Checkbox checked={selectedDocs.includes(data.document_id)} />
+            <Checkbox checked={selectedDocs.includes(data.document_id)}/>
           </StyledListHeader>
 
           {data.name && (
-            <Flex align="center" gap={4} style={{ marginTop: -6 }}>
-              <IoCallOutline size={12} />
+            <Flex align="center" gap={4} style={{marginTop: -6}}>
+              <IoCallOutline size={12}/>
               <StyledParagraph type="secondary" className="mb-0" ellipsis>
                 {data.title}
               </StyledParagraph>

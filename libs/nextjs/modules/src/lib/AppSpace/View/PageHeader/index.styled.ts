@@ -12,7 +12,7 @@ export const StylesImageWrapper = styled.div`
   position: relative;
   width: 100px;
   height: 100px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 12px;

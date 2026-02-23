@@ -5,20 +5,22 @@ import AppAudioPlayer from './AppAudioPlayer';
 type Media = {
   media_type: 'audio' | 'video';
   playback_id: string;
-  media_id?: string;};
+  media_id?: string;
+};
 
 type AppMediaPlayerProps = {
   title?: string;
   subTitle?: string;
   media: Media;
-  poster?: string;};
+  poster?: string;
+};
 
 const AppMediaPlayer: React.FC<AppMediaPlayerProps> = ({
-  title,
-  subTitle,
-  media,
-  poster,
-}) => {
+                                                         title,
+                                                         subTitle,
+                                                         media,
+                                                         poster,
+                                                       }) => {
   return (
     media &&
     (media.media_type === 'audio' ? (
@@ -29,7 +31,7 @@ const AppMediaPlayer: React.FC<AppMediaPlayerProps> = ({
         poster={poster}
       />
     ) : (
-      <AppVideoPlayer title={title} media={media} poster={poster} />
+      <AppVideoPlayer title={title} media={media} poster={poster}/>
     ))
   );
 };

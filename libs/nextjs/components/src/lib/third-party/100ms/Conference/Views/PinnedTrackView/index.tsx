@@ -1,17 +1,13 @@
-import {
-  selectPeers,
-  selectVideoTrackByPeerID,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import { GridSidePaneView } from '../MainGridView/GridView';
+import {selectPeers, selectVideoTrackByPeerID, useHMSStore,} from '@100mslive/react-sdk';
+import {GridSidePaneView} from '../MainGridView/GridView';
 import VideoTile from '../VideoTile';
-import { usePinnedTrack } from '../../../AppData/useUISettings';
-import { StyledContainer, StyledVideoContainer } from './index.styled';
-import { useMeasure } from 'react-use';
+import {usePinnedTrack} from '../../../AppData/useUISettings';
+import {StyledContainer, StyledVideoContainer} from './index.styled';
+import {useMeasure} from 'react-use';
 import React from 'react';
 
 const PinnedTrackView = () => {
-  const aspectRatio = { width: 1, height: 1 };
+  const aspectRatio = {width: 1, height: 1};
   // can be audio or video track, if tile with only audio track is pinned
   const pinnedTrack = usePinnedTrack();
   const peerVideoTrack = useHMSStore(
@@ -19,7 +15,7 @@ const PinnedTrackView = () => {
   );
   const pinnedVideoTrack =
     pinnedTrack && pinnedTrack.type === 'audio' ? peerVideoTrack : pinnedTrack;
-  const [ref, { height, width }] = useMeasure();
+  const [ref, {height, width}] = useMeasure();
   const peers = (useHMSStore(selectPeers) || []).filter(
     (peer) =>
       peer.videoTrack || peer.audioTrack || peer.auxiliaryTracks.length > 0

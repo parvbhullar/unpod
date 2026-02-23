@@ -1,10 +1,5 @@
-import { useCallback, useState } from 'react';
-import {
-  selectLocalPeerID,
-  selectPeerMetadata,
-  useHMSActions,
-  useHMSStore,
-} from '@100mslive/react-sdk';
+import {useCallback, useState} from 'react';
+import {selectLocalPeerID, selectPeerMetadata, useHMSActions, useHMSStore,} from '@100mslive/react-sdk';
 
 export const useMyMetadata = () => {
   const hmsActions = useHMSActions();

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 /**
  * Message source types for tracking
@@ -45,11 +45,11 @@ type LocationRequestResolver = {
  * @returns {Object} - { sendJsonMessage, lastMessage, isConnected, voiceAssistant, testReceive, onLocationResponse }
  */
 export const useCentrifugoDataChannel = ({
-  conversationId: _conversationId, // Reserved for future use (metadata)
-  params,
-  enabled = true,
-  centrifugoConfig = {},
-}: {
+                                           conversationId: _conversationId, // Reserved for future use (metadata)
+                                           params,
+                                           enabled = true,
+                                           centrifugoConfig = {},
+                                         }: {
   conversationId?: string;
   params?: Record<string, unknown>;
   enabled?: boolean;
@@ -194,7 +194,7 @@ export const useCentrifugoDataChannel = ({
         console.log('[Centrifugo DataChannel] Initializing connection...');
 
         // Dynamically import centrifuge-js
-        const { Centrifuge } = await import('centrifuge');
+        const {Centrifuge} = await import('centrifuge');
 
         const wsUrl = getCentrifugoUrl();
         console.log('[Centrifugo DataChannel] Connecting to:', wsUrl);
@@ -384,7 +384,7 @@ export const useCentrifugoDataChannel = ({
           console.log('[Centrifugo DataChannel] Participant left:', ctx.info);
           if (didUnmount.current) return;
           setParticipants((prev) => {
-            const updated = { ...prev };
+            const updated = {...prev};
             delete updated[ctx.info.client];
             return updated;
           });
@@ -491,7 +491,7 @@ export const useCentrifugoDataChannel = ({
         if (resolver.timeout) {
           clearTimeout(resolver.timeout);
         }
-        resolver.resolve({ accepted });
+        resolver.resolve({accepted});
         locationRequestResolvers.current.delete(requestId);
       } else {
         console.warn(
@@ -569,7 +569,7 @@ export const useCentrifugoDataChannel = ({
       streamingMessagesRef.current.clear();
 
       // Clear all pending location requests
-      locationRequestResolvers.current.forEach(({ timeout, reject }) => {
+      locationRequestResolvers.current.forEach(({timeout, reject}) => {
         if (timeout) {
           clearTimeout(timeout);
         }

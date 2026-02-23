@@ -1,28 +1,20 @@
-import type { ReactNode } from 'react';
-import { useMemo, useState } from 'react';
-import {
-  StyledHeaderActions,
-  StyledHeaderIcon,
-  StyledHeaderTitle,
-  StyledMainHeaderContent,
-} from './index.styled';
+import type {ReactNode} from 'react';
+import {useMemo, useState} from 'react';
+import {StyledHeaderActions, StyledHeaderIcon, StyledHeaderTitle, StyledMainHeaderContent,} from './index.styled';
 import UserAvatar from '@unpod/components/common/UserAvatar';
-import { getFirstLetter } from '@unpod/helpers/StringHelper';
+import {getFirstLetter} from '@unpod/helpers/StringHelper';
 import DocumentHeaderDetails from './DocumentHeaderDetails';
 import AppSpaceHeaderMenus from '@unpod/components/common/AppSpaceHeaderMenus';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
 import SpaceOptions from './components/SpaceOptions';
 import AppSpaceContactCall from '@unpod/components/modules/AppSpaceContactCall';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
-import { isEditAccessAllowed } from '@unpod/helpers/PermissionHelper';
-import { Dropdown, Flex, Typography } from 'antd';
-import { useRouter } from 'next/navigation';
-import { MdAdd, MdEdit } from 'react-icons/md';
-import { RiVideoAddLine } from 'react-icons/ri';
-import { getTimeFromNow } from '@unpod/helpers/DateHelper';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
+import {isEditAccessAllowed} from '@unpod/helpers/PermissionHelper';
+import {Dropdown, Flex, Typography} from 'antd';
+import {useRouter} from 'next/navigation';
+import {MdAdd, MdEdit} from 'react-icons/md';
+import {RiVideoAddLine} from 'react-icons/ri';
+import {getTimeFromNow} from '@unpod/helpers/DateHelper';
 import People from '../../Sidebar/People';
 
 const dropDownMenu = [
@@ -31,7 +23,7 @@ const dropDownMenu = [
     label: 'Write',
     icon: (
       <span className="ant-icon">
-        <MdEdit size={20} />
+        <MdEdit size={20}/>
       </span>
     ),
   },
@@ -40,7 +32,7 @@ const dropDownMenu = [
     label: 'Upload',
     icon: (
       <span className="ant-icon">
-        <RiVideoAddLine size={20} />
+        <RiVideoAddLine size={20}/>
       </span>
     ),
   },
@@ -144,24 +136,24 @@ const getCurrentObjectData = (
   activeTab: string,
 ) => {
   if (activeTab === 'chat' && activeConversation) {
-    return { type: 'chat', data: activeConversation };
+    return {type: 'chat', data: activeConversation};
   } else if (activeTab === 'note' && activeNote) {
-    return { type: 'note', data: activeNote };
+    return {type: 'note', data: activeNote};
   } else if (activeTab === 'doc' && activeDocument) {
-    return { type: 'doc', data: activeDocument };
+    return {type: 'doc', data: activeDocument};
   } else if (activeTab === 'call' && activeCall) {
-    return { type: 'call', data: activeCall };
+    return {type: 'call', data: activeCall};
   }
-  return { type: 'space', data: currentSpace };
+  return {type: 'space', data: currentSpace};
 };
-const { Text } = Typography;
+const {Text} = Typography;
 
 type EntityHeaderProps = {
   onAddClick: (key: string) => void;
   taskCallButton?: ReactNode;
 };
 
-const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
+const EntityHeader = ({onAddClick, taskCallButton}: EntityHeaderProps) => {
   const [addNew, setAddNew] = useState(false);
   const {
     activeDocument,
@@ -171,9 +163,9 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
     activeCall,
     activeTab,
   } = useAppSpaceContext();
-  const { setActiveTab } = useAppSpaceActionsContext();
+  const {setActiveTab} = useAppSpaceActionsContext();
   const router = useRouter();
-  const { type, data: currentData } = getCurrentObjectData(
+  const {type, data: currentData} = getCurrentObjectData(
     currentSpace,
     activeConversation,
     activeNote,
@@ -194,7 +186,7 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
     return isEditAccessAllowed(null, null, currentSpace);
   }, [currentSpace]);
 
-  const { icon, title, subtitle, email, isUser } = headerInfo;
+  const {icon, title, subtitle, email, isUser} = headerInfo;
   const isDocumentType = type === 'doc';
   const isCallType = type === 'call';
   const iconText = icon || '';
@@ -206,7 +198,7 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
           <Flex gap={10} align="center">
             {isUser ? (
               <UserAvatar
-                user={{ full_name: iconText }}
+                user={{full_name: iconText}}
                 shape="square"
                 size={32}
                 fontSize={14}
@@ -219,10 +211,10 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
             <Flex vertical={true}>
               <StyledHeaderTitle level={2}>{title}</StyledHeaderTitle>
               {isDocumentType && (
-                <DocumentHeaderDetails subtitle={subtitle} email={email} />
+                <DocumentHeaderDetails subtitle={subtitle} email={email}/>
               )}
               {isCallType && subtitle && (
-                <Text type="secondary" style={{ fontSize: 12 }}>
+                <Text type="secondary" style={{fontSize: 12}}>
                   {subtitle}
                 </Text>
               )}
@@ -246,37 +238,37 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
                 type="primary"
                 shape="circle"
                 size="small"
-                icon={<MdAdd size={24} />}
+                icon={<MdAdd size={24}/>}
                 onClick={() => onAddClick('document')}
               />
             )}
 
             {activeTab === 'notes' && (
-              <Dropdown menu={{ items: dropDownMenu, onClick: onMenuClick }}>
+              <Dropdown menu={{items: dropDownMenu, onClick: onMenuClick}}>
                 <AppHeaderButton
                   type="primary"
                   shape="circle"
                   size="small"
-                  icon={<MdAdd size={24} />}
+                  icon={<MdAdd size={24}/>}
                 />
               </Dropdown>
             )}
 
             {activeTab !== 'doc' &&
               activeTab !== 'note' &&
-              activeTab !== 'call' && <SpaceOptions />}
+              activeTab !== 'call' && <SpaceOptions/>}
 
             {activeTab === 'note' && activeNote && (
               <AppHeaderButton
                 type="primary"
                 shape="circle"
                 size="small"
-                icon={<MdAdd size={24} />}
+                icon={<MdAdd size={24}/>}
                 onClick={() => onAddClick('note')}
               />
             )}
 
-            {activeTab === 'call' && <SpaceOptions />}
+            {activeTab === 'call' && <SpaceOptions/>}
 
             {activeTab === 'doc' &&
               currentSpace?.content_type === 'contact' && (
@@ -288,7 +280,7 @@ const EntityHeader = ({ onAddClick, taskCallButton }: EntityHeaderProps) => {
                   data={currentData}
                   hideExport
                   type="doc"
-                  drawerChildren={<People />}
+                  drawerChildren={<People/>}
                 />
               )}
 

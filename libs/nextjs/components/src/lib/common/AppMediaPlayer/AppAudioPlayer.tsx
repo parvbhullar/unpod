@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {
   StyledAudioPlayer,
@@ -12,23 +12,25 @@ import {
   StyledPlayerInfo,
   StyledUserBar,
 } from './index.styled';
-import { useAuthContext } from '@unpod/providers';
-import { useTheme } from 'styled-components';
-import { Typography } from 'antd';
+import {useAuthContext} from '@unpod/providers';
+import {useTheme} from 'styled-components';
+import {Typography} from 'antd';
 import AppImage from '../../next/AppImage';
-import { MdPlayCircleOutline } from 'react-icons/md';
-import { getImageUrl } from '@unpod/helpers/UrlHelper';
+import {MdPlayCircleOutline} from 'react-icons/md';
+import {getImageUrl} from '@unpod/helpers/UrlHelper';
 import type MuxPlayerElement from '@mux/mux-player';
 
 type MediaInfo = {
   playback_id: string;
-  media_id?: string;};
+  media_id?: string;
+};
 
 type AppAudioPlayerProps = {
   title?: string;
   subTitle?: string;
   media: MediaInfo;
-  poster?: string;};
+  poster?: string;
+};
 
 type MuxPlayerHandle = MuxPlayerElement & {
   media?: { nativeEl?: HTMLMediaElement };
@@ -36,13 +38,13 @@ type MuxPlayerHandle = MuxPlayerElement & {
 };
 
 const AppAudioPlayer: React.FC<AppAudioPlayerProps> = ({
-  title,
-  subTitle,
-  media,
-  poster,
-}) => {
+                                                         title,
+                                                         subTitle,
+                                                         media,
+                                                         poster,
+                                                       }) => {
   const theme = useTheme();
-  const { user } = useAuthContext();
+  const {user} = useAuthContext();
   const playerRef = useRef<MuxPlayerHandle | null>(null);
   const waveformRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -126,7 +128,7 @@ const AppAudioPlayer: React.FC<AppAudioPlayerProps> = ({
         <StyledPlayerInfo>
           <StyledUserBar>
             <StyledAvatarWrapper onClick={onPlayClick}>
-              <MdPlayCircleOutline fontSize={36} />
+              <MdPlayCircleOutline fontSize={36}/>
             </StyledAvatarWrapper>
 
             <StyledMeta>

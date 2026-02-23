@@ -1,28 +1,28 @@
 import styled from 'styled-components';
-import { Form, Input } from 'antd';
-import { lighten } from 'polished';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
+import {Form, Input} from 'antd';
+import {lighten} from 'polished';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 export const StyledContentRoot = styled.div`
   //min-width: 630px;
   padding: 12px 0 0 0;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     min-width: 300px;
   }
 `;
 
 export const StyledButton = styled(AppHeaderButton)`
-  background-color: ${({ theme }) => theme.palette.success};
-  border-color: ${({ theme }) => theme.palette.success};
+  background-color: ${({theme}) => theme.palette.success};
+  border-color: ${({theme}) => theme.palette.success};
 
   &:hover {
-    background-color: ${({ theme }) =>
-      lighten(0.2, theme.palette.success)} !important;
-    border-color: ${({ theme }) =>
-      lighten(0.2, theme.palette.success)} !important;
+    background-color: ${({theme}) =>
+  lighten(0.2, theme.palette.success)} !important;
+    border-color: ${({theme}) =>
+  lighten(0.2, theme.palette.success)} !important;
   }
 `;
 

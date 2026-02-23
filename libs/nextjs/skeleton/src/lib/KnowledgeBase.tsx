@@ -1,5 +1,5 @@
-import { Card, Col, Row } from 'antd';
-import { SkeletonInput } from './common/SkeletonInput';
+import {Card, Col, Row} from 'antd';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonAvatar from './common/SkeletonAvatar';
 import styled from 'styled-components';
 
@@ -16,14 +16,14 @@ const StyledCard = styled(Card)`
 function KnowledgeBaseCardSkeleton() {
   return (
     <Row gutter={[24, 24]}>
-      {Array.from({ length: 16 }).map((_, idx) => (
+      {Array.from({length: 16}).map((_, idx) => (
         <Col xs={24} sm={12} xl={6} key={idx}>
           <StyledCard>
-            <div style={{ display: 'flex', alignItems: 'left' }}>
+            <div style={{display: 'flex', alignItems: 'left'}}>
               <SkeletonAvatar
                 size="default"
                 shape="square"
-                style={{ borderRadius: 10, marginBottom: 10 }}
+                style={{borderRadius: 10, marginBottom: 10}}
               />
             </div>
 
@@ -36,10 +36,10 @@ function KnowledgeBaseCardSkeleton() {
               }}
             >
               <SkeletonInput
-                style={{ width: '70%', height: 18, marginBottom: 10 }}
+                style={{width: '70%', height: 18, marginBottom: 10}}
               />
-              <SkeletonInput style={{ width: '90%', height: 14 }} />
-              <SkeletonInput style={{ width: '100%', height: 14 }} />
+              <SkeletonInput style={{width: '90%', height: 14}}/>
+              <SkeletonInput style={{width: '100%', height: 14}}/>
             </div>
 
             <div
@@ -50,9 +50,9 @@ function KnowledgeBaseCardSkeleton() {
                 gap: 8,
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <SkeletonAvatar size="small" />
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                <SkeletonAvatar size="small"/>
+                <div style={{display: 'flex', alignItems: 'center'}}>
                   <SkeletonInput
                     style={{
                       width: 100,
@@ -63,7 +63,7 @@ function KnowledgeBaseCardSkeleton() {
                   />
                 </div>
               </div>
-              <SkeletonAvatar size={16} />
+              <SkeletonAvatar size={16}/>
             </div>
           </StyledCard>
         </Col>
@@ -72,4 +72,4 @@ function KnowledgeBaseCardSkeleton() {
   );
 }
 
-export { KnowledgeBaseCardSkeleton };
+export {KnowledgeBaseCardSkeleton};

@@ -11,7 +11,7 @@ export const StyledAttachment = styled.div`
   height: 80px;
   overflow: hidden;
   border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.palette.primary}55;
+  border: 1px solid ${({theme}) => theme.palette.primary}55;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,7 +52,7 @@ export const StyledActionsWrapper = styled.div`
     left: auto;
     right: auto;
     opacity: 0;
-    color: ${({ theme }) => theme.palette.common.white};
+    color: ${({theme}) => theme.palette.common.white};
   }
 
   &:hover {

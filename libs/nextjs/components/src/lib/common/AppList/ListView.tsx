@@ -1,12 +1,7 @@
-import React, { ReactNode } from 'react';
-import { useBottomScrollListener } from 'react-bottom-scroll-listener';
-import { Spin } from 'antd';
-import {
-  StyledContentWrapper,
-  StyledListContainer,
-  StyledLoadingOverlay,
-  StyledScrollViewport,
-} from './index.styled';
+import React, {ReactNode} from 'react';
+import {useBottomScrollListener} from 'react-bottom-scroll-listener';
+import {Spin} from 'antd';
+import {StyledContentWrapper, StyledListContainer, StyledLoadingOverlay, StyledScrollViewport,} from './index.styled';
 
 const getEmptyContainer = (ListEmptyComponent: ReactNode) => {
   if (ListEmptyComponent)
@@ -40,29 +35,29 @@ type ListViewProps<T> = {
   isLoadingMore?: boolean;
 };
 
-const ListView = <T,>({
-  renderItem,
-  onEndReached = () => {
-    console.log('defaultProps onEndReached');
-  },
-  data = [],
-  ListFooterComponent,
-  ListEmptyComponent,
-  extra,
-  ...rest
-}: ListViewProps<T>) => {
+const ListView = <T, >({
+                         renderItem,
+                         onEndReached = () => {
+                           console.log('defaultProps onEndReached');
+                         },
+                         data = [],
+                         ListFooterComponent,
+                         ListEmptyComponent,
+                         extra,
+                         ...rest
+                       }: ListViewProps<T>) => {
   const containerRef = useBottomScrollListener<HTMLDivElement>(onEndReached, {
     offset: 200,
     debounce: 50,
     triggerOnNoScroll: false,
   });
 
-  const { height, maxWidth, padding, ...otherStyles } = rest?.style || {};
+  const {height, maxWidth, padding, ...otherStyles} = rest?.style || {};
 
   return (
     <StyledScrollViewport
       className="app-list"
-      style={{ height, ...otherStyles }}
+      style={{height, ...otherStyles}}
       ref={containerRef}
     >
       {extra}
@@ -72,7 +67,7 @@ const ListView = <T,>({
             <>
               {rest.loading && !rest.isLoadingMore && (
                 <StyledLoadingOverlay>
-                  <Spin />
+                  <Spin/>
                 </StyledLoadingOverlay>
               )}
               {data.map((item, index) => renderItem(item, index))}

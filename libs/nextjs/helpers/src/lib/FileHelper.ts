@@ -40,7 +40,7 @@ export const fileDownload = (
   if (data instanceof Blob) {
     blob = data;
   } else {
-    blob = new Blob([data], { type: mimeType || 'application/octet-stream' });
+    blob = new Blob([data], {type: mimeType || 'application/octet-stream'});
   }
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');

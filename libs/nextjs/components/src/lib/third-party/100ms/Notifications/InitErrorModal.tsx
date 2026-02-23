@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Modal } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Modal} from 'antd';
 
-export const InitErrorModal = ({ notification }) => {
+export const InitErrorModal = ({notification}) => {
   const [showModal, setShowModal] = useState(false);
-  const [info, setInfo] = useState({ title: 'Init Error', description: '' });
+  const [info, setInfo] = useState({title: 'Init Error', description: ''});
 
   useEffect(() => {
     const data = notification?.data;
@@ -24,7 +24,7 @@ export const InitErrorModal = ({ notification }) => {
       description = data.description;
       title = 'Init Error';
     }
-    setInfo({ title, description });
+    setInfo({title, description});
     setShowModal(true);
   }, [notification]);
 
@@ -34,8 +34,8 @@ export const InitErrorModal = ({ notification }) => {
       onCancel={() => setShowModal(false)}
       title={info.title}
     >
-      <div style={{ wordBreak: 'break-word' }}>
-        {info.description} <br />
+      <div style={{wordBreak: 'break-word'}}>
+        {info.description} <br/>
         Current URL - {window.location.href}
       </div>
     </Modal>

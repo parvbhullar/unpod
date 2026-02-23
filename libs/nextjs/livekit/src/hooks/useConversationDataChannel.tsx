@@ -1,15 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  useLocalParticipant,
-  useRoomContext,
-  useTrackTranscription,
-  useVoiceAssistant
-} from '@livekit/components-react';
-import { createMessageValidator, processLiveKitDataPacket } from '@unpod/helpers';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {useLocalParticipant, useRoomContext, useTrackTranscription, useVoiceAssistant} from '@livekit/components-react';
+import {createMessageValidator, processLiveKitDataPacket} from '@unpod/helpers';
 
-import { RoomEvent, Track } from 'livekit-client';
-import { registerGetLocationHandler } from './rpcHandlers/getLocationHandler';
-import { registerTopicHandlers, unregisterTopicHandlers } from './textStreamHandlers/registerTopicHandlers';
+import {RoomEvent, Track} from 'livekit-client';
+import {registerGetLocationHandler} from './rpcHandlers/getLocationHandler';
+import {registerTopicHandlers, unregisterTopicHandlers} from './textStreamHandlers/registerTopicHandlers';
 
 /**
  * Message source types for tracking and deduplication
@@ -84,11 +79,11 @@ type UseConversationDataChannelOptions = {
 };
 
 export const useConversationDataChannel = ({
-  conversationId,
-  params,
-  enabled = true,
-  topic, // Default topic: 'chat'
-}: UseConversationDataChannelOptions) => {
+                                             conversationId,
+                                             params,
+                                             enabled = true,
+                                             topic, // Default topic: 'chat'
+                                           }: UseConversationDataChannelOptions) => {
   const [lastMessage, setLastMessage] = useState<AnyMessage | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const didUnmount = useRef(false);
@@ -108,7 +103,7 @@ export const useConversationDataChannel = ({
   // Get voice assistant and local participant
   const voiceAssistant = useVoiceAssistant();
   const participant = useLocalParticipant();
-  const { localParticipant } = participant;
+  const {localParticipant} = participant;
   // Get transcriptions for both agent and local participant
   const agentTranscription = useTrackTranscription(voiceAssistant.audioTrack);
   const localTranscription = useTrackTranscription({
@@ -609,7 +604,7 @@ export const useConversationDataChannel = ({
       }
 
       // Clear all pending requests
-      locationRequestResolvers.current.forEach(({ timeout, reject }) => {
+      locationRequestResolvers.current.forEach(({timeout, reject}) => {
         if (timeout) {
           clearTimeout(timeout);
         }
@@ -629,7 +624,7 @@ export const useConversationDataChannel = ({
       const resolver = locationRequestResolvers.current.get(requestId);
       if (resolver) {
         clearTimeout(resolver.timeout);
-        resolver.resolve({ accepted });
+        resolver.resolve({accepted});
         locationRequestResolvers.current.delete(requestId);
       } else {
         console.warn(`⚠️ No resolver found for request ${requestId}`);
@@ -715,7 +710,7 @@ export const useConversationDataChannel = ({
           message: 'Self-test message',
           timestamp: Date.now(),
         }),
-        { topic: 'lk.block_response' },
+        {topic: 'lk.block_response'},
       )
       .then(() => {
         console.log(

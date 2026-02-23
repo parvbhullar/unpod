@@ -1,25 +1,13 @@
 'use client';
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
-import {
-  httpLocalClient,
-  setAuthToken,
-  setFirebaseConfig,
-  setOrgHeader,
-} from '@unpod/services';
-import { getDataApi, postDataApi } from '../../APIHooks';
-import { useInfoViewActionsContext } from '../AppInfoViewProvider';
-import { consoleLog, isEmptyObject } from '@unpod/helpers/GlobalHelper';
-import { useRouter } from 'next/navigation';
-import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
-import { clearLocalStorage } from '@unpod/helpers/DraftHelper';
+import React, {createContext, useCallback, useContext, useEffect, useLayoutEffect, useState,} from 'react';
+import {httpLocalClient, setAuthToken, setFirebaseConfig, setOrgHeader,} from '@unpod/services';
+import {getDataApi, postDataApi} from '../../APIHooks';
+import {useInfoViewActionsContext} from '../AppInfoViewProvider';
+import {consoleLog, isEmptyObject} from '@unpod/helpers/GlobalHelper';
+import {useRouter} from 'next/navigation';
+import {getCurrentBrowserFingerPrint} from '@rajesh896/broprint.js';
+import {clearLocalStorage} from '@unpod/helpers/DraftHelper';
 import type {
   AuthActionsContextType,
   AuthContextProviderProps,
@@ -80,7 +68,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
   const infoViewActionsContext = useInfoViewActionsContext();
 
   useLayoutEffect(() => {
-    const { isAuthenticate, userData } = props;
+    const {isAuthenticate, userData} = props;
     if (isAuthenticate && userData) {
       setAuthToken(userData.token);
       const user = userData.user;
@@ -94,7 +82,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
   }, [props.isAuthenticate]);
 
   const setVisitorId = useCallback((visitorId: string) => {
-    setState((prev: AuthState) => ({ ...prev, visitorId }));
+    setState((prev: AuthState) => ({...prev, visitorId}));
   }, []);
 
   const updateAuthUser = useCallback((user: User | null) => {
@@ -106,11 +94,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
   }, []);
 
   const updateAuthLoading = useCallback((loading: boolean) => {
-    setState((prev: AuthState) => ({ ...prev, isLoading: loading }));
+    setState((prev: AuthState) => ({...prev, isLoading: loading}));
   }, []);
 
   const setActiveOrg = useCallback((org: Organization | null) => {
-    setState((prev: AuthState) => ({ ...prev, activeOrg: org }));
+    setState((prev: AuthState) => ({...prev, activeOrg: org}));
   }, []);
 
   const logoutAuthUser = useCallback(() => {
@@ -133,9 +121,9 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     // Use Tauri's persistent storage if available
     if (isTauri) {
       try {
-        const { invoke } = await import('@tauri-apps/api/core');
+        const {invoke} = await import('@tauri-apps/api/core');
         const token = await invoke<string>('session_get_token');
-        return { data: { token } };
+        return {data: {token}};
       } catch (error) {
         console.error('Failed to get token from Tauri:', error);
       }
@@ -148,15 +136,15 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
       // Store in Tauri's persistent storage if available
       if (isTauri) {
         try {
-          const { invoke } = await import('@tauri-apps/api/core');
-          await invoke('session_set_token', { token });
+          const {invoke} = await import('@tauri-apps/api/core');
+          await invoke('session_set_token', {token});
           // Also store in cookie as fallback
-          return httpLocalClient.post('/api/token/', { token });
+          return httpLocalClient.post('/api/token/', {token});
         } catch (error) {
           console.error('Failed to store token in Tauri:', error);
         }
       }
-      return httpLocalClient.post('/api/token/', { token });
+      return httpLocalClient.post('/api/token/', {token});
     },
     [isTauri],
   );
@@ -166,7 +154,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     // Delete from Tauri's persistent storage if available
     if (isTauri) {
       try {
-        const { invoke } = await import('@tauri-apps/api/core');
+        const {invoke} = await import('@tauri-apps/api/core');
         await invoke('session_delete_token');
       } catch (error) {
         console.error('Failed to delete token from Tauri:', error);
@@ -176,7 +164,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
   }, [isTauri]);
 
   const updateGlobalData = useCallback((data: GlobalData) => {
-    setState((prev: AuthState) => ({ ...prev, globalData: data }));
+    setState((prev: AuthState) => ({...prev, globalData: data}));
   }, []);
 
   const getGlobalData = useCallback((): Promise<unknown> => {
@@ -205,7 +193,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
     }
   }, [state.activeOrg?.domain_handle]);
 
- const getAuthUser = useCallback((): Promise<unknown> => {
+  const getAuthUser = useCallback((): Promise<unknown> => {
     return new Promise((resolve, reject) => {
       getDataApi<User>('auth/me/', infoViewActionsContext)
         .then((res) => {
@@ -256,7 +244,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (
                     }
 
                     updateAuthUser(meRes.data);
-                    return resolve({ ...meRes, token: res.data.token });
+                    return resolve({...meRes, token: res.data.token});
                   })
                   .catch((response: unknown) => {
                     return reject(response);

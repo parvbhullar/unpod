@@ -1,17 +1,13 @@
-import {
-  selectIsAllowedToPublish,
-  useHMSStore,
-  useScreenShare,
-} from '@100mslive/react-sdk';
+import {selectIsAllowedToPublish, useHMSStore, useScreenShare,} from '@100mslive/react-sdk';
 // import { ShareScreenOptions } from './pdfAnnotator/shareScreenOptions';
-import { useUISettings } from '../../AppData/useUISettings';
-import { isScreenshareSupported } from '../../common/utils';
-import { UI_SETTINGS } from '../../common/constants';
-import { StyledContainer } from './index.styled';
-import { Button, Tooltip } from 'antd';
-import { MdOutlineScreenShare, MdOutlineStopScreenShare } from 'react-icons/md';
+import {useUISettings} from '../../AppData/useUISettings';
+import {isScreenshareSupported} from '../../common/utils';
+import {UI_SETTINGS} from '../../common/constants';
+import {StyledContainer} from './index.styled';
+import {Button, Tooltip} from 'antd';
+import {MdOutlineScreenShare, MdOutlineStopScreenShare} from 'react-icons/md';
 
-export const ScreenshareToggle = ({ css = {} }) => {
+export const ScreenshareToggle = ({css = {}}) => {
   const isAllowedToPublish = useHMSStore(selectIsAllowedToPublish);
   const isAudioOnly = useUISettings(UI_SETTINGS.isAudioOnly);
 
@@ -46,9 +42,9 @@ export const ScreenshareToggle = ({ css = {} }) => {
           shape="circle"
           icon={
             isVideoScreenshare ? (
-              <MdOutlineStopScreenShare fontSize={20} />
+              <MdOutlineStopScreenShare fontSize={20}/>
             ) : (
-              <MdOutlineScreenShare fontSize={20} />
+              <MdOutlineScreenShare fontSize={20}/>
             )
           }
         />

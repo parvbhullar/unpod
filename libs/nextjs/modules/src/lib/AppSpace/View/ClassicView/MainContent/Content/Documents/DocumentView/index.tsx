@@ -1,19 +1,16 @@
-import { Fragment, useEffect, useState } from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import AddWidget from './AddWidget';
 import AddNewSource from '@unpod/components/modules/AppDocuments/AddNewSource';
-import { StyledContainer, StyledInnerContainer } from './index.styled';
+import {StyledContainer, StyledInnerContainer} from './index.styled';
 import AddContactDoc from '@unpod/components/modules/AppDocuments/AddContactDoc';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 
 const DocumentView = () => {
   const [addNewDoc, setAddNewDoc] = useState(false);
-  const { setActiveDocument, setDocumentMode, connectorActions } =
+  const {setActiveDocument, setDocumentMode, connectorActions} =
     useAppSpaceActionsContext();
 
-  const { currentSpace, documentMode, activeDocument, connectorData } =
+  const {currentSpace, documentMode, activeDocument, connectorData} =
     useAppSpaceContext();
   const AddNewSourceAny = AddNewSource as any;
 
@@ -70,7 +67,7 @@ const DocumentView = () => {
           </StyledInnerContainer>
         </StyledContainer>
       ) : (
-        <AddWidget onClick={() => setAddNewDoc(true)} />
+        <AddWidget onClick={() => setAddNewDoc(true)}/>
       )}
     </Fragment>
   );

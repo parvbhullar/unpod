@@ -11,7 +11,7 @@ export const StyledRoot = styled.div`
 export const StyledContainer = styled.div`
   flex: 1;
   padding: 24px;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
   @media (max-width: 768px) {
     padding: 12px;
   }

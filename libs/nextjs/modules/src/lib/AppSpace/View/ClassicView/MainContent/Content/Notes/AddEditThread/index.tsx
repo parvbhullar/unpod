@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import WriteThread from './WriteThread';
 import UploadThread from './UploadThread';
-import { useGetDataApi } from '@unpod/providers';
+import {useGetDataApi} from '@unpod/providers';
 
 const POST_TYPE_CONTENT = {
   note: WriteThread,
@@ -13,8 +12,8 @@ const POST_TYPE_CONTENT = {
   post_audio: UploadThread,
 };
 
-const AddEditThread = ({ threadType, ...restProps }) => {
-  const [{ apiData: tagsData }] = useGetDataApi(`core/tags/`, {});
+const AddEditThread = ({threadType, ...restProps}) => {
+  const [{apiData: tagsData}] = useGetDataApi(`core/tags/`, {});
 
   const TypeComponent = POST_TYPE_CONTENT[threadType];
 

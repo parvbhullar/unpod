@@ -1,18 +1,18 @@
-import { memo } from 'react';
+import {memo} from 'react';
 
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
-import { BsArrowReturnLeft } from 'react-icons/bs';
-import { RxExternalLink } from 'react-icons/rx';
-import { Button, Typography } from 'antd';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { downloadFile } from '@unpod/helpers/FileHelper';
-import { StyledContainer, StyledParent } from './index.styled';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
+import {BsArrowReturnLeft} from 'react-icons/bs';
+import {RxExternalLink} from 'react-icons/rx';
+import {Button, Typography} from 'antd';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {downloadFile} from '@unpod/helpers/FileHelper';
+import {StyledContainer, StyledParent} from './index.styled';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
-const ReferenceDataView = ({ post }: { post?: any }) => {
+const ReferenceDataView = ({post}: { post?: any }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { data, execution_type } = post?.related_data || {};
+  const {data, execution_type} = post?.related_data || {};
 
   const onViewClick = () => {
     if (data.meta?.source_url || data.meta?.siteUrl) {
@@ -39,8 +39,8 @@ const ReferenceDataView = ({ post }: { post?: any }) => {
     data.content && (
       <StyledContainer>
         <StyledParent>
-          <BsArrowReturnLeft fontSize={16} />
-          <Paragraph type="secondary" ellipsis={{ rows: 1 }}>
+          <BsArrowReturnLeft fontSize={16}/>
+          <Paragraph type="secondary" ellipsis={{rows: 1}}>
             {getStringFromHtml(data.content)}
           </Paragraph>
 
@@ -51,7 +51,7 @@ const ReferenceDataView = ({ post }: { post?: any }) => {
               shape="circle"
               onClick={onViewClick}
             >
-              <RxExternalLink fontSize={16} />
+              <RxExternalLink fontSize={16}/>
             </Button>
           )}
         </StyledParent>

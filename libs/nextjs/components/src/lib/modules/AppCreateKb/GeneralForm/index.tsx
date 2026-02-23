@@ -1,17 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
-import type { FormInstance } from 'antd';
-import { Form, Radio, Select, Space } from 'antd';
-import {
-  COLLECTION_TYPE_DATA,
-  contentTypeData,
-  PERMISSION_TYPES,
-} from '@unpod/constants';
-import { AppInput, AppSelect, AppTextArea } from '../../../antd';
-import { getDraftData, saveDraftData } from '@unpod/helpers/DraftHelper';
+import {useCallback, useEffect, useState} from 'react';
+import type {FormInstance} from 'antd';
+import {Form, Radio, Select, Space} from 'antd';
+import {COLLECTION_TYPE_DATA, contentTypeData, PERMISSION_TYPES,} from '@unpod/constants';
+import {AppInput, AppSelect, AppTextArea} from '../../../antd';
+import {getDraftData, saveDraftData} from '@unpod/helpers/DraftHelper';
 import _debounce from 'lodash/debounce';
 import AppSharedUserList from '../../../common/AppSharedUserList';
-import { useIntl } from 'react-intl';
-import { getStatusOptionsFromConfig } from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
+import {getStatusOptionsFromConfig} from '@unpod/helpers/LocalizationFormatHelper';
 
 type DraftData = {
   title?: string;
@@ -30,19 +26,19 @@ type GeneralFormProps = {
 };
 
 const GeneralForm = ({
-  isSpace,
-  setContentType,
-  form,
-  userList,
-  setUserList,
-}: GeneralFormProps) => {
+                       isSpace,
+                       setContentType,
+                       form,
+                       userList,
+                       setUserList,
+                     }: GeneralFormProps) => {
   const [dataFetched, setDataFetched] = useState(false);
   const debounceFn = useCallback(_debounce(saveDraftData, 2000), []);
   const title = Form.useWatch('name', form);
   const contentType = Form.useWatch('content_type', form);
   const description = Form.useWatch('description', form);
   const privacyType = Form.useWatch('privacy_type', form);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (dataFetched) {
@@ -81,16 +77,16 @@ const GeneralForm = ({
           {
             required: true,
             message: isSpace
-              ? formatMessage({ id: 'validation.enterSpaceName' })
-              : formatMessage({ id: 'validation.enterKnowledgeBaseName' }),
+              ? formatMessage({id: 'validation.enterSpaceName'})
+              : formatMessage({id: 'validation.enterKnowledgeBaseName'}),
           },
         ]}
       >
         <AppInput
           placeholder={
             isSpace
-              ? formatMessage({ id: 'space.spaceName' })
-              : formatMessage({ id: 'knowledgeBase.pageTitle' })
+              ? formatMessage({id: 'space.spaceName'})
+              : formatMessage({id: 'knowledgeBase.pageTitle'})
           }
         />
       </Form.Item>
@@ -100,17 +96,17 @@ const GeneralForm = ({
         rules={[
           {
             required: true,
-            message: formatMessage({ id: 'validation.selectContentType' }),
+            message: formatMessage({id: 'validation.selectContentType'}),
           },
         ]}
       >
-        <AppSelect placeholder={formatMessage({ id: 'form.contentType' })}>
+        <AppSelect placeholder={formatMessage({id: 'form.contentType'})}>
           {(isSpace
-            ? (getStatusOptionsFromConfig(
+              ? (getStatusOptionsFromConfig(
                 COLLECTION_TYPE_DATA as any,
                 formatMessage,
               ) as any)
-            : (getStatusOptionsFromConfig(
+              : (getStatusOptionsFromConfig(
                 contentTypeData as any,
                 formatMessage,
               ) as any)
@@ -161,7 +157,7 @@ const GeneralForm = ({
       </Form.Item> */}
       <Form.Item name="description">
         <AppTextArea
-          placeholder={formatMessage({ id: 'form.description' })}
+          placeholder={formatMessage({id: 'form.description'})}
           autoSize={{
             minRows: 5,
             maxRows: 50,
@@ -173,7 +169,7 @@ const GeneralForm = ({
         rules={[
           {
             required: true,
-            message: formatMessage({ id: 'validation.selectPrivacy' }),
+            message: formatMessage({id: 'validation.selectPrivacy'}),
           },
         ]}
       >
@@ -182,14 +178,14 @@ const GeneralForm = ({
             <Radio.Button key={item.key} value={item.key}>
               <Space>
                 {item?.icon}
-                <span>{formatMessage({ id: item?.label })}</span>
+                <span>{formatMessage({id: item?.label})}</span>
               </Space>
             </Radio.Button>
           ))}
         </Radio.Group>
       </Form.Item>
       {privacyType === 'shared' && (
-        <AppSharedUserList users={userList} onChangeUsers={setUserList} />
+        <AppSharedUserList users={userList} onChangeUsers={setUserList}/>
       )}
     </>
   );

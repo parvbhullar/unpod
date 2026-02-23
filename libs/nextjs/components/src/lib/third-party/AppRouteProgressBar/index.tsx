@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
 
@@ -26,7 +26,7 @@ const AppRouteProgressBar = () => {
     };
   }, [router.events]);
 
-  return loading && <TopBarProgress />;
+  return loading && <TopBarProgress/>;
 };
 
 export default AppRouteProgressBar;

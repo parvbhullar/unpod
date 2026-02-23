@@ -1,4 +1,4 @@
-import { Pagination, type TablePaginationConfig } from 'antd';
+import {Pagination, type TablePaginationConfig} from 'antd';
 import styled from 'styled-components';
 
 const StyledPagination = styled(Pagination)`
@@ -6,7 +6,7 @@ const StyledPagination = styled(Pagination)`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  background: ${({ theme }: { theme: any }) => theme.backgroundColor};
+  background: ${({theme}: { theme: any }) => theme.backgroundColor};
   position: sticky;
   bottom: 0;
   padding: 20px 0 12px;

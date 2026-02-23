@@ -7,16 +7,16 @@ import {
   UserBubble,
   UserChatRow,
 } from './index.styled';
-import { useAppSpaceContext } from '@unpod/providers';
+import {useAppSpaceContext} from '@unpod/providers';
 import AppList from '@unpod/components/common/AppList';
-import { UserOutlined } from '@ant-design/icons';
-import { getFormattedDate } from '@unpod/helpers/DateHelper';
+import {UserOutlined} from '@ant-design/icons';
+import {getFormattedDate} from '@unpod/helpers/DateHelper';
 import UserAvatar from '@unpod/components/common/UserAvatar';
-import { useMediaQuery } from 'react-responsive';
-import { DesktopWidthQuery } from '@unpod/constants';
+import {useMediaQuery} from 'react-responsive';
+import {DesktopWidthQuery} from '@unpod/constants';
 
 const Conversations = () => {
-  const { activeCall } = useAppSpaceContext();
+  const {activeCall} = useAppSpaceContext();
   const mobileScreen = useMediaQuery(DesktopWidthQuery);
 
   const transcript = activeCall?.output?.transcript as any;
@@ -88,7 +88,7 @@ const Conversations = () => {
         )}
       </MessageWrapper>
       <AvatarContainer $isUser>
-        <UserOutlined />
+        <UserOutlined/>
       </AvatarContainer>
     </UserChatRow>
   );

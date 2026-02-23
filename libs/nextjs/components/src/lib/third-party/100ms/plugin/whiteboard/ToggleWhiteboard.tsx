@@ -1,10 +1,10 @@
-import { selectLocalPeerRoleName, useHMSStore } from '@100mslive/react-sdk';
-import { useHLSViewerRole } from '../../AppData/useUISettings';
-import { useIsFeatureEnabled } from '../../hooks/useFeatures';
-import { useWhiteboardMetadata } from './useWhiteboardMetadata';
-import { FEATURE_LIST } from '../../common/constants';
-import { Button, Tooltip } from 'antd';
-import { MdOutlineDraw } from 'react-icons/md';
+import {selectLocalPeerRoleName, useHMSStore} from '@100mslive/react-sdk';
+import {useHLSViewerRole} from '../../AppData/useUISettings';
+import {useIsFeatureEnabled} from '../../hooks/useFeatures';
+import {useWhiteboardMetadata} from './useWhiteboardMetadata';
+import {FEATURE_LIST} from '../../common/constants';
+import {Button, Tooltip} from 'antd';
+import {MdOutlineDraw} from 'react-icons/md';
 
 export const ToggleWhiteboard = () => {
   const {
@@ -42,7 +42,7 @@ export const ToggleWhiteboard = () => {
         shape="circle"
         // disabled={whiteboardActive && !amIWhiteboardOwner}
         data-testid="white_board_btn"
-        icon={<MdOutlineDraw fontSize={20} />}
+        icon={<MdOutlineDraw fontSize={20}/>}
       />
     </Tooltip>
   );

@@ -1,5 +1,5 @@
-import { getMachineName } from './StringHelper';
-import { randomId } from './GlobalHelper';
+import {getMachineName} from './StringHelper';
+import {randomId} from './GlobalHelper';
 
 export type InputSchemaProperty = {
   title?: string;

@@ -1,15 +1,10 @@
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 
-import { clampColumnWidth, getHeaderCellAlphaIdx, max, min } from '../utils';
-import type {
-  CalculatedColumn,
-  CalculatedColumnParent,
-  ColumnOrColumnGroup,
-  Omit,
-} from '../models/data-grid';
-import { renderValue } from '../cellRenderers';
-import type { DataGridProps } from '../DataGrid';
-import { SELECT_COLUMN_KEY, SERIAL_COLUMN_KEY } from '../constants/AppConst';
+import {clampColumnWidth, getHeaderCellAlphaIdx, max, min} from '../utils';
+import type {CalculatedColumn, CalculatedColumnParent, ColumnOrColumnGroup, Omit,} from '../models/data-grid';
+import {renderValue} from '../cellRenderers';
+import type {DataGridProps} from '../DataGrid';
+import {SELECT_COLUMN_KEY, SERIAL_COLUMN_KEY} from '../constants/AppConst';
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer V>
@@ -18,7 +13,8 @@ type Mutable<T> = {
 };
 
 type WithParent<R, SR> = {
-  readonly parent: MutableCalculatedColumnParent<R, SR> | undefined;};
+  readonly parent: MutableCalculatedColumnParent<R, SR> | undefined;
+};
 
 type MutableCalculatedColumnParent<R, SR> = Omit<
   Mutable<CalculatedColumnParent<R, SR>>,
@@ -33,7 +29,8 @@ type MutableCalculatedColumn<R, SR> = Omit<
 
 type ColumnMetric = {
   width: number;
-  left: number;};
+  left: number;
+};
 
 const DEFAULT_COLUMN_WIDTH = 'auto';
 const DEFAULT_COLUMN_MIN_WIDTH = 80;
@@ -44,16 +41,17 @@ type CalculatedColumnsArgs<R, SR> = {
   viewportWidth: number;
   scrollLeft: number;
   getColumnWidth: (column: CalculatedColumn<R, SR>) => string | number;
-  enableVirtualization: boolean;};
+  enableVirtualization: boolean;
+};
 
 export function useCalculatedColumns<R, SR>({
-  rawColumns,
-  defaultColumnOptions,
-  getColumnWidth,
-  viewportWidth,
-  scrollLeft,
-  enableVirtualization,
-}: CalculatedColumnsArgs<R, SR>) {
+                                              rawColumns,
+                                              defaultColumnOptions,
+                                              getColumnWidth,
+                                              viewportWidth,
+                                              scrollLeft,
+                                              enableVirtualization,
+                                            }: CalculatedColumnsArgs<R, SR>) {
   const defaultWidth = defaultColumnOptions?.width ?? DEFAULT_COLUMN_WIDTH;
   const defaultMinWidth =
     defaultColumnOptions?.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
@@ -63,7 +61,7 @@ export function useCalculatedColumns<R, SR>({
   const defaultResizable = defaultColumnOptions?.resizable ?? false;
   const defaultDraggable = defaultColumnOptions?.draggable ?? false;
 
-  const { childrenCount } = useMemo(() => {
+  const {childrenCount} = useMemo(() => {
     let childrenCount = 0;
 
     for (const rawColumn of rawColumns) {
@@ -171,7 +169,7 @@ export function useCalculatedColumns<R, SR>({
     const prevFrozenElementKey = columns[prevFrozenIndex - 1]?.key;*/
 
     columns.sort(
-      ({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
+      ({key: aKey, frozen: frozenA}, {key: bKey, frozen: frozenB}) => {
         // Sort select column first:
         if (aKey === SELECT_COLUMN_KEY || aKey === SERIAL_COLUMN_KEY) return -1;
         if (bKey === SELECT_COLUMN_KEY || bKey === SERIAL_COLUMN_KEY) return 1;
@@ -262,7 +260,7 @@ export function useCalculatedColumns<R, SR>({
         width = column.minWidth;
       }
       templateColumns.push(`${width}px`);
-      columnMetrics.set(column, { width, left });
+      columnMetrics.set(column, {width, left});
       left += width;
     }
 
@@ -324,7 +322,7 @@ export function useCalculatedColumns<R, SR>({
     // get the first visible non-frozen column index
     let colVisibleStartIdx = firstUnfrozenColumnIdx;
     while (colVisibleStartIdx < lastColIdx) {
-      const { left, width } = columnMetrics.get(columns[colVisibleStartIdx])!;
+      const {left, width} = columnMetrics.get(columns[colVisibleStartIdx])!;
       // if the right side of the columnn is beyond the left side of the available viewport,
       // then it is the first column that's at least partially visible
       if (left + width > viewportLeft) {
@@ -336,7 +334,7 @@ export function useCalculatedColumns<R, SR>({
     // get the last visible non-frozen column index
     let colVisibleEndIdx = colVisibleStartIdx;
     while (colVisibleEndIdx < lastColIdx) {
-      const { left, width } = columnMetrics.get(columns[colVisibleEndIdx])!;
+      const {left, width} = columnMetrics.get(columns[colVisibleEndIdx])!;
       // if the right side of the column is beyond or equal to the right side of the available viewport,
       // then it the last column that's at least partially visible, as the previous column's right side is not beyond the viewport.
       if (left + width >= viewportRight) {
@@ -385,7 +383,7 @@ function updateColumnParent<R, SR>(
   }
 
   if (column.parent !== undefined) {
-    const { parent } = column;
+    const {parent} = column;
     if (parent.idx === -1) {
       parent.idx = index;
     }

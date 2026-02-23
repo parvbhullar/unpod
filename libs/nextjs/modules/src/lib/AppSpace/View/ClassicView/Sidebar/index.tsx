@@ -1,25 +1,19 @@
 'use client';
 import SidebarHeader from './Header';
-import { useAppSpaceContext } from '@unpod/providers';
-import Notes from './Notes';
-import { StyledItemsWrapper, StyledRoot } from './index.styled';
+import {useAppSpaceContext} from '@unpod/providers';
+import {StyledItemsWrapper, StyledRoot} from './index.styled';
 import People from './People';
 import Call from './Call';
-import type { ComponentType, Ref } from 'react';
 
 const Sidebar = () => {
-  const { activeTab, notesRef, conversationsRef } = useAppSpaceContext();
-  const NotesComponent = Notes as unknown as ComponentType<{
-    ref?: Ref<unknown>;
-  }>;
+  const {activeTab} = useAppSpaceContext();
 
   return (
     <StyledRoot>
-      <SidebarHeader />
+      <SidebarHeader/>
       <StyledItemsWrapper>
-        {activeTab === 'note' && <NotesComponent ref={notesRef} />}
-        {activeTab === 'doc' && <People />}
-        {activeTab === 'call' && <Call />}
+        {activeTab === 'doc' && <People/>}
+        {activeTab === 'call' && <Call/>}
       </StyledItemsWrapper>
     </StyledRoot>
   );

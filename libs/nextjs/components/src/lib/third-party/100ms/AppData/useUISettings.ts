@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import {useCallback} from 'react';
 import {
   selectAppData,
   selectAppDataByPath,
@@ -8,8 +8,8 @@ import {
   useHMSStore,
   useHMSVanillaStore
 } from '@100mslive/react-sdk';
-import { UserPreferencesKeys, useUserPreferences } from '../hooks/useUserPreferences';
-import { APP_DATA, SESSION_STORE_KEY, UI_SETTINGS } from '../common/constants';
+import {UserPreferencesKeys, useUserPreferences} from '../hooks/useUserPreferences';
+import {APP_DATA, SESSION_STORE_KEY, UI_SETTINGS} from '../common/constants';
 
 /**
  * fields saved related to UI settings in store's app data can be
@@ -138,7 +138,7 @@ export const useSetAppDataByKey = (appDataKey) => {
   return [value, setValue];
 };
 
-const useSetAppData = ({ key1, key2 }) => {
+const useSetAppData = ({key1, key2}) => {
   const actions = useHMSActions();
   const store = useHMSVanillaStore();
   const [, setPreferences] = useUserPreferences(
@@ -153,8 +153,8 @@ const useSetAppData = ({ key1, key2 }) => {
         key1,
         key2
           ? {
-              [key2]: value,
-            }
+            [key2]: value,
+          }
           : value,
         true
       );

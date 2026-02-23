@@ -1,5 +1,5 @@
-import { type HTMLAttributes, type ReactNode, memo } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import {type HTMLAttributes, memo, type ReactNode} from 'react';
+import styled, {css, keyframes} from 'styled-components';
 
 const opacityWave = keyframes`
   0% { opacity: 1; }
@@ -15,28 +15,28 @@ const StyleBadge = styled.span<{
   $size?: BadgeSize;
   $animateWave?: boolean;
 }>`
-  font-size: ${({ theme }) => theme.font.size.sm};
+  font-size: ${({theme}) => theme.font.size.sm};
   text-transform: capitalize;
-  border-radius: ${({ $shape, $size }) => {
-    if ($shape === 'round') return '20px';
-    return $size === 'medium' ? '20px' : '6px';
-  }};
-  // max-width: ${({ $size }) => ($size === 'medium' ? '120px' : '100px')};
-  // min-width: ${({ $size }) => ($size === 'medium' ? '80px' : '60px')};
+  border-radius: ${({$shape, $size}) => {
+  if ($shape === 'round') return '20px';
+  return $size === 'medium' ? '20px' : '6px';
+}};
+  // max-width: ${({$size}) => ($size === 'medium' ? '120px' : '100px')};
+  // min-width: ${({$size}) => ($size === 'medium' ? '80px' : '60px')};
   text-align: center;
-  padding: ${({ $shape, $size }) => {
-    if ($shape === 'round') return '1px 14px';
-    return $size === 'medium' ? '5px 8px' : '2px 6px';
-  }};
+  padding: ${({$shape, $size}) => {
+  if ($shape === 'round') return '1px 14px';
+  return $size === 'medium' ? '5px 8px' : '2px 6px';
+}};
 
-  font-weight: ${({ $size }) => ($size === 'medium' ? 500 : 400)};
-  // color: ${({ theme }) => theme.palette.text.primary};
+  font-weight: ${({$size}) => ($size === 'medium' ? 500 : 400)};
+  // color: ${({theme}) => theme.palette.text.primary};
   cursor: pointer;
   white-space: nowrap;
 
-  ${({ $animateWave }) =>
-    $animateWave &&
-    css`
+  ${({$animateWave}) =>
+  $animateWave &&
+  css`
       animation: ${opacityWave} 2s infinite;
     `}
 `;
@@ -51,17 +51,18 @@ type AppStatusBadgeProps = HTMLAttributes<HTMLSpanElement> & {
   size?: BadgeSize;
   statusColors?: StatusColors;
   shape?: BadgeShape;
-  animate?: boolean;};
+  animate?: boolean;
+};
 
 export const AppStatusBadge = ({
-  status,
-  name,
-  size = 'medium',
-  statusColors,
-  shape,
-  animate = false,
-  ...restProps
-}: AppStatusBadgeProps) => {
+                                 status,
+                                 name,
+                                 size = 'medium',
+                                 statusColors,
+                                 shape,
+                                 animate = false,
+                                 ...restProps
+                               }: AppStatusBadgeProps) => {
   const statusObj = status && statusColors ? statusColors[status] : null;
 
   return statusObj ? (

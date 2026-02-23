@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledZoomContainer = styled(Paragraph)`
   position: absolute;
   right: 0;
   bottom: 0;
   padding: 2px 4px;
-  background: ${({ theme }) => theme.palette.background.component};
+  background: ${({theme}) => theme.palette.background.component};
   border-radius: 10px;
   margin-bottom: 0 !important;
   cursor: pointer;
@@ -24,6 +24,6 @@ export const StyledCellContent = styled.div`
   }
 
   & a.ant-typography {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 `;

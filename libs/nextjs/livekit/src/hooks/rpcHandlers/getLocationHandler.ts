@@ -1,4 +1,4 @@
-import type { MutableRefObject } from 'react';
+import type {MutableRefObject} from 'react';
 
 type AnyMessage = {
   data: string;
@@ -39,13 +39,13 @@ type RegisterGetLocationHandlerOptions = {
  * @returns {Function} Unregister function to cleanup the RPC handler
  */
 export const registerGetLocationHandler = ({
-  localParticipant,
-  setLastMessage,
-  locationRequestResolvers,
-  room,
-  isConnected,
-  topic,
-}: RegisterGetLocationHandlerOptions) => {
+                                             localParticipant,
+                                             setLastMessage,
+                                             locationRequestResolvers,
+                                             room,
+                                             isConnected,
+                                             topic,
+                                           }: RegisterGetLocationHandlerOptions) => {
   console.log('🔧 Registering RPC handler: getLocation');
 
   const unregisterGetLocation = localParticipant.registerRpcMethod(

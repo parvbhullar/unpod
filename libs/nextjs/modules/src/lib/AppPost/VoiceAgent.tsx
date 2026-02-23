@@ -1,6 +1,6 @@
 'use client';
 import '@livekit/components-styles';
-import { ConfigurationPanelItem } from '@unpod/livekit/components/config/ConfigurationPanelItem';
+import {ConfigurationPanelItem} from '@unpod/livekit/components/config/ConfigurationPanelItem';
 import {
   RoomAudioRenderer,
   StartAudio,
@@ -10,14 +10,11 @@ import {
   useRoomContext,
   useVoiceAssistant,
 } from '@livekit/components-react';
-import { ConnectionState } from 'livekit-client';
-import { useCallback, useEffect, useState } from 'react';
-import {
-  StyledAgentContainer,
-  StyledVisualizerContainer,
-} from '@unpod/livekit/components/playground/Playground.styled';
+import {ConnectionState} from 'livekit-client';
+import {useCallback, useEffect, useState} from 'react';
+import {StyledAgentContainer, StyledVisualizerContainer,} from '@unpod/livekit/components/playground/Playground.styled';
 import AudioOutputTile from '@unpod/livekit/components/config/AudioOutputTile';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 type TranscriptItem = {
   name: string;
@@ -31,13 +28,13 @@ type VoiceAgentProps = {
   spaceView?: boolean;
 };
 
-const VoiceAgent = ({ onConnect, spaceView }: VoiceAgentProps) => {
+const VoiceAgent = ({onConnect, spaceView}: VoiceAgentProps) => {
   const [transcripts, setTranscripts] = useState<TranscriptItem[]>([]);
-  const { localParticipant } = useLocalParticipant();
+  const {localParticipant} = useLocalParticipant();
   const voiceAssistant = useVoiceAssistant();
   const roomState = useConnectionState();
   const room = useRoomContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (roomState !== ConnectionState.Connected) {
@@ -123,9 +120,9 @@ const VoiceAgent = ({ onConnect, spaceView }: VoiceAgentProps) => {
 
       {roomState === ConnectionState.Connected && (
         <>
-          <RoomAudioRenderer />
+          <RoomAudioRenderer/>
           <StartAudio
-            label={formatMessage({ id: 'talkToAgent.playbackMessage' })}
+            label={formatMessage({id: 'talkToAgent.playbackMessage'})}
           />
         </>
       )}

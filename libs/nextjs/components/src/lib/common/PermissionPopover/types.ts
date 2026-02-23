@@ -1,12 +1,7 @@
-import type { Dispatch, SetStateAction } from 'react';
-import type { PopoverProps } from 'antd';
+import type {Dispatch, SetStateAction} from 'react';
+import type {PopoverProps} from 'antd';
 
-import type {
-  Organization,
-  Spaces,
-  Thread,
-  User,
-} from '@unpod/constants/types';
+import type {Organization, Spaces, Thread, User,} from '@unpod/constants/types';
 
 export type PermissionPopoverType =
   | 'org'

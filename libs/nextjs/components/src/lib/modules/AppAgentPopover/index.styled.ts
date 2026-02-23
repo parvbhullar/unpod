@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Button, Input } from 'antd';
-import { lighten } from 'polished';
+import {Button, Input} from 'antd';
+import {lighten} from 'polished';
 import AppCustomMenus from '../../common/AppCustomMenus';
-import type { GlobalTheme } from '@unpod/constants/types';
+import type {GlobalTheme} from '@unpod/constants/types';
 
 export const StyledKbMenus = styled.div`
   display: flex;
@@ -25,10 +25,10 @@ export const StyledMenus = styled(AppCustomMenus as any)`
 
 export const StyledInputWrapper = styled.div`
   padding: 10px 0;
-  //border-top: 1px solid ${({ theme }: { theme: GlobalTheme }) =>
-    lighten(0.05, theme.border.color)};
+  //border-top: 1px solid ${({theme}: { theme: GlobalTheme }) =>
+  lighten(0.05, theme.border.color)};
   border-bottom: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => lighten(0.05, theme.border.color)};
+    ${({theme}: { theme: GlobalTheme }) => lighten(0.05, theme.border.color)};
 `;
 
 export const StyledSearchInput = styled(Input)`
@@ -40,7 +40,7 @@ export const StylesPilotLogo = styled.div`
   width: 24px;
   height: 24px;
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primaryActive};
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primaryActive};
   border-radius: 5px;
   overflow: hidden;
 `;
@@ -50,13 +50,13 @@ export const StyledIconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   padding: 3px;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.primaryHover};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primaryHover};
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primaryActive};
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primaryActive};
   border-radius: 5px;
-  color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.primary}99 !important;
+  color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primary}99 !important;
 `;
 
 export const StyledButton = styled(Button)`

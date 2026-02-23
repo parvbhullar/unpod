@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   AppTableProps,
   CellKeyboardEvent,
@@ -7,14 +7,14 @@ import {
   SortColumn,
   themeOptions,
 } from './core/models/data-grid';
-import { Empty, type TablePaginationConfig } from 'antd';
-import { ThemeProvider } from 'styled-components';
-import { PAGINATION_SIZE, tablePageSize } from './core/constants/AppConst';
+import {Empty, type TablePaginationConfig} from 'antd';
+import {ThemeProvider} from 'styled-components';
+import {PAGINATION_SIZE, tablePageSize} from './core/constants/AppConst';
 import AppDraggableDataGrid from './AppDraggableDataGrid';
 import LoadingView from './core/components/LoadingView';
 import TablePagination from './core/TablePagination';
-import DataGrid, { SelectColumn } from './core';
-import { StyledTableEmptyWrapper, StyledTableWrapper } from './index.styled';
+import DataGrid, {SelectColumn} from './core';
+import {StyledTableEmptyWrapper, StyledTableWrapper} from './index.styled';
 import LoadingMoreView from './core/components/LoadingMoreView';
 
 function rowKeyGetter(row: any, rowKey: string) {
@@ -31,12 +31,13 @@ function keysToSet(keys: React.Key[]): ReadonlySet<React.Key> {
   const numbers = keys.map((key) => key);
   return new Set(numbers);
 }
+
 const OFFSET_MARGIN = 74;
 
 const EMPTY_STATE_SIZE = 136;
 
 function paginateArray(data: any[], pagination: TablePaginationConfig) {
-  const { pageSize, current } = pagination;
+  const {pageSize, current} = pagination;
 
   if (pageSize && current) {
     const startIndex = (current - 1) * pageSize;
@@ -48,7 +49,7 @@ function paginateArray(data: any[], pagination: TablePaginationConfig) {
   return [];
 }
 
-function isAtBottom({ currentTarget }: React.UIEvent<HTMLDivElement>): boolean {
+function isAtBottom({currentTarget}: React.UIEvent<HTMLDivElement>): boolean {
   return (
     currentTarget.scrollTop + 10 >=
     currentTarget.scrollHeight - currentTarget.clientHeight
@@ -111,30 +112,30 @@ const defaultThemeOptions: themeOptions = {
 };
 
 const AppDataGrid = ({
-  columns,
-  dataSource = [],
-  loading,
-  isLoadingMore,
-  id,
-  onChange,
-  rowKey = 'id',
-  className,
-  rowSelection,
-  pagination,
-  isDraggable = false,
-  size = 'small',
-  bordered = false,
-  onRowDragEnd,
-  customRowHeight,
-  defaultColumnOptions,
-  extraHeight = 0,
-  customBlockSize,
-  fullHeight,
-  hasLocalFilters = false,
-  themeOptions,
-  onScrolledToBottom,
-  ...restProps
-}: AppTableProps) => {
+                       columns,
+                       dataSource = [],
+                       loading,
+                       isLoadingMore,
+                       id,
+                       onChange,
+                       rowKey = 'id',
+                       className,
+                       rowSelection,
+                       pagination,
+                       isDraggable = false,
+                       size = 'small',
+                       bordered = false,
+                       onRowDragEnd,
+                       customRowHeight,
+                       defaultColumnOptions,
+                       extraHeight = 0,
+                       customBlockSize,
+                       fullHeight,
+                       hasLocalFilters = false,
+                       themeOptions,
+                       onScrolledToBottom,
+                       ...restProps
+                     }: AppTableProps) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [localPaginated, setLocalPaginated] = useState<boolean>(false);
   const [rows, setRows] = useState<any[]>([]);
@@ -152,7 +153,7 @@ const AppDataGrid = ({
     [themeOptions],
   );
 
-  const { hasChildren, extraRowSpanCount } = useMemo(() => {
+  const {hasChildren, extraRowSpanCount} = useMemo(() => {
     const hasChildren = columns?.find((item) => item?.children);
     const extraRowSpanCount = dataSource?.reduce(
       (acc, val) =>
@@ -165,7 +166,7 @@ const AppDataGrid = ({
     };
   }, [columns, dataSource]);
 
-  const { blockSize } = useMemo(() => {
+  const {blockSize} = useMemo(() => {
     const rowHeight =
       customRowHeight && typeof customRowHeight === 'number'
         ? customRowHeight
@@ -447,13 +448,13 @@ const AppDataGrid = ({
             {loading ? (
               <LoadingView
                 position="absolute"
-                style={{ backgroundColor: 'transparent' }}
+                style={{backgroundColor: 'transparent'}}
               />
             ) : null}
           </React.Fragment>
         )}
 
-        {isLoadingMore ? <LoadingMoreView /> : null}
+        {isLoadingMore ? <LoadingMoreView/> : null}
       </StyledTableWrapper>
     </ThemeProvider>
   );

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
 export const StyledFPContainer = styled.div`
   position: relative;
@@ -10,7 +10,7 @@ export const StyledFPContainer = styled.div`
   margin: 0 auto;
   border-radius: 12px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     width: 100%;
     max-width: unset;
   }

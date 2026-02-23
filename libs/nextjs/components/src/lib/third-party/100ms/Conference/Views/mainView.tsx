@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, {Suspense, useEffect} from 'react';
 import {
   selectIsConnectedToRoom,
   selectLocalPeerRoleName,
@@ -16,7 +16,7 @@ import MainGridView from './MainGridView';
 import PDFView from './PDFView';
 import ScreenShareView from './screenShareView';
 import WaitingView from './WaitingView';
-import { useAppConfig } from '../../AppData/useAppConfig';
+import {useAppConfig} from '../../AppData/useAppConfig';
 import {
   useHLSViewerRole,
   useIsHeadless,
@@ -26,12 +26,9 @@ import {
   useUrlToEmbed,
   useWaitingViewerRole,
 } from '../../AppData/useUISettings';
-import {
-  SESSION_STORE_KEY,
-  UI_MODE_ACTIVE_SPEAKER,
-} from '../../common/constants';
-import { StyledContainer } from './index.styled';
-import { useWhiteboardMetadata } from '../../plugin/whiteboard';
+import {SESSION_STORE_KEY, UI_MODE_ACTIVE_SPEAKER,} from '../../common/constants';
+import {StyledContainer} from './index.styled';
+import {useWhiteboardMetadata} from '../../plugin/whiteboard';
 
 const WhiteboardView = React.lazy(() => import('./WhiteBoardView'));
 const HLSView = React.lazy(() => import('./HLSView'));
@@ -44,13 +41,13 @@ export const ConferenceMainView = () => {
   const peerSharing = useHMSStore(selectPeerScreenSharing);
   const peerSharingAudio = useHMSStore(selectPeerSharingAudio);
   const peerSharingPlaylist = useHMSStore(selectPeerSharingVideoPlaylist);
-  const { whiteboardOwner: whiteboardShared } = useWhiteboardMetadata();
+  const {whiteboardOwner: whiteboardShared} = useWhiteboardMetadata();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const uiMode = useHMSStore(selectTemplateAppData).uiMode;
   const hmsActions = useHMSActions();
   const isHeadless = useIsHeadless();
   const headlessUIMode = useAppConfig('headlessConfig', 'uiMode');
-  const { uiViewMode, isAudioOnly } = useUISettings();
+  const {uiViewMode, isAudioOnly} = useUISettings();
   const hlsViewerRole = useHLSViewerRole();
   const waitingViewerRole = useWaitingViewerRole();
   const urlToIframe = useUrlToEmbed();
@@ -132,7 +129,7 @@ export const ConferenceMainView = () => {
   }
 
   return (
-    <Suspense fallback={<FullPageProgress />}>
+    <Suspense fallback={<FullPageProgress/>}>
       <StyledContainer
         style={{
           height: '100%',
@@ -140,7 +137,7 @@ export const ConferenceMainView = () => {
           position: 'relative',
         }}
       >
-        <ViewComponent />
+        <ViewComponent/>
       </StyledContainer>
     </Suspense>
   );

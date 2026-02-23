@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Row, Typography } from 'antd';
+import {Row, Typography} from 'antd';
 import SimpleBar from 'simplebar-react';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 export const StyledRow = styled(Row)`
   padding: 16px;
@@ -23,17 +23,17 @@ export const StyledConversationItem = styled.div`
   align-items: flex-start;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  border-radius: ${({theme}) => theme.component.card.borderRadius};
   cursor: pointer;
   margin-bottom: 2px;
   transition: background 0.2s;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 
   &.active {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 `;
 
@@ -70,7 +70,7 @@ export const StyledListHeader = styled.div`
 
 export const StyledContainer = styled.div`
   flex: 1;
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 16px auto 16px;
   //padding-inline: 16px;
@@ -78,7 +78,7 @@ export const StyledContainer = styled.div`
   flex-direction: column;
   gap: 40px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg + 200}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg + 200}px) {
     width: 500px;
   }
 `;
@@ -102,7 +102,7 @@ export const StyledList = styled.div`
 export const StyledAskContainer = styled.div`
   min-height: 30vh;
   margin: 16px auto 16px;
-  width: ${({ theme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   display: flex;
   flex-direction: column;
@@ -115,16 +115,16 @@ export const StyledAskContainer = styled.div`
     min-height: 80%;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md + 75}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md + 75}px) {
     margin-top: 0;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     width: 400px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
-    width: ${({ theme }) => theme.sizes.mainContentWidth};
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
+    width: ${({theme}) => theme.sizes.mainContentWidth};
   }
 `;
 
@@ -145,7 +145,7 @@ export const StyledInfoContainer = styled.div`
 export const StyledTitle = styled(Title)`
   font-size: 14px !important;
   font-weight: 600 !important;
-  color: ${({ theme }) => theme.palette.common.black};
+  color: ${({theme}) => theme.palette.common.black};
   margin: 0 !important;
   white-space: nowrap;
   overflow: hidden;
@@ -162,7 +162,7 @@ export const StyledConversationHeader = styled.div`
 
 export const StyledConversationTime = styled.span`
   font-size: 11px;
-  color: ${({ theme }) => theme.palette.text.secondary};
+  color: ${({theme}) => theme.palette.text.secondary};
   white-space: nowrap;
   margin-left: 8px;
 `;

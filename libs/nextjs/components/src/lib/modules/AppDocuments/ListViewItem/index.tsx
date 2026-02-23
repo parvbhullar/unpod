@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
-import { useState } from 'react';
+import type {ReactNode} from 'react';
+import {useState} from 'react';
 
-import type { MenuProps } from 'antd';
-import { Badge, Button, Dropdown, Space, Tooltip, Typography } from 'antd';
+import type {MenuProps} from 'antd';
+import {Badge, Button, Dropdown, Space, Tooltip, Typography} from 'antd';
 import {
   MdCheckBoxOutlineBlank,
   MdOutlineCheckBox,
@@ -11,13 +11,9 @@ import {
   MdOutlineMoreVert,
 } from 'react-icons/md';
 import clsx from 'clsx';
-import { changeDateStringFormat } from '@unpod/helpers/DateHelper';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
-import {
-  deleteDataApi,
-  getDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
+import {changeDateStringFormat} from '@unpod/helpers/DateHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
+import {deleteDataApi, getDataApi, useInfoViewActionsContext,} from '@unpod/providers';
 import UserAvatar from '../../../common/UserAvatar';
 import {
   StyledContent,
@@ -30,11 +26,11 @@ import {
   StyledRoot,
 } from './index.styled';
 import AppConfirmModal from '../../../antd/AppConfirmModal';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
-import type { Document } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
+import type {Document} from '@unpod/constants/types';
 
-const { Paragraph, Title, Text } = Typography;
+const {Paragraph, Title, Text} = Typography;
 
 const menuItems = [
   {
@@ -42,7 +38,7 @@ const menuItems = [
     label: 'common.edit',
     icon: (
       <span className="ant-icon edit-icon">
-        <MdOutlineEdit fontSize={18} />
+        <MdOutlineEdit fontSize={18}/>
       </span>
     ),
   },
@@ -51,7 +47,7 @@ const menuItems = [
     label: 'common.delete',
     icon: (
       <span className="ant-icon delete-icon">
-        <MdOutlineDelete fontSize={18} />
+        <MdOutlineDelete fontSize={18}/>
       </span>
     ),
   },
@@ -69,25 +65,26 @@ type ListViewItemProps = {
   setSelectedDocs: (updater: (prev: string[]) => string[]) => void;
   currentSpace: { token: string };
   onDocumentEdit: (doc: Document) => void;
-  onDocumentDelete: (doc: Document) => void;};
+  onDocumentDelete: (doc: Document) => void;
+};
 
 const ListViewItem = ({
-  document,
-  name,
-  createdAt,
-  dropdownMenus,
-  onDocumentClick,
-  activeDocument,
-  allowSelection,
-  selectedDocs,
-  setSelectedDocs,
-  currentSpace,
-  onDocumentEdit,
-  onDocumentDelete,
-}: ListViewItemProps) => {
+                        document,
+                        name,
+                        createdAt,
+                        dropdownMenus,
+                        onDocumentClick,
+                        activeDocument,
+                        allowSelection,
+                        selectedDocs,
+                        setSelectedDocs,
+                        currentSpace,
+                        onDocumentEdit,
+                        onDocumentDelete,
+                      }: ListViewItemProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onEmailToggleSelect = () => {
     const documentId = document.document_id;
@@ -149,7 +146,7 @@ const ListViewItem = ({
       });
   };
 
-  const onMenuClick = ({ key, domEvent }: any) => {
+  const onMenuClick = ({key, domEvent}: any) => {
     if (key === 'edit') {
       onEditClick(domEvent);
     } else if (key === 'delete') {
@@ -173,7 +170,7 @@ const ListViewItem = ({
       <StyledListHeader>
         <StyledMeta ellipsis>
           <StyledItem>
-            <UserAvatar user={{ full_name: name }} />
+            <UserAvatar user={{full_name: name}}/>
           </StyledItem>
           <StyledMetaContent>
             {/*<Title
@@ -191,7 +188,7 @@ const ListViewItem = ({
 
         <StyledHeaderExtra>
           <Space>
-            {document.seen ? null : <Badge color="#796cff" />}
+            {document.seen ? null : <Badge color="#796cff"/>}
 
             <Tooltip
               title={changeDateStringFormat(
@@ -217,9 +214,9 @@ const ListViewItem = ({
                 icon={
                   document.document_id &&
                   selectedDocs.includes(document.document_id) ? (
-                    <MdOutlineCheckBox fontSize={21} />
+                    <MdOutlineCheckBox fontSize={21}/>
                   ) : (
-                    <MdCheckBoxOutlineBlank fontSize={21} />
+                    <MdCheckBoxOutlineBlank fontSize={21}/>
                   )
                 }
               />
@@ -241,7 +238,7 @@ const ListViewItem = ({
                 type="text"
                 shape="circle"
                 size="small"
-                icon={<MdOutlineMoreVert fontSize={21} />}
+                icon={<MdOutlineMoreVert fontSize={21}/>}
                 onClick={(e) => e.stopPropagation()}
               />
             </Dropdown>
@@ -252,14 +249,14 @@ const ListViewItem = ({
         <StyledContentDetails>
           <Title
             level={4}
-            className={clsx({ 'font-weight-normal': document.seen })}
+            className={clsx({'font-weight-normal': document.seen})}
             ellipsis
           >
             {document.title}
           </Title>
 
           {document.description && (
-            <Paragraph type="secondary" className="mb-0" ellipsis={{ rows: 2 }}>
+            <Paragraph type="secondary" className="mb-0" ellipsis={{rows: 2}}>
               {getStringFromHtml(document.description)}
             </Paragraph>
           )}
@@ -269,7 +266,7 @@ const ListViewItem = ({
       <AppConfirmModal
         open={isDeleteOpen}
         onOk={onDeleteConfirm}
-        message={formatMessage({ id: 'spaceHeader.docsDeleteButton' })}
+        message={formatMessage({id: 'spaceHeader.docsDeleteButton'})}
         onCancel={() => setDeleteOpen(false)}
       />
     </StyledRoot>

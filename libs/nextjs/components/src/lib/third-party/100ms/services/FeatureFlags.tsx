@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { selectRoomID, useHMSStore } from '@100mslive/react-sdk';
+import {useEffect} from 'react';
+import {selectRoomID, useHMSStore} from '@100mslive/react-sdk';
 
 export class FeatureFlags {
   static enableTranscription =

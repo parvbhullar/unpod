@@ -1,9 +1,9 @@
-import React, { memo, useId, useRef } from 'react';
+import React, {memo, useId, useRef} from 'react';
 import styled from 'styled-components';
-import { rgba } from 'polished';
+import {rgba} from 'polished';
 import clsx from 'clsx';
 
-import { getColSpan, getMinMaxIdx } from './utils';
+import {getColSpan, getMinMaxIdx} from './utils';
 import type {
   CalculatedColumn,
   Direction,
@@ -14,11 +14,11 @@ import type {
   TableCellItemProps,
   UndoRedoProcessProps,
 } from './models/data-grid';
-import type { DataGridProps } from './DataGrid';
-import { SelectCellState } from './DataGrid';
+import type {DataGridProps} from './DataGrid';
+import {SelectCellState} from './DataGrid';
 import HeaderCell from './HeaderCell';
-import { CellFrozen, StyledCellWrapper } from './style/cell';
-import { rowHidden, rowSelectedClassname } from './style/row';
+import {CellFrozen, StyledCellWrapper} from './style/cell';
+import {rowHidden, rowSelectedClassname} from './style/row';
 
 type SharedDataGridProps<R, SR, K extends React.Key> = Pick<
   DataGridProps<R, SR, K>,
@@ -59,7 +59,8 @@ export type HeaderRowProps<R, SR, K extends React.Key> = SharedDataGridProps<R, 
   selectedPosition: SelectCellState;
   draggedOverCellIdx: number;
 
-  saveVersionHistory(data: UndoRedoProcessProps): void;};
+  saveVersionHistory(data: UndoRedoProcessProps): void;
+};
 
 export const StyledHeaderRow = styled.div`
   display: contents;
@@ -81,11 +82,12 @@ export const StyledHeaderRow = styled.div`
   }
 
   & .rdg-cell {
-    // background: ${({ theme }) => rgba(theme.palette.primary, 0.25)};
+      // background: ${({theme}) => rgba(theme.palette.primary, 0.25)};
 
     &:first-child {
       border-top-left-radius: 8px;
     }
+
     &:last-child {
       border-top-right-radius: 8px;
 
@@ -97,37 +99,37 @@ export const StyledHeaderRow = styled.div`
 `;
 
 function HeaderRow<R, SR, K extends React.Key>({
-  rowIdx,
-  columns,
-  onColumnResize,
-  onColumnsReorder,
-  sortColumns,
-  onSortColumnsChange,
-  selectedCellIdx,
-  selectCell,
-  shouldFocusGrid,
-  direction,
+                                                 rowIdx,
+                                                 columns,
+                                                 onColumnResize,
+                                                 onColumnsReorder,
+                                                 sortColumns,
+                                                 onSortColumnsChange,
+                                                 selectedCellIdx,
+                                                 selectCell,
+                                                 shouldFocusGrid,
+                                                 direction,
 
-  isHidden,
-  filters,
-  onFiltersChange,
-  lastLeftFixedColumnIndex,
-  rowSelectionType,
-  showBorder,
-  onInsertCell,
-  onDeleteCells,
-  onRenameColumn,
-  onLocalFiltersChange,
-  saveVersionHistory,
-  rowCount,
-  onSerialNoRowHeaderClick,
-  selectedPosition,
-  draggedOverCellIdx,
-}: HeaderRowProps<R, SR, K>) {
+                                                 isHidden,
+                                                 filters,
+                                                 onFiltersChange,
+                                                 lastLeftFixedColumnIndex,
+                                                 rowSelectionType,
+                                                 showBorder,
+                                                 onInsertCell,
+                                                 onDeleteCells,
+                                                 onRenameColumn,
+                                                 onLocalFiltersChange,
+                                                 saveVersionHistory,
+                                                 rowCount,
+                                                 onSerialNoRowHeaderClick,
+                                                 selectedPosition,
+                                                 draggedOverCellIdx,
+                                               }: HeaderRowProps<R, SR, K>) {
   const dragDropKey = useId();
   // For firefox compatibilty
   const isResizedColumn = useRef(false);
-  const { idx } = selectedPosition;
+  const {idx} = selectedPosition;
   const [startIdx, endIdx] = getMinMaxIdx(idx, draggedOverCellIdx);
 
   const cells = [];

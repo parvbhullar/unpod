@@ -1,16 +1,16 @@
-import type { GlobalTheme, VoiceProfile } from '@unpod/constants/types';
+import type {GlobalTheme, VoiceProfile} from '@unpod/constants/types';
 
-import { useEffect, useRef, useState } from 'react';
-import { Space, Tooltip, Typography } from 'antd';
-import { MdOutlinePause, MdOutlinePlayArrow } from 'react-icons/md';
-import { useTheme } from 'styled-components';
-import { clsx } from 'clsx';
-import { useMediaQuery } from 'react-responsive';
-import { IoMdClose } from 'react-icons/io';
+import {useEffect, useRef, useState} from 'react';
+import {Space, Tooltip, Typography} from 'antd';
+import {MdOutlinePause, MdOutlinePlayArrow} from 'react-icons/md';
+import {useTheme} from 'styled-components';
+import {clsx} from 'clsx';
+import {useMediaQuery} from 'react-responsive';
+import {IoMdClose} from 'react-icons/io';
 
-import { MobileWidthQuery } from '@unpod/constants';
-import { LANGUAGE_NAMES } from '@unpod/constants/CommonConsts';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
+import {MobileWidthQuery} from '@unpod/constants';
+import {LANGUAGE_NAMES} from '@unpod/constants/CommonConsts';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
 
 import {
   PlayButton,
@@ -29,7 +29,7 @@ import {
   StyledValueTag,
 } from './index.styled';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type PlayPauseButtonProps = {
   data: VoiceProfile;
@@ -37,7 +37,7 @@ type PlayPauseButtonProps = {
   theme?: GlobalTheme;
 };
 
-const PlayPauseButton = ({ data, isSelected, theme }: PlayPauseButtonProps) => {
+const PlayPauseButton = ({data, isSelected, theme}: PlayPauseButtonProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
 
   const [loading, setLoading] = useState(false);
@@ -104,9 +104,9 @@ const PlayPauseButton = ({ data, isSelected, theme }: PlayPauseButtonProps) => {
         shape="circle"
         icon={
           isPlaying ? (
-            <MdOutlinePause fontSize={20} />
+            <MdOutlinePause fontSize={20}/>
           ) : (
-            <MdOutlinePlayArrow fontSize={20} />
+            <MdOutlinePlayArrow fontSize={20}/>
           )
         }
         onClick={(e) => {
@@ -124,19 +124,19 @@ const PlayPauseButton = ({ data, isSelected, theme }: PlayPauseButtonProps) => {
 };
 
 const getCostColor = (cost?: string) => {
-  if (!cost) return { color: '#d1d5db', width: '0%' };
+  if (!cost) return {color: '#d1d5db', width: '0%'};
   const value = parseFloat(cost);
-  if (value <= 0.06) return { color: '#22c55e', width: '45%' };
-  if (value <= 0.08) return { color: '#eab308', width: '65%' };
-  return { color: '#ef4444', width: '80%' };
+  if (value <= 0.06) return {color: '#22c55e', width: '45%'};
+  if (value <= 0.08) return {color: '#eab308', width: '65%'};
+  return {color: '#ef4444', width: '80%'};
 };
 
 const getLatencyColor = (latency?: string) => {
-  if (!latency) return { color: '#d1d5db', width: '0%' };
+  if (!latency) return {color: '#d1d5db', width: '0%'};
   const value = parseFloat(latency);
-  if (value <= 680) return { color: '#22c55e', width: '55%' };
-  if (value <= 800) return { color: '#eab308', width: '70%' };
-  return { color: '#ef4444', width: '75%' };
+  if (value <= 680) return {color: '#22c55e', width: '55%'};
+  if (value <= 800) return {color: '#eab308', width: '70%'};
+  return {color: '#ef4444', width: '75%'};
 };
 
 type VoiceProfileCardProps = {
@@ -147,14 +147,14 @@ type VoiceProfileCardProps = {
 };
 
 const VoiceProfileCard = ({
-  data,
-  onProfileSelect,
-  hideSelect,
-  selected = false,
-}: VoiceProfileCardProps) => {
+                            data,
+                            onProfileSelect,
+                            hideSelect,
+                            selected = false,
+                          }: VoiceProfileCardProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(MobileWidthQuery);
-  const { name, gender, transcriber, voice } = data;
+  const {name, gender, transcriber, voice} = data;
 
   const provider = voice?.name || transcriber?.name || 'N/A';
 
@@ -180,27 +180,27 @@ const VoiceProfileCard = ({
 
   return (
     <StyledCard
-      className={clsx({ selected: selected })}
+      className={clsx({selected: selected})}
       onClick={onProfileClick}
     >
       {!isMobile && (
-        <PlayPauseButton data={data} isSelected={selected} theme={theme} />
+        <PlayPauseButton data={data} isSelected={selected} theme={theme}/>
       )}
 
       <StyledProfileContent>
         <StyledProfileMain>
           {isMobile && (
-            <PlayPauseButton data={data} isSelected={selected} theme={theme} />
+            <PlayPauseButton data={data} isSelected={selected} theme={theme}/>
           )}
 
           <StyledText className="profile-name" strong>
             {name}
           </StyledText>
-          <Space size={4} style={{ flex: 1, flexWrap: 'wrap' }}>
-            <Text style={{ fontSize: 13 }} type="secondary">
+          <Space size={4} style={{flex: 1, flexWrap: 'wrap'}}>
+            <Text style={{fontSize: 13}} type="secondary">
               {genderText}
             </Text>
-            <Text style={{ fontSize: 13, color: '#d1d5db' }}>·</Text>
+            <Text style={{fontSize: 13, color: '#d1d5db'}}>·</Text>
             {languages.map((lang) => (
               <Tooltip key={lang} title={LANGUAGE_NAMES[lang] || lang}>
                 <StyledLanguageTag>{lang}</StyledLanguageTag>
@@ -241,7 +241,7 @@ const VoiceProfileCard = ({
 
       {hideSelect && (
         <StyledButton
-          icon={<IoMdClose size={14} />}
+          icon={<IoMdClose size={14}/>}
           onClick={(e) => {
             e.stopPropagation();
             onCloseClick();

@@ -6,19 +6,19 @@ export const TagWrapper = styled.div`
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md + 52}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md + 52}px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 `;

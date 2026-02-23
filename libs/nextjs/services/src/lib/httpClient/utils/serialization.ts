@@ -3,12 +3,7 @@
  * Handles different data types (FormData, JSON, query params) consistently for checksum generation
  */
 
-import {
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosResponseHeaders,
-  RawAxiosResponseHeaders,
-} from 'axios'; // Symbol to store raw response data
+import {AxiosRequestConfig, AxiosResponse, AxiosResponseHeaders, RawAxiosResponseHeaders,} from 'axios'; // Symbol to store raw response data
 
 // Symbol to store raw response data
 export const RAW_RESPONSE_DATA: unique symbol = Symbol('rawResponseData');
@@ -16,7 +11,8 @@ export const RAW_RESPONSE_DATA: unique symbol = Symbol('rawResponseData');
 // Type for response data with raw data symbol
 export type ResponseDataWithRaw = {
   [RAW_RESPONSE_DATA]?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 /**
  * Recursively sort object keys alphabetically to match backend behavior
@@ -95,7 +91,8 @@ const setNestedValue = (
 type FileMetadata = {
   name: string;
   size: number;
-  type: string;};
+  type: string;
+};
 
 /**
  * Serialize FormData for checksum generation
@@ -247,7 +244,8 @@ const extractQueryParamsFromUrl = (url: string): Record<string, unknown> => {
  */
 export type SerializedRequestData = {
   serializedData: string;
-  dataType: 'body' | 'formdata' | 'params';};
+  dataType: 'body' | 'formdata' | 'params';
+};
 
 /**
  * Serialize request data for checksum generation
@@ -276,7 +274,7 @@ export const serializeRequestData = (
     const configParams = (config.params || {}) as Record<string, unknown>;
 
     // Merge both sources - config.params takes precedence over URL params
-    const mergedParams = { ...urlParams, ...configParams };
+    const mergedParams = {...urlParams, ...configParams};
 
     if (Object.keys(mergedParams).length > 0) {
       // Filter out empty objects and convert values
@@ -335,14 +333,15 @@ export const serializeRequestData = (
     }
   }
 
-  return { serializedData, dataType };
+  return {serializedData, dataType};
 };
 
 /**
  * Extended response type with raw data storage
  */
 export type AxiosResponseWithRaw<T = unknown> = AxiosResponse<T> & {
-  [RAW_RESPONSE_DATA]?: string;};
+  [RAW_RESPONSE_DATA]?: string;
+};
 
 /**
  * Serialize response data for checksum validation

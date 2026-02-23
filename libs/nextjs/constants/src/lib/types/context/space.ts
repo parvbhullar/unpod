@@ -1,20 +1,15 @@
-import type {
-  Dispatch,
-  MutableRefObject,
-  ReactNode,
-  SetStateAction,
-} from 'react';
+import type {Dispatch, MutableRefObject, ReactNode, SetStateAction,} from 'react';
 import type {
   UsePaginatedConnectorDataActions,
   UsePaginatedConnectorDataState,
   UsePaginatedDataActions,
   UsePaginatedDataState,
 } from '../api-hooks';
-import type { Call, CallItem } from '../calls';
-import type { Conversation } from '../conversation';
-import type { Document } from '../document';
-import type { ConversationsHandle, NotesHandle } from '../handles';
-import type { Spaces, SpaceSchema } from '../space';
+import type {Call, CallItem} from '../calls';
+import type {Conversation} from '../conversation';
+import type {Document} from '../document';
+import type {ConversationsHandle} from '../handles';
+import type {Spaces, SpaceSchema} from '../space';
 
 export type PathData = {
   tab?: string;
@@ -22,7 +17,6 @@ export type PathData = {
 };
 
 export type AppSpaceContextType = {
-  notesRef: MutableRefObject<NotesHandle | null>;
   conversationsRef: MutableRefObject<ConversationsHandle | null>;
   token?: string;
   notesData: UsePaginatedDataState<Conversation[]>;

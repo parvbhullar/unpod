@@ -1,9 +1,9 @@
-import { StyledPlaceHolder, StyledPlaceHolderInner } from './index.styled';
+import {StyledPlaceHolder, StyledPlaceHolderInner} from './index.styled';
 import AppImage from '../../next/AppImage';
-import type { ReactNode } from 'react';
-import { Typography } from 'antd';
+import type {ReactNode} from 'react';
+import {Typography} from 'antd';
 
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const emptyMessages = {
   space: {
@@ -33,14 +33,15 @@ type EmptyType = keyof typeof emptyMessages;
 type AppEmptyWorkSpaceProps = {
   type?: EmptyType;
   children?: ReactNode;
-  title?: string;};
+  title?: string;
+};
 
 const AppEmptyWorkSpace = ({
-  type = 'space',
-  children,
-  title,
-}: AppEmptyWorkSpaceProps) => {
-  const { formatMessage } = useIntl();
+                             type = 'space',
+                             children,
+                             title,
+                           }: AppEmptyWorkSpaceProps) => {
+  const {formatMessage} = useIntl();
 
   const message = type ? emptyMessages[type] : undefined;
 
@@ -54,8 +55,8 @@ const AppEmptyWorkSpace = ({
           height={children ? 280 : 344}
         />
 
-        <Typography.Title level={2} style={{ marginTop: 32 }}>
-          {message ? formatMessage({ id: message.titleId }) : title}
+        <Typography.Title level={2} style={{marginTop: 32}}>
+          {message ? formatMessage({id: message.titleId}) : title}
         </Typography.Title>
 
         {message?.descriptionId && (

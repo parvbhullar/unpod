@@ -3,12 +3,18 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/nextjs/react-data-grid/src",
   "projectType": "library",
-  "tags": ["type:lib", "scope:frontend", "tech:nextjs"],
+  "tags": [
+    "type:lib",
+    "scope:frontend",
+    "tech:nextjs"
+  ],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["libs/nextjs/react-data-grid/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "libs/nextjs/react-data-grid/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     }
   }

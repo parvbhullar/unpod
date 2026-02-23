@@ -1,7 +1,7 @@
-import { Button } from 'antd';
+import {Button} from 'antd';
 import styled from 'styled-components';
-import { rgba } from 'polished';
-import { CirclePicker } from 'react-color';
+import {rgba} from 'polished';
+import {CirclePicker} from 'react-color';
 
 /*
 const CirclePicker = dynamic(
@@ -23,9 +23,9 @@ export const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background-color: ${({ theme }: { theme: any }) =>
-    rgba(theme.primaryColor, 0.11)};
-  border: 1px solid ${({ theme }: { theme: any }) => theme.border.color};
+  background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.primaryColor, 0.11)};
+  border: 1px solid ${({theme}: { theme: any }) => theme.border.color};
   border-radius: 8px;
   padding: 10px;
   overflow: hidden;
@@ -64,7 +64,7 @@ type Props = {
   onColorSelect: (color: string, type: 'text' | 'fill') => void;
 };
 
-const ColorPalette = ({ activeColor, type, onColorSelect }: Props) => {
+const ColorPalette = ({activeColor, type, onColorSelect}: Props) => {
   return (
     <StyledRoot>
       <CirclePicker

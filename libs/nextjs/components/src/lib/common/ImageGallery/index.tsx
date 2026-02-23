@@ -1,16 +1,13 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { Image as AntImage } from 'antd';
-import { useWindowSize } from 'react-use';
+import React, {Fragment, useEffect, useMemo, useState} from 'react';
+import {Image as AntImage} from 'antd';
+import {useWindowSize} from 'react-use';
 import AppImage from '../../next/AppImage';
-import {
-  StyledActionsWrapper,
-  StyledGalleryItem,
-  StyledRoot,
-} from './index.styled';
-import { MdOutlineDownloadForOffline } from 'react-icons/md';
+import {StyledActionsWrapper, StyledGalleryItem, StyledRoot,} from './index.styled';
+import {MdOutlineDownloadForOffline} from 'react-icons/md';
 
 type Image = {
-  media_url: string;};
+  media_url: string;
+};
 
 type ImageGalleryProps = {
   images: Image[];
@@ -18,14 +15,15 @@ type ImageGalleryProps = {
     item: Image,
     event: React.MouseEvent<SVGElement, MouseEvent>,
   ) => void;
-  style?: React.CSSProperties;};
+  style?: React.CSSProperties;
+};
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({
-  images,
-  onDownload,
-  ...restProps
-}) => {
-  const { width, height } = useWindowSize();
+                                                     images,
+                                                     onDownload,
+                                                     ...restProps
+                                                   }) => {
+  const {width, height} = useWindowSize();
   const [open, setOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<Image | null>(null);
   const [containerStyle, setContainerStyle] = useState<React.CSSProperties>({
@@ -33,7 +31,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   });
   const galleryRef = React.useRef<HTMLDivElement>(null);
 
-  const { thHeight } = useMemo(() => {
+  const {thHeight} = useMemo(() => {
     const galleryWidth = (galleryRef.current?.clientWidth ?? 0) - 24;
     return {
       thWidth: galleryWidth ? galleryWidth / 3 : 0,
@@ -44,9 +42,9 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   useEffect(() => {
     if (images && images.length > 0) {
       if (images.length === 2)
-        setContainerStyle({ display: 'flex', flexWrap: 'nowrap' });
+        setContainerStyle({display: 'flex', flexWrap: 'nowrap'});
       else if (images.length > 2)
-        setContainerStyle({ gridTemplateColumns: `repeat(3, 1fr)` });
+        setContainerStyle({gridTemplateColumns: `repeat(3, 1fr)`});
 
       setCurrentItem(images[0]);
     }
@@ -96,7 +94,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
 
       {currentItem && (
         <AntImage
-          style={{ display: 'none' }}
+          style={{display: 'none'}}
           src={`${currentItem.media_url}?tr=w-1080,h-180`}
           preview={{
             visible: open,

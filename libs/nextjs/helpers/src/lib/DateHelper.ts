@@ -1,4 +1,4 @@
-import dayjs, { Dayjs, ManipulateType } from 'dayjs';
+import dayjs, {Dayjs, ManipulateType} from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import localeData from 'dayjs/plugin/localeData';
@@ -185,7 +185,7 @@ export const getScheduleOptions = (): ScheduleOption[] => {
 export const formatDateYearMonth = (dateStr: string): string => {
   const [year, month] = dateStr.split('-');
   const date = new Date(parseInt(year), parseInt(month) - 1);
-  return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  return date.toLocaleString('en-US', {month: 'long', year: 'numeric'});
 };
 
 export const getUtcTimestamp = (

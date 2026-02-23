@@ -1,13 +1,14 @@
 'use client';
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { isHostUser } from '@unpod/helpers/StreamHelper';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
+import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import {isHostUser} from '@unpod/helpers/StreamHelper';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
 
 interface Post {
   slug: string;
   is_live?: boolean;
   post_id?: string;
   roomCode?: string;
+
   [key: string]: any;
 }
 
@@ -34,7 +35,7 @@ interface StreamContextProviderProps {
   token?: string;
 }
 
-const StreamContextProvider: React.FC<StreamContextProviderProps> = ({ children, post, token }) => {
+const StreamContextProvider: React.FC<StreamContextProviderProps> = ({children, post, token}) => {
   const [role, setRole] = useState<string | undefined>();
   const [currentPost, setCurrentPost] = useState<Post | null>(post);
   const infoViewActionsContext = useInfoViewActionsContext();
@@ -47,7 +48,7 @@ const StreamContextProvider: React.FC<StreamContextProviderProps> = ({ children,
     getDataApi(
       `threads/${post.slug}/hms/livesession/token/`,
       infoViewActionsContext
-    ).then(({ data }) => {
+    ).then(({data}) => {
       setCurrentPost({
         ...post,
         roomCode: data?.host_room_code?.code
@@ -65,7 +66,7 @@ const StreamContextProvider: React.FC<StreamContextProviderProps> = ({ children,
         getDataApi(
           `threads/${post.slug}/hms/livesession/start/`,
           infoViewActionsContext
-        ).then(({ data }) => {
+        ).then(({data}) => {
           setCurrentPost({
             ...post,
             roomCode: data?.host_room_code?.code
@@ -75,7 +76,7 @@ const StreamContextProvider: React.FC<StreamContextProviderProps> = ({ children,
         });
       } else {
         getDataApi(`threads/${post.slug}/detail/`, infoViewActionsContext).then(
-          ({ data }) => {
+          ({data}) => {
             setCurrentPost(data);
             if (post?.is_live) {
               onJoinStream();

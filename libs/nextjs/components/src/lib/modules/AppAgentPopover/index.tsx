@@ -1,18 +1,12 @@
-import type { ChangeEvent, ReactNode } from 'react';
-import { useMemo } from 'react';
+import type {ChangeEvent, ReactNode} from 'react';
+import {useMemo} from 'react';
 
-import { BiBot } from 'react-icons/bi';
-import { useGetDataApi } from '@unpod/providers';
-import { debounce, isArray } from 'lodash';
-import {
-  StyledButton,
-  StyledInputWrapper,
-  StyledKbMenus,
-  StyledMenus,
-  StyledSearchInput,
-} from './index.styled';
-import { AppPopover } from '../../antd';
-import { useIntl } from 'react-intl';
+import {BiBot} from 'react-icons/bi';
+import {useGetDataApi} from '@unpod/providers';
+import {debounce, isArray} from 'lodash';
+import {StyledButton, StyledInputWrapper, StyledKbMenus, StyledMenus, StyledSearchInput,} from './index.styled';
+import {AppPopover} from '../../antd';
+import {useIntl} from 'react-intl';
 
 type AgentPilot = {
   handle?: string;
@@ -24,21 +18,22 @@ type AppAgentPopoverProps = {
   pilot?: AgentPilot | null;
   setPilot: (pilot: AgentPilot | null) => void;
   type?: string;
-  renderChildren?: (pilot?: AgentPilot | null) => ReactNode;};
+  renderChildren?: (pilot?: AgentPilot | null) => ReactNode;
+};
 
 const AppAgentPopover = ({
-  pilot,
-  setPilot,
-  type,
-  renderChildren,
-}: AppAgentPopoverProps) => {
-  const { formatMessage } = useIntl();
-  const [{ apiData }, { setQueryParams }] = useGetDataApi(
+                           pilot,
+                           setPilot,
+                           type,
+                           renderChildren,
+                         }: AppAgentPopoverProps) => {
+  const {formatMessage} = useIntl();
+  const [{apiData}, {setQueryParams}] = useGetDataApi(
     `core/pilots/org/`,
-    { data: [] },
-    { type, search: pilot?.name || '' },
+    {data: []},
+    {type, search: pilot?.name || ''},
     true,
-    ({ data }: { data: AgentPilot[] }) => {
+    ({data}: { data: AgentPilot[] }) => {
       if (!pilot?.handle) {
         setPilot(
           data.find((item: AgentPilot) => item.handle === pilot?.name) || null,
@@ -58,7 +53,7 @@ const AppAgentPopover = ({
         return {
           key: itemKey,
           label: item.name,
-          icon: <BiBot fontSize={18} />,
+          icon: <BiBot fontSize={18}/>,
           onClick: () => onItemClick(item),
         };
       });
@@ -67,7 +62,7 @@ const AppAgentPopover = ({
   }, [apiData, setPilot]);
 
   const onSearch = (value: string) => {
-    setQueryParams({ search: value, type: 'Voice' });
+    setQueryParams({search: value, type: 'Voice'});
   };
 
   return (
@@ -76,7 +71,7 @@ const AppAgentPopover = ({
         <StyledKbMenus>
           <StyledInputWrapper>
             <StyledSearchInput
-              placeholder={formatMessage({ id: 'agent.searchAgents' })}
+              placeholder={formatMessage({id: 'agent.searchAgents'})}
               onChange={
                 debounce(
                   (event: ChangeEvent<HTMLInputElement>) =>
@@ -100,9 +95,9 @@ const AppAgentPopover = ({
         renderChildren(pilot)
       ) : (
         <StyledButton type="default" shape="round">
-          <BiBot fontSize={18} />
+          <BiBot fontSize={18}/>
           {pilot?.name ||
-            formatMessage({ id: 'appSpaceCallModal.selectAgent' })}
+            formatMessage({id: 'appSpaceCallModal.selectAgent'})}
         </StyledButton>
       )}
     </AppPopover>

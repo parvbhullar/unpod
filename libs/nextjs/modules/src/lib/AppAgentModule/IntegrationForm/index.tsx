@@ -1,21 +1,13 @@
-import { Button, Flex, Form, FormInstance } from 'antd';
+import {Button, Flex, Form, FormInstance} from 'antd';
 import AppPilotSection from '@unpod/components/modules/AppPilotSection';
-import { useInfoViewContext } from '@unpod/providers';
-import { SaveOutlined } from '@ant-design/icons';
-import {
-  AnalysisItem,
-  INPUT_DEFAULT_VALUES,
-  TYPE_BASED_DEFAULT_VALUES,
-} from '@unpod/constants';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-} from '../index.styled';
-import { useIntl } from 'react-intl';
-import type { FormField, IntegrationItem, Pilot } from '@unpod/constants/types';
+import {useInfoViewContext} from '@unpod/providers';
+import {SaveOutlined} from '@ant-design/icons';
+import {AnalysisItem, INPUT_DEFAULT_VALUES, TYPE_BASED_DEFAULT_VALUES,} from '@unpod/constants';
+import {StickyFooter, StyledMainContainer, StyledTabRoot,} from '../index.styled';
+import {useIntl} from 'react-intl';
+import type {FormField, IntegrationItem, Pilot} from '@unpod/constants/types';
 
-const { useForm } = Form;
+const {useForm} = Form;
 
 type IntegrationFormProps = {
   agentData: Pilot;
@@ -32,12 +24,12 @@ type FormValue = {
 };
 
 const IntegrationForm = ({
-  agentData,
-  updateAgentData,
-}: IntegrationFormProps) => {
+                           agentData,
+                           updateAgentData,
+                         }: IntegrationFormProps) => {
   const infoViewContext = useInfoViewContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onFinish = (values: FormValue) => {
     // Handle form submission
@@ -92,10 +84,10 @@ const IntegrationForm = ({
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext.loading}
           >
-            {formatMessage({ id: 'common.save' })}
+            {formatMessage({id: 'common.save'})}
           </Button>
         </Flex>
       </StickyFooter>

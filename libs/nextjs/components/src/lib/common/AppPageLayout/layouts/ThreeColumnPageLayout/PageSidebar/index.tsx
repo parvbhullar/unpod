@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
-import { useTheme } from 'styled-components';
+import {useTheme} from 'styled-components';
 import AppDrawer from '../../../../../antd/AppDrawer';
 import {
   StyledAddBtn,
@@ -11,18 +11,13 @@ import {
   StyledSidebar,
   StyledSkeletonButton,
 } from './index.styled';
-import { type MenuProps, Space } from 'antd';
-import { MdArrowForwardIos, MdEdit } from 'react-icons/md';
-import { RiVideoAddLine } from 'react-icons/ri';
-import {
-  useAppActionsContext,
-  useAppContext,
-  useAuthContext,
-  useOrgContext,
-} from '@unpod/providers';
-import { useMediaQuery } from 'react-responsive';
-import { useParams, useRouter } from 'next/navigation';
-import { DesktopWidthQuery } from '@unpod/constants';
+import {type MenuProps, Space} from 'antd';
+import {MdArrowForwardIos, MdEdit} from 'react-icons/md';
+import {RiVideoAddLine} from 'react-icons/ri';
+import {useAppActionsContext, useAppContext, useAuthContext, useOrgContext,} from '@unpod/providers';
+import {useMediaQuery} from 'react-responsive';
+import {useParams, useRouter} from 'next/navigation';
+import {DesktopWidthQuery} from '@unpod/constants';
 
 type PageSidebarProps = Omit<MenuProps, 'items' | 'onClick'> & {
   loading?: boolean;
@@ -31,26 +26,27 @@ type PageSidebarProps = Omit<MenuProps, 'items' | 'onClick'> & {
   children?: ReactNode;
   reloadDataApi?: () => void;
   hidePageHeader?: boolean;
-  isAllowedAdd?: boolean;};
+  isAllowedAdd?: boolean;
+};
 
 const PageSidebar = ({
-  loading,
-  items,
-  onMenuClick,
-  children,
-  reloadDataApi,
-  hidePageHeader,
-  isAllowedAdd,
-  ...restProps
-}: PageSidebarProps) => {
+                       loading,
+                       items,
+                       onMenuClick,
+                       children,
+                       reloadDataApi,
+                       hidePageHeader,
+                       isAllowedAdd,
+                       ...restProps
+                     }: PageSidebarProps) => {
   const theme = useTheme();
   const isMobileView = useMediaQuery(DesktopWidthQuery);
   const router = useRouter();
-  const { postSlug } = useParams<{ postSlug?: string }>();
-  const { isAuthenticated, activeOrg } = useAuthContext();
-  const { activeSpace } = useOrgContext();
-  const { collapsed } = useAppContext();
-  const { setCollapsed } = useAppActionsContext();
+  const {postSlug} = useParams<{ postSlug?: string }>();
+  const {isAuthenticated, activeOrg} = useAuthContext();
+  const {activeSpace} = useOrgContext();
+  const {collapsed} = useAppContext();
+  const {setCollapsed} = useAppActionsContext();
 
   // const isAllowedAdd = isAddAllowed(undefined, undefined, activeSpace);
 
@@ -72,11 +68,11 @@ const PageSidebar = ({
 
       {loading ? (
         <StyledLoadingContainer>
-          <StyledSkeletonButton active size="large" shape="round" block />
-          <StyledSkeletonButton active size="large" shape="round" block />
-          <StyledSkeletonButton active size="large" shape="round" block />
-          <StyledSkeletonButton active size="large" shape="round" block />
-          <StyledSkeletonButton active size="large" shape="round" block />
+          <StyledSkeletonButton active size="large" shape="round" block/>
+          <StyledSkeletonButton active size="large" shape="round" block/>
+          <StyledSkeletonButton active size="large" shape="round" block/>
+          <StyledSkeletonButton active size="large" shape="round" block/>
+          <StyledSkeletonButton active size="large" shape="round" block/>
         </StyledLoadingContainer>
       ) : (
         <StyledMainMenu
@@ -97,10 +93,10 @@ const PageSidebar = ({
             ghost
           >
             <Space align="center">
-              <MdEdit fontSize={16} />
+              <MdEdit fontSize={16}/>
               <span className="add-post-btn-text">Write</span>
             </Space>
-            <MdArrowForwardIos fontSize={16} />
+            <MdArrowForwardIos fontSize={16}/>
           </StyledAddBtn>
 
           {/*{process.env.isDevMode === 'yes' && (
@@ -127,10 +123,10 @@ const PageSidebar = ({
             ghost
           >
             <Space align="center">
-              <RiVideoAddLine fontSize={16} />
+              <RiVideoAddLine fontSize={16}/>
               <span className="add-post-btn-text">Upload</span>
             </Space>
-            <MdArrowForwardIos fontSize={16} />
+            <MdArrowForwardIos fontSize={16}/>
           </StyledAddBtn>
         </StyledAddBtnView>
       )}
@@ -144,7 +140,7 @@ const PageSidebar = ({
       width={theme?.layout.main.sidebar.width}
       onClose={() => setCollapsed(false)}
       open={collapsed}
-      bodyStyle={{ padding: 0 }}
+      bodyStyle={{padding: 0}}
     >
       {sidebarContent()}
     </AppDrawer>

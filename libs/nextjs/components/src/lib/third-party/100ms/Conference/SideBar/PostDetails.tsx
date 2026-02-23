@@ -1,41 +1,39 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import useWebSocket from 'react-use-websocket';
 import {
   putDataApi,
   useAuthContext,
   useInfoViewActionsContext,
-} from '@unpod/providers';
-import AppPostReplies from '../../../../modules/AppPostReplies';
-import { StyledScrollbar } from './index.styled';
-import AppPostQuestionWindow from '../../../../modules/AppPostQuestionWindow';
-import AppPostView from '../../../../modules/AppPostView';
-import {
   useOrgActionContext,
   useOrgContext,
 } from '@unpod/providers';
-import { useStreamContext } from '../../StreamContextProvider';
+import AppPostReplies from '../../../../modules/AppPostReplies';
+import {StyledScrollbar} from './index.styled';
+import AppPostQuestionWindow from '../../../../modules/AppPostQuestionWindow';
+import AppPostView from '../../../../modules/AppPostView';
+import {useStreamContext} from '../../StreamContextProvider';
 
 const PostDetails: React.FC = () => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { currentPost } = useOrgContext();
-  const { setCurrentPost } = useOrgActionContext();
+  const {currentPost} = useOrgContext();
+  const {setCurrentPost} = useOrgActionContext();
   const didUnmount = useRef(false);
-  const { visitorId, isAuthenticated } = useAuthContext();
-  const { post, token } = useStreamContext() || {};
+  const {visitorId, isAuthenticated} = useAuthContext();
+  const {post, token} = useStreamContext() || {};
 
   let parmas: Record<string, any> = {
     token,
     app_type: process.env.appType,
   };
   if (!isAuthenticated) {
-    parmas = { session_user: visitorId, app_type: process.env.appType };
+    parmas = {session_user: visitorId, app_type: process.env.appType};
   }
 
   const [replyParent, setReplyParent] = useState(null);
   const [thinking, setThinking] = useState(false);
   const rootRef = React.useRef<any>(null);
 
-  const { sendJsonMessage, lastMessage } = useWebSocket(
+  const {sendJsonMessage, lastMessage} = useWebSocket(
     `${process.env.chatApiUrl}conversation/${post?.post_id}/`,
     {
       queryParams: parmas,
@@ -100,7 +98,7 @@ const PostDetails: React.FC = () => {
         .then((res) => {
           if (res.data?.reaction) {
             const count = +currentPost.reaction_count + reactionCount;
-            setCurrentPost({ ...currentPost, reaction_count: count });
+            setCurrentPost({...currentPost, reaction_count: count});
             infoViewActionsContext.showMessage(res.message);
           }
         })
@@ -140,7 +138,7 @@ const PostDetails: React.FC = () => {
         />
       )}
 
-      <div id="post-reply-end" style={{ marginBottom: 20 }} />
+      <div id="post-reply-end" style={{marginBottom: 20}}/>
 
       <AppPostQuestionWindow
         currentPost={currentPost}

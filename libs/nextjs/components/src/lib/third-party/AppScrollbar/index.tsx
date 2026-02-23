@@ -1,4 +1,4 @@
-import React, { ComponentProps, ReactNode } from 'react';
+import React, {ComponentProps, ReactNode} from 'react';
 import SimpleBar from 'simplebar-react';
 
 type SimpleBarProps = ComponentProps<typeof SimpleBar>;
@@ -9,12 +9,12 @@ type AppScrollbarProps = SimpleBarProps & {
 };
 
 const AppScrollbar: React.FC<AppScrollbarProps> = ({
-  children,
-  className = '',
-  ...others
-}) => {
+                                                     children,
+                                                     className = '',
+                                                     ...others
+                                                   }) => {
   return (
-    <SimpleBar className={className} style={{ maxHeight: '100%' }} {...others}>
+    <SimpleBar className={className} style={{maxHeight: '100%'}} {...others}>
       {children}
     </SimpleBar>
   );

@@ -1,25 +1,26 @@
-import { useState } from 'react';
-import { Button, Form, Radio, Row, Space, Typography } from 'antd';
+import {useState} from 'react';
+import {Button, Form, Radio, Row, Space, Typography} from 'antd';
 import AppInputNumber from '../../../antd/AppInputNumber';
 
 const options = [
-  { key: 10, value: 10, name: '+$10' },
-  { key: 50, value: 50, name: '+$50' },
-  { key: 100, value: 100, name: '+$100' },
+  {key: 10, value: 10, name: '+$10'},
+  {key: 50, value: 50, name: '+$50'},
+  {key: 100, value: 100, name: '+$100'},
 ];
 
 type AddCreditFormProps = {
   onWalletAddClose: () => void;
   onAddAmount: (amount: number) => void;
   loading?: boolean;
-  walletAmount?: string | number;};
+  walletAmount?: string | number;
+};
 
 const AddCreditForm = ({
-  onWalletAddClose,
-  onAddAmount,
-  loading,
-  walletAmount,
-}: AddCreditFormProps) => {
+                         onWalletAddClose,
+                         onAddAmount,
+                         loading,
+                         walletAmount,
+                       }: AddCreditFormProps) => {
   const [form] = Form.useForm();
   const [addAmount] = useState(5);
 
@@ -66,7 +67,7 @@ const AddCreditForm = ({
           },
         ]}
       >
-        <AppInputNumber min={0} placeholder="Enter Amount" />
+        <AppInputNumber min={0} placeholder="Enter Amount"/>
       </Form.Item>
 
       <Form.Item>

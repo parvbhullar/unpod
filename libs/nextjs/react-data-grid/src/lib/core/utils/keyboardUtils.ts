@@ -51,6 +51,7 @@ const nonInputKeys = new Set([
 export function isCtrlKeyHeldDown(e: React.KeyboardEvent): boolean {
   return (e.ctrlKey || e.metaKey) && e.key !== 'Control';
 }
+
 export function isAltKeyHeldDown(e: React.KeyboardEvent): boolean {
   return (e.altKey || e.metaKey) && e.key !== 'Alt';
 }
@@ -70,9 +71,9 @@ export function isDefaultCellInput(
  *   - The editor element must be the only immediate child of the editor container/a label.
  */
 export function onEditorNavigation({
-  key,
-  target,
-}: React.KeyboardEvent<HTMLDivElement>): boolean {
+                                     key,
+                                     target,
+                                   }: React.KeyboardEvent<HTMLDivElement>): boolean {
   if (
     key === 'Tab' &&
     (target instanceof HTMLInputElement ||

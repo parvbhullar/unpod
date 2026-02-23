@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, {useEffect, useRef, useState} from 'react';
+import styled, {keyframes} from 'styled-components';
 
 // Linear rotation - continuous without reset (1000 rotations)
 const rotate = keyframes`
@@ -52,8 +52,8 @@ const moveCircular = keyframes`
 
 const SphereContainer = styled.div<{ size: number }>`
   position: relative;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,8 +64,8 @@ const SphereContainer = styled.div<{ size: number }>`
 // Background glow layer 1 - larger
 const GlowLayer1 = styled.div<{ size: number; $isReady?: boolean }>`
   position: absolute;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -74,7 +74,7 @@ const GlowLayer1 = styled.div<{ size: number; $isReady?: boolean }>`
     transparent 100%
   );
   animation: ${pulse} 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  animation-play-state: ${({ $isReady }) => ($isReady ? 'running' : 'paused')};
+  animation-play-state: ${({$isReady}) => ($isReady ? 'running' : 'paused')};
   will-change: transform;
   backface-visibility: hidden;
   perspective: 1000px;
@@ -83,8 +83,8 @@ const GlowLayer1 = styled.div<{ size: number; $isReady?: boolean }>`
 // Background glow layer 2 - smaller
 const GlowLayer2 = styled.div<{ size: number; $isReady?: boolean }>`
   position: absolute;
-  width: ${({ size }) => size * 0.9}px;
-  height: ${({ size }) => size * 0.9}px;
+  width: ${({size}) => size * 0.9}px;
+  height: ${({size}) => size * 0.9}px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -92,7 +92,7 @@ const GlowLayer2 = styled.div<{ size: number; $isReady?: boolean }>`
     transparent 100%
   );
   animation: ${pulse} 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  animation-play-state: ${({ $isReady }) => ($isReady ? 'running' : 'paused')};
+  animation-play-state: ${({$isReady}) => ($isReady ? 'running' : 'paused')};
   will-change: transform;
   backface-visibility: hidden;
   perspective: 1000px;
@@ -101,8 +101,8 @@ const GlowLayer2 = styled.div<{ size: number; $isReady?: boolean }>`
 // Main sphere base
 const SphereBase = styled.div<{ size: number }>`
   position: absolute;
-  width: ${({ size }) => size * 0.75}px;
-  height: ${({ size }) => size * 0.75}px;
+  width: ${({size}) => size * 0.75}px;
+  height: ${({size}) => size * 0.75}px;
   border-radius: 50%;
   background: linear-gradient(135deg, #f0f0ff 0%, #e8e4ff 50%, #ded8ff 100%);
   box-shadow: 0 0 30px 10px rgba(208, 204, 255, 0.4);
@@ -112,9 +112,9 @@ const SphereBase = styled.div<{ size: number }>`
 // Static wrapper for initial angle offset
 const WaveLayerWrapper = styled.div<{ size: number; $initialAngle?: number }>`
   position: absolute;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
-  transform: rotate(${({ $initialAngle }) => $initialAngle || 0}deg);
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
+  transform: rotate(${({$initialAngle}) => $initialAngle || 0}deg);
   transform-origin: center center;
 `;
 
@@ -126,9 +126,9 @@ const WaveLayerAnimated = styled.div<{
   position: absolute;
   width: 100%;
   height: 100%;
-  animation: ${({ $reverse }) => ($reverse ? rotateReverse : rotate)} 17390s
+  animation: ${({$reverse}) => ($reverse ? rotateReverse : rotate)} 17390s
     linear infinite;
-  animation-play-state: ${({ $isReady }) => ($isReady ? 'running' : 'paused')};
+  animation-play-state: ${({$isReady}) => ($isReady ? 'running' : 'paused')};
   will-change: transform;
   transform-origin: center center;
   backface-visibility: hidden;
@@ -143,7 +143,7 @@ const WaveLayerPulse = styled.div<{ $isReady?: boolean }>`
   width: 100%;
   height: 100%;
   animation: ${pulse} 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  animation-play-state: ${({ $isReady }) => ($isReady ? 'running' : 'paused')};
+  animation-play-state: ${({$isReady}) => ($isReady ? 'running' : 'paused')};
   will-change: transform;
   transform-origin: center center;
   backface-visibility: hidden;
@@ -155,8 +155,8 @@ const WaveLayerPulse = styled.div<{ $isReady?: boolean }>`
 // Center highlight
 const CenterHighlight = styled.div<{ size: number }>`
   position: absolute;
-  width: ${({ size }) => size * 0.35}px;
-  height: ${({ size }) => size * 0.35}px;
+  width: ${({size}) => size * 0.35}px;
+  height: ${({size}) => size * 0.35}px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -171,10 +171,10 @@ const CenterHighlight = styled.div<{ size: number }>`
 // Top highlight shine
 const TopHighlight = styled.div<{ size: number }>`
   position: absolute;
-  top: ${({ size }) => size * 0.15}px;
-  left: ${({ size }) => size * 0.3}px;
-  width: ${({ size }) => size * 0.2}px;
-  height: ${({ size }) => size * 0.15}px;
+  top: ${({size}) => size * 0.15}px;
+  left: ${({size}) => size * 0.3}px;
+  width: ${({size}) => size * 0.2}px;
+  height: ${({size}) => size * 0.15}px;
   border-radius: 100px;
   background: linear-gradient(
     to bottom,
@@ -218,9 +218,9 @@ type AnimatedSphereProps = {
  * @param {Object} props.breakpoints - Responsive sizes { mobile: 60, tablet: 120, desktop: 250 }
  */
 export const AnimatedSphere: React.FC<AnimatedSphereProps> = ({
-  size = 250,
-  breakpoints,
-}) => {
+                                                                size = 250,
+                                                                breakpoints,
+                                                              }) => {
   // Calculate responsive size based on breakpoints
   const [responsiveSize, setResponsiveSize] = useState(size);
 
@@ -354,15 +354,15 @@ export const AnimatedSphere: React.FC<AnimatedSphereProps> = ({
   }, [currentSize]);
 
   return (
-    <SphereContainer size={currentSize} style={{ opacity: isReady ? 1 : 0 }}>
+    <SphereContainer size={currentSize} style={{opacity: isReady ? 1 : 0}}>
       {/* Background glow layer 1 */}
-      <GlowLayer1 size={currentSize} $isReady={isReady} />
+      <GlowLayer1 size={currentSize} $isReady={isReady}/>
 
       {/* Background glow layer 2 */}
-      <GlowLayer2 size={currentSize} $isReady={isReady} />
+      <GlowLayer2 size={currentSize} $isReady={isReady}/>
 
       {/* Main sphere base */}
-      <SphereBase size={currentSize} />
+      <SphereBase size={currentSize}/>
 
       {/* Rotating wave layer 1 (Purple) - 15° initial angle */}
       <WaveLayerWrapper size={currentSize * 0.6} $initialAngle={15}>
@@ -397,10 +397,10 @@ export const AnimatedSphere: React.FC<AnimatedSphereProps> = ({
       </WaveLayerWrapper>
 
       {/* Center highlight */}
-      <CenterHighlight size={currentSize} />
+      <CenterHighlight size={currentSize}/>
 
       {/* Top highlight shine */}
-      <TopHighlight size={currentSize} />
+      <TopHighlight size={currentSize}/>
     </SphereContainer>
   );
 };

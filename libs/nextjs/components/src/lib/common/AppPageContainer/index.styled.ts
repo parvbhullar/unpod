@@ -26,7 +26,7 @@ export const StyledInnerContainer = styled.div`
   // height: 100%;
   flex: 1;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     max-width: calc(100vw - 60px);
   }
 `;

@@ -1,42 +1,42 @@
 import React from 'react';
-import { Form, Tooltip } from 'antd';
+import {Form, Tooltip} from 'antd';
 import PropTypes from 'prop-types';
-import { StyledAppScrollbar, StyledMailModalTextArea } from './index.styled';
+import {StyledAppScrollbar, StyledMailModalTextArea} from './index.styled';
 import ToolbarFormats from './ToolbarOptions';
-import { StyledToolbar } from './AppEditorInput/index.styled';
+import {StyledToolbar} from './AppEditorInput/index.styled';
 import AppEditorInput from './AppEditorInput';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const toolbarSelectBox = (formatData) => {
-  const { className, options } = formatData;
+  const {className, options} = formatData;
   return (
     <select className={`ql-${className}`} onChange={(e) => e.persist()}>
-      <option selected />
+      <option selected/>
       {options.map((value, index) => {
-        return <option value={value} key={'option-' + index} />;
+        return <option value={value} key={'option-' + index}/>;
       })}
     </select>
   );
 };
 const toolbarButton = (formatData) => {
-  const { className, value, tooltip } = formatData;
+  const {className, value, tooltip} = formatData;
   return (
     <Tooltip title={tooltip}>
-      <button className={`ql-${className}`} value={value} />
+      <button className={`ql-${className}`} value={value}/>
     </Tooltip>
   );
 };
 
 const AppEditor = ({
-  name,
-  placeHolder,
-  required,
-  visible,
-  children,
-  value,
-  ...restProps
-}) => {
-  const { formatMessage } = useIntl();
+                     name,
+                     placeHolder,
+                     required,
+                     visible,
+                     children,
+                     value,
+                     ...restProps
+                   }) => {
+  const {formatMessage} = useIntl();
 
   return (
     <StyledMailModalTextArea className="app-editor">
@@ -47,7 +47,7 @@ const AppEditor = ({
           rules={[
             {
               required: required,
-              message: formatMessage({ id: 'validation.contentRequired' }),
+              message: formatMessage({id: 'validation.contentRequired'}),
             },
           ]}
           className="app-editor__form-item"
@@ -56,7 +56,7 @@ const AppEditor = ({
             name={name}
             defaultValue={value}
             placeholder={
-              placeHolder || formatMessage({ id: 'common.typeSomething' })
+              placeHolder || formatMessage({id: 'common.typeSomething'})
             }
             toolbarId="app-toolbar-container"
             theme="snow"

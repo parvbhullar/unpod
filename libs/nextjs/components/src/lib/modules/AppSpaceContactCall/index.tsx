@@ -1,12 +1,6 @@
 'use client';
-import { Fragment, useState } from 'react';
-import {
-  MdCall,
-  MdOutlineDelete,
-  MdOutlineEdit,
-  MdOutlineMoreVert,
-  MdRefresh,
-} from 'react-icons/md';
+import {Fragment, useState} from 'react';
+import {MdCall, MdOutlineDelete, MdOutlineEdit, MdOutlineMoreVert, MdRefresh,} from 'react-icons/md';
 import {
   deleteDataApi,
   getDataApi,
@@ -15,16 +9,16 @@ import {
   useInfoViewActionsContext,
 } from '@unpod/providers';
 import ExportTasks from './ExportTasks';
-import { AppHeaderButton } from '../../common/AppPageHeader';
+import {AppHeaderButton} from '../../common/AppPageHeader';
 import AppSpaceCallModal from './AppSpaceCallModal';
-import type { MenuProps } from 'antd';
-import { Dropdown } from 'antd';
+import type {MenuProps} from 'antd';
+import {Dropdown} from 'antd';
 import AppConfirmModal from '../../antd/AppConfirmModal';
-import { AppDrawer, DrawerBody } from '../../antd';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {AppDrawer, DrawerBody} from '../../antd';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
 const menuItems = [
   {
@@ -32,7 +26,7 @@ const menuItems = [
     label: 'common.edit',
     icon: (
       <span className="ant-icon edit-icon">
-        <MdOutlineEdit fontSize={18} />
+        <MdOutlineEdit fontSize={18}/>
       </span>
     ),
   },
@@ -41,7 +35,7 @@ const menuItems = [
     label: 'common.delete',
     icon: (
       <span className="ant-icon delete-icon">
-        <MdOutlineDelete fontSize={18} />
+        <MdOutlineDelete fontSize={18}/>
       </span>
     ),
   },
@@ -59,23 +53,23 @@ type AppSpaceContactCallProps = {
 };
 
 const AppSpaceContactCall = ({
-  selectedRowKeys,
-  idKey = 'id',
-  onFinishSchedule,
-  onRefreshTasks,
-  data,
-  hideExport = false,
-  type,
-  drawerChildren
-}: AppSpaceContactCallProps) => {
+                               selectedRowKeys,
+                               idKey = 'id',
+                               onFinishSchedule,
+                               onRefreshTasks,
+                               data,
+                               hideExport = false,
+                               type,
+                               drawerChildren
+                             }: AppSpaceContactCallProps) => {
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const { connectorData, activeDocument, selectedDocs, currentSpace } =
+  const {connectorData, activeDocument, selectedDocs, currentSpace} =
     useAppSpaceContext();
   const mobileScreen = useMediaQuery(MobileWidthQuery);
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { setActiveDocument, setDocumentMode, connectorActions } =
+  const {setActiveDocument, setDocumentMode, connectorActions} =
     useAppSpaceActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -134,7 +128,7 @@ const AppSpaceContactCall = ({
     setDeleteOpen(true);
   };
 
-  const onMenuClick: MenuProps['onClick'] = ({ key }) => {
+  const onMenuClick: MenuProps['onClick'] = ({key}) => {
     if (key === 'edit') {
       onEditClick();
     } else if (key === 'delete') {
@@ -148,24 +142,24 @@ const AppSpaceContactCall = ({
         type="primary"
         shape={!mobileScreen ? 'round' : 'circle'}
         icon={
-          <span className="anticon" style={{ verticalAlign: 'middle' }}>
-            <MdCall fontSize={!mobileScreen ? 16 : 22} />
+          <span className="anticon" style={{verticalAlign: 'middle'}}>
+            <MdCall fontSize={!mobileScreen ? 16 : 22}/>
           </span>
         }
         disabled={type === 'doc' && isDisabled()}
         onClick={() => (type === 'doc' ? setVisible(true) : setOpen(true))}
       >
-        {!mobileScreen && formatMessage({ id: 'spaceHeader.call' })}
+        {!mobileScreen && formatMessage({id: 'spaceHeader.call'})}
       </AppHeaderButton>
 
-      {!hideExport && <ExportTasks currentSpace={currentSpace!} />}
+      {!hideExport && <ExportTasks currentSpace={currentSpace!}/>}
 
       {onRefreshTasks && (
         <AppHeaderButton
           type="default"
           shape="circle"
           size="small"
-          icon={<MdRefresh fontSize={20} />}
+          icon={<MdRefresh fontSize={20}/>}
           onClick={onRefreshTasks}
         />
       )}
@@ -184,14 +178,14 @@ const AppSpaceContactCall = ({
           disabled={isDisabled()}
           shape="circle"
           size="small"
-          icon={<MdOutlineMoreVert fontSize={21} />}
+          icon={<MdOutlineMoreVert fontSize={21}/>}
         />
       </Dropdown>
 
       <AppConfirmModal
         open={isDeleteOpen}
         onOk={onDeleteConfirm}
-        message={formatMessage({ id: 'spaceHeader.docsDeleteButton' })}
+        message={formatMessage({id: 'spaceHeader.docsDeleteButton'})}
         onCancel={() => setDeleteOpen(false)}
       />
       <AppDrawer
@@ -199,27 +193,27 @@ const AppSpaceContactCall = ({
         open={open}
         onClose={() => setOpen(false)}
         closable={false}
-        title={formatMessage({ id: 'spaceHeader.call' })}
+        title={formatMessage({id: 'spaceHeader.call'})}
         extra={
           <AppHeaderButton
             type="primary"
             shape={!mobileScreen ? 'round' : 'circle'}
             icon={
-              <span className="anticon" style={{ verticalAlign: 'middle' }}>
-                <MdCall fontSize={!mobileScreen ? 16 : 22} />
+              <span className="anticon" style={{verticalAlign: 'middle'}}>
+                <MdCall fontSize={!mobileScreen ? 16 : 22}/>
               </span>
             }
             onClick={() => setVisible(true)}
             disabled={isDisabled()}
           >
-            {!mobileScreen && formatMessage({ id: 'spaceHeader.callNow' })}
+            {!mobileScreen && formatMessage({id: 'spaceHeader.callNow'})}
           </AppHeaderButton>
         }
       >
         <DrawerBody
           $overFlowY="hidden"
           $bodyHeight={65}
-          style={{ overflow: 'visible', padding: '0 0 0 0' }}
+          style={{overflow: 'visible', padding: '0 0 0 0'}}
         >
           {drawerChildren}
         </DrawerBody>

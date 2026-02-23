@@ -16,7 +16,7 @@ export const StylesImageWrapper = styled.div`
   position: relative;
   width: 110px;
   height: 110px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 20px;

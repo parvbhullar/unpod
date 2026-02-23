@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
-import {
-  selectPeerByID,
-  useHMSActions,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import { useFilteredRoles } from '../../common/hooks';
-import { Button, Modal, Select, Space, Tooltip } from 'antd';
+import React, {useState} from 'react';
+import {selectPeerByID, useHMSActions, useHMSStore,} from '@100mslive/react-sdk';
+import {useFilteredRoles} from '../../common/hooks';
+import {Button, Modal, Select, Space, Tooltip} from 'antd';
 
-const PeerName = ({ children, maxWidth, ref, ...rest }) => (
+const PeerName = ({children, maxWidth, ref, ...rest}) => (
   <strong
     {...rest}
     ref={ref}
@@ -21,7 +17,7 @@ const PeerName = ({ children, maxWidth, ref, ...rest }) => (
   </strong>
 );
 
-export const RoleChangeModal = ({ peerId, onOpenChange }) => {
+export const RoleChangeModal = ({peerId, onOpenChange}) => {
   const peer = useHMSStore(selectPeerByID(peerId));
   const roles = useFilteredRoles();
   const [selectedRole, setRole] = useState(peer?.roleName);
@@ -95,7 +91,7 @@ export const RoleChangeModal = ({ peerId, onOpenChange }) => {
       >
         <Select
           defaultValue={selectedRole}
-          style={{ width: '100%' }}
+          style={{width: '100%'}}
           onChange={setRole}
           options={roles.map((role) => ({
             label: (

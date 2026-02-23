@@ -1,47 +1,35 @@
-import { useEffect, useState } from 'react';
-import { Button, Form, Modal, Space } from 'antd';
-import {
-  StyledBottomBar,
-  StyledContentRoot,
-  StyledInput,
-} from './index.styled';
+import {useEffect, useState} from 'react';
+import {Button, Form, Modal, Space} from 'antd';
+import {StyledBottomBar, StyledContentRoot, StyledInput,} from './index.styled';
 import AppScheduleInputs from '../AppScheduleInputs';
 import AppAgentPopover from '../AppAgentPopover';
-import { BiBot } from 'react-icons/bi';
-import {
-  postDataApi,
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import {
-  getBrowserTimezone,
-  getFormattedDate,
-  getUtcTimestamp,
-} from '@unpod/helpers/DateHelper';
-import { useIntl } from 'react-intl';
+import {BiBot} from 'react-icons/bi';
+import {postDataApi, useAppSpaceActionsContext, useAppSpaceContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {getBrowserTimezone, getFormattedDate, getUtcTimestamp,} from '@unpod/helpers/DateHelper';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 type AppSpaceCallModalProps = {
   open: boolean;
   idKey: string;
   onFinishSchedule?: (data: any) => void;
   setOpen: (open: boolean) => void;
   filters?: any;
-  from?: string;};
+  from?: string;
+};
 
 const AppSpaceCallModal = ({
-  open,
-  idKey,
-  onFinishSchedule,
-  setOpen,
-  filters,
-  from = 'doc',
-}: AppSpaceCallModalProps) => {
-  const { setSelectedDocs } = useAppSpaceActionsContext();
-  const { selectedDocs, connectorData, currentSpace, activeCall } =
+                             open,
+                             idKey,
+                             onFinishSchedule,
+                             setOpen,
+                             filters,
+                             from = 'doc',
+                           }: AppSpaceCallModalProps) => {
+  const {setSelectedDocs} = useAppSpaceActionsContext();
+  const {selectedDocs, connectorData, currentSpace, activeCall} =
     useAppSpaceContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
@@ -51,7 +39,7 @@ const AppSpaceCallModal = ({
   const [repeatType, setRepeatType] = useState('now');
 
   const [pilot, setPilot] = useState<any | null>(
-    activeCall?.assignee ? { name: activeCall.assignee } : null,
+    activeCall?.assignee ? {name: activeCall.assignee} : null,
   );
   const [form] = useForm();
 
@@ -103,9 +91,9 @@ const AppSpaceCallModal = ({
         if (pilot) {
           setLoading(true);
 
-          const payload: Record<string, any> = { pilot: pilot.handle };
+          const payload: Record<string, any> = {pilot: pilot.handle};
           if (from === 'call' && activeCall) {
-            payload.documents = [{ document_id: activeCall.ref_id }];
+            payload.documents = [{document_id: activeCall.ref_id}];
           }
           if (from === 'doc') {
             if (filters) {
@@ -129,14 +117,14 @@ const AppSpaceCallModal = ({
           payload.schedule =
             repeatType === 'custom'
               ? {
-                  type: repeatType,
-                  calling_date: getFormattedDate(values.date, 'YYYY-MM-DD'),
-                  calling_time:
-                    getFormattedDate(values.time, 'HH:mm:ss') +
-                    getBrowserTimezone(),
-                  day: values.day,
-                }
-              : { type: repeatType };
+                type: repeatType,
+                calling_date: getFormattedDate(values.date, 'YYYY-MM-DD'),
+                calling_time:
+                  getFormattedDate(values.time, 'HH:mm:ss') +
+                  getBrowserTimezone(),
+                day: values.day,
+              }
+              : {type: repeatType};
 
           postDataApi(
             `tasks/space-task/${currentSpace?.token}/`,
@@ -162,19 +150,19 @@ const AppSpaceCallModal = ({
             });
         } else {
           infoViewActionsContext.showError(
-            formatMessage({ id: 'validation.selectAgentError' }),
+            formatMessage({id: 'validation.selectAgentError'}),
           );
         }
       })
       .catch(() => {
         infoViewActionsContext.showError(
-          formatMessage({ id: 'validation.instructionsMessage' }),
+          formatMessage({id: 'validation.instructionsMessage'}),
         );
       });
   };
   return (
     <Modal
-      title={formatMessage({ id: 'appSpaceCallModal.title' })}
+      title={formatMessage({id: 'appSpaceCallModal.title'})}
       open={open}
       onCancel={() => setOpen(false)}
       footer={null}
@@ -195,7 +183,7 @@ const AppSpaceCallModal = ({
         >
           <Item
             name="context"
-            initialValue={formatMessage({ id: 'instructions.defaultMessage' })}
+            initialValue={formatMessage({id: 'instructions.defaultMessage'})}
             rules={[
               {
                 required: true,
@@ -210,7 +198,7 @@ const AppSpaceCallModal = ({
                 id: 'appSpaceCallModal.instructionsPlaceholder',
               })}
               variant="borderless"
-              autoSize={{ minRows: 2, maxRows: 10 }}
+              autoSize={{minRows: 2, maxRows: 10}}
             />
           </Item>
 
@@ -229,9 +217,9 @@ const AppSpaceCallModal = ({
                 type="Voice"
                 renderChildren={() => (
                   <Button type="default" shape="round">
-                    <BiBot fontSize={18} />
+                    <BiBot fontSize={18}/>
                     {pilot?.name ||
-                      formatMessage({ id: 'appSpaceCallModal.selectAgent' })}
+                      formatMessage({id: 'appSpaceCallModal.selectAgent'})}
                   </Button>
                 )}
               />
@@ -245,8 +233,8 @@ const AppSpaceCallModal = ({
                 ghost
               >
                 {schedule
-                  ? formatMessage({ id: 'appSpaceCallModal.cancelSchedule' })
-                  : formatMessage({ id: 'appSpaceCallModal.schedule' })}
+                  ? formatMessage({id: 'appSpaceCallModal.cancelSchedule'})
+                  : formatMessage({id: 'appSpaceCallModal.schedule'})}
               </Button>
 
               <Button
@@ -255,7 +243,7 @@ const AppSpaceCallModal = ({
                 htmlType="submit"
                 loading={loading}
               >
-                {formatMessage({ id: 'common.submit' })}
+                {formatMessage({id: 'common.submit'})}
               </Button>
             </Space>
           </StyledBottomBar>

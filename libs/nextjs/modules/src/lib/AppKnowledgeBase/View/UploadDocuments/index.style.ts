@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Form, Upload } from 'antd';
+import {Button, Form, Upload} from 'antd';
 
-const { Dragger } = Upload;
+const {Dragger} = Upload;
 
 export const StyledForm = styled(Form)`
   margin: auto;

@@ -1,14 +1,14 @@
 import React from 'react';
-import type { PopoverProps } from 'antd';
-import { Popover } from 'antd';
+import type {PopoverProps} from 'antd';
+import {Popover} from 'antd';
 
 const AppPopover: React.FC<PopoverProps> = ({
-  content,
-  onOpenChange,
-  trigger = ['click'],
-  placement = 'bottomLeft',
-  ...props
-}) => {
+                                              content,
+                                              onOpenChange,
+                                              trigger = ['click'],
+                                              placement = 'bottomLeft',
+                                              ...props
+                                            }) => {
   return (
     <Popover
       content={content}

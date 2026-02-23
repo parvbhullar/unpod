@@ -1,25 +1,18 @@
-import type { ComponentType } from 'react';
-import { useState } from 'react';
-import {
-  getPostIcon,
-  isShareBtnAccessAllowed,
-} from '@unpod/helpers/PermissionHelper';
-import { Badge, Space } from 'antd';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useAuthContext,
-} from '@unpod/providers';
+import type {ComponentType} from 'react';
+import {useState} from 'react';
+import {getPostIcon, isShareBtnAccessAllowed,} from '@unpod/helpers/PermissionHelper';
+import {Badge, Space} from 'antd';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {useAppSpaceActionsContext, useAppSpaceContext, useAuthContext,} from '@unpod/providers';
 import PermissionPopover from '@unpod/components/common/PermissionPopover';
-import { useMediaQuery } from 'react-responsive';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import {useMediaQuery} from 'react-responsive';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import RequestPopover from '@unpod/components/common/RequestPopover';
 import SubscribeModal from './SubscribeModal';
-import { TabWidthQuery } from '@unpod/constants';
+import {TabWidthQuery} from '@unpod/constants';
 import AppSharedUsers from '@unpod/components/modules/AppSharedUsers';
-import { useIntl } from 'react-intl';
-import type { Conversation, Document, Spaces } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {Conversation, Document, Spaces} from '@unpod/constants/types';
 
 type SharedData = {
   final_role?: string;
@@ -41,13 +34,13 @@ const getCurrentObjectData = (
   activeTab: string,
 ) => {
   if (activeTab === 'chat' && activeConversation) {
-    return { type: 'chat', data: activeConversation };
+    return {type: 'chat', data: activeConversation};
   } else if (activeTab === 'note' && activeNote) {
-    return { type: 'note', data: activeNote };
+    return {type: 'note', data: activeNote};
   } else if (activeTab === 'doc' && activeDocument) {
-    return { type: 'doc', data: activeDocument };
+    return {type: 'doc', data: activeDocument};
   }
-  return { type: 'space', data: currentSpace };
+  return {type: 'space', data: currentSpace};
 };
 
 const getBtnText = (currentData: SharedData | null) => {
@@ -80,10 +73,10 @@ const SpaceOptions = () => {
   } = useAppSpaceContext();
   const [openPermissionManager, setOpenPermissionManager] = useState(false);
   const [openRequestManager, setOpenRequestManager] = useState(false);
-  const { isAuthenticated } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {isAuthenticated} = useAuthContext();
+  const {formatMessage} = useIntl();
 
-  const { type, data: currentData } = getCurrentObjectData(
+  const {type, data: currentData} = getCurrentObjectData(
     currentSpace as SharedData | null,
     activeConversation as SharedData | null,
     activeNote as SharedData | null,
@@ -113,7 +106,7 @@ const SpaceOptions = () => {
 
   return (
     <Space align="center">
-      <AppSharedUsers users={currentData?.users as any} />
+      <AppSharedUsers users={currentData?.users as any}/>
 
       {isAuthenticated &&
         !isTabletOrMobile &&
@@ -134,14 +127,14 @@ const SpaceOptions = () => {
                 icon={
                   <span
                     className={`anticon ${privacyType}-icon`}
-                    style={{ verticalAlign: 'middle' }}
+                    style={{verticalAlign: 'middle'}}
                   >
                     {getPostIcon(privacyType)}
                   </span>
                 }
                 onClick={() => setOpenPermissionManager(true)}
               >
-                {formatMessage({ id: getBtnText(currentData) })}
+                {formatMessage({id: getBtnText(currentData)})}
               </AppHeaderButton>
             </Badge>
           </PermissionPopoverAny>
@@ -152,7 +145,7 @@ const SpaceOptions = () => {
             onOpenChange={setOpenRequestManager}
             currentData={currentData}
             setCurrentData={setCurrentData}
-            title={formatMessage({ id: 'common.requestAccess' })}
+            title={formatMessage({id: 'common.requestAccess'})}
           >
             <AppHeaderButton
               type="primary"
@@ -161,14 +154,14 @@ const SpaceOptions = () => {
               icon={
                 <span
                   className={`anticon ${privacyType}-icon`}
-                  style={{ verticalAlign: 'middle' }}
+                  style={{verticalAlign: 'middle'}}
                 >
                   {getPostIcon(privacyType)}
                 </span>
               }
               onClick={() => setOpenRequestManager(true)}
             >
-              {formatMessage({ id: getBtnText(currentData) })}
+              {formatMessage({id: getBtnText(currentData)})}
             </AppHeaderButton>
           </RequestPopoverAny>
         ))}
@@ -176,7 +169,7 @@ const SpaceOptions = () => {
       {!isAuthenticated &&
         currentData?.token &&
         currentData?.privacy_type === 'public' && (
-          <SubscribeModal currentData={currentData as any} type={type} />
+          <SubscribeModal currentData={currentData as any} type={type}/>
         )}
     </Space>
   );

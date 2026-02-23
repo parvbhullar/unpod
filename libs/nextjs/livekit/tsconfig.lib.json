@@ -2,13 +2,24 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@unpod/helpers": ["src/types/module-shims.d.ts"],
-      "@unpod/helpers/*": ["src/types/module-shims.d.ts"],
-      "@unpod/providers": ["src/types/module-shims.d.ts"],
-      "@unpod/components/*": ["src/types/module-shims.d.ts"]
+      "@unpod/helpers": [
+        "src/types/module-shims.d.ts"
+      ],
+      "@unpod/helpers/*": [
+        "src/types/module-shims.d.ts"
+      ],
+      "@unpod/providers": [
+        "src/types/module-shims.d.ts"
+      ],
+      "@unpod/components/*": [
+        "src/types/module-shims.d.ts"
+      ]
     },
     "types": [
       "node",

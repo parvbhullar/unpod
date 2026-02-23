@@ -1,17 +1,17 @@
-import { StyledDot, StyledFlex, StyledText } from './index.styled';
-import { Flex } from 'antd';
-import { changeDateStringFormat } from '@unpod/helpers/DateHelper';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
+import {StyledDot, StyledFlex, StyledText} from './index.styled';
+import {Flex} from 'antd';
+import {changeDateStringFormat} from '@unpod/helpers/DateHelper';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
 
 const statusColors = {
-  interested: { color: 'badge-success', label: 'Interested' },
-  interrested: { color: 'badge-success', label: 'Interested' },
-  'not connected': { color: 'badge-error', label: 'Not Connected' },
-  'follow up': { color: 'badge-warning', label: 'Follow Up' },
-  connected: { color: 'badge-primary', label: 'Connected' },
+  interested: {color: 'badge-success', label: 'Interested'},
+  interrested: {color: 'badge-success', label: 'Interested'},
+  'not connected': {color: 'badge-error', label: 'Not Connected'},
+  'follow up': {color: 'badge-warning', label: 'Follow Up'},
+  connected: {color: 'badge-primary', label: 'Connected'},
 };
 
-export const RenderDescription = ({ item }: { item: any }) => {
+export const RenderDescription = ({item}: { item: any }) => {
   console.log(
     'RenderDescription item:',
     item.output?.post_call_data?.classification?.labels,
@@ -35,7 +35,7 @@ export const RenderDescription = ({ item }: { item: any }) => {
 
         {item.output?.post_call_data?.classification?.labels?.length !== 0 && (
           <>
-            <StyledDot />
+            <StyledDot/>
             <AppStatusBadge
               status={item.output?.post_call_data?.classification?.labels?.[0]?.toLowerCase()}
               name={item.output?.post_call_data?.classification?.labels?.[0]?.toLowerCase()}

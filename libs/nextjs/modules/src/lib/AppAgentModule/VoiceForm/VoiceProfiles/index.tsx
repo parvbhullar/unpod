@@ -1,6 +1,6 @@
-import type { VoiceProfile } from '@unpod/constants/types';
+import type {VoiceProfile} from '@unpod/constants/types';
 
-import { useGetDataApi } from '@unpod/providers';
+import {useGetDataApi} from '@unpod/providers';
 import AppList from '@unpod/components/common/AppList';
 import VoiceProfileCard from './VoiceProfileCard';
 
@@ -11,13 +11,13 @@ type VoiceProfilesProps = {
 };
 
 const VoiceProfiles = ({
-  onProfileSelect,
-  id,
-  hideSelect,
-}: VoiceProfilesProps) => {
-  const [{ apiData, loading }] = useGetDataApi<VoiceProfile[]>(
+                         onProfileSelect,
+                         id,
+                         hideSelect,
+                       }: VoiceProfilesProps) => {
+  const [{apiData, loading}] = useGetDataApi<VoiceProfile[]>(
     `/core/voice-profiles/`,
-    { data: [] },
+    {data: []},
   );
 
   return (

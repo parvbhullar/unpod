@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { Tabs, Upload } from 'antd';
+import {Tabs, Upload} from 'antd';
 
-const { Dragger } = Upload;
+const {Dragger} = Upload;
 
 export const StyledRoot = styled.div`
   flex: 1;
 `;
 
 export const StyledTabs = styled(Tabs)`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   position: sticky;
   top: 0;
   z-index: 10;

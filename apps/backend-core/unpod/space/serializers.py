@@ -341,28 +341,6 @@ class SpaceDetailSerializers(serializers.ModelSerializer):
         representation["allowed_operations"] = getRoleBasedOperation(
             final_role, "space"
         )
-        representation["connected_apps"] = instance.app_configs.annotate(
-            app_name=F("app_config__app__name"),
-            app_slug=F("app_config__app__slug"),
-            app_state=F("app_config__state"),
-            app_description=F("app_config__app__description"),
-            app_logo=F("app_config__app__icon"),
-        ).values(
-            "id",
-            "app_name",
-            "app_slug",
-            "app_state",
-            "link_config",
-            "app_description",
-            "app_logo",
-        )
-
-        for app in representation["connected_apps"]:
-            app["app_logo"] = (
-                imagekitBackend.generateURL(app["app_logo"])
-                if app["app_logo"]
-                else None
-            )
         return representation
 
 

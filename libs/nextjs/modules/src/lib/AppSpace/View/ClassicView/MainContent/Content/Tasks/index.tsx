@@ -1,20 +1,16 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
 import AppTable from '@unpod/components/third-party/AppTable';
-import type { Spaces, TaskItem } from '@unpod/constants/types';
-import {
-  getDataApi,
-  useInfoViewActionsContext,
-  usePaginatedDataApi,
-} from '@unpod/providers';
+import type {Spaces, TaskItem} from '@unpod/constants/types';
+import {getDataApi, useInfoViewActionsContext, usePaginatedDataApi,} from '@unpod/providers';
 import AppLoadingMore from '@unpod/components/common/AppLoadingMore';
 import AppColumnZoomView from '@unpod/components/common/AppColumnZoomView';
-import { AppDrawer } from '@unpod/components/antd';
-import { getColumns } from './columns';
-import { StyledContainer, StyledRoot } from './index.styled';
-import { downloadFile } from '@unpod/helpers/FileHelper';
-import { getTableFilterData } from '@unpod/helpers/TableHelper';
-import { CallLogsTableSkeleton } from '@unpod/skeleton';
-import { useIntl } from 'react-intl';
+import {AppDrawer} from '@unpod/components/antd';
+import {getColumns} from './columns';
+import {StyledContainer, StyledRoot} from './index.styled';
+import {downloadFile} from '@unpod/helpers/FileHelper';
+import {getTableFilterData} from '@unpod/helpers/TableHelper';
+import {CallLogsTableSkeleton} from '@unpod/skeleton';
+import {useIntl} from 'react-intl';
 
 type TasksHandle = {
   refreshData: () => void;
@@ -26,7 +22,7 @@ type TasksProps = {
 
 const AppTableAny = AppTable as any;
 
-const Tasks = forwardRef<TasksHandle, TasksProps>(({ currentSpace }, ref) => {
+const Tasks = forwardRef<TasksHandle, TasksProps>(({currentSpace}, ref) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [selectedCol, setSelectedCol] = useState<{ title?: string } | null>(
     null,
@@ -35,13 +31,13 @@ const Tasks = forwardRef<TasksHandle, TasksProps>(({ currentSpace }, ref) => {
     sortedInfo: {},
     filteredInfo: {},
   });
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const handleSetSelectedCol = (value: unknown) => {
     setSelectedCol(value as { title?: string } | null);
   };
 
   const [
-    { apiData, loading, refreshing, isLoadingMore, hasMoreRecord, page },
+    {apiData, loading, refreshing, isLoadingMore, hasMoreRecord, page},
     {
       setQueryParams,
       setLoadingMore,
@@ -130,7 +126,7 @@ const Tasks = forwardRef<TasksHandle, TasksProps>(({ currentSpace }, ref) => {
   return (
     <StyledRoot>
       <StyledContainer>
-        {loading && <CallLogsTableSkeleton />}
+        {loading && <CallLogsTableSkeleton/>}
         <AppTableAny
           rowKey="task_id"
           columns={
@@ -151,7 +147,7 @@ const Tasks = forwardRef<TasksHandle, TasksProps>(({ currentSpace }, ref) => {
           }}
           extraHeight={20}
         />
-        {isLoadingMore && <AppLoadingMore />}
+        {isLoadingMore && <AppLoadingMore/>}
       </StyledContainer>
 
       <AppDrawer
@@ -159,10 +155,10 @@ const Tasks = forwardRef<TasksHandle, TasksProps>(({ currentSpace }, ref) => {
         open={selectedCol !== null}
         destroyOnHidden={true}
         onClose={() => setSelectedCol(null)}
-        styles={{ body: { padding: 0, position: 'relative' } }}
+        styles={{body: {padding: 0, position: 'relative'}}}
         width="60%"
       >
-        <AppColumnZoomView selectedCol={selectedCol} />
+        <AppColumnZoomView selectedCol={selectedCol}/>
       </AppDrawer>
     </StyledRoot>
   );

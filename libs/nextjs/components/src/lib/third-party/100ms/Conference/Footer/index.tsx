@@ -1,13 +1,13 @@
 import React from 'react';
-import { ConferencingFooter } from './ConferencingFooter';
+import {ConferencingFooter} from './ConferencingFooter';
 // import { StreamingFooter } from './StreamingFooter';
-import { isStreamingKit } from '../../common/utils';
+import {isStreamingKit} from '../../common/utils';
 
 export const Footer = () => {
   return isStreamingKit() ? (
-    /*<StreamingFooter />*/ <div />
+    /*<StreamingFooter />*/ <div/>
   ) : (
-    <ConferencingFooter />
+    <ConferencingFooter/>
   );
 };
 

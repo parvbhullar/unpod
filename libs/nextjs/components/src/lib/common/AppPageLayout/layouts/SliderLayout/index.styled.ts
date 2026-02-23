@@ -7,7 +7,7 @@ export const StyledSliderLayoutWrapper = styled.div`
   width: 100%;
   .carousel-col {
     position: relative;
-    @media (max-width: ${({ theme }) => theme.breakpoints.lg - 1}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.lg - 1}px) {
       display: none;
     }
   }
@@ -52,10 +52,10 @@ export const StyledSliderContent = styled.div`
     text-align: center;
     color: inherit !important;
     margin-bottom: 32px;
-    @media (max-width: ${({ theme }) => theme.breakpoints.xxl}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xxl}px) {
       font-size: 22px;
     }
-    @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
       font-size: 20px;
     }
   }
@@ -64,10 +64,10 @@ export const StyledSliderContent = styled.div`
     font-size: 26px;
     color: inherit !important;
     margin-bottom: 5px;
-    @media (max-width: ${({ theme }) => theme.breakpoints.xxl}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xxl}px) {
       font-size: 24px;
     }
-    @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
       font-size: 22px;
     }
   }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import {
   selectAppData,
   selectIsLocalAudioEnabled,
@@ -6,7 +6,7 @@ import {
   useHMSActions,
   useHMSVanillaStore,
 } from '@100mslive/react-sdk';
-import { APP_DATA, isMacOS } from '../common/constants';
+import {APP_DATA, isMacOS} from '../common/constants';
 
 let isEvenListenersAttached = false;
 

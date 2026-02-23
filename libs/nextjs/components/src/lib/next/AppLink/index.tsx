@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import Link, { LinkProps } from 'next/link';
+import React, {ReactNode} from 'react';
+import Link, {LinkProps} from 'next/link';
 
 type AppLinkProps = Omit<LinkProps, 'href'> & {
   href: string;
@@ -8,7 +8,7 @@ type AppLinkProps = Omit<LinkProps, 'href'> & {
   [key: string]: unknown;
 };
 
-const AppLink: React.FC<AppLinkProps> = ({ href, children, ...rest }) => {
+const AppLink: React.FC<AppLinkProps> = ({href, children, ...rest}) => {
   // if (rest.disabled) {
   //   return <span>{children}</span>;
   // }

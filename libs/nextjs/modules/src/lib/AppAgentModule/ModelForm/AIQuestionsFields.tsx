@@ -1,7 +1,7 @@
-import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { useState } from 'react';
-import { Button, Flex } from 'antd';
-import { AppInput } from '@unpod/components/antd';
+import type {ChangeEvent, Dispatch, SetStateAction} from 'react';
+import {useState} from 'react';
+import {Button, Flex} from 'antd';
+import {AppInput} from '@unpod/components/antd';
 import styled from 'styled-components';
 
 const AIQuestionsContainer = styled(Flex)`
@@ -19,9 +19,9 @@ type AIQuestionsFieldsProps = {
 };
 
 const AIQuestionsFields = ({
-  questionsFields,
-  setQuestionsFields,
-}: AIQuestionsFieldsProps) => {
+                             questionsFields,
+                             setQuestionsFields,
+                           }: AIQuestionsFieldsProps) => {
   const [question, setQuestion] = useState('');
 
   const handleAddSharedField = () => {
@@ -38,7 +38,7 @@ const AIQuestionsFields = ({
   };
 
   const handleQuestionInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const { target } = event;
+    const {target} = event;
     setQuestion(target.value ?? '');
   };
 

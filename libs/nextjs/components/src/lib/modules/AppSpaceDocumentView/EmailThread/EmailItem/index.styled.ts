@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Space, Tag } from 'antd';
+import {Space, Tag} from 'antd';
 
 export const StyledListHeader = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ export const StyledListHeader = styled.div`
 
   //position: sticky;
   //top: 0;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   z-index: 1;
 `;
 
@@ -81,7 +81,7 @@ export const StyledContent = styled.div`
 
 export const StyledDetailsItems = styled.div`
   padding: 0 16px 16px 16px;
-  border-block-end: 1px solid ${({ theme }) => theme.border.color};
+  border-block-end: 1px solid ${({theme}) => theme.border.color};
   display: flex;
   flex-direction: column;
   gap: 20px;

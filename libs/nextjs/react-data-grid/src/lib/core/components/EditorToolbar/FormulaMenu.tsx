@@ -1,10 +1,10 @@
-import type { MenuProps } from 'antd';
-import { Dropdown, Tooltip } from 'antd';
-import { StyledButton } from './index.styled';
-import { MdOutlineFunctions } from 'react-icons/md';
-import { SelectCellState } from '../../DataGrid';
-import { CalculatedColumn } from '../..';
-import { getMinMaxIdx } from '../../utils';
+import type {MenuProps} from 'antd';
+import {Dropdown, Tooltip} from 'antd';
+import {StyledButton} from './index.styled';
+import {MdOutlineFunctions} from 'react-icons/md';
+import {SelectCellState} from '../../DataGrid';
+import {CalculatedColumn} from '../..';
+import {getMinMaxIdx} from '../../utils';
 
 type Props<R> = {
   columns: readonly CalculatedColumn<R, any>[];
@@ -17,13 +17,13 @@ type Props<R> = {
 const operations = ['SUM', 'AVERAGE', 'PRODUCT', 'MIN', 'MAX'];
 
 function FormulaMenu<R>({
-  columns,
-  selectedPosition,
-  draggedOverCellIdx,
-  draggedOverRowIdx,
-  onUpdateFormula,
-}: Props<R>) {
-  const { idx, rowIdx } = selectedPosition;
+                          columns,
+                          selectedPosition,
+                          draggedOverCellIdx,
+                          draggedOverRowIdx,
+                          onUpdateFormula,
+                        }: Props<R>) {
+  const {idx, rowIdx} = selectedPosition;
   const [startIdx, endIdx] = getMinMaxIdx(idx, draggedOverCellIdx);
   const [startRowIdx, endRowIdx] = getMinMaxIdx(rowIdx, draggedOverRowIdx);
 
@@ -34,12 +34,12 @@ function FormulaMenu<R>({
 
     if (endRowIdx - startRowIdx > 0) {
       onUpdateFormula(
-        { idx: startIdx, rowIdx: endRowIdx + 1 } as SelectCellState,
+        {idx: startIdx, rowIdx: endRowIdx + 1} as SelectCellState,
         formula,
       );
     } else {
       onUpdateFormula(
-        { idx: endIdx + 1, rowIdx: startRowIdx } as SelectCellState,
+        {idx: endIdx + 1, rowIdx: startRowIdx} as SelectCellState,
         formula,
       );
     }
@@ -53,14 +53,14 @@ function FormulaMenu<R>({
 
   return (
     <Dropdown
-      menu={{ items: menuItems }}
+      menu={{items: menuItems}}
       trigger={['click']}
       placement="bottom"
       disabled={!draggedOverCellIdx}
     >
       <Tooltip title="Functions">
         <StyledButton size="small" type="text">
-          <MdOutlineFunctions fontSize={18} />
+          <MdOutlineFunctions fontSize={18}/>
         </StyledButton>
       </Tooltip>
     </Dropdown>

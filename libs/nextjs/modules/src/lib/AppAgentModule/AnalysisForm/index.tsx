@@ -1,24 +1,15 @@
-import type { FormInstance } from 'antd';
-import { Button, Flex, Form } from 'antd';
+import type {FormInstance} from 'antd';
+import {Button, Flex, Form} from 'antd';
 import AppPilotSection from '@unpod/components/modules/AppPilotSection';
-import { useInfoViewContext } from '@unpod/providers';
-import { SaveOutlined } from '@ant-design/icons';
-import {
-  AnalysisItem,
-  FormField,
-  INPUT_DEFAULT_VALUES,
-  TYPE_BASED_DEFAULT_VALUES,
-} from '@unpod/constants';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-} from '../index.styled';
-import type { Pilot } from '@unpod/constants/types';
+import {useInfoViewContext} from '@unpod/providers';
+import {SaveOutlined} from '@ant-design/icons';
+import {AnalysisItem, FormField, INPUT_DEFAULT_VALUES, TYPE_BASED_DEFAULT_VALUES,} from '@unpod/constants';
+import {StickyFooter, StyledMainContainer, StyledTabRoot,} from '../index.styled';
+import type {Pilot} from '@unpod/constants/types';
 
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { useForm } = Form;
+const {useForm} = Form;
 
 type AnalysisFormProps = {
   agentData: Pilot;
@@ -26,10 +17,10 @@ type AnalysisFormProps = {
   headerForm?: FormInstance;
 };
 
-const AnalysisForm = ({ agentData, updateAgentData }: AnalysisFormProps) => {
+const AnalysisForm = ({agentData, updateAgentData}: AnalysisFormProps) => {
   const infoViewContext = useInfoViewContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onFinish = (values: any) => {
     // Handle form submission
@@ -81,10 +72,10 @@ const AnalysisForm = ({ agentData, updateAgentData }: AnalysisFormProps) => {
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext.loading}
           >
-            {formatMessage({ id: 'common.save' })}
+            {formatMessage({id: 'common.save'})}
           </Button>
         </Flex>
       </StickyFooter>

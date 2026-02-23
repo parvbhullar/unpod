@@ -1,10 +1,10 @@
 'use client';
-import { useCallback } from 'react';
+import {useCallback} from 'react';
 import VoiceAgent from './VoiceAgent';
-import { useAgentConnection } from '@unpod/livekit/hooks/useAgentConnection';
+import {useAgentConnection} from '@unpod/livekit/hooks/useAgentConnection';
 
-const AgentView = ({ spaceView = false }) => {
-  const { setConnectionMode } = useAgentConnection() as any;
+const AgentView = ({spaceView = false}) => {
+  const {setConnectionMode} = useAgentConnection() as any;
 
   // Stable callback for VoiceAgent to prevent cleanup loop
   const handleVoiceAgentConnect = useCallback(
@@ -18,7 +18,7 @@ const AgentView = ({ spaceView = false }) => {
 
   // return  <div>hi</div>
   return (
-    <VoiceAgent onConnect={handleVoiceAgentConnect} spaceView={spaceView} />
+    <VoiceAgent onConnect={handleVoiceAgentConnect} spaceView={spaceView}/>
   );
 };
 

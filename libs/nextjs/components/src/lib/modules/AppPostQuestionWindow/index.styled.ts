@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Divider, Input, Select, Space, Typography } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Divider, Input, Select, Space, Typography} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledDivider = styled(Divider)`
   margin: 12px 0;
@@ -28,8 +28,8 @@ export const StyledMainContent = styled.div`
 export const StyledInput = styled(Input.TextArea)`
   padding: 4px 0;
   resize: none;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.component};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.component};
 `;
 
 export const StyledSpace = styled(Space)`
@@ -76,23 +76,23 @@ export const StyledIconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   padding: 5px;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.primary}33;
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primary}33;
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary}33;
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primary}33;
   border-radius: 5px;
-  color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.primary}99 !important;
+  color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primary}99 !important;
 `;
 
 export const StylesPilotLogo = styled.div`
   position: relative;
   width: 30px;
   height: 30px;
-  // border: 1px solid ${({ theme }: { theme: GlobalTheme }) =>
-    theme.border.color};
+  // border: 1px solid ${({theme}: { theme: GlobalTheme }) =>
+  theme.border.color};
   border: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary}33;
+    ${({theme}: { theme: GlobalTheme }) => theme.palette.primary}33;
   border-radius: 5px;
   overflow: hidden;
 `;
@@ -110,18 +110,18 @@ export const StyledCloseButton = styled.div`
   margin-left: -5px;
 
   &:hover {
-    background-color: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.palette.background.colorPrimaryBg};
+    background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.colorPrimaryBg};
   }
 `;
 
 export const StyledPilotRoot = styled.div`
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
-  width: ${({ theme }: { theme: GlobalTheme }) => theme.sizes.mainContentWidth};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
+  width: ${({theme}: { theme: GlobalTheme }) => theme.sizes.mainContentWidth};
   max-width: 100%;
-  border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.component.card.borderRadius};
+  border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
   box-shadow: 0 4px 4px 4px rgba(0, 0, 0, 0.01);
   padding: 16px;
   margin: auto auto 20px;
@@ -133,10 +133,10 @@ export const StyledPilotRoot = styled.div`
 
 export const StyledPilotContainer = styled.div`
   position: relative;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
-  border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-    `${theme.radius.base}px`};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
+  border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  `${theme.radius.base}px`};
   padding: 0 100px 16px 0;
   transition: all 0.25s linear;
   // max-height: 65px;

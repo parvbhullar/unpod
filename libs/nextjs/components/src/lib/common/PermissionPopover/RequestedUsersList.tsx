@@ -1,20 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Typography } from 'antd';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import {useEffect, useState} from 'react';
+import {Typography} from 'antd';
+import {DownOutlined, UpOutlined} from '@ant-design/icons';
 
-import {
-  StyledRequestedAccessWrapper,
-  StyledRequestedMember,
-  StyledRequestedMembersWrapper,
-} from './index.styled';
+import {StyledRequestedAccessWrapper, StyledRequestedMember, StyledRequestedMembersWrapper,} from './index.styled';
 import RequestAccessRow from './RequestAccessRow';
-import type {
-  PermissionEntity,
-  PermissionMember,
-  RequestedUsersListProps,
-} from './types';
+import type {PermissionEntity, PermissionMember, RequestedUsersListProps,} from './types';
 
 import UserAvatar from '../UserAvatar';
 import AppScrollbar from '../../third-party/AppScrollbar';
@@ -26,12 +18,12 @@ const normalizeRequestMembers = (
 };
 
 const RequestedUsersList = ({
-  type,
-  currentData,
-  userList,
-  setUserList,
-  setCurrentData,
-}: RequestedUsersListProps) => {
+                              type,
+                              currentData,
+                              userList,
+                              setUserList,
+                              setCurrentData,
+                            }: RequestedUsersListProps) => {
   const [requestMembers, setRequestMembers] = useState<PermissionMember[]>(
     normalizeRequestMembers(currentData?.access_request),
   );
@@ -87,7 +79,7 @@ const RequestedUsersList = ({
       <StyledRequestedMembersWrapper>
         {requestMembers.length > 1 ? (
           <StyledRequestedMember>
-            <UserAvatar user={requestMembers[0]} />
+            <UserAvatar user={requestMembers[0]}/>
             <Typography.Text>
               <span className="bold">
                 {requestMembers[0].full_name || requestMembers[0].email}{' '}
@@ -98,9 +90,9 @@ const RequestedUsersList = ({
               are asking to access this space
             </Typography.Text>
             {expandView ? (
-              <DownOutlined onClick={() => setExpandView(!expandView)} />
+              <DownOutlined onClick={() => setExpandView(!expandView)}/>
             ) : (
-              <UpOutlined onClick={() => setExpandView(!expandView)} />
+              <UpOutlined onClick={() => setExpandView(!expandView)}/>
             )}
           </StyledRequestedMember>
         ) : null}

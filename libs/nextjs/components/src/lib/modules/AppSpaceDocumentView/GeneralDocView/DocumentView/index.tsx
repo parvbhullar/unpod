@@ -1,14 +1,11 @@
-import { memo } from 'react';
+import {memo} from 'react';
 
-import { Button, Divider, Tooltip, Typography } from 'antd';
-import { RxExternalLink } from 'react-icons/rx';
-import { MdLink } from 'react-icons/md';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { downloadFile } from '@unpod/helpers/FileHelper';
+import {Button, Divider, Tooltip, Typography} from 'antd';
+import {RxExternalLink} from 'react-icons/rx';
+import {MdLink} from 'react-icons/md';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {downloadFile} from '@unpod/helpers/FileHelper';
 import AppMarkdownViewer from '../../../../third-party/AppMarkdownViewer';
 import UserAvatar from '../../../../common/UserAvatar';
 import {
@@ -20,11 +17,11 @@ import {
   StyledListHeader,
   StyledMeta,
 } from './index.styled';
-import type { Document } from '@unpod/constants/types';
+import type {Document} from '@unpod/constants/types';
 
-const { Paragraph, Text, Title } = Typography;
+const {Paragraph, Text, Title} = Typography;
 
-const DocumentView = ({ document }: { document: Document }) => {
+const DocumentView = ({document}: { document: Document }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
 
   const onViewClick = () => {
@@ -51,7 +48,7 @@ const DocumentView = ({ document }: { document: Document }) => {
     <StyledDetailsItems>
       <StyledListHeader>
         <StyledAvatarWrapper>
-          <UserAvatar user={{ full_name: document.name }} />
+          <UserAvatar user={{full_name: document.name}}/>
         </StyledAvatarWrapper>
         <StyledMeta>
           <StyledCollapsedMeta>
@@ -64,7 +61,7 @@ const DocumentView = ({ document }: { document: Document }) => {
         <StyledHeaderExtra
           align="center"
           size={5}
-          split={<Divider type="vertical" />}
+          split={<Divider type="vertical"/>}
         >
           <Tooltip
             title={changeDateStringFormat(
@@ -85,7 +82,7 @@ const DocumentView = ({ document }: { document: Document }) => {
               shape="circle"
               onClick={onViewClick}
             >
-              <RxExternalLink fontSize={18} />
+              <RxExternalLink fontSize={18}/>
             </Button>
           </Tooltip>
         </StyledHeaderExtra>
@@ -94,10 +91,10 @@ const DocumentView = ({ document }: { document: Document }) => {
         <AppMarkdownViewer
           markdown={content}
           components={{
-            a: ({ children, ...props }: any) => {
+            a: ({children, ...props}: any) => {
               return (
                 <a {...props} target="_blank" rel="noopener noreferrer">
-                  {children || <MdLink />}
+                  {children || <MdLink/>}
                 </a>
               );
             },

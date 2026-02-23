@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import taMessages from '../locales/ta_IN.json';
 import enUS from 'antd/lib/locale/en_US';
 

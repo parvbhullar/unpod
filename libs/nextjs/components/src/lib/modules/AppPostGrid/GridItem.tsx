@@ -1,13 +1,9 @@
-
-import { Badge, Skeleton, Space, Tooltip, Typography } from 'antd';
-import { FaPlay } from 'react-icons/fa';
+import {Badge, Skeleton, Space, Tooltip, Typography} from 'antd';
+import {FaPlay} from 'react-icons/fa';
 import AppImage from '../../next/AppImage';
-import {
-  changeDateStringFormat,
-  getTimeFromNow,
-} from '@unpod/helpers/DateHelper';
-import { getPostIcon } from '@unpod/helpers/PermissionHelper';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {changeDateStringFormat, getTimeFromNow,} from '@unpod/helpers/DateHelper';
+import {getPostIcon} from '@unpod/helpers/PermissionHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import UserAvatar from '../../common/UserAvatar';
 import {
   StyledCardContentWrapper,
@@ -21,15 +17,16 @@ import {
   StyledTitleItem,
   StyledTitleWrapper,
 } from './Grid.styled';
-import type { Thread } from '@unpod/constants/types';
+import type {Thread} from '@unpod/constants/types';
 
-const { Link, Text, Title } = Typography;
+const {Link, Text, Title} = Typography;
 
 type GridItemProps = {
   thread: Thread;
-  onThreadClick: (thread: Thread) => void;};
+  onThreadClick: (thread: Thread) => void;
+};
 
-const GridItem = ({ thread, onThreadClick }: GridItemProps) => {
+const GridItem = ({thread, onThreadClick}: GridItemProps) => {
   const firstReplyMedia = thread?.block?.data?.files?.find(
     (reply: { file_type?: string }) => reply.file_type === 'image',
   );
@@ -53,7 +50,7 @@ const GridItem = ({ thread, onThreadClick }: GridItemProps) => {
                 objectFit="cover"
               />
               <StyledPlayWrapper>
-                <FaPlay />
+                <FaPlay/>
               </StyledPlayWrapper>
             </StyledGridThumbnailWrapper>
           ) : (
@@ -91,7 +88,7 @@ const GridItem = ({ thread, onThreadClick }: GridItemProps) => {
 
             <StyledThreadMeta>
               <Tooltip title={thread?.user?.full_name}>
-                <UserAvatar user={thread?.user} />
+                <UserAvatar user={thread?.user}/>
               </Tooltip>
 
               <Space orientation="vertical" size={4}>
@@ -103,7 +100,7 @@ const GridItem = ({ thread, onThreadClick }: GridItemProps) => {
 
                 <Space orientation="horizontal">
                   {getPostIcon(thread?.privacy_type || '')}
-                  {thread.seen ? null : <Badge color="#796cff" />}
+                  {thread.seen ? null : <Badge color="#796cff"/>}
                   {thread.created ? (
                     <Tooltip
                       title={changeDateStringFormat(

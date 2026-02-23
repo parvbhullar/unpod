@@ -1,19 +1,15 @@
-import React, { ReactNode } from 'react';
-import { Button, Form, Typography, Upload } from 'antd';
-import { RiFileTextLine } from 'react-icons/ri';
-import {
-  StyledInnerContainer,
-  StyledUploadContainer,
-  StyledUploadWrapper,
-} from './index.styled';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { useInfoViewActionsContext } from '@unpod/providers';
-import { useIntl } from 'react-intl';
-import type { RcFile, UploadProps } from 'antd/es/upload';
+import React, {ReactNode} from 'react';
+import {Button, Form, Typography, Upload} from 'antd';
+import {RiFileTextLine} from 'react-icons/ri';
+import {StyledInnerContainer, StyledUploadContainer, StyledUploadWrapper,} from './index.styled';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {useInfoViewActionsContext} from '@unpod/providers';
+import {useIntl} from 'react-intl';
+import type {RcFile, UploadProps} from 'antd/es/upload';
 
-const { Dragger } = Upload;
-const { Paragraph } = Typography;
-const { Item } = Form;
+const {Dragger} = Upload;
+const {Paragraph} = Typography;
+const {Item} = Form;
 
 
 type UploadFileLike = File | RcFile;
@@ -25,19 +21,20 @@ export type FileUploadProps = {
   children?: ReactNode;
   multiple?: boolean;
   maxFileCount?: number;
-  label?: string;};
+  label?: string;
+};
 
 export const FileUpload: React.FC<FileUploadProps> = ({
-  acceptTypes,
-  files,
-  setFiles,
-  children,
-  multiple = false,
-  maxFileCount = 10,
-  label,
-}) => {
+                                                        acceptTypes,
+                                                        files,
+                                                        setFiles,
+                                                        children,
+                                                        multiple = false,
+                                                        maxFileCount = 10,
+                                                        label,
+                                                      }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const handleUploadChange: UploadProps['beforeUpload'] = (file, fileList) => {
     const extension = getFileExtension(file.name);
@@ -47,7 +44,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       (!file.type || !acceptTypes.includes(file.type))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
       setFiles(null);
       return false;
@@ -77,7 +74,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         rules={[
           {
             required: !hasFileSelected(),
-            message: `${formatMessage({ id: 'upload.fileType' })} ${acceptTypes}`,
+            message: `${formatMessage({id: 'upload.fileType'})} ${acceptTypes}`,
           },
         ]}
       >
@@ -94,12 +91,12 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               fileList={[]}
             >
               <StyledInnerContainer>
-                <RiFileTextLine fontSize={36} />
+                <RiFileTextLine fontSize={36}/>
                 <Paragraph>
-                  {formatMessage({ id: 'upload.dragDropFiles' })}
+                  {formatMessage({id: 'upload.dragDropFiles'})}
                 </Paragraph>
-                <Button type="primary" style={{ height: 36 }}>
-                  {formatMessage({ id: 'common.chooseFile' })}
+                <Button type="primary" style={{height: 36}}>
+                  {formatMessage({id: 'common.chooseFile'})}
                 </Button>
               </StyledInnerContainer>
             </Dragger>

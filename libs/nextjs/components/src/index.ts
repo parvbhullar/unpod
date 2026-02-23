@@ -1,6 +1,6 @@
-export { default as ErrorBoundary } from './lib/ErrorBoundary';
-export { default as OnboardingTour } from './lib/OnboardingTour';
-export { default as UnpodLogoAnimation } from './lib/common/UnpodLogoAnimation';
+export {default as ErrorBoundary} from './lib/ErrorBoundary';
+export {default as OnboardingTour} from './lib/OnboardingTour';
+export {default as UnpodLogoAnimation} from './lib/common/UnpodLogoAnimation';
 
 /*export * from './lib/AppConfirmDeletePopover';
 export * from './lib/AppConfirmPopover';

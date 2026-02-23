@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyledListFooter = styled.div`
   padding: 10px;
-  color: ${({ theme }) => theme.palette.text.secondary};
+  color: ${({theme}) => theme.palette.text.secondary};
   display: flex;
   justify-content: center;
 `;
@@ -11,7 +11,7 @@ export const StyledLoaderProgress = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  color: ${({ theme }) => theme.palette.text.secondary};
+  color: ${({theme}) => theme.palette.text.secondary};
   padding: 8px;
 
   & span {

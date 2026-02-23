@@ -1,15 +1,16 @@
-import React, { memo, useState } from 'react';
-import { MdSearch } from 'react-icons/md';
-import { debounce } from 'lodash';
-import { StyledInput } from './index.styled';
-import { useIntl } from 'react-intl';
-import { InputProps } from 'antd';
+import React, {memo, useState} from 'react';
+import {MdSearch} from 'react-icons/md';
+import {debounce} from 'lodash';
+import {StyledInput} from './index.styled';
+import {useIntl} from 'react-intl';
+import {InputProps} from 'antd';
 
 type SearchBoxProps = Omit<InputProps, 'onSearch'> & {
-  onSearch: (value: string) => void;};
+  onSearch: (value: string) => void;
+};
 
-const SearchBox: React.FC<SearchBoxProps> = ({ onSearch, ...props }) => {
-  const { formatMessage } = useIntl();
+const SearchBox: React.FC<SearchBoxProps> = ({onSearch, ...props}) => {
+  const {formatMessage} = useIntl();
   const [searchStr, setSearchStr] = useState('');
 
   const debounceFun = debounce((str: string) => {
@@ -30,11 +31,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearch, ...props }) => {
 
   return (
     <StyledInput
-      placeholder={formatMessage({ id: 'common.searchHere' })}
+      placeholder={formatMessage({id: 'common.searchHere'})}
       size="large"
       value={searchStr}
       onChange={onSearchChange}
-      prefix={<MdSearch fontSize={20} />}
+      prefix={<MdSearch fontSize={20}/>}
       {...props}
     />
   );

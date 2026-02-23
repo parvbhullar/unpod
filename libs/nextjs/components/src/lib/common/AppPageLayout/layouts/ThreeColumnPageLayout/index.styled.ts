@@ -40,10 +40,10 @@ export const StyledPageRoot = styled.div<{ $layoutType: LayoutType }>`
   flex: 1;
   margin: 0;
   display: grid;
-  ${({ $layoutType }) => setLayoutType($layoutType)};
+  ${({$layoutType}) => setLayoutType($layoutType)};
   // overflow: auto;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xl - 1}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xl - 1}px) {
     display: block;
   }
 `;

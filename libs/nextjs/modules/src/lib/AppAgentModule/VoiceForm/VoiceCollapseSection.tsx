@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect } from 'react';
-import type { CollapseProps, FormInstance } from 'antd';
-import { Checkbox, Collapse, Flex, Form, Space, Typography } from 'antd';
+import React, {Fragment, useEffect} from 'react';
+import type {CollapseProps, FormInstance} from 'antd';
+import {Checkbox, Collapse, Flex, Form, Space, Typography} from 'antd';
 import {
   ApiOutlined,
   AudioOutlined,
@@ -9,25 +9,19 @@ import {
   RobotOutlined,
   TrademarkOutlined,
 } from '@ant-design/icons';
-import { TbPlugConnected } from 'react-icons/tb';
-import { AiOutlineApi } from 'react-icons/ai';
-import { RiVoiceprintLine } from 'react-icons/ri';
-import { AppInput, AppInputNumber, AppSelect } from '@unpod/components/antd';
+import {TbPlugConnected} from 'react-icons/tb';
+import {AiOutlineApi} from 'react-icons/ai';
+import {RiVoiceprintLine} from 'react-icons/ri';
+import {AppInput, AppInputNumber, AppSelect} from '@unpod/components/antd';
 import TemperatureSlider from '../ModelForm/TemperatureSlider';
-import { StyledCollapseItemRow, StyledModelOption } from './index.styled';
+import {StyledCollapseItemRow, StyledModelOption} from './index.styled';
 import AppTextArea from '@unpod/components/antd/AppTextArea';
-import { useIntl } from 'react-intl';
-import {
-  Pilot,
-  ProviderModel,
-  ProviderModelVoice,
-  VoiceProfile,
-  VoiceProfileLanguage,
-} from '@unpod/constants/types';
-import { useGetDataApi } from '@unpod/providers';
+import {useIntl} from 'react-intl';
+import {Pilot, ProviderModel, ProviderModelVoice, VoiceProfile, VoiceProfileLanguage,} from '@unpod/constants/types';
+import {useGetDataApi} from '@unpod/providers';
 
-const { Text } = Typography;
-const { Item } = Form;
+const {Text} = Typography;
+const {Item} = Form;
 
 type VoiceCollapseSectionProps = {
   form: FormInstance;
@@ -36,11 +30,11 @@ type VoiceCollapseSectionProps = {
 };
 
 const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
-  agentData,
-  form,
-  voiceProfile,
-}) => {
-  const { formatMessage } = useIntl();
+                                                                     agentData,
+                                                                     form,
+                                                                     voiceProfile,
+                                                                   }) => {
+  const {formatMessage} = useIntl();
 
   const llmProvider = Form.useWatch('provider', form);
   const llmModel = Form.useWatch('model', form);
@@ -50,26 +44,26 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   const voiceModelId = Form.useWatch('voice_model', form);
   const manualVoiceEnabled = Form.useWatch('manualVoiceId', form);
 
-  const [{ apiData: modalProviderData, loading: providerLoading }] =
+  const [{apiData: modalProviderData, loading: providerLoading}] =
     useGetDataApi<ProviderModel[]>(`core/providers/models/?model_type=LLM`, {
       data: [],
     });
 
-  const [{ apiData: providerTData, loading: providerTLoading }] = useGetDataApi<
+  const [{apiData: providerTData, loading: providerTLoading}] = useGetDataApi<
     ProviderModel[]
   >(`core/providers/models/?model_type=TRANSCRIBER`, {
     data: [],
   });
 
-  const [{ apiData: providerVData, loading: providerVLoading }] = useGetDataApi<
+  const [{apiData: providerVData, loading: providerVLoading}] = useGetDataApi<
     ProviderModel[]
   >(`core/providers/models/?model_type=VOICE`, {
     data: [],
   });
 
   const [
-    { apiData: llmModelData, loading: llmLoading },
-    { updateInitialUrl: updateLLMInitialUrl },
+    {apiData: llmModelData, loading: llmLoading},
+    {updateInitialUrl: updateLLMInitialUrl},
   ] = useGetDataApi<ProviderModel[]>(
     `core/providers/models/`,
     {
@@ -80,8 +74,8 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   );
 
   const [
-    { apiData: transcriberModelData, loading: transcriberLoading },
-    { updateInitialUrl: updateTranscriberInitialUrl },
+    {apiData: transcriberModelData, loading: transcriberLoading},
+    {updateInitialUrl: updateTranscriberInitialUrl},
   ] = useGetDataApi<ProviderModel[]>(
     `core/providers/models/`,
     {
@@ -92,8 +86,8 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   );
 
   const [
-    { apiData: voiceModelData, loading: voiceLoading },
-    { updateInitialUrl: updateVoiceInitialUrl },
+    {apiData: voiceModelData, loading: voiceLoading},
+    {updateInitialUrl: updateVoiceInitialUrl},
   ] = useGetDataApi<ProviderModel[]>(
     `core/providers/models/`,
     {
@@ -189,11 +183,11 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   };
 
   const onVoiceProviderChange = () => {
-    form.setFieldsValue({ voice_model: '', voice: '' });
+    form.setFieldsValue({voice_model: '', voice: ''});
   };
 
   const onVoiceModelChange = () => {
-    form.setFieldsValue({ voice: '' });
+    form.setFieldsValue({voice: ''});
   };
 
   const languageData = getTranscriberLanguage();
@@ -204,8 +198,8 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
       key: '1',
       label: (
         <Flex align="center" gap={8}>
-          <TbPlugConnected size={18} />
-          <Text strong>{formatMessage({ id: 'identityStudio.model' })}</Text>
+          <TbPlugConnected size={18}/>
+          <Text strong>{formatMessage({id: 'identityStudio.model'})}</Text>
         </Flex>
       ),
       children: (
@@ -221,7 +215,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                 id: 'identityStudio.providerPlaceholder',
               })}
               loading={providerLoading}
-              suffixIcon={<ApiOutlined />}
+              suffixIcon={<ApiOutlined/>}
               options={modalProviderData?.data?.map((p: ProviderModel) => ({
                 kay: p.id,
                 value: p.id,
@@ -239,13 +233,13 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                 }),
               },
             ]}
-            help={formatMessage({ id: 'identityStudio.modelHelp' })}
+            help={formatMessage({id: 'identityStudio.modelHelp'})}
           >
             <AppSelect
               placeholder={formatMessage({
                 id: 'identityStudio.modelPlaceholder',
               })}
-              suffixIcon={<RobotOutlined />}
+              suffixIcon={<RobotOutlined/>}
               loading={llmLoading}
               disabled={!llmProvider}
               options={llmModelData?.data?.map(
@@ -258,12 +252,12 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                       <Space>
                         {item.inference && (
                           <Text title="Available on low latency inference">
-                            <InfoCircleOutlined />
+                            <InfoCircleOutlined/>
                           </Text>
                         )}
                         {item.realtime_sts && (
                           <Text title="This is Realtime(STS) model">
-                            <TrademarkOutlined />
+                            <TrademarkOutlined/>
                           </Text>
                         )}
                       </Space>
@@ -276,7 +270,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
 
           <Item
             name="max_tokens"
-            help={formatMessage({ id: 'identityStudio.maxTokensHelp' })}
+            help={formatMessage({id: 'identityStudio.maxTokensHelp'})}
           >
             <AppInputNumber
               placeholder={formatMessage({
@@ -291,7 +285,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               id: 'identityStudio.temperatureHelp',
             })}
           >
-            <TemperatureSlider />
+            <TemperatureSlider/>
           </Item>
         </Fragment>
       ),
@@ -302,9 +296,9 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
       key: '2',
       label: (
         <Flex align="center" gap={8}>
-          <AiOutlineApi size={18} />
+          <AiOutlineApi size={18}/>
           <Text strong>
-            {formatMessage({ id: 'identityStudio.transcriberTitle' })}
+            {formatMessage({id: 'identityStudio.transcriberTitle'})}
           </Text>
         </Flex>
       ),
@@ -328,7 +322,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               placeholder={formatMessage({
                 id: 'identityStudio.transcriptionProvider',
               })}
-              suffixIcon={<ApiOutlined />}
+              suffixIcon={<ApiOutlined/>}
               loading={providerTLoading}
               options={providerTData?.data?.map((item: ProviderModel) => ({
                 key: item.id,
@@ -355,7 +349,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               placeholder={formatMessage({
                 id: 'identityStudio.transcriptionModel',
               })}
-              suffixIcon={<RobotOutlined />}
+              suffixIcon={<RobotOutlined/>}
               loading={transcriberLoading}
               disabled={transcriberModelData?.data?.length === 0}
               options={transcriberModelData?.data?.map(
@@ -368,12 +362,12 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                       <Space>
                         {item.inference && (
                           <Text title="Available on low latency inference">
-                            <InfoCircleOutlined />
+                            <InfoCircleOutlined/>
                           </Text>
                         )}
                         {item.realtime_sts && (
                           <Text title="This is Realtime(STS) model">
-                            <TrademarkOutlined />
+                            <TrademarkOutlined/>
                           </Text>
                         )}
                       </Space>
@@ -385,7 +379,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
           </Item>
           <Item
             name="transcriber_language"
-            help={formatMessage({ id: 'identityStudio.languageDesc' })}
+            help={formatMessage({id: 'identityStudio.languageDesc'})}
             rules={[
               {
                 required: true,
@@ -399,7 +393,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               placeholder={formatMessage({
                 id: 'identityStudio.languageForTranscription',
               })}
-              suffixIcon={<GlobalOutlined />}
+              suffixIcon={<GlobalOutlined/>}
               loading={transcriberLoading}
               disabled={languageData?.length === 0}
               options={languageData?.map((item: VoiceProfileLanguage) => ({
@@ -418,8 +412,8 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
       key: '3',
       label: (
         <Flex align="center" gap={8}>
-          <RiVoiceprintLine />
-          <Text strong>{formatMessage({ id: 'voiceConfig.title' })}</Text>
+          <RiVoiceprintLine/>
+          <Text strong>{formatMessage({id: 'voiceConfig.title'})}</Text>
         </Flex>
       ),
       children: (
@@ -439,7 +433,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               placeholder={formatMessage({
                 id: 'identityStudio.voiceProvider',
               })}
-              suffixIcon={<ApiOutlined />}
+              suffixIcon={<ApiOutlined/>}
               loading={providerVLoading}
               onChange={onVoiceProviderChange}
               options={providerVData?.data?.map((item: ProviderModel) => ({
@@ -464,7 +458,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
               placeholder={formatMessage({
                 id: 'identityStudio.voiceModel',
               })}
-              suffixIcon={<RobotOutlined />}
+              suffixIcon={<RobotOutlined/>}
               loading={voiceLoading}
               disabled={voiceModelData?.data?.length === 0}
               onChange={onVoiceModelChange}
@@ -478,12 +472,12 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                       <Space>
                         {item.inference && (
                           <Text title="Available on low latency inference">
-                            <InfoCircleOutlined />
+                            <InfoCircleOutlined/>
                           </Text>
                         )}
                         {item.realtime_sts && (
                           <Text title="This is Realtime(STS) model">
-                            <TrademarkOutlined />
+                            <TrademarkOutlined/>
                           </Text>
                         )}
                       </Space>
@@ -517,7 +511,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                   placeholder={formatMessage({
                     id: 'identityStudio.synthesizedVoice',
                   })}
-                  suffixIcon={<AudioOutlined />}
+                  suffixIcon={<AudioOutlined/>}
                   disabled={voiceData?.length === 0}
                   options={voiceData?.map((item: ProviderModelVoice) => ({
                     key: item.code,
@@ -530,7 +524,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
           </StyledCollapseItemRow>
           <Item name="manualVoiceId" valuePropName="checked">
             <Checkbox>
-              {formatMessage({ id: 'voiceConfig.manualVoice' })}
+              {formatMessage({id: 'voiceConfig.manualVoice'})}
             </Checkbox>
           </Item>
 
@@ -540,29 +534,29 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
                 id: 'voice.voicePrompt',
               })}
               rows={4}
-              autoSize={{ minRows: 4, maxRows: 6 }}
+              autoSize={{minRows: 4, maxRows: 6}}
             />
           </Item>
           <Item
             name="voice_temperature"
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             label={
               <Text strong>
-                {formatMessage({ id: 'voice.voiceTemperature' })}
+                {formatMessage({id: 'voice.voiceTemperature'})}
               </Text>
             }
           >
-            <TemperatureSlider text={false} min={0.7} max={1.5} step={0.1} />
+            <TemperatureSlider text={false} min={0.7} max={1.5} step={0.1}/>
           </Item>
 
           <Item
             name="voice_speed"
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             label={
-              <Text strong>{formatMessage({ id: 'voice.voiceSpeed' })}</Text>
+              <Text strong>{formatMessage({id: 'voice.voiceSpeed'})}</Text>
             }
           >
-            <TemperatureSlider text={false} min={0.5} max={1.5} step={0.05} />
+            <TemperatureSlider text={false} min={0.5} max={1.5} step={0.05}/>
           </Item>
         </Fragment>
       ),
@@ -571,7 +565,7 @@ const VoiceCollapseSection: React.FC<VoiceCollapseSectionProps> = ({
   ];
 
   return (
-    <Collapse expandIconPlacement="end" items={items} />
+    <Collapse expandIconPlacement="end" items={items}/>
   );
 };
 

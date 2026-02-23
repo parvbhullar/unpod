@@ -1,8 +1,8 @@
 import AddForm from './AddForm';
 import AppDrawer from '../../antd/AppDrawer';
-import { useIntl } from 'react-intl';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
+import {useIntl} from 'react-intl';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
 
 type AppCreateKbProps = {
   onCreated?: (response: any) => void;
@@ -10,8 +10,8 @@ type AppCreateKbProps = {
   setAddNew: (open: boolean) => void;
 };
 
-const AppCreateKb = ({ onCreated, addNew, setAddNew }: AppCreateKbProps) => {
-  const { formatMessage } = useIntl();
+const AppCreateKb = ({onCreated, addNew, setAddNew}: AppCreateKbProps) => {
+  const {formatMessage} = useIntl();
   const isMobile = useMediaQuery(MobileWidthQuery);
 
   const onSaved = (response: any) => {
@@ -27,10 +27,10 @@ const AppCreateKb = ({ onCreated, addNew, setAddNew }: AppCreateKbProps) => {
   return (
     <AppDrawer
       open={addNew}
-      title={formatMessage({ id: 'knowledgeBase.createKnowledgeBase' })}
+      title={formatMessage({id: 'knowledgeBase.createKnowledgeBase'})}
       size={isMobile ? '100%' : 'calc(100% - 405px)'}
     >
-      <AddForm onSaved={onSaved} onClose={onCloseClick} />
+      <AddForm onSaved={onSaved} onClose={onCloseClick}/>
     </AppDrawer>
   );
 };

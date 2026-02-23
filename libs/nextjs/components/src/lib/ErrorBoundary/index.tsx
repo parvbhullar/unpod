@@ -1,8 +1,8 @@
 'use client';
 
-import React, { ErrorInfo, ReactNode } from 'react';
-import { Alert, Button } from 'antd';
-import { injectIntl, IntlShape } from 'react-intl';
+import React, {ErrorInfo, ReactNode} from 'react';
+import {Alert, Button} from 'antd';
+import {injectIntl, IntlShape} from 'react-intl';
 
 type ErrorBoundaryProps = {
   children: ReactNode;
@@ -15,11 +15,13 @@ type ErrorBoundaryProps = {
   title?: string;
   description?: string;
   showError?: boolean;
-  resetText?: string;};
+  resetText?: string;
+};
 
 type ErrorBoundaryState = {
   hasError: boolean;
-  error: Error | null;};
+  error: Error | null;
+};
 
 class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
@@ -27,11 +29,11 @@ class ErrorBoundary extends React.Component<
 > {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = {hasError: false, error: null};
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+    return {hasError: true, error};
   }
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
@@ -42,15 +44,15 @@ class ErrorBoundary extends React.Component<
   }
 
   handleReset = (): void => {
-    this.setState({ hasError: false, error: null });
+    this.setState({hasError: false, error: null});
     if (this.props.onReset) {
       this.props.onReset();
     }
   };
 
   override render(): ReactNode {
-    const { intl } = this.props;
-    const { formatMessage } = intl;
+    const {intl} = this.props;
+    const {formatMessage} = intl;
 
     if (this.state.hasError) {
       // Custom fallback UI
@@ -62,24 +64,24 @@ class ErrorBoundary extends React.Component<
 
       // Default fallback UI
       return (
-        <div style={{ padding: 20 }}>
+        <div style={{padding: 20}}>
           <Alert
             message={
-              this.props.title || formatMessage({ id: 'errorBoundary.title' })
+              this.props.title || formatMessage({id: 'errorBoundary.title'})
             }
             description={
               this.props.showError
                 ? this.state.error?.message ||
-                  formatMessage({ id: 'errorBoundary.unexpected' })
+                formatMessage({id: 'errorBoundary.unexpected'})
                 : this.props.description ||
-                  formatMessage({ id: 'errorBoundary.description' })
+                formatMessage({id: 'errorBoundary.description'})
             }
             type="error"
             showIcon
             action={
               <Button size="small" onClick={this.handleReset}>
                 {this.props.resetText ||
-                  formatMessage({ id: 'errorBoundary.tryAgain' })}
+                  formatMessage({id: 'errorBoundary.tryAgain'})}
               </Button>
             }
           />

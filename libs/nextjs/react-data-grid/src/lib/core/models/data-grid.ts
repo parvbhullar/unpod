@@ -1,7 +1,7 @@
 import type * as React from 'react';
-import type { Key, ReactElement, ReactNode } from 'react';
-import type { Dayjs } from 'dayjs';
-import type { PopoverProps, TablePaginationConfig } from 'antd';
+import type {Key, ReactElement, ReactNode} from 'react';
+import type {Dayjs} from 'dayjs';
+import type {PopoverProps, TablePaginationConfig} from 'antd';
 
 type SharedDivProps = Pick<
   React.HTMLAttributes<HTMLDivElement>,
@@ -44,7 +44,8 @@ export type AppTableProps = {
   hasLocalFilters?: boolean;
   themeOptions?: themeOptions;
   onScrolledToBottom?: () => void;
-  [x: string]: any;};
+  [x: string]: any;
+};
 
 export type DataGridProps<R, SR = unknown, K extends Key = Key> = SharedDivProps & {
   /**
@@ -141,7 +142,8 @@ export type DataGridProps<R, SR = unknown, K extends Key = Key> = SharedDivProps
   rowClass?: Maybe<(row: R, rowIdx: number) => Maybe<string>>;
   /** @default 'ltr' */
   direction?: Maybe<Direction>;
-  'data-testid'?: Maybe<string>;};
+  'data-testid'?: Maybe<string>;
+};
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -231,7 +233,8 @@ export type Column<TRow, TSummaryRow = unknown> = {
     readonly displayCellContent?: Maybe<boolean>;
     /** @default true */
     readonly commitOnOutsideClick?: Maybe<boolean>;
-  }>;};
+  }>;
+};
 
 export type ColumnsType<S, R = unknown> = (Column<S, R> | ColumnGroup<S, R>)[];
 
@@ -256,7 +259,8 @@ export type CalculatedColumn<TRow, TSummaryRow = unknown> = Column<
   readonly isLastFrozenColumn: boolean;
   readonly isFirstRightFixedColumn: boolean;
   readonly isFirstFrozenColumn?: boolean;
-  readonly renderCell: (props: RenderCellProps<TRow, TSummaryRow>) => ReactNode;};
+  readonly renderCell: (props: RenderCellProps<TRow, TSummaryRow>) => ReactNode;
+};
 
 export type ColumnGroup<R, SR = unknown> = {
   /** The name of the column group, it will be displayed in the header cell */
@@ -264,7 +268,8 @@ export type ColumnGroup<R, SR = unknown> = {
   readonly key?: string;
   readonly dataIndex?: string;
   readonly headerCellClass?: Maybe<string>;
-  readonly children: readonly ColumnOrColumnGroup<R, SR>[];};
+  readonly children: readonly ColumnOrColumnGroup<R, SR>[];
+};
 
 export type CalculatedColumnParent<R, SR> = {
   readonly title: string | ReactElement;
@@ -273,7 +278,8 @@ export type CalculatedColumnParent<R, SR> = {
   readonly colSpan: number;
   readonly level: number;
   readonly align?: Maybe<AlignType>;
-  readonly headerCellClass?: Maybe<string>;};
+  readonly headerCellClass?: Maybe<string>;
+};
 
 export type ColumnOrColumnGroup<R, SR = unknown> =
   | Column<R, SR>
@@ -285,10 +291,12 @@ export type CalculatedColumnOrColumnGroup<R, SR> =
 
 export type Position = {
   readonly idx: number;
-  readonly rowIdx: number;};
+  readonly rowIdx: number;
+};
 export type CellPosition = Position & {
   rowKey: number | string;
-  colKey: string;};
+  colKey: string;
+};
 
 export type RenderCellProps<TRow, TSummaryRow = unknown> = {
   column: CalculatedColumn<TRow, TSummaryRow>;
@@ -296,12 +304,14 @@ export type RenderCellProps<TRow, TSummaryRow = unknown> = {
   isCellEditable: boolean;
   tabIndex: number;
   onRowChange: (row: TRow) => void;
-  rowSelectionType: 'radio' | 'checkbox';};
+  rowSelectionType: 'radio' | 'checkbox';
+};
 
 export type RenderSummaryCellProps<TSummaryRow, TRow = unknown> = {
   column: CalculatedColumn<TRow, TSummaryRow>;
   row: TSummaryRow;
-  tabIndex: number;};
+  tabIndex: number;
+};
 
 export type RenderGroupCellProps<TRow, TSummaryRow = unknown> = {
   groupKey: unknown;
@@ -311,16 +321,19 @@ export type RenderGroupCellProps<TRow, TSummaryRow = unknown> = {
   isExpanded: boolean;
   tabIndex: number;
   toggleGroup: () => void;
-  rowSelectionType?: 'radio' | 'checkbox';};
+  rowSelectionType?: 'radio' | 'checkbox';
+};
 
 export type RenderEditCellProps<TRow, TSummaryRow = unknown> = {
   column: CalculatedColumn<TRow, TSummaryRow>;
   row: TRow;
   onRowChange: (row: TRow, commitChanges?: boolean) => void;
-  onClose: (commitChanges?: boolean, shouldFocusCell?: boolean) => void;};
+  onClose: (commitChanges?: boolean, shouldFocusCell?: boolean) => void;
+};
 
 export type RenderEditSelectCellProps<TRow, TSummaryRow = unknown> = RenderEditCellProps<TRow, TSummaryRow> & {
-  options: readonly any[];};
+  options: readonly any[];
+};
 
 export type RenderHeaderCellProps<TRow, TSummaryRow = unknown> = {
   column: CalculatedColumn<TRow, TSummaryRow>;
@@ -333,12 +346,16 @@ export type RenderHeaderCellProps<TRow, TSummaryRow = unknown> = {
   onSort: (ctrlClick: boolean) => void;
   rowSelectionType?: 'radio' | 'checkbox';
   headerColumnOptions?: ReactNode;
-  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;};
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+};
 
-export type CellRendererProps<TRow, TSummaryRow> = Pick<RenderRowProps<TRow, TSummaryRow>, 'row' | 'rowIdx' | 'selectCell'> & Omit<
-      React.HTMLAttributes<HTMLDivElement>,
-      'style' | 'children' | 'onClick' | 'onDoubleClick' | 'onContextMenu'
-    > & {
+export type CellRendererProps<TRow, TSummaryRow> =
+  Pick<RenderRowProps<TRow, TSummaryRow>, 'row' | 'rowIdx' | 'selectCell'>
+  & Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'style' | 'children' | 'onClick' | 'onDoubleClick' | 'onContextMenu'
+>
+  & {
   column: CalculatedColumn<TRow, TSummaryRow>;
   colSpan: number | undefined;
   isCopied: boolean;
@@ -379,7 +396,8 @@ export type CellRendererProps<TRow, TSummaryRow> = Pick<RenderRowProps<TRow, TSu
   getParsedRow: (row: TRow, dataIndex: keyof TRow, formula?: string) => TRow;
   formulas?: GridFormulaType[];
   cellSavedStyles?: GridCellStyleType[];
-  rowKeyId: string;};
+  rowKeyId: string;
+};
 
 export type CellEvent<E extends React.SyntheticEvent<HTMLDivElement>> = E & {
   preventGridDefault: () => void;
@@ -393,14 +411,16 @@ export type CellKeyboardEvent = CellEvent<React.KeyboardEvent<HTMLDivElement>>;
 export type CellClickArgs<TRow, TSummaryRow = unknown> = {
   row: TRow;
   column: CalculatedColumn<TRow, TSummaryRow>;
-  selectCell: (enableEditor?: boolean) => void;};
+  selectCell: (enableEditor?: boolean) => void;
+};
 
 type SelectCellKeyDownArgs<TRow, TSummaryRow = unknown> = {
   mode: 'SELECT';
   row: TRow;
   column: CalculatedColumn<TRow, TSummaryRow>;
   rowIdx: number;
-  selectCell: (position: Position, enableEditor?: Maybe<boolean>) => void;};
+  selectCell: (position: Position, enableEditor?: Maybe<boolean>) => void;
+};
 
 export type EditCellKeyDownArgs<TRow, TSummaryRow = unknown> = {
   mode: 'EDIT';
@@ -408,7 +428,8 @@ export type EditCellKeyDownArgs<TRow, TSummaryRow = unknown> = {
   column: CalculatedColumn<TRow, TSummaryRow>;
   rowIdx: number;
   navigate: () => void;
-  onClose: (commitChanges?: boolean, shouldFocusCell?: boolean) => void;};
+  onClose: (commitChanges?: boolean, shouldFocusCell?: boolean) => void;
+};
 
 export type CellKeyDownArgs<TRow, TSummaryRow = unknown> =
   | SelectCellKeyDownArgs<TRow, TSummaryRow>
@@ -417,12 +438,16 @@ export type CellKeyDownArgs<TRow, TSummaryRow = unknown> =
 export type CellSelectArgs<TRow, TSummaryRow = unknown> = {
   rowIdx: number;
   row: TRow;
-  column: CalculatedColumn<TRow, TSummaryRow>;};
+  column: CalculatedColumn<TRow, TSummaryRow>;
+};
 
-export type BaseRenderRowProps<TRow, TSummaryRow = unknown> = Omit<React.HTMLAttributes<HTMLDivElement>, 'style' | 'children'> & Pick<
-      DataGridProps<TRow, TSummaryRow>,
-      'onCellClick' | 'onCellDoubleClick' | 'onCellContextMenu'
-    > & {
+export type BaseRenderRowProps<TRow, TSummaryRow = unknown> =
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'style' | 'children'>
+  & Pick<
+  DataGridProps<TRow, TSummaryRow>,
+  'onCellClick' | 'onCellDoubleClick' | 'onCellContextMenu'
+>
+  & {
   viewportColumns: readonly CalculatedColumn<TRow, TSummaryRow>[];
   rowIdx: number;
   selectedCellIdx: number | undefined;
@@ -430,7 +455,8 @@ export type BaseRenderRowProps<TRow, TSummaryRow = unknown> = Omit<React.HTMLAtt
   gridRowStart: number;
   height: number;
   selectCell: (position: CellPosition, enableEditor?: Maybe<boolean>) => void;
-  onDragSerialNoRow: (cellIdx?: number, rowIdx?: number) => void;};
+  onDragSerialNoRow: (cellIdx?: number, rowIdx?: number) => void;
+};
 
 export type RenderRowProps<TRow, TSummaryRow = unknown> = BaseRenderRowProps<TRow, TSummaryRow> & {
   row: TRow;
@@ -465,11 +491,13 @@ export type RenderRowProps<TRow, TSummaryRow = unknown> = BaseRenderRowProps<TRo
   getParsedRow: (row: TRow, dataIndex: keyof TRow, formula?: string) => TRow;
   formulas?: GridFormulaType[];
   cellSavedStyles?: GridCellStyleType[];
-  rowKeyId: string;};
+  rowKeyId: string;
+};
 
 export type RowsChangeData<R, SR = unknown> = {
   indexes: number[];
-  column: CalculatedColumn<R, SR>;};
+  column: CalculatedColumn<R, SR>;
+};
 
 export type CopyClipboardProps = {
   startIdx: number;
@@ -485,28 +513,31 @@ export type SelectRowEvent<TRow> =
 
 export type RowSpanArgs<R, SR> =
   | {
-      type: 'ROW';
-      row: R;
-    }
+  type: 'ROW';
+  row: R;
+}
   | {
-      type: 'SUMMARY';
-      row: SR;
-    };
+  type: 'SUMMARY';
+  row: SR;
+};
 
 export type FillEvent<TRow> = {
   columnKey: string;
   sourceRow: TRow;
-  targetRow: TRow;};
+  targetRow: TRow;
+};
 
 export type CopyEvent<TRow> = {
   sourceColumnKey: string;
-  sourceRow: TRow;};
+  sourceRow: TRow;
+};
 
 export type PasteEvent<TRow> = {
   sourceColumnKey: string;
   sourceRow: TRow;
   targetColumnKey: string;
-  targetRow: TRow;};
+  targetRow: TRow;
+};
 
 export type GroupRow<TRow> = {
   readonly childRows: readonly TRow[];
@@ -517,11 +548,13 @@ export type GroupRow<TRow> = {
   readonly level: number;
   readonly posInSet: number;
   readonly setSize: number;
-  readonly startRowIndex: number;};
+  readonly startRowIndex: number;
+};
 
 export type SortColumn = {
   readonly columnKey: string;
-  readonly direction: SortDirection;};
+  readonly direction: SortDirection;
+};
 
 export type FilterType = Record<string, FilterDataType>;
 
@@ -572,10 +605,12 @@ export type RowHeightArgs<TRow> =
   | { type: 'GROUP'; row: GroupRow<TRow> };
 
 export type RenderSortIconProps = {
-  sortDirection: SortDirection | undefined;};
+  sortDirection: SortDirection | undefined;
+};
 
 export type RenderSortPriorityProps = {
-  priority: number | undefined;};
+  priority: number | undefined;
+};
 
 export type RenderSortStatusProps = RenderSortIconProps & RenderSortPriorityProps & {};
 
@@ -588,7 +623,8 @@ export type RenderCheckboxProps = Pick<
   | 'disabled'
   | 'type'
 > & {
-  onChange: (checked: boolean, shift: boolean) => void;};
+  onChange: (checked: boolean, shift: boolean) => void;
+};
 
 export type Renderers<TRow, TSummaryRow> = {
   renderCheckbox?: Maybe<(props: RenderCheckboxProps) => JSX.Element>;
@@ -596,17 +632,20 @@ export type Renderers<TRow, TSummaryRow> = {
     (key: Key, props: RenderRowProps<TRow, TSummaryRow>) => ReactNode
   >;
   renderSortStatus?: Maybe<(props: RenderSortStatusProps) => ReactNode>;
-  noRowsFallback?: Maybe<ReactNode>;};
+  noRowsFallback?: Maybe<ReactNode>;
+};
 
 export type Direction = 'ltr' | 'rtl';
 
 export type FilterConfirmProps = {
-  closeDropdown: boolean;};
+  closeDropdown: boolean;
+};
 
 export type ColumnFilterItem = {
   text: React.ReactNode;
   value: string | number | boolean;
-  children?: ColumnFilterItem[];};
+  children?: ColumnFilterItem[];
+};
 
 export type FilterDropdownProps = {
   prefixCls?: string;
@@ -621,14 +660,16 @@ export type FilterDropdownProps = {
   filters?: ColumnFilterItem[];
   /** Only close filterDropdown */
   close?: () => void;
-  visible?: boolean;};
+  visible?: boolean;
+};
 
 export type RowSelectionType = 'checkbox' | 'radio';
 
 export type TableRowSelection<T> = {
   type?: RowSelectionType;
   selectedRowKeys: Key[];
-  onChange: (selectedRowKeys: Key[], selectedRows: T[]) => void;};
+  onChange: (selectedRowKeys: Key[], selectedRows: T[]) => void;
+};
 
 export type ConfirmWindowProps = {
   title?: string;
@@ -656,7 +697,8 @@ export type UndoRedoProcessProps = {
     rows?: { [x: number | string]: React.CSSProperties | null };
     columns?: { [x: number | string]: React.CSSProperties | null };
     cell?: GridCellStyleType[];
-  };};
+  };
+};
 
 export type TableCellItemProps = {
   idx: number;
@@ -774,19 +816,19 @@ export type themeOptions = {
 };
 
 declare const AppInputField: <TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-}: RenderEditCellProps<TRow, TSummaryRow>) => JSX.Element;
+                                                   row,
+                                                   column,
+                                                   onRowChange,
+                                                   onClose,
+                                                 }: RenderEditCellProps<TRow, TSummaryRow>) => JSX.Element;
 
 export declare const SelectInput: <TRow, TSummaryRow>({
-  row,
-  column,
-  onRowChange,
-  onClose,
-  options,
-}: RenderEditSelectCellProps<TRow, TSummaryRow>) => JSX.Element;
+                                                        row,
+                                                        column,
+                                                        onRowChange,
+                                                        onClose,
+                                                        options,
+                                                      }: RenderEditSelectCellProps<TRow, TSummaryRow>) => JSX.Element;
 
 export declare const TimeInput: typeof AppInputField;
 export declare const DateInput: typeof AppInputField;

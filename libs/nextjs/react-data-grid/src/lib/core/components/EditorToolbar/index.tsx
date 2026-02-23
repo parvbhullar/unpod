@@ -1,9 +1,9 @@
-import type { CSSProperties } from 'react';
-import { useMemo, useState } from 'react';
-import { Popover, Tooltip } from 'antd';
-import { BiSolidColorFill } from 'react-icons/bi';
-import { TbMathFunction } from 'react-icons/tb';
-import { ImTextColor } from 'react-icons/im';
+import type {CSSProperties} from 'react';
+import {useMemo, useState} from 'react';
+import {Popover, Tooltip} from 'antd';
+import {BiSolidColorFill} from 'react-icons/bi';
+import {TbMathFunction} from 'react-icons/tb';
+import {ImTextColor} from 'react-icons/im';
 import {
   MdOutlineFormatBold,
   MdOutlineFormatItalic,
@@ -13,7 +13,7 @@ import {
 } from 'react-icons/md';
 import clsx from 'clsx';
 import ColorPalette from './ColorPalette';
-import { SelectCellState } from '../../DataGrid';
+import {SelectCellState} from '../../DataGrid';
 import {
   StyledButton,
   StyledColorButton,
@@ -22,13 +22,10 @@ import {
   StyledRoot,
   StyledToolbarRoot,
 } from './index.styled';
-import { CalculatedColumn } from '../..';
+import {CalculatedColumn} from '../..';
 import FormulaMenu from './FormulaMenu';
-import type {
-  GridCellStyleType,
-  GridFormulaType,
-} from '../../models/data-grid';
-import { useDataGridConfiguration } from '../../DataGridContext';
+import type {GridCellStyleType, GridFormulaType,} from '../../models/data-grid';
+import {useDataGridConfiguration} from '../../DataGridContext';
 
 type Props<R> = {
   rows: readonly R[];
@@ -48,22 +45,22 @@ type Props<R> = {
 };
 
 function EditorToolbar<R>({
-  rows,
-  columns,
-  cellSavedStyles,
-  rowKeyId,
-  selectedPosition,
-  onStylePropsChange,
-  canUndo,
-  onUndo,
-  canRedo,
-  onRedo,
-  draggedOverCellIdx,
-  draggedOverRowIdx,
-  formulas,
-  onUpdateFormula,
-}: Props<R>) {
-  const { editorToolbar } = useDataGridConfiguration();
+                            rows,
+                            columns,
+                            cellSavedStyles,
+                            rowKeyId,
+                            selectedPosition,
+                            onStylePropsChange,
+                            canUndo,
+                            onUndo,
+                            canRedo,
+                            onRedo,
+                            draggedOverCellIdx,
+                            draggedOverRowIdx,
+                            formulas,
+                            onUpdateFormula,
+                          }: Props<R>) {
+  const {editorToolbar} = useDataGridConfiguration();
 
   const [openTextColor, setOpenTextColor] = useState(false);
   const [openFillColor, setOpenFillColor] = useState(false);
@@ -74,7 +71,7 @@ function EditorToolbar<R>({
   }, [editorToolbar]);
 
   const isShowToolbar = useMemo(() => {
-    const { allowFormulaInput, ...restProps } = editorToolbar;
+    const {allowFormulaInput, ...restProps} = editorToolbar;
     return Object.values(restProps).some((item) => item);
   }, [editorToolbar]);
 
@@ -111,7 +108,7 @@ function EditorToolbar<R>({
 
   const onColorSelect = (color: string, type: 'text' | 'fill') => {
     onStylePropsChange(
-      type === 'text' ? { color } : { backgroundColor: color },
+      type === 'text' ? {color} : {backgroundColor: color},
     );
   };
 
@@ -119,7 +116,7 @@ function EditorToolbar<R>({
     <StyledRoot>
       {editorToolbar.allowFormulaInput && (
         <StyledInput
-          prefix={<TbMathFunction fontSize={18} />}
+          prefix={<TbMathFunction fontSize={18}/>}
           value={currFormula}
           onChange={(e) => onChangeFormula(e.target.value)}
         />
@@ -135,7 +132,7 @@ function EditorToolbar<R>({
                 onClick={onUndo}
                 disabled={!canUndo}
               >
-                <MdUndo fontSize={18} />
+                <MdUndo fontSize={18}/>
               </StyledButton>
             </Tooltip>
           )}
@@ -148,7 +145,7 @@ function EditorToolbar<R>({
                 onClick={onRedo}
                 disabled={!canRedo}
               >
-                <MdRedo fontSize={18} />
+                <MdRedo fontSize={18}/>
               </StyledButton>
             </Tooltip>
           )}
@@ -161,9 +158,9 @@ function EditorToolbar<R>({
                 className={clsx({
                   selected: activeStyle.fontWeight === 'bold',
                 })}
-                onClick={() => onStylePropsChange({ fontWeight: 'bold' })}
+                onClick={() => onStylePropsChange({fontWeight: 'bold'})}
               >
-                <MdOutlineFormatBold fontSize={18} />
+                <MdOutlineFormatBold fontSize={18}/>
               </StyledButton>
             </Tooltip>
           )}
@@ -176,9 +173,9 @@ function EditorToolbar<R>({
                 className={clsx({
                   selected: activeStyle.fontStyle === 'italic',
                 })}
-                onClick={() => onStylePropsChange({ fontStyle: 'italic' })}
+                onClick={() => onStylePropsChange({fontStyle: 'italic'})}
               >
-                <MdOutlineFormatItalic fontSize={18} />
+                <MdOutlineFormatItalic fontSize={18}/>
               </StyledButton>
             </Tooltip>
           )}
@@ -192,10 +189,10 @@ function EditorToolbar<R>({
                   selected: activeStyle.textDecoration === 'line-through',
                 })}
                 onClick={() =>
-                  onStylePropsChange({ textDecoration: 'line-through' })
+                  onStylePropsChange({textDecoration: 'line-through'})
                 }
               >
-                <MdOutlineFormatStrikethrough fontSize={18} />
+                <MdOutlineFormatStrikethrough fontSize={18}/>
               </StyledButton>
             </Tooltip>
           )}
@@ -214,7 +211,7 @@ function EditorToolbar<R>({
               onOpenChange={(open) => {
                 if (open) setOpenTextColor(false);
               }}
-              overlayInnerStyle={{ padding: 0 }}
+              overlayInnerStyle={{padding: 0}}
             >
               <Tooltip
                 title="Text Color"
@@ -222,7 +219,7 @@ function EditorToolbar<R>({
                 onOpenChange={setOpenTextColor}
               >
                 <StyledColorButton size="small" type="text">
-                  <ImTextColor />
+                  <ImTextColor/>
                   <StyledFillColor
                     style={{
                       backgroundColor: activeStyle.color || '#1F1F1F',
@@ -247,7 +244,7 @@ function EditorToolbar<R>({
               onOpenChange={(open) => {
                 if (open) setOpenFillColor(false);
               }}
-              overlayInnerStyle={{ padding: 0 }}
+              overlayInnerStyle={{padding: 0}}
             >
               <Tooltip
                 title="Fill Color"
@@ -255,7 +252,7 @@ function EditorToolbar<R>({
                 onOpenChange={setOpenFillColor}
               >
                 <StyledColorButton size="small" type="text">
-                  <BiSolidColorFill />
+                  <BiSolidColorFill/>
                   <StyledFillColor
                     style={{
                       backgroundColor: activeStyle.backgroundColor || '#fff',

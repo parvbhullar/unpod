@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Button, Layout, Typography } from 'antd';
+import {Button, Layout, Typography} from 'antd';
 
-const { Header } = Layout;
-const { Title } = Typography;
+const {Header} = Layout;
+const {Title} = Typography;
 
 export const StyledHeader = styled(Header)`
   display: flex;
@@ -17,18 +17,18 @@ export const StyledHeader = styled(Header)`
   top: 0;
   width: 100%;
   z-index: 101;
-  /*border-bottom: 1px solid ${({ theme }) => theme.border.color};
+  /*border-bottom: 1px solid ${({theme}) => theme.border.color};
   border-radius: 10px 10px 0 0;*/
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     padding: 10px 10px !important;
   }
 `;
 
 export const StyledContainer = styled.div<{ $hasCenter?: boolean }>`
   display: grid;
-  grid-template-columns: ${({ $hasCenter }) =>
-    $hasCenter ? '1fr auto 1fr' : '1fr auto'};
+  grid-template-columns: ${({$hasCenter}) =>
+  $hasCenter ? '1fr auto 1fr' : '1fr auto'};
   gap: 16px;
   /*display: flex;
   align-items: center;
@@ -64,8 +64,8 @@ export const StyledCenterContainer = styled.div`
 
 export const StyledTitleWrapper = styled.div<{ $isScrolled?: boolean }>`
   padding: 4px 16px !important;
-  background: ${({ $isScrolled }) =>
-    $isScrolled ? 'rgba(138, 119, 255, 0.99)' : 'rgba(138, 119, 255, 0.66)'};
+  background: ${({$isScrolled}) =>
+  $isScrolled ? 'rgba(138, 119, 255, 0.99)' : 'rgba(138, 119, 255, 0.66)'};
   border-radius: 20px;
   transition: background-color 0.3s;
 `;
@@ -84,7 +84,7 @@ export const StyledMainTitle = styled(Title)`
 export const StyledListingBtn = styled.div`
   cursor: pointer;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs + 100}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs + 100}px) {
     display: none;
   }
 `;

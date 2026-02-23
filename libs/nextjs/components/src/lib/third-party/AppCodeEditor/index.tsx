@@ -1,17 +1,17 @@
-
-import React, { useRef, useState } from 'react';
-import { StyledEditor, StyledPlaceholder } from './index.styled';
-import { EditorProps } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import React, {useRef, useState} from 'react';
+import {StyledEditor, StyledPlaceholder} from './index.styled';
+import {EditorProps} from '@monaco-editor/react';
+import {editor} from 'monaco-editor';
 
 type AppCodeEditorProps = EditorProps & {
-  placeholder?: string;};
+  placeholder?: string;
+};
 
 const AppCodeEditor: React.FC<AppCodeEditorProps> = ({
-  placeholder = 'Write Python code here...',
-  defaultLanguage = 'python',
-  ...props
-}) => {
+                                                       placeholder = 'Write Python code here...',
+                                                       defaultLanguage = 'python',
+                                                       ...props
+                                                     }) => {
   const [value, setValue] = useState('');
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
@@ -21,12 +21,12 @@ const AppCodeEditor: React.FC<AppCodeEditorProps> = ({
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{position: 'relative'}}>
       <StyledEditor
         height="30vh"
         onMount={handleEditorDidMount}
         options={{
-          minimap: { enabled: false },
+          minimap: {enabled: false},
           wordWrap: 'on',
           lineNumbersMinChars: 3,
         }}

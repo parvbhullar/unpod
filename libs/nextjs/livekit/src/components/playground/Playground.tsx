@@ -1,10 +1,10 @@
 'use client';
 import '@livekit/components-styles';
-import { LoadingSVG } from '../button/LoadingSVG';
-import { AudioInputTile } from '../config/AudioInputTile';
-import { ConfigurationPanelItem } from '../config/ConfigurationPanelItem';
-import { useConfig } from '../../hooks/useConfig';
-import { TranscriptionTile } from '../../transcriptions/TranscriptionTile';
+import {LoadingSVG} from '../button/LoadingSVG';
+import {AudioInputTile} from '../config/AudioInputTile';
+import {ConfigurationPanelItem} from '../config/ConfigurationPanelItem';
+import {useConfig} from '../../hooks/useConfig';
+import {TranscriptionTile} from '../../transcriptions/TranscriptionTile';
 import {
   BarVisualizer,
   RoomAudioRenderer,
@@ -17,8 +17,8 @@ import {
   useTracks,
   useVoiceAssistant,
 } from '@livekit/components-react';
-import { ConnectionState, LocalParticipant, Track } from 'livekit-client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {ConnectionState, LocalParticipant, Track} from 'livekit-client';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   AudioTileContainer,
   Container,
@@ -27,14 +27,14 @@ import {
   StyledPlaygroundTile,
   StyledVisualizerContainer,
 } from './Playground.styled';
-import { Button, Col } from 'antd';
+import {Button, Col} from 'antd';
 
 type PlaygroundProps = {
   onConnect: (shouldConnect: boolean) => void;
 };
 
-const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
-  const { config } = useConfig();
+const Playground: React.FC<PlaygroundProps> = ({onConnect}) => {
+  const {config} = useConfig();
   const [, setTranscripts] = useState<
     {
       name: string;
@@ -43,7 +43,7 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
       isSelf: boolean;
     }[]
   >([]);
-  const { localParticipant } = useLocalParticipant();
+  const {localParticipant} = useLocalParticipant();
   const remoteParticipants = useRemoteParticipants();
   const voiceAssistant = useVoiceAssistant();
   console.log('voiceAssistant:', voiceAssistant);
@@ -63,10 +63,10 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
   }, [config, localParticipant, roomState]);
 
   const localTracks = tracks.filter(
-    ({ participant }) => participant instanceof LocalParticipant,
+    ({participant}) => participant instanceof LocalParticipant,
   );
   const localMicTrack = localTracks.find(
-    ({ source }) => source === Track.Source.Microphone,
+    ({source}) => source === Track.Source.Microphone,
   );
 
   const onDataReceived = useCallback(
@@ -107,7 +107,7 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
 
     const waitingContent = (
       <FlexColumnCenter>
-        <LoadingSVG />
+        <LoadingSVG/>
         Waiting for audio track
       </FlexColumnCenter>
     );
@@ -116,7 +116,7 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
       <BarVisualizer
         state={voiceAssistant.state}
         trackRef={voiceAssistant.audioTrack}
-        options={{ minHeight: 80, maxHeight: 100 }}
+        options={{minHeight: 80, maxHeight: 100}}
       />
     );
 
@@ -133,7 +133,7 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
 
   const chatTileContent = useMemo(() => {
     if (voiceAssistant.audioTrack) {
-      return <TranscriptionTile agentAudioTrack={voiceAssistant.audioTrack} />;
+      return <TranscriptionTile agentAudioTrack={voiceAssistant.audioTrack}/>;
     }
     return <></>;
   }, [voiceAssistant.audioTrack]);
@@ -164,7 +164,7 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
                 roomState={roomState}
                 onConnectClicked={() => onConnect(false)}
               >
-                {localMicTrack && <AudioInputTile trackRef={localMicTrack} />}
+                {localMicTrack && <AudioInputTile trackRef={localMicTrack}/>}
               </ConfigurationPanelItem>
             )}
           </StyledAgentContainer>
@@ -173,8 +173,8 @@ const Playground: React.FC<PlaygroundProps> = ({ onConnect }) => {
 
       {roomState === ConnectionState.Connected && (
         <>
-          <RoomAudioRenderer />
-          <StartAudio label="Click to enable audio playback" />
+          <RoomAudioRenderer/>
+          <StartAudio label="Click to enable audio playback"/>
         </>
       )}
     </>

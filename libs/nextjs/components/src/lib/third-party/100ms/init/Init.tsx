@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { FeatureFlagsInit } from '../services/FeatureFlags';
+import React, {useEffect} from 'react';
+import {FeatureFlagsInit} from '../services/FeatureFlags';
 
 const Init = () => {
   useEffect(() => {
@@ -21,7 +21,7 @@ const Init = () => {
     };
   }, []);
 
-  return <FeatureFlagsInit />;
+  return <FeatureFlagsInit/>;
 };
 
-export { Init };
+export {Init};

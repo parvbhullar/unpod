@@ -1,41 +1,26 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
-import {
-  getDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import {
-  MdArticle,
-  MdAudiotrack,
-  MdQuestionAnswer,
-  MdTask,
-  MdVideoLibrary,
-} from 'react-icons/md';
-import {
-  StyledIconWrapper,
-  StyledMenuItem,
-  StyledSubMenuItem,
-  StyledSubMenuText,
-} from './index.styled';
-import { Tooltip } from 'antd';
-import { RiEditLine } from 'react-icons/ri';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import {useParams, usePathname, useRouter} from 'next/navigation';
+import {getDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {MdArticle, MdAudiotrack, MdQuestionAnswer, MdTask, MdVideoLibrary,} from 'react-icons/md';
+import {StyledIconWrapper, StyledMenuItem, StyledSubMenuItem, StyledSubMenuText,} from './index.styled';
+import {Tooltip} from 'antd';
+import {RiEditLine} from 'react-icons/ri';
 import PageSidebar from '@unpod/components/common/AppPageLayout/layouts/ThreeColumnPageLayout/PageSidebar';
 
 const ICONS = {
-  post_text: <MdArticle fontSize={16} />,
-  post_video: <MdVideoLibrary fontSize={16} />,
-  post_audio: <MdAudiotrack fontSize={16} />,
-  post_video_stream: <MdVideoLibrary fontSize={16} />,
-  post_audio_stream: <MdAudiotrack fontSize={16} />,
-  article_text: <MdArticle fontSize={16} />,
-  article_video: <MdVideoLibrary fontSize={16} />,
-  article_audio: <MdAudiotrack fontSize={16} />,
-  article_video_stream: <MdVideoLibrary fontSize={16} />,
-  article_audio_stream: <MdAudiotrack fontSize={16} />,
-  task_text: <MdTask fontSize={16} />,
-  ask_text: <MdTask fontSize={16} />,
-  question_text: <MdQuestionAnswer fontSize={16} />,
+  post_text: <MdArticle fontSize={16}/>,
+  post_video: <MdVideoLibrary fontSize={16}/>,
+  post_audio: <MdAudiotrack fontSize={16}/>,
+  post_video_stream: <MdVideoLibrary fontSize={16}/>,
+  post_audio_stream: <MdAudiotrack fontSize={16}/>,
+  article_text: <MdArticle fontSize={16}/>,
+  article_video: <MdVideoLibrary fontSize={16}/>,
+  article_audio: <MdAudiotrack fontSize={16}/>,
+  article_video_stream: <MdVideoLibrary fontSize={16}/>,
+  article_audio_stream: <MdAudiotrack fontSize={16}/>,
+  task_text: <MdTask fontSize={16}/>,
+  ask_text: <MdTask fontSize={16}/>,
+  question_text: <MdQuestionAnswer fontSize={16}/>,
 };
 
 type ThreadPost = {
@@ -52,7 +37,7 @@ type ThreadPost = {
 };
 
 const getRootPostMenuItem = (options: any) => {
-  const { key, icon, path, children, title, isEdit, onTitleClick } = options;
+  const {key, icon, path, children, title, isEdit, onTitleClick} = options;
 
   const keyString = path ? (isEdit ? `${path}/edit/` : path) : key;
 
@@ -71,7 +56,7 @@ const getRootPostMenuItem = (options: any) => {
 };
 
 const getPostMenuItem = (options: any) => {
-  const { key, icon, path, children, title, isEdit } = options;
+  const {key, icon, path, children, title, isEdit} = options;
 
   const keyString = path ? (isEdit ? `${path}/edit/` : path) : key;
 
@@ -82,7 +67,7 @@ const getPostMenuItem = (options: any) => {
       <StyledSubMenuItem>
         {isEdit ? (
           <StyledIconWrapper>
-            <RiEditLine fontSize={16} />
+            <RiEditLine fontSize={16}/>
           </StyledIconWrapper>
         ) : (
           icon
@@ -100,12 +85,12 @@ type ThreadMenusProps = {
   currentPost?: ThreadPost;
 };
 
-const ThreadMenus = ({ currentPost }: ThreadMenusProps) => {
+const ThreadMenus = ({currentPost}: ThreadMenusProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated } = useAuthContext();
+  const {isAuthenticated} = useAuthContext();
   const router = useRouter();
   const pathname = usePathname();
-  const { orgSlug, spaceSlug, postSlug } = useParams();
+  const {orgSlug, spaceSlug, postSlug} = useParams();
   const currentRoute = useRef(pathname || '');
 
   const [posts, setPosts] = useState<ThreadPost[]>([]);
@@ -179,7 +164,7 @@ const ThreadMenus = ({ currentPost }: ThreadMenusProps) => {
           title: post.title,
           icon: (
             <StyledIconWrapper>
-              {ICONS[rootIconKey] || <MdArticle fontSize={16} />}
+              {ICONS[rootIconKey] || <MdArticle fontSize={16}/>}
             </StyledIconWrapper>
           ),
           key: post.slug,
@@ -193,7 +178,7 @@ const ThreadMenus = ({ currentPost }: ThreadMenusProps) => {
                 title: subPost.title,
                 icon: (
                   <StyledIconWrapper>
-                    {ICONS[subIconKey] || <MdArticle fontSize={16} />}
+                    {ICONS[subIconKey] || <MdArticle fontSize={16}/>}
                   </StyledIconWrapper>
                 ),
                 key: subPost.slug,
@@ -211,7 +196,7 @@ const ThreadMenus = ({ currentPost }: ThreadMenusProps) => {
         title: post.title,
         icon: (
           <StyledIconWrapper>
-            {ICONS[iconKey] || <MdArticle fontSize={16} />}
+            {ICONS[iconKey] || <MdArticle fontSize={16}/>}
           </StyledIconWrapper>
         ),
         key: post.slug,

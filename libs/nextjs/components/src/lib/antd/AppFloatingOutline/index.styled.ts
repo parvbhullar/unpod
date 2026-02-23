@@ -31,7 +31,7 @@ export const AppFormControlWrapper = styled.div`
       }
 
       & .separator {
-        color: ${({ theme }) => theme.palette.text.primary};
+        color: ${({theme}) => theme.palette.text.primary};
         display: flex;
         align-items: center;
         justify-content: center;
@@ -43,10 +43,10 @@ export const AppFormControlWrapper = styled.div`
 
   & .input-label.focused,
   &:hover .input-label.shrink {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
 
     .ant-form-item-has-error & {
-      color: ${({ theme }) => theme.palette.error};
+      color: ${({theme}) => theme.palette.error};
     }
   }
 
@@ -69,7 +69,7 @@ export const AppFormControlWrapper = styled.div`
   & &.app-number-range-picker {
     & .ant-input-number:hover:first-child {
       border-style: solid;
-      border-color: ${({ theme }) => theme.border.color} !important;
+      border-color: ${({theme}) => theme.border.color} !important;
       border-right-width: 1px !important;
     }
   }
@@ -90,13 +90,13 @@ export const AppFormControlWrapper = styled.div`
   }
 
   & .ant-input-number-handler-wrap {
-    border-top-right-radius: ${({ theme }) => theme.radius.base}px;
-    border-bottom-right-radius: ${({ theme }) => theme.radius.base}px;
+    border-top-right-radius: ${({theme}) => theme.radius.base}px;
+    border-bottom-right-radius: ${({theme}) => theme.radius.base}px;
   }
 `;
 
 export const InputLabel = styled.label`
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
   font-size: 14px !important;
   padding: 0;
   display: block;
@@ -126,7 +126,7 @@ export const InputLabel = styled.label`
     white-space: nowrap;
     overflow: hidden;
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
       max-width: 115%;
     }
     &.addon-before {
@@ -136,12 +136,12 @@ export const InputLabel = styled.label`
 `;
 
 export const InputContainer = styled.div`
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
   cursor: text;
   display: inline-flex;
   position: relative;
   align-items: center;
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border-radius: ${({theme}) => theme.radius.base}px;
   height: 100%;
   z-index: 1;
 
@@ -176,12 +176,12 @@ export const InputContainer = styled.div`
   & .ant-picker-input {
     height: 40px;
 
-    /*@media (min-width: ${({ theme }) => theme.breakpoints.xxl}px) {
+    /*@media (min-width: ${({theme}) => theme.breakpoints.xxl}px) {
       height: 40px;
-      font-size: ${({ theme }) => theme.font.size.lg};
+      font-size: ${({theme}) => theme.font.size.lg};
     }
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.xxl + 320}px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.xxl + 320}px) {
       height: 48px;
     }*/
   }
@@ -243,7 +243,7 @@ export const InputContainer = styled.div`
   & .ant-input-group > .ant-input:first-child,
   & .ant-input-group-addon:first-child {
     border-right-width: 1px !important;
-    border-right-color: ${({ theme }) => theme.border.color} !important;
+    border-right-color: ${({theme}) => theme.border.color} !important;
   }
 
   .ant-form-item & .ant-select,
@@ -254,12 +254,12 @@ export const InputContainer = styled.div`
   &.focused,
   &:hover {
     & .form-control-fieldset {
-      border-color: ${({ theme }) => theme.palette.primary};
+      border-color: ${({theme}) => theme.palette.primary};
     }
 
     & .ant-input-group > .ant-input:first-child,
     & .ant-input-group-addon:first-child {
-      border-right-color: ${({ theme }) => theme.palette.primary} !important;
+      border-right-color: ${({theme}) => theme.palette.primary} !important;
     }
   }
 
@@ -267,12 +267,12 @@ export const InputContainer = styled.div`
   .ant-form-item-has-error &.focused,
   .ant-form-item-has-error &:hover {
     & .form-control-fieldset {
-      border-color: ${({ theme }) => theme.palette.error};
+      border-color: ${({theme}) => theme.palette.error};
     }
 
     & .ant-input-group > .ant-input:first-child,
     & .ant-input-group-addon:first-child {
-      border-right-color: ${({ theme }) => theme.palette.error} !important;
+      border-right-color: ${({theme}) => theme.palette.error} !important;
     }
   }
 
@@ -281,7 +281,7 @@ export const InputContainer = styled.div`
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px
-      ${({ theme }) => theme?.palette.background.default} inset !important;
+      ${({theme}) => theme?.palette.background.default} inset !important;
   }
 `;
 
@@ -291,7 +291,7 @@ export const FormControlFieldset = styled.fieldset`
   right: 0;
   bottom: 0;
   margin: 0;
-  border-color: ${({ theme }) => theme.border.color};
+  border-color: ${({theme}) => theme.border.color};
   padding: 0 8px;
   overflow: hidden;
   position: absolute;
@@ -302,7 +302,7 @@ export const FormControlFieldset = styled.fieldset`
   z-index: 1;
 
   .ant-form-item-has-error & {
-    border-color: ${({ theme }) => theme.palette.error};
+    border-color: ${({theme}) => theme.palette.error};
   }
 
   & .fieldset-legend {

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledRoot = styled.div`
-  font-family: ${({ theme }) => theme.font.family};
-  color: ${({ theme }) => theme.palette.text.primary};
+  font-family: ${({theme}) => theme.font.family};
+  color: ${({theme}) => theme.palette.text.primary};
 
   /* Light theme. */
   --color-canvas-default: #ffffff;

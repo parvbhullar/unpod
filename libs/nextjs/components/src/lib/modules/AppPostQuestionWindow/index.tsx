@@ -1,5 +1,5 @@
-import type { CSSProperties, MouseEvent } from 'react';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import type {CSSProperties, MouseEvent} from 'react';
+import {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {
   StyledBottomBar,
   StyledCloseButton,
@@ -16,48 +16,26 @@ import {
   StyledTopBar,
   StylesPilotLogo,
 } from './index.styled';
-import {
-  Badge,
-  Button,
-  Col,
-  Dropdown,
-  Form,
-  Row,
-  Select,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
-import {
-  MdArrowForward,
-  MdClose,
-  MdDelete,
-  MdOutlineAttachment,
-  MdOutlineWorkspaces,
-} from 'react-icons/md';
+import {Badge, Button, Col, Dropdown, Form, Row, Select, Space, Typography, Upload,} from 'antd';
+import {MdArrowForward, MdClose, MdDelete, MdOutlineAttachment, MdOutlineWorkspaces,} from 'react-icons/md';
 import clsx from 'clsx';
 
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
-import { BsArrowReturnLeft, BsFillFileEarmarkPersonFill } from 'react-icons/bs';
-import { POST_TYPE } from '@unpod/constants/AppEnums';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
+import {BsArrowReturnLeft, BsFillFileEarmarkPersonFill} from 'react-icons/bs';
+import {POST_TYPE} from '@unpod/constants/AppEnums';
 import _debounce from 'lodash/debounce';
-import { getDraftData, saveDraftData } from '@unpod/helpers/DraftHelper';
-import { useRouter } from 'next/navigation';
-import {
-  getDataApi,
-  uploadDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { AskAttachmentTypes } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
+import {getDraftData, saveDraftData} from '@unpod/helpers/DraftHelper';
+import {useRouter} from 'next/navigation';
+import {getDataApi, uploadDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {AskAttachmentTypes} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
 import AppLoader from '../../common/AppLoader';
 import AppImage from '../../next/AppImage';
 import AppSuperbookInputs from '../../common/AppSuperbookInputBlock/AppSuperbookInputs';
-import { getDateObject } from '@unpod/helpers/DateHelper';
-import { getJsonString } from '@unpod/helpers/StringHelper';
-import { useIntl } from 'react-intl';
-import type { Pilot, Spaces } from '@unpod/constants/types';
+import {getDateObject} from '@unpod/helpers/DateHelper';
+import {getJsonString} from '@unpod/helpers/StringHelper';
+import {useIntl} from 'react-intl';
+import type {Pilot, Spaces} from '@unpod/constants/types';
 
 /*const AppEditorInput = dynamic(import('../AppEditor/AppEditorInput'));*/
 
@@ -66,7 +44,7 @@ const defaultPilot = {
   name: '@Superpilot',
 };
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 type KnowledgeBaseItem = Spaces;
 
@@ -107,17 +85,18 @@ type AppPostQuestionWindowProps = {
   sendJsonMessage?: (payload: any) => void;
   rootStyle?: CSSProperties;
   overlayStyle?: CSSProperties;
-  placeholder?: string;};
+  placeholder?: string;
+};
 
 const AppPostQuestionWindow = ({
-  currentPost,
-  replyParent,
-  setReplyParent,
-  sendJsonMessage,
-  rootStyle,
-  overlayStyle,
-  placeholder = 'Ask me to do anything...',
-}: AppPostQuestionWindowProps) => {
+                                 currentPost,
+                                 replyParent,
+                                 setReplyParent,
+                                 sendJsonMessage,
+                                 rootStyle,
+                                 overlayStyle,
+                                 placeholder = 'Ask me to do anything...',
+                               }: AppPostQuestionWindowProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const router = useRouter() as {
     events?: {
@@ -125,13 +104,13 @@ const AppPostQuestionWindow = ({
       off: (event: string, cb: () => void) => void;
     };
   };
-  const { isAuthenticated } = useAuthContext();
+  const {isAuthenticated} = useAuthContext();
   const [focused, setFocused] = useState(false);
   const [newQuery, setNewQuery] = useState<string | null>(null);
   const [requestPilot, setRequestedPilot] = useState<string | null>(null);
   const [pilot, setPilot] = useState<Pilot | null>(defaultPilot);
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [dataFetched, setDataFetched] = useState(false);
   const [pilots, setPilots] = useState<Pilot[]>([]);
@@ -185,7 +164,7 @@ const AppPostQuestionWindow = ({
 
   useEffect(() => {
     if (dataFetched && currentPost?.slug) {
-      debounceFn(`ask-${currentPost?.slug}`, { content: newQuery });
+      debounceFn(`ask-${currentPost?.slug}`, {content: newQuery});
     }
   }, [newQuery, requestPilot, dataFetched, currentPost?.slug]);
 
@@ -393,7 +372,7 @@ const AppPostQuestionWindow = ({
           !AskAttachmentTypes.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -416,7 +395,7 @@ const AppPostQuestionWindow = ({
       key: item.uid ?? item.name,
       label: (
         <Row justify="space-between" align="middle">
-          <Typography.Text style={{ marginRight: 5 }}>
+          <Typography.Text style={{marginRight: 5}}>
             {item.name}
           </Typography.Text>
           <MdDelete
@@ -447,14 +426,14 @@ const AppPostQuestionWindow = ({
                 </StylesPilotLogo>
               ) : (
                 <StyledIconWrapper>
-                  <BsFillFileEarmarkPersonFill fontSize={18} />
+                  <BsFillFileEarmarkPersonFill fontSize={18}/>
                 </StyledIconWrapper>
               )}
 
               <StyledSelect
                 variant="borderless"
                 size="small"
-                placeholder={formatMessage({ id: 'common.superPilot' })}
+                placeholder={formatMessage({id: 'common.superPilot'})}
                 value={requestPilot || undefined}
                 onChange={(value) => onChangePilot(value as string)}
                 style={{
@@ -477,14 +456,14 @@ const AppPostQuestionWindow = ({
 
               {requestPilot && (
                 <StyledCloseButton onClick={onClosePilot}>
-                  <MdClose />
+                  <MdClose/>
                 </StyledCloseButton>
               )}
             </Space>
 
             {requestPilot === 'superpilot' && isAuthenticated && (
               <Space size="small" align="center">
-                <MdOutlineWorkspaces fontSize={16} />
+                <MdOutlineWorkspaces fontSize={16}/>
 
                 <Select
                   variant="borderless"
@@ -495,7 +474,7 @@ const AppPostQuestionWindow = ({
                   }}
                   mode="multiple"
                   maxTagCount={1}
-                  placeholder={formatMessage({ id: 'knowledgeBase.pageTitle' })}
+                  placeholder={formatMessage({id: 'knowledgeBase.pageTitle'})}
                   disabled={kbList?.length === 0}
                   value={knowledgeBases}
                   onChange={setKnowledgeBases}
@@ -514,12 +493,12 @@ const AppPostQuestionWindow = ({
             onFocus={onFocused}
             onMouseDown={onFocused}
             // onBlur={onBlurred}
-            className={clsx({ focused: focused })}
+            className={clsx({focused: focused})}
           >
             {replyParent && (
               <StyledParentContainer>
                 <StyledParent>
-                  <BsArrowReturnLeft fontSize={16} />
+                  <BsArrowReturnLeft fontSize={16}/>
                   <Typography.Paragraph type="secondary" ellipsis>
                     Replying to{' '}
                     {replyParent.title
@@ -529,12 +508,12 @@ const AppPostQuestionWindow = ({
 
                   <Button
                     type="text"
-                    icon={<MdClose fontSize={16} />}
+                    icon={<MdClose fontSize={16}/>}
                     size="small"
                     onClick={() => setReplyParent?.(null)}
                   />
                 </StyledParent>
-                <StyledDivider />
+                <StyledDivider/>
               </StyledParentContainer>
             )}
 
@@ -544,15 +523,15 @@ const AppPostQuestionWindow = ({
                   {(inputFormBlock?.input_schema || []).map((item, index) =>
                     item.type === 'checkboxes' ? (
                       <Col key={index} xs={24} sm={24} md={24}>
-                        <AppSuperbookInputs item={item} />
+                        <AppSuperbookInputs item={item}/>
                       </Col>
                     ) : item.type === 'textarea' || item.type === 'json' ? (
                       <Col key={index} xs={24} sm={24} md={24}>
-                        <AppSuperbookInputs item={item} />
+                        <AppSuperbookInputs item={item}/>
                       </Col>
                     ) : (
                       <Col key={index} xs={24} sm={12} md={8}>
-                        <AppSuperbookInputs item={item} />
+                        <AppSuperbookInputs item={item}/>
                       </Col>
                     ),
                   )}
@@ -563,12 +542,12 @@ const AppPostQuestionWindow = ({
                 <StyledInput
                   placeholder={
                     (inputFormBlock?.input_schema || []).length > 0
-                      ? formatMessage({ id: 'superbook.instructionsOptional' })
-                      : formatMessage({ id: 'superbook.askMeAnything' })
+                      ? formatMessage({id: 'superbook.instructionsOptional'})
+                      : formatMessage({id: 'superbook.askMeAnything'})
                   }
                   maxLength={200}
                   variant="borderless"
-                  autoSize={{ minRows: 2, maxRows: 3 }}
+                  autoSize={{minRows: 2, maxRows: 3}}
                   size="large"
                 />
               </Item>
@@ -622,7 +601,7 @@ const AppPostQuestionWindow = ({
                         <Button
                           type={attachments?.length ? 'primary' : 'default'}
                           shape="circle"
-                          icon={<MdOutlineAttachment fontSize={18} />}
+                          icon={<MdOutlineAttachment fontSize={18}/>}
                         />
                       </Badge>
                     </Dropdown>
@@ -630,15 +609,15 @@ const AppPostQuestionWindow = ({
                     <Button
                       type={attachments?.length ? 'primary' : 'default'}
                       shape="circle"
-                      icon={<MdOutlineAttachment fontSize={18} />}
+                      icon={<MdOutlineAttachment fontSize={18}/>}
                     />
                   )}
                 </Upload>
 
                 <Button type="primary" shape="round" htmlType="submit">
                   <Space>
-                    {formatMessage({ id: 'common.run' })}{' '}
-                    <MdArrowForward fontSize={18} />
+                    {formatMessage({id: 'common.run'})}{' '}
+                    <MdArrowForward fontSize={18}/>
                   </Space>
                 </Button>
 
@@ -657,10 +636,10 @@ const AppPostQuestionWindow = ({
 
       <StyledOverlay
         onClick={onOverlayClick}
-        className={clsx({ focused: focused })}
+        className={clsx({focused: focused})}
         style={focused ? overlayStyle : undefined}
       />
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </>
   );
 };

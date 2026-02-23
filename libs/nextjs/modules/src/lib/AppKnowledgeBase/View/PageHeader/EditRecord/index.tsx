@@ -1,16 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { putDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { Button, Col, Form } from 'antd';
-import {
-  AppGridContainer,
-  AppInput,
-  AppTextArea,
-  DrawerBody,
-  DrawerFooter,
-  DrawerForm,
-} from '@unpod/components/antd';
-import { useIntl } from 'react-intl';
+import {useEffect, useState} from 'react';
+import {putDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {Button, Col, Form} from 'antd';
+import {AppGridContainer, AppInput, AppTextArea, DrawerBody, DrawerFooter, DrawerForm,} from '@unpod/components/antd';
+import {useIntl} from 'react-intl';
 
 type EditRecordProps = {
   onClose: () => void;
@@ -18,11 +11,11 @@ type EditRecordProps = {
   setCurrentKb: (kb: any) => void;
 };
 
-const EditRecord = ({ onClose, currentKb, setCurrentKb }: EditRecordProps) => {
+const EditRecord = ({onClose, currentKb, setCurrentKb}: EditRecordProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (currentKb) {
@@ -65,7 +58,7 @@ const EditRecord = ({ onClose, currentKb, setCurrentKb }: EditRecordProps) => {
               ]}
             >
               <AppInput
-                placeholder={formatMessage({ id: 'knowledgeBase.pageTitle' })}
+                placeholder={formatMessage({id: 'knowledgeBase.pageTitle'})}
               />
             </Form.Item>
           </Col>
@@ -73,7 +66,7 @@ const EditRecord = ({ onClose, currentKb, setCurrentKb }: EditRecordProps) => {
           <Col span={24}>
             <Form.Item name="description">
               <AppTextArea
-                placeholder={formatMessage({ id: 'form.description' })}
+                placeholder={formatMessage({id: 'form.description'})}
                 maxLength={250}
                 rows={4}
               />
@@ -83,11 +76,11 @@ const EditRecord = ({ onClose, currentKb, setCurrentKb }: EditRecordProps) => {
       </DrawerBody>
 
       <DrawerFooter>
-        <Button onClick={onClose} style={{ marginRight: 8 }}>
-          {formatMessage({ id: 'common.cancel' })}
+        <Button onClick={onClose} style={{marginRight: 8}}>
+          {formatMessage({id: 'common.cancel'})}
         </Button>
         <Button type="primary" htmlType="submit" loading={loading}>
-          {formatMessage({ id: 'common.update' })}
+          {formatMessage({id: 'common.update'})}
         </Button>
       </DrawerFooter>
     </DrawerForm>

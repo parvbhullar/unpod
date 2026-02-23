@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 // In firefox, setTimeout with duration 0 too short for browser notice the changes in dom
@@ -44,13 +44,13 @@ class Expand extends Component {
   getClientHeight = () => this.refWrapper.scrollHeight;
 
   getDefaultExpandStyle = () => {
-    const { status } = this.state;
+    const {status} = this.state;
 
     switch (status) {
       case PHASE.OPENING:
       case PHASE.CLOSE:
       case PHASE.CLOSED:
-        return { height: 0, opacity: 0, overflow: 'hidden' };
+        return {height: 0, opacity: 0, overflow: 'hidden'};
       case PHASE.OPENED:
       case PHASE.CLOSING:
         return {
@@ -59,7 +59,7 @@ class Expand extends Component {
           overflow: 'hidden',
         };
       default:
-        return { height: 'auto', opacity: 1, overflow: 'unset' };
+        return {height: 'auto', opacity: 1, overflow: 'unset'};
     }
   };
 
@@ -80,7 +80,7 @@ class Expand extends Component {
     };
   }
 
-  updateStatus = (status) => this.setState({ status });
+  updateStatus = (status) => this.setState({status});
 
   delay = (fn, time) => {
     this.timeout = setTimeout(fn, time);
@@ -93,7 +93,7 @@ class Expand extends Component {
   };
 
   transit = (entering, entered, enter) => {
-    const { duration } = this.props;
+    const {duration} = this.props;
 
     this.updateStatus(entering);
 
@@ -121,7 +121,7 @@ class Expand extends Component {
   };
 
   render() {
-    const { className, children, tag: Tag } = this.props;
+    const {className, children, tag: Tag} = this.props;
 
     const childProps = {
       className,

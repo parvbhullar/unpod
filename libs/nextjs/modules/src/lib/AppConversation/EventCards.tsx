@@ -1,16 +1,11 @@
 'use client';
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
-import { Button } from 'antd';
-import {
-  ArrowRightOutlined,
-  CalendarOutlined,
-  EnvironmentOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import { useIntl } from 'react-intl';
+import type {SyntheticEvent} from 'react';
+import {useState} from 'react';
+import {Button} from 'antd';
+import {ArrowRightOutlined, CalendarOutlined, EnvironmentOutlined, UserOutlined,} from '@ant-design/icons';
+import {useIntl} from 'react-intl';
 
-import { AppDrawer } from '@unpod/components/antd';
+import {AppDrawer} from '@unpod/components/antd';
 import {
   EventCard,
   EventCardBanner,
@@ -49,17 +44,17 @@ type EventCardsProps = {
   data?: EventCardsData;
 };
 
-const EventCards = ({ data }: EventCardsProps) => {
+const EventCards = ({data}: EventCardsProps) => {
   const events = data?.items || [];
   const query = data?.query;
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   return (
     <EventCardsContainer>
       {query && (
         <EventQueryHeader>
-          {formatMessage({ id: 'event.resultsFor' })} "{query}"
+          {formatMessage({id: 'event.resultsFor'})} "{query}"
         </EventQueryHeader>
       )}
       <CardsScrollWrapper ScrollComponent={EventCardsScroll} items={events}>
@@ -97,16 +92,16 @@ const EventCards = ({ data }: EventCardsProps) => {
               <EventDetails>
                 {event.location && (
                   <EventDetailRow>
-                    <EnvironmentOutlined />
+                    <EnvironmentOutlined/>
                     <span>{event.location}</span>
                   </EventDetailRow>
                 )}
 
                 {event.organizer && (
                   <EventDetailRow>
-                    <UserOutlined />
+                    <UserOutlined/>
                     <span>
-                      {formatMessage({ id: 'event.organizedBy' })}{' '}
+                      {formatMessage({id: 'event.organizedBy'})}{' '}
                       {event.organizer}
                     </span>
                   </EventDetailRow>
@@ -115,7 +110,7 @@ const EventCards = ({ data }: EventCardsProps) => {
 
               {event.event_date && (
                 <EventDate>
-                  <CalendarOutlined />
+                  <CalendarOutlined/>
                   {new Date(event.event_date).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -143,7 +138,7 @@ const EventCards = ({ data }: EventCardsProps) => {
         width={550}
       >
         {selectedEvent && (
-          <div style={{ padding: '4px' }}>
+          <div style={{padding: '4px'}}>
             {selectedEvent.image && (
               <img
                 src={selectedEvent.image}
@@ -228,7 +223,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                       marginTop: '2px',
                     }}
                   />
-                  <div style={{ flex: 1 }}>
+                  <div style={{flex: 1}}>
                     <div
                       style={{
                         fontSize: '12px',
@@ -238,7 +233,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                         textTransform: 'uppercase',
                       }}
                     >
-                      {formatMessage({ id: 'event.dateTime' })}
+                      {formatMessage({id: 'event.dateTime'})}
                     </div>
                     <div
                       style={{
@@ -291,7 +286,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                       marginTop: '2px',
                     }}
                   />
-                  <div style={{ flex: 1 }}>
+                  <div style={{flex: 1}}>
                     <div
                       style={{
                         fontSize: '12px',
@@ -301,7 +296,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                         textTransform: 'uppercase',
                       }}
                     >
-                      {formatMessage({ id: 'event.location' })}
+                      {formatMessage({id: 'event.location'})}
                     </div>
                     <div
                       style={{
@@ -331,7 +326,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                       marginTop: '2px',
                     }}
                   />
-                  <div style={{ flex: 1 }}>
+                  <div style={{flex: 1}}>
                     <div
                       style={{
                         fontSize: '12px',
@@ -341,7 +336,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                         textTransform: 'uppercase',
                       }}
                     >
-                      {formatMessage({ id: 'event.organizer' })}
+                      {formatMessage({id: 'event.organizer'})}
                     </div>
                     <div
                       style={{
@@ -365,7 +360,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                 href={selectedEvent.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                icon={<ArrowRightOutlined />}
+                icon={<ArrowRightOutlined/>}
                 iconPlacement="end"
                 style={{
                   height: '48px',
@@ -378,7 +373,7 @@ const EventCards = ({ data }: EventCardsProps) => {
                   boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
                 }}
               >
-                {formatMessage({ id: 'event.viewDetails' })}
+                {formatMessage({id: 'event.viewDetails'})}
               </Button>
             )}
           </div>

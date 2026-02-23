@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { useAppSpaceContext, useFetchDataApi } from '@unpod/providers';
+import {useEffect} from 'react';
+import {useAppSpaceContext, useFetchDataApi} from '@unpod/providers';
 import AppEmptyWorkSpace from '@unpod/components/modules/AppEmptyWorkSpace';
 import AppLoader from '@unpod/components/common/AppLoader';
 import AppPostGrid from '@unpod/components/modules/AppPostGrid';
 import AppPostList from '@unpod/components/modules/AppPostList';
 import AppLoadingMore from '@unpod/components/common/AppLoadingMore';
-import type { Thread } from '@unpod/constants/types';
+import type {Thread} from '@unpod/constants/types';
 
-const GeneralView = ({ listingType }: { listingType: any }) => {
-  const { currentSpace } = useAppSpaceContext();
+const GeneralView = ({listingType}: { listingType: any }) => {
+  const {currentSpace} = useAppSpaceContext();
   const [
-    { apiData, loading, page, isLoadingMore },
-    { setData, setPage, setLoadingMore, updateInitialUrl },
+    {apiData, loading, page, isLoadingMore},
+    {setData, setPage, setLoadingMore, updateInitialUrl},
   ] = useFetchDataApi<Thread[]>(
     `threads/${currentSpace?.token}/`,
     [],
@@ -28,7 +28,7 @@ const GeneralView = ({ listingType }: { listingType: any }) => {
   }, [currentSpace?.token]);
 
   return apiData?.length ? (
-    <div style={{ minHeight: '50vh' }}>
+    <div style={{minHeight: '50vh'}}>
       {listingType === 'grid' ? (
         <AppPostGrid
           loading={loading}
@@ -49,12 +49,12 @@ const GeneralView = ({ listingType }: { listingType: any }) => {
         />
       )}
 
-      {isLoadingMore && <AppLoadingMore />}
+      {isLoadingMore && <AppLoadingMore/>}
     </div>
   ) : loading ? (
-    <AppLoader />
+    <AppLoader/>
   ) : (
-    <AppEmptyWorkSpace />
+    <AppEmptyWorkSpace/>
   );
 };
 

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import clsx from 'clsx';
 
-import type { CalculatedColumn, Position } from './models/data-grid';
-import type { DataGridProps, SelectCellState } from './DataGrid';
-import { getCellStyle } from './utils';
+import type {CalculatedColumn, Position} from './models/data-grid';
+import type {DataGridProps, SelectCellState} from './DataGrid';
+import {getCellStyle} from './utils';
 
 const StyledCellDragHandle = styled.div`
   --rdg-selection-color: #66afe9;
@@ -13,12 +13,12 @@ const StyledCellDragHandle = styled.div`
   cursor: move;
   inline-size: var(--rdg-drag-handle-size);
   block-size: var(--rdg-drag-handle-size);
-  background-color: ${({ theme }: { theme: any }) => theme.palette.primary};
+  background-color: ${({theme}: { theme: any }) => theme.palette.primary};
   place-self: end;
 
   &:hover {
     --rdg-drag-handle-size: 16px;
-    border: 2px solid ${({ theme }: { theme: any }) => theme.table.borderColor};
+    border: 2px solid ${({theme}: { theme: any }) => theme.table.borderColor};
     background-color: var(--rdg-background-color);
   }
 
@@ -42,24 +42,25 @@ type Props<R, SR> = Pick<
   isCellEditable: (position: Position) => boolean;
   onClick: () => void;
   setDragging: (isDragging: boolean) => void;
-  setDraggedOverRowIdx: (overRowIdx: number | undefined) => void;};
+  setDraggedOverRowIdx: (overRowIdx: number | undefined) => void;
+};
 
 export default function DragHandle<R, SR>({
-  gridRowStart,
-  rows,
-  column,
-  columnWidth,
-  maxColIdx,
-  isLastRow,
-  selectedPosition,
-  latestDraggedOverRowIdx,
-  isCellEditable,
-  onRowsChange,
-  onClick,
-  setDragging,
-  setDraggedOverRowIdx,
-}: Props<R, SR>) {
-  const { idx, rowIdx } = selectedPosition;
+                                            gridRowStart,
+                                            rows,
+                                            column,
+                                            columnWidth,
+                                            maxColIdx,
+                                            isLastRow,
+                                            selectedPosition,
+                                            latestDraggedOverRowIdx,
+                                            isCellEditable,
+                                            onRowsChange,
+                                            onClick,
+                                            setDragging,
+                                            setDraggedOverRowIdx,
+                                          }: Props<R, SR>) {
+  const {idx, rowIdx} = selectedPosition;
 
   function handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
     // keep the focus on the cell
@@ -104,7 +105,7 @@ export default function DragHandle<R, SR>({
     const updatedRows = [...rows];
     const indexes: number[] = [];
     for (let i = startRowIdx; i < endRowIdx; i++) {
-      if (isCellEditable({ rowIdx: i, idx })) {
+      if (isCellEditable({rowIdx: i, idx})) {
         const updatedRow = {
           ...rows[i],
           [column.dataIndex]: sourceRow[column.dataIndex as keyof R],
@@ -118,13 +119,13 @@ export default function DragHandle<R, SR>({
     }
 
     if (indexes.length > 0) {
-      onRowsChange?.(updatedRows, { indexes, column });
+      onRowsChange?.(updatedRows, {indexes, column});
     }
   }
 
   function getStyle(): React.CSSProperties {
-    const colSpan = column.colSpan?.({ type: 'ROW', row: rows[rowIdx] }) ?? 1;
-    const { insetInlineStart, ...style } = getCellStyle(column, colSpan);
+    const colSpan = column.colSpan?.({type: 'ROW', row: rows[rowIdx]}) ?? 1;
+    const {insetInlineStart, ...style} = getCellStyle(column, colSpan);
     const marginEnd = 'calc(var(--rdg-drag-handle-size) * -0.5 + 1px)';
     const isLastColumn = column.idx + colSpan - 1 === maxColIdx;
 

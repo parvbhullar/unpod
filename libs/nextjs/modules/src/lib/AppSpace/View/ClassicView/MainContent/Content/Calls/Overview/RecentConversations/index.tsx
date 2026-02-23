@@ -7,24 +7,24 @@ import {
   StyledTimeRow,
   StyledTimeText,
 } from './index.styled';
-import { Badge, Flex, Typography } from 'antd';
-import { BsChatRightDots } from 'react-icons/bs';
+import {Badge, Flex, Typography} from 'antd';
+import {BsChatRightDots} from 'react-icons/bs';
 import AppList from '@unpod/components/common/AppList';
-import { getFormattedDate } from '@unpod/helpers/DateHelper';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
+import {getFormattedDate} from '@unpod/helpers/DateHelper';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 const RecentConversations = ({
-  recentConversations = [],
-}: {
+                               recentConversations = [],
+                             }: {
   recentConversations?: any[];
 }) => {
   return (
     <StyledRoot>
       <StyledContainer>
         <Flex gap={5} align={'center'}>
-          <BsChatRightDots size={15} />
+          <BsChatRightDots size={15}/>
           <Text strong>Recent Conversations</Text>
         </Flex>
         <AppList
@@ -36,7 +36,7 @@ const RecentConversations = ({
               title={
                 <StyledTimeRow>
                   <StyledTimeText>{getFormattedDate(item.date)}</StyledTimeText>
-                  <Badge dot={true} status="default" />
+                  <Badge dot={true} status="default"/>
                   <StyledTimeText>
                     {getFormattedDate(item.date, 'HH:mm')}
                   </StyledTimeText>
