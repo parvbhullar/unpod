@@ -11,8 +11,8 @@ import {
   StyledTitleBlock,
 } from './index.styled';
 import AppToggleSidebar from '../AppToggleSidebar';
-import { useAuthContext } from '@unpod/providers';
-import { useRouter } from 'next/navigation';
+import {useAuthContext} from '@unpod/providers';
+import {useRouter} from 'next/navigation';
 import ListingOptions from './ListingOptions';
 
 export const AppHeaderButton = StyledButton;
@@ -30,25 +30,25 @@ type AppPageHeaderProps = {
 };
 
 const AppPageHeader: React.FC<AppPageHeaderProps> = ({
-  leftOptions,
-  rightOptions,
-  centerOptions,
-  pageTitle,
-  titleIcon,
-  isListingPage,
-  hideToggleBtn,
-  hideAuthBtn,
-  children,
-}) => {
+                                                       leftOptions,
+                                                       rightOptions,
+                                                       centerOptions,
+                                                       pageTitle,
+                                                       titleIcon,
+                                                       isListingPage,
+                                                       hideToggleBtn,
+                                                       hideAuthBtn,
+                                                       children,
+                                                     }) => {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const {isAuthenticated, isLoading} = useAuthContext();
 
   return (
     <StyledHeader>
       {children || (
         <StyledContainer $hasCenter={!!centerOptions}>
           <StyledLeftContainer>
-            {!hideToggleBtn && <AppToggleSidebar />}
+            {!hideToggleBtn && <AppToggleSidebar/>}
 
             {pageTitle &&
               (typeof pageTitle === 'string' ? (
@@ -57,7 +57,7 @@ const AppPageHeader: React.FC<AppPageHeaderProps> = ({
                   <StyledMainTitle
                     level={1}
                     className="mb-0"
-                    ellipsis={{ rows: 1 }}
+                    ellipsis={{rows: 1}}
                   >
                     {pageTitle}
                   </StyledMainTitle>
@@ -74,7 +74,7 @@ const AppPageHeader: React.FC<AppPageHeaderProps> = ({
           )}
 
           <StyledRightContainer>
-            {isListingPage && <ListingOptions />}
+            {isListingPage && <ListingOptions/>}
             {rightOptions}
             {!isAuthenticated && !isLoading && !hideAuthBtn && (
               <React.Fragment>

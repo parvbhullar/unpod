@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
-import { Button, Form, Radio, Select, Typography } from 'antd';
+import {useEffect} from 'react';
+import {Button, Form, Radio, Select, Typography} from 'antd';
 import ModalWindow from '../ModalWindow';
-import { StyledRoot } from './index.style';
-import { AppInput } from '../AppInput';
-import { AppSelect } from '../AppSelect';
-import { getMachineName } from '../../helpers/StringHelper';
+import {StyledRoot} from './index.style';
+import {AppInput} from '../AppInput';
+import {AppSelect} from '../AppSelect';
+import {getMachineName} from '../../helpers/StringHelper';
 
-const { useForm } = Form;
-const { Paragraph } = Typography;
+const {useForm} = Form;
+const {Paragraph} = Typography;
 
 type ColumnDataType = {
   label: string;
@@ -15,11 +15,11 @@ type ColumnDataType = {
 };
 
 const dataTypes: ColumnDataType[] = [
-  { label: 'String', value: 'text' },
-  { label: 'Number', value: 'number' },
-  { label: 'Date', value: 'date' },
-  { label: 'Time', value: 'time' },
-  { label: 'Datetime', value: 'datetime' },
+  {label: 'String', value: 'text'},
+  {label: 'Number', value: 'number'},
+  {label: 'Date', value: 'date'},
+  {label: 'Time', value: 'time'},
+  {label: 'Datetime', value: 'datetime'},
 ];
 
 type Props = {
@@ -31,17 +31,17 @@ type Props = {
 };
 
 const NewColumnWindow = ({
-  onCancel,
-  columns,
-  idx,
-  onAddColumn,
-  ...restProps
-}: Props) => {
+                           onCancel,
+                           columns,
+                           idx,
+                           onAddColumn,
+                           ...restProps
+                         }: Props) => {
   const [form] = useForm();
 
   useEffect(() => {
     if (idx >= 0) {
-      form.setFieldsValue({ idx: idx.toString() });
+      form.setFieldsValue({idx: idx.toString()});
     }
   }, [idx, form]);
 
@@ -69,7 +69,7 @@ const NewColumnWindow = ({
     >
       <StyledRoot>
         <Form
-          initialValues={{ idx: idx.toString(), position: 'after' }}
+          initialValues={{idx: idx.toString(), position: 'after'}}
           form={form}
           onFinish={onFinish}
         >
@@ -90,7 +90,7 @@ const NewColumnWindow = ({
                 if (columnName) {
                   const column_key = getMachineName(columnName);
 
-                  form.setFieldsValue({ column_key });
+                  form.setFieldsValue({column_key});
                 }
               }}
             />
@@ -122,7 +122,7 @@ const NewColumnWindow = ({
               }),
             ]}
           >
-            <AppInput placeholder="Column Key" />
+            <AppInput placeholder="Column Key"/>
           </Form.Item>
 
           <Form.Item

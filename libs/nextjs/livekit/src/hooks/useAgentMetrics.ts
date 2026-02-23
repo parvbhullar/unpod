@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDataChannel } from '@livekit/components-react';
-import { ConnectionState } from 'livekit-client';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {useDataChannel} from '@livekit/components-react';
+import {ConnectionState} from 'livekit-client';
 
 export function useAgentMetrics(roomState) {
   const [duration, setDuration] = useState(0);
@@ -70,7 +70,7 @@ export function useAgentMetrics(roomState) {
         }
       }
     } catch (err) {
-      console.warn('Metrics parse failed',err);
+      console.warn('Metrics parse failed', err);
     }
   }, []);
 

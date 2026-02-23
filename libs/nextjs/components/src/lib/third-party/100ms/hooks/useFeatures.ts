@@ -1,4 +1,4 @@
-import { selectTemplateAppData, useHMSStore } from '@100mslive/react-sdk';
+import {selectTemplateAppData, useHMSStore} from '@100mslive/react-sdk';
 
 export const useFeatures = (key) => {
   let features = useHMSStore(selectTemplateAppData)?.features;

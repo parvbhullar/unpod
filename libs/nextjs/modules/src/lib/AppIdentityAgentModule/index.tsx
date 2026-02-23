@@ -1,25 +1,17 @@
 'use client';
-import { type ComponentType, isValidElement, useEffect, useMemo } from 'react';
-import { Divider, Form } from 'antd';
-import { useIntl } from 'react-intl';
-import { usePathname, useRouter } from 'next/navigation';
-import { StyledRoot, StyledTabsWrapper } from './index.styled';
-import {
-  uploadPostDataApi,
-  uploadPutDataApi,
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
+import {type ComponentType, isValidElement, useEffect, useMemo} from 'react';
+import {Divider, Form} from 'antd';
+import {useIntl} from 'react-intl';
+import {usePathname, useRouter} from 'next/navigation';
+import {StyledRoot, StyledTabsWrapper} from './index.styled';
+import {uploadPostDataApi, uploadPutDataApi, useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
 import AgentHeader from './AgentHeader';
-import { generateHandle } from '@unpod/helpers/StringHelper';
-import { getTabItems } from './constants';
-import { AppTabs } from '@unpod/components/antd';
-import {
-  useAppModuleActionsContext,
-  useAppModuleContext,
-} from '@unpod/providers/AppModuleContextProvider';
-import { useSkeleton } from '@unpod/custom-hooks';
-import { AiIdentityStudioSkeleton } from '@unpod/skeleton/AIIdentityStudio';
+import {generateHandle} from '@unpod/helpers/StringHelper';
+import {getTabItems} from './constants';
+import {AppTabs} from '@unpod/components/antd';
+import {useAppModuleActionsContext, useAppModuleContext,} from '@unpod/providers/AppModuleContextProvider';
+import {useSkeleton} from '@unpod/custom-hooks';
+import {AiIdentityStudioSkeleton} from '@unpod/skeleton/AIIdentityStudio';
 
 type AppIdentityAgentModuleProps = {
   pilot?: any;
@@ -29,24 +21,24 @@ type AppIdentityAgentModuleProps = {
 };
 
 const AppIdentityAgentModule = ({
-  pilot,
-  isNew,
-  currentSpace,
-}: AppIdentityAgentModuleProps) => {
-  const { formatMessage } = useIntl();
+                                  pilot,
+                                  isNew,
+                                  currentSpace,
+                                }: AppIdentityAgentModuleProps) => {
+  const {formatMessage} = useIntl();
   const infoViewActionsContext = useInfoViewActionsContext();
   useAppModuleActionsContext();
-  const { record, isNewRecord } = useAppModuleContext() as any;
-  const { setRecord, updateRecord, addNewRecord, setIsNewRecord } =
+  const {record, isNewRecord} = useAppModuleContext() as any;
+  const {setRecord, updateRecord, addNewRecord, setIsNewRecord} =
     useAppModuleActionsContext() as any;
-  const { isPageLoading, skeleton: SkeletonComponent } = useSkeleton(
+  const {isPageLoading, skeleton: SkeletonComponent} = useSkeleton(
     AiIdentityStudioSkeleton as ComponentType<unknown>,
     AiIdentityStudioSkeleton as ComponentType<unknown>,
   );
   const SkeletonView = isValidElement(SkeletonComponent) ? (
     SkeletonComponent
   ) : (
-    <SkeletonComponent />
+    <SkeletonComponent/>
   );
 
   const infoViewContext = useInfoViewContext();
@@ -150,7 +142,7 @@ const AppIdentityAgentModule = ({
         form={form}
       />
 
-      <Divider style={{ margin: '0 0 5px 0' }} />
+      <Divider style={{margin: '0 0 5px 0'}}/>
       <StyledTabsWrapper>
         <AppTabs
           items={getTabItems({

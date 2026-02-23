@@ -36,7 +36,8 @@ export const StyledCurrentLanguage = styled.div`
 `;
 
 type StyledLanguageItemProps = {
-  $isActive?: boolean;};
+  $isActive?: boolean;
+};
 
 export const StyledLanguageItem = styled.div<StyledLanguageItemProps>`
   display: flex;
@@ -45,7 +46,7 @@ export const StyledLanguageItem = styled.div<StyledLanguageItemProps>`
   cursor: pointer;
   min-width: 140px;
   background-color: ${(props) =>
-    props.$isActive ? 'rgba(0, 0, 0, 0.04)' : 'transparent'};
+  props.$isActive ? 'rgba(0, 0, 0, 0.04)' : 'transparent'};
   font-weight: ${(props) => (props.$isActive ? 600 : 400)};
 
   .flag-icon {

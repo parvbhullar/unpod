@@ -1,15 +1,10 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
-import { Col, Row, Tooltip } from 'antd';
-import { useDrag, useDrop } from 'react-dnd';
-import {
-  MdDelete,
-  MdFormatListBulleted,
-  MdOutlineDragIndicator,
-  MdOutlineMoreVert,
-} from 'react-icons/md';
-import { INPUT_TYPE_ICONS, REQUIRED_CONTACT_FIELDS } from '@unpod/constants';
+import {Col, Row, Tooltip} from 'antd';
+import {useDrag, useDrop} from 'react-dnd';
+import {MdDelete, MdFormatListBulleted, MdOutlineDragIndicator, MdOutlineMoreVert,} from 'react-icons/md';
+import {INPUT_TYPE_ICONS, REQUIRED_CONTACT_FIELDS} from '@unpod/constants';
 import AppPopconfirm from '../../../antd/AppPopconfirm';
 import {
   StyledActions,
@@ -21,7 +16,7 @@ import {
   StyledInputWrapper,
   StyledLabel,
 } from './index.styled';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 type SchemaInput = {
   id: string | number;
@@ -44,25 +39,26 @@ type InputRowProps = {
   handleRequiredChange: (checked: boolean, item: SchemaInput) => void;
   onRowReorder: (dragIndex: number, hoverIndex: number) => void;
   contentType?: string;
-  index: number;};
+  index: number;
+};
 
 const InputRow = ({
-  item,
-  handleInputChange,
-  handleDescriptionChange,
-  setSelectedItem,
-  setOpenDetail,
-  handleDeleteInput,
-  handleRequiredChange,
-  onRowReorder,
-  contentType,
-  index,
-}: InputRowProps) => {
+                    item,
+                    handleInputChange,
+                    handleDescriptionChange,
+                    setSelectedItem,
+                    setOpenDetail,
+                    handleDeleteInput,
+                    handleRequiredChange,
+                    onRowReorder,
+                    contentType,
+                    index,
+                  }: InputRowProps) => {
   const [openDelTooltip, setDelTooltip] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [description, setDescription] = useState('');
   const ref = useRef<HTMLDivElement | null>(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (item.title) setInputVal(item.title);
@@ -72,7 +68,7 @@ const InputRow = ({
     if (item.description) setDescription(item.description);
   }, [item.description]);
 
-  const [{ isOver }, drop] = useDrop<
+  const [{isOver}, drop] = useDrop<
     { index: number },
     void,
     { isOver: boolean; canDrop: boolean }
@@ -87,14 +83,14 @@ const InputRow = ({
     }),
   });
 
-  const [{ isDragging }, drag] = useDrag<
+  const [{isDragging}, drag] = useDrag<
     { index: number },
     void,
     { isDragging: boolean }
   >({
     type: 'row',
     item: () => {
-      return { index };
+      return {index};
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -105,16 +101,16 @@ const InputRow = ({
   drag(drop(ref));
 
   return (
-    <StyledContainer isOver={isOver} style={{ opacity }}>
+    <StyledContainer isOver={isOver} style={{opacity}}>
       <StyledDragHandle ref={ref}>
-        <MdOutlineDragIndicator fontSize={18} />
+        <MdOutlineDragIndicator fontSize={18}/>
       </StyledDragHandle>
 
       <Row gutter={[12, 12]}>
         <Col xs={24} sm={10}>
           <StyledInputWrapper>
             <StyledLabel>
-              {formatMessage({ id: 'knowledgeBase.parameter' })}:{' '}
+              {formatMessage({id: 'knowledgeBase.parameter'})}:{' '}
             </StyledLabel>
             <StyledInput
               variant="filled"
@@ -132,11 +128,11 @@ const InputRow = ({
         <Col xs={24} sm={9}>
           <StyledInputWrapper>
             <StyledLabel>
-              {formatMessage({ id: 'form.description' })}:{' '}
+              {formatMessage({id: 'form.description'})}:{' '}
             </StyledLabel>
             <StyledInput
               variant="filled"
-              placeholder={formatMessage({ id: 'form.description' })}
+              placeholder={formatMessage({id: 'form.description'})}
               defaultValue={item.description}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -150,7 +146,7 @@ const InputRow = ({
 
         <Col xs={24} sm={5}>
           <StyledInputWrapper>
-            <StyledLabel>{formatMessage({ id: 'task.actions' })}:</StyledLabel>
+            <StyledLabel>{formatMessage({id: 'task.actions'})}:</StyledLabel>
 
             <StyledActions>
               {(item.type === 'select' ||
@@ -165,7 +161,7 @@ const InputRow = ({
                       setOpenDetail(true);
                     }}
                   >
-                    <MdFormatListBulleted fontSize={18} />
+                    <MdFormatListBulleted fontSize={18}/>
                   </StyledButton>
                 </Tooltip>
               )}
@@ -180,23 +176,23 @@ const InputRow = ({
                     id: 'schema.deleteInputConfirm',
                   })}
                   onConfirm={() => handleDeleteInput(item)}
-                  okText={formatMessage({ id: 'common.yes' })}
-                  cancelText={formatMessage({ id: 'common.no' })}
+                  okText={formatMessage({id: 'common.yes'})}
+                  cancelText={formatMessage({id: 'common.no'})}
                   onOpenChange={(open: boolean) => setDelTooltip(!open)}
                 >
                   <Tooltip
-                    title={formatMessage({ id: 'common.delete' })}
+                    title={formatMessage({id: 'common.delete'})}
                     open={openDelTooltip}
                     onOpenChange={(open: boolean) => setDelTooltip(open)}
                   >
                     <StyledButton type="text" size="small">
-                      <MdDelete fontSize={18} />
+                      <MdDelete fontSize={18}/>
                     </StyledButton>
                   </Tooltip>
                 </AppPopconfirm>
               )}
 
-              <Tooltip title={formatMessage({ id: 'common.required' })}>
+              <Tooltip title={formatMessage({id: 'common.required'})}>
                 <StyledCheckbox
                   checked={item.required}
                   onChange={(e) => handleRequiredChange(e.target.checked, item)}
@@ -204,7 +200,7 @@ const InputRow = ({
               </Tooltip>
 
               <Tooltip
-                title={formatMessage({ id: 'common.moreInfo' })}
+                title={formatMessage({id: 'common.moreInfo'})}
                 placement="topLeft"
               >
                 <StyledButton
@@ -215,7 +211,7 @@ const InputRow = ({
                     setOpenDetail(true);
                   }}
                 >
-                  <MdOutlineMoreVert fontSize={18} />
+                  <MdOutlineMoreVert fontSize={18}/>
                 </StyledButton>
               </Tooltip>
             </StyledActions>

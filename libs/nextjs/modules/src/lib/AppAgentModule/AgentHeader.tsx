@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import type { FormInstance, MenuProps } from 'antd';
-import { Dropdown, Flex, Form, Space } from 'antd';
+import {useEffect, useState} from 'react';
+import type {FormInstance, MenuProps} from 'antd';
+import {Dropdown, Flex, Form, Space} from 'antd';
 import {
   MdDeleteOutline,
   MdMoreVert,
@@ -12,35 +12,23 @@ import {
   MdOutlineSupportAgent,
 } from 'react-icons/md';
 
-import {
-  deleteDataApi,
-  postDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import {
-  StyledContainer,
-  StyledSegmented,
-  StyledTitleContainer,
-  ToggleButton,
-} from './index.styled';
+import {deleteDataApi, postDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {StyledContainer, StyledSegmented, StyledTitleContainer, ToggleButton,} from './index.styled';
 import AgentTitle from './AgentTitile';
-import { useApp } from '@unpod/custom-hooks';
-import {
-  useAppModuleActionsContext,
-  useAppModuleContext,
-} from '@unpod/providers/AppModuleContextProvider';
-import { useRouter } from 'next/navigation';
+import {useApp} from '@unpod/custom-hooks';
+import {useAppModuleActionsContext, useAppModuleContext,} from '@unpod/providers/AppModuleContextProvider';
+import {useRouter} from 'next/navigation';
 import AppDrawer from '@unpod/components/antd/AppDrawer';
 import VoiceAgent from './VoiceAgent';
-import { useMediaQuery } from 'react-responsive';
+import {useMediaQuery} from 'react-responsive';
 import AppRegionField from '@unpod/components/common/AppRegionField';
 import AppCopyToClipboard from '@unpod/components/third-party/AppCopyToClipboard';
-import { IoDuplicateOutline } from 'react-icons/io5';
-import { DesktopWidthQuery } from '@unpod/constants';
-import type { Pilot } from '@unpod/constants/types';
+import {IoDuplicateOutline} from 'react-icons/io5';
+import {DesktopWidthQuery} from '@unpod/constants';
+import type {Pilot} from '@unpod/constants/types';
 
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 import TestAgent from '@unpod/livekit/AppVoiceAgent/Test/TestAgent';
 
 type AgentHeaderProps = {
@@ -51,22 +39,22 @@ type AgentHeaderProps = {
 };
 
 const AgentHeader = ({
-  agentData,
-  saveAgent,
-  loading,
-  form,
-}: AgentHeaderProps) => {
-  const { openConfirmModal } = useApp();
+                       agentData,
+                       saveAgent,
+                       loading,
+                       form,
+                     }: AgentHeaderProps) => {
+  const {openConfirmModal} = useApp();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { deleteRecord } = useAppModuleActionsContext();
-  const { listData } = useAppModuleContext() as {
+  const {deleteRecord} = useAppModuleActionsContext();
+  const {listData} = useAppModuleContext() as {
     listData: { apiData: Array<{ handle?: string }> };
   };
   const router = useRouter();
-  const { addNewRecord } = useAppModuleActionsContext();
+  const {addNewRecord} = useAppModuleActionsContext();
   const [isTalkToAgentOpen, setIsTalkToAgentOpen] = useState(false);
   const [isTestAgentOpen, setIsTestAgentOpen] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const desktopScreen = useMediaQuery(DesktopWidthQuery);
 
@@ -90,7 +78,7 @@ const AgentHeader = ({
         handle: form.getFieldValue('handle'),
       };
       if (!agentData?.handle) payload.region = form.getFieldValue('region');
-      saveAgent?.({ ...agentData, ...payload }, state);
+      saveAgent?.({...agentData, ...payload}, state);
     });
   };
 
@@ -143,17 +131,17 @@ const AgentHeader = ({
     setIsTalkToAgentOpen(true);
   };
 
-  const onMenuClick: MenuProps['onClick'] = ({ key }) => {
+  const onMenuClick: MenuProps['onClick'] = ({key}) => {
     if (key === 'delete') {
       openConfirmModal({
-        content: formatMessage({ id: 'identityStudio.deleteConfirm' }),
+        content: formatMessage({id: 'identityStudio.deleteConfirm'}),
         onOk: onDelete,
       });
     } else if (key === 'chat') {
-      form.setFieldsValue({ type: 'Message' });
+      form.setFieldsValue({type: 'Message'});
       onSetHeaderData('draft');
     } else if (key === 'voice') {
-      form.setFieldsValue({ type: 'Voice' });
+      form.setFieldsValue({type: 'Voice'});
       onSetHeaderData('draft');
     } else if (key === 'talk') {
       onTalkToAgent();
@@ -179,18 +167,18 @@ const AgentHeader = ({
       <ToggleButton
         active={agentData?.type === 'Message'}
         disabled={!agentData?.handle}
-        onClick={() => onMenuClick({ key: 'chat' } as any)}
+        onClick={() => onMenuClick({key: 'chat'} as any)}
         aria-disabled={!agentData?.handle}
       >
-        <MdOutlineChat />
+        <MdOutlineChat/>
       </ToggleButton>
       <ToggleButton
         active={agentData?.type === 'Voice'}
         disabled={!agentData?.handle}
-        onClick={() => onMenuClick({ key: 'voice' } as any)}
+        onClick={() => onMenuClick({key: 'voice'} as any)}
         aria-disabled={!agentData?.handle}
       >
-        <MdOutlineMic />
+        <MdOutlineMic/>
       </ToggleButton>
     </div>
   );
@@ -198,34 +186,34 @@ const AgentHeader = ({
   const menus = [
     ...(desktopScreen
       ? [
-          {
-            key: 'toggle',
-            label: <ChatVoiceToggle />,
-            disabled: true,
-          },
-          {
-            type: 'divider' as const,
-          },
-          {
-            key: 'talk',
-            label: (
-              <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                <MdOutlinePhoneEnabled fontSize={18} />
-                <span style={{ marginLeft: 8 }}>
-                  {formatMessage({ id: 'common.talkToAgent' })}
+        {
+          key: 'toggle',
+          label: <ChatVoiceToggle/>,
+          disabled: true,
+        },
+        {
+          type: 'divider' as const,
+        },
+        {
+          key: 'talk',
+          label: (
+            <span style={{display: 'inline-flex', alignItems: 'center'}}>
+                <MdOutlinePhoneEnabled fontSize={18}/>
+                <span style={{marginLeft: 8}}>
+                  {formatMessage({id: 'common.talkToAgent'})}
                 </span>
               </span>
-            ),
-            disabled: !agentData?.handle,
-          },
-        ]
+          ),
+          disabled: !agentData?.handle,
+        },
+      ]
       : []),
     {
       key: 'test-agent',
       label: (
-        <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <MdOutlineSupportAgent fontSize={18} />
-          <span style={{ marginLeft: 8 }}>Test Agent</span>
+        <span style={{display: 'inline-flex', alignItems: 'center'}}>
+          <MdOutlineSupportAgent fontSize={18}/>
+          <span style={{marginLeft: 8}}>Test Agent</span>
         </span>
       ),
       disabled: !agentData?.handle,
@@ -239,9 +227,9 @@ const AgentHeader = ({
             alignItems: 'center',
           }}
         >
-          <IoDuplicateOutline fontSize={16} />
-          <span style={{ marginLeft: 8 }}>
-            {formatMessage({ id: 'aiStudio.copyAgent' })}
+          <IoDuplicateOutline fontSize={16}/>
+          <span style={{marginLeft: 8}}>
+            {formatMessage({id: 'aiStudio.copyAgent'})}
           </span>
         </span>
       ),
@@ -250,14 +238,14 @@ const AgentHeader = ({
       key: 'copy_handle',
       label: (
         <AppCopyToClipboard
-          title={formatMessage({ id: 'aiStudio.copyHandle' })}
+          title={formatMessage({id: 'aiStudio.copyHandle'})}
           text={agentData?.handle}
           hideIcon={false}
         />
       ),
       icon: (
         <span className="ant-icon">
-          <MdOutlineContentCopy fontSize={16} />
+          <MdOutlineContentCopy fontSize={16}/>
         </span>
       ),
     },
@@ -271,9 +259,9 @@ const AgentHeader = ({
             color: '#ff4d4f',
           }}
         >
-          <MdDeleteOutline fontSize={18} />
-          <span style={{ marginLeft: 8, color: '#ff4d4f' }}>
-            {formatMessage({ id: 'common.delete' })}
+          <MdDeleteOutline fontSize={18}/>
+          <span style={{marginLeft: 8, color: '#ff4d4f'}}>
+            {formatMessage({id: 'common.delete'})}
           </span>
         </span>
       ),
@@ -311,7 +299,7 @@ const AgentHeader = ({
           </StyledTitleContainer>
 
           <Space align="start">
-            {!agentData?.handle && <AppRegionField />}
+            {!agentData?.handle && <AppRegionField/>}
 
             {!desktopScreen && (
               <>
@@ -320,20 +308,20 @@ const AgentHeader = ({
                   size="large"
                   value={agentData?.type}
                   onChange={(type) => {
-                    form.setFieldsValue({ type });
+                    form.setFieldsValue({type});
                     onSetHeaderData('draft');
                   }}
                   options={[
                     {
-                      label: formatMessage({ id: 'aiStudio.ChatButton' }),
+                      label: formatMessage({id: 'aiStudio.ChatButton'}),
                       value: 'Message',
-                      icon: <MdOutlineChat fontSize={18} />,
+                      icon: <MdOutlineChat fontSize={18}/>,
                       disabled: !agentData?.handle,
                     },
                     {
-                      label: formatMessage({ id: 'aiStudio.VoiceButton' }),
+                      label: formatMessage({id: 'aiStudio.VoiceButton'}),
                       value: 'Voice',
-                      icon: <MdOutlineMic fontSize={18} />,
+                      icon: <MdOutlineMic fontSize={18}/>,
                       disabled: !agentData?.handle,
                     },
                   ]}
@@ -342,11 +330,11 @@ const AgentHeader = ({
                 <AppHeaderButton
                   shape="round"
                   size="small"
-                  icon={<MdOutlinePhoneEnabled fontSize={18} />}
+                  icon={<MdOutlinePhoneEnabled fontSize={18}/>}
                   disabled={!agentData?.handle}
                   onClick={onTalkToAgent}
                 >
-                  {formatMessage({ id: 'common.talkToAgent' })}
+                  {formatMessage({id: 'common.talkToAgent'})}
                 </AppHeaderButton>
               </>
             )}
@@ -355,23 +343,23 @@ const AgentHeader = ({
               type="primary"
               shape="round"
               size="small"
-              icon={<MdOutlineCheckCircle fontSize={desktopScreen ? 22 : 18} />}
+              icon={<MdOutlineCheckCircle fontSize={desktopScreen ? 22 : 18}/>}
               onClick={() => onSetHeaderData('published')}
               loading={loading}
             >
-              {desktopScreen ? '' : formatMessage({ id: 'agent.publish' })}
+              {desktopScreen ? '' : formatMessage({id: 'agent.publish'})}
             </AppHeaderButton>
 
             {agentData && (
               <Dropdown
-                menu={{ items: menus, onClick: onMenuClick }}
+                menu={{items: menus, onClick: onMenuClick}}
                 trigger={['click']}
                 placement="bottomRight"
               >
                 <AppHeaderButton
                   shape="circle"
                   size="small"
-                  icon={<MdMoreVert fontSize={16} />}
+                  icon={<MdMoreVert fontSize={16}/>}
                 />
               </Dropdown>
             )}
@@ -383,11 +371,11 @@ const AgentHeader = ({
         open={isTalkToAgentOpen}
         onClose={() => setIsTalkToAgentOpen(false)}
         padding="0"
-        title={formatMessage({ id: 'common.talkToAgent' })}
+        title={formatMessage({id: 'common.talkToAgent'})}
         closable
         overflowY="hidden"
       >
-        {isTalkToAgentOpen ? <VoiceAgent agentData={agentData} /> : null}
+        {isTalkToAgentOpen ? <VoiceAgent agentData={agentData}/> : null}
       </AppDrawer>
 
       <AppDrawer
@@ -399,7 +387,7 @@ const AgentHeader = ({
         size={500}
         overflowY="hidden"
       >
-        {isTestAgentOpen ? <TestAgent agentData={agentData} /> : null}
+        {isTestAgentOpen ? <TestAgent agentData={agentData}/> : null}
       </AppDrawer>
     </StyledContainer>
   );

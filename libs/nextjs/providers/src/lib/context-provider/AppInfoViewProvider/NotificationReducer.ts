@@ -1,4 +1,4 @@
-import type { InfoViewAction, InfoViewState } from '@unpod/constants/types';
+import type {InfoViewAction, InfoViewState} from '@unpod/constants/types';
 
 export const InfoViewActions = {
   FETCH_STARTS: 'FETCH_STARTS',

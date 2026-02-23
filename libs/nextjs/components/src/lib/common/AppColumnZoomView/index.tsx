@@ -1,9 +1,8 @@
-
-import { Button, Space, Tooltip, Typography } from 'antd';
-import { MdArrowBack } from 'react-icons/md';
+import {Button, Space, Tooltip, Typography} from 'antd';
+import {MdArrowBack} from 'react-icons/md';
 import clsx from 'clsx';
 import AppMarkdownViewer from '../../third-party/AppMarkdownViewer';
-import { isJson } from '@unpod/helpers/GlobalHelper';
+import {isJson} from '@unpod/helpers/GlobalHelper';
 import {
   StyledContentContainer,
   StyledContentWrapper,
@@ -14,26 +13,28 @@ import {
 import AppCopyToClipboard from '../../third-party/AppCopyToClipboard';
 import AppJsonViewer from '../../third-party/AppJsonViewer';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type ColumnZoomData = {
   title?: string;
-  content?: string;};
+  content?: string;
+};
 
 type AppColumnZoomViewProps = {
   showTitle?: boolean;
   selectedCol?: ColumnZoomData | null;
-  onBackClick?: () => void;};
+  onBackClick?: () => void;
+};
 
 const AppColumnZoomView: React.FC<AppColumnZoomViewProps> = ({
-  showTitle,
-  selectedCol,
-  onBackClick,
-}) => {
+                                                               showTitle,
+                                                               selectedCol,
+                                                               onBackClick,
+                                                             }) => {
   const isJsonContent = selectedCol?.content && isJson(selectedCol.content);
 
   return (
-    <StyledFullContent className={clsx({ open: selectedCol })}>
+    <StyledFullContent className={clsx({open: selectedCol})}>
       {((showTitle && selectedCol?.title) || onBackClick) && (
         <StyledTitleContainer>
           <Space>
@@ -45,7 +46,7 @@ const AppColumnZoomView: React.FC<AppColumnZoomViewProps> = ({
                   shape="circle"
                   onClick={onBackClick}
                 >
-                  <MdArrowBack fontSize={18} />
+                  <MdArrowBack fontSize={18}/>
                 </Button>
               </Tooltip>
             )}
@@ -58,17 +59,17 @@ const AppColumnZoomView: React.FC<AppColumnZoomViewProps> = ({
       )}
 
       <StyledContentContainer
-        className={clsx({ 'json-content': isJsonContent })}
+        className={clsx({'json-content': isJsonContent})}
       >
         <StyledCopyWrapper>
           <AppCopyToClipboard
             text={
               isJsonContent
                 ? JSON.stringify(
-                    JSON.parse(selectedCol?.content || ''),
-                    null,
-                    2,
-                  )
+                  JSON.parse(selectedCol?.content || ''),
+                  null,
+                  2,
+                )
                 : selectedCol?.content || ''
             }
             showToolTip
@@ -77,9 +78,9 @@ const AppColumnZoomView: React.FC<AppColumnZoomViewProps> = ({
 
         <StyledContentWrapper>
           {isJsonContent ? (
-            <AppJsonViewer json={JSON.parse(selectedCol?.content || '')} />
+            <AppJsonViewer json={JSON.parse(selectedCol?.content || '')}/>
           ) : (
-            <AppMarkdownViewer markdown={selectedCol?.content || ''} />
+            <AppMarkdownViewer markdown={selectedCol?.content || ''}/>
           )}
         </StyledContentWrapper>
       </StyledContentContainer>

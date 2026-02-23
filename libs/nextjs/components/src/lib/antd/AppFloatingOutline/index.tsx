@@ -1,12 +1,7 @@
 'use client';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import {
-  AppFormControlWrapper,
-  FormControlFieldset,
-  InputContainer,
-  InputLabel,
-} from './index.styled';
-import { useAutoComplete } from '@unpod/custom-hooks';
+import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import {AppFormControlWrapper, FormControlFieldset, InputContainer, InputLabel,} from './index.styled';
+import {useAutoComplete} from '@unpod/custom-hooks';
 
 type AppFloatingOutlineProps = {
   placeholder: string | undefined;
@@ -17,21 +12,22 @@ type AppFloatingOutlineProps = {
   children: ReactNode;
   asterisk?: boolean;
   addonBefore?: boolean | ReactNode;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppFloatingOutline: React.FC<AppFloatingOutlineProps> = ({
-  placeholder,
-  value = '',
-  eleID = '',
-  disabled = false,
-  className = '',
-  children,
-  asterisk = false,
-  addonBefore = false,
-  ...restProps
-}) => {
+                                                                 placeholder,
+                                                                 value = '',
+                                                                 eleID = '',
+                                                                 disabled = false,
+                                                                 className = '',
+                                                                 children,
+                                                                 asterisk = false,
+                                                                 addonBefore = false,
+                                                                 ...restProps
+                                                               }) => {
   const [isFocused, setFocused] = useState<boolean>(false);
-  const { filled, setFilled } = useAutoComplete();
+  const {filled, setFilled} = useAutoComplete();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

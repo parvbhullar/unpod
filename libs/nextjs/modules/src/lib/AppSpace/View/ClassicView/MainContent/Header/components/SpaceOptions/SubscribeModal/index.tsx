@@ -1,17 +1,13 @@
-import { memo, useState } from 'react';
-import { Button, Form, Input, Modal, Typography } from 'antd';
+import {memo, useState} from 'react';
+import {Button, Form, Input, Modal, Typography} from 'antd';
 import AppImage from '@unpod/components/next/AppImage';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { EMAIL_REGX } from '@unpod/constants';
-import {
-  StyledContainer,
-  StyledInfoWrapper,
-  StylesImageWrapper,
-} from './index.styled';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {EMAIL_REGX} from '@unpod/constants';
+import {StyledContainer, StyledInfoWrapper, StylesImageWrapper,} from './index.styled';
 import AppLoader from '@unpod/components/common/AppLoader';
 
-const { Paragraph, Title } = Typography;
-const { Item, useForm } = Form;
+const {Paragraph, Title} = Typography;
+const {Item, useForm} = Form;
 
 type SubscribeModalProps = {
   type?: string;
@@ -19,9 +15,9 @@ type SubscribeModalProps = {
 };
 
 const SubscribeModal = ({
-  type = 'space',
-  currentData,
-}: SubscribeModalProps) => {
+                          type = 'space',
+                          currentData,
+                        }: SubscribeModalProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -114,7 +110,7 @@ const SubscribeModal = ({
                 }),
               ]}
             >
-              <Input placeholder="Enter Email" size="large" />
+              <Input placeholder="Enter Email" size="large"/>
             </Item>
 
             <Button type="primary" htmlType="submit" block>
@@ -124,7 +120,7 @@ const SubscribeModal = ({
         </StyledContainer>
       </Modal>
 
-      {loading ? <AppLoader /> : null}
+      {loading ? <AppLoader/> : null}
     </>
   );
 };

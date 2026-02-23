@@ -1,27 +1,12 @@
-import { cloneElement, Fragment, useMemo, useState } from 'react';
-import type { Dayjs } from 'dayjs';
+import {cloneElement, Fragment, useMemo, useState} from 'react';
+import type {Dayjs} from 'dayjs';
 
-import {
-  Button,
-  Calendar,
-  Form,
-  Modal,
-  Select,
-  Space,
-  theme,
-  Typography,
-} from 'antd';
-import {
-  MdArrowDropDown,
-  MdArrowDropUp,
-  MdArrowForward,
-  MdCalendarMonth,
-  MdScheduleSend,
-} from 'react-icons/md';
-import { useAuthContext } from '@unpod/providers';
+import {Button, Calendar, Form, Modal, Select, Space, theme, Typography,} from 'antd';
+import {MdArrowDropDown, MdArrowDropUp, MdArrowForward, MdCalendarMonth, MdScheduleSend,} from 'react-icons/md';
+import {useAuthContext} from '@unpod/providers';
 import AppDate from '../../../antd/AppDate';
 import AppTime from '../../../antd/AppTime';
-import { getDateObject } from '@unpod/helpers/DateHelper';
+import {getDateObject} from '@unpod/helpers/DateHelper';
 import AppSelect from '../../../antd/AppSelect';
 import {
   StyledButton,
@@ -33,11 +18,11 @@ import {
   StyledMenuItem,
   StyledModalContainer,
 } from './index.styled';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Option } = Select;
-const { Text } = Typography;
-const { Item, useForm } = Form;
+const {Option} = Select;
+const {Text} = Typography;
+const {Item, useForm} = Form;
 
 type ScheduleItem = {
   label: string;
@@ -75,8 +60,8 @@ type RepeatOption = {
 };
 
 const repeatOptions: RepeatOption[] = [
-  { label: 'schedule.once', value: 'once', mode: 'date', calendar: 'month' },
-  { label: 'schedule.daily', value: 'daily', mode: 'date', calendar: 'month' },
+  {label: 'schedule.once', value: 'once', mode: 'date', calendar: 'month'},
+  {label: 'schedule.daily', value: 'daily', mode: 'date', calendar: 'month'},
   {
     label: 'schedule.weekly',
     value: 'weekly',
@@ -108,15 +93,16 @@ const defaultOption = repeatOptions[0];
 type SendButtonProps = {
   query?: string | null;
   attachments?: any[];
-  onSchedule?: (values: Record<string, any>) => void;};
+  onSchedule?: (values: Record<string, any>) => void;
+};
 
 const SendButton = ({
-  query,
-  attachments = [],
-  onSchedule,
-}: SendButtonProps) => {
-  const { isAuthenticated } = useAuthContext();
-  const { token } = theme.useToken();
+                      query,
+                      attachments = [],
+                      onSchedule,
+                    }: SendButtonProps) => {
+  const {isAuthenticated} = useAuthContext();
+  const {token} = theme.useToken();
   const [form] = useForm();
 
   const wrapperStyle = {
@@ -130,7 +116,7 @@ const SendButton = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDateTime, setOpenDateTime] = useState(false);
   const [calendarDate, setCalendarDate] = useState<Dayjs | null>(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const today = useMemo(() => {
     const currentDateTime = getDateObject();
@@ -220,11 +206,11 @@ const SendButton = ({
           menu={{
             items: [
               {
-                label: formatMessage({ id: 'schedule.title' }),
+                label: formatMessage({id: 'schedule.title'}),
                 key: 'schedule-ask',
                 icon: (
                   <span className="anticon">
-                    <MdScheduleSend fontSize={16} />
+                    <MdScheduleSend fontSize={16}/>
                   </span>
                 ),
               },
@@ -234,9 +220,9 @@ const SendButton = ({
           onOpenChange={setOpenSchedule}
           icon={
             openSchedule ? (
-              <MdArrowDropUp fontSize={18} />
+              <MdArrowDropUp fontSize={18}/>
             ) : (
-              <MdArrowDropDown fontSize={18} />
+              <MdArrowDropDown fontSize={18}/>
             )
           }
           buttonsRender={([leftButton, rightButton]) => [
@@ -249,27 +235,27 @@ const SendButton = ({
             }),
           ]}
         >
-          {formatMessage({ id: 'common.submit' })}
+          {formatMessage({id: 'common.submit'})}
         </StyledDropdownButton>
       ) : (
         <StyledButton type="primary" shape="round" htmlType="submit">
-          {formatMessage({ id: 'common.submit' })}
-          <MdArrowForward fontSize={18} />
+          {formatMessage({id: 'common.submit'})}
+          <MdArrowForward fontSize={18}/>
         </StyledButton>
       )}
 
       <Modal
         title={
           openDateTime
-            ? formatMessage({ id: 'schedule.pickDateTime' })
-            : formatMessage({ id: 'schedule.title' })
+            ? formatMessage({id: 'schedule.pickDateTime'})
+            : formatMessage({id: 'schedule.title'})
         }
         open={isModalOpen}
         onCancel={handleCancel}
         width={openDateTime ? 650 : 350}
         styles={{
-          body: { padding: 0 },
-          header: { padding: '20px 16px 0 16px' },
+          body: {padding: 0},
+          header: {padding: '20px 16px 0 16px'},
         }}
         footer={null}
         centered
@@ -302,18 +288,18 @@ const SendButton = ({
                     rules={[
                       {
                         required: true,
-                        message: formatMessage({ id: 'schedule.selectOption' }),
+                        message: formatMessage({id: 'schedule.selectOption'}),
                       },
                     ]}
                   >
                     <AppSelect
-                      placeholder={formatMessage({ id: 'schedule.repeatType' })}
+                      placeholder={formatMessage({id: 'schedule.repeatType'})}
                       defaultValue={defaultOption.value}
                       onChange={(value) => onRepeatTypeChange(String(value))}
                     >
                       {repeatOptions.map((option) => (
                         <Option key={option.value} value={option.value}>
-                          {formatMessage({ id: option.label })}
+                          {formatMessage({id: option.label})}
                         </Option>
                       ))}
                     </AppSelect>
@@ -324,12 +310,12 @@ const SendButton = ({
                     rules={[
                       {
                         required: true,
-                        message: formatMessage({ id: 'schedule.selectDate' }),
+                        message: formatMessage({id: 'schedule.selectDate'}),
                       },
                     ]}
                   >
                     <AppDate
-                      placeholder={formatMessage({ id: 'schedule.date' })}
+                      placeholder={formatMessage({id: 'schedule.date'})}
                       onChange={onDatePickerChange}
                       picker={repeatType.mode}
                     />
@@ -340,18 +326,18 @@ const SendButton = ({
                     rules={[
                       {
                         required: true,
-                        message: formatMessage({ id: 'schedule.selectTime' }),
+                        message: formatMessage({id: 'schedule.selectTime'}),
                       },
                     ]}
                   >
                     <AppTime
-                      placeholder={formatMessage({ id: 'schedule.time' })}
+                      placeholder={formatMessage({id: 'schedule.time'})}
                       format="HH:mm"
                     />
                   </Item>
 
                   <Button type="primary" shape="round" htmlType="submit">
-                    {formatMessage({ id: 'schedule.title' })}
+                    {formatMessage({id: 'schedule.title'})}
                   </Button>
                 </StyledInputsWrapper>
               </StyledCalendarRoot>
@@ -362,15 +348,15 @@ const SendButton = ({
                     key={item.key}
                     onClick={() => onScheduleItemClick(item)}
                   >
-                    <Text>{formatMessage({ id: item.label })}</Text>
+                    <Text>{formatMessage({id: item.label})}</Text>
                     <Text>{item.time}</Text>
                   </StyledMenuItem>
                 ))}
                 <StyledMenuItem onClick={() => setOpenDateTime(true)}>
                   <Space>
-                    <MdCalendarMonth fontSize={18} />
+                    <MdCalendarMonth fontSize={18}/>
                     <Text>
-                      {formatMessage({ id: 'schedule.pickDateTime' })}
+                      {formatMessage({id: 'schedule.pickDateTime'})}
                     </Text>
                   </Space>
                 </StyledMenuItem>

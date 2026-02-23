@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {
   getDataApi,
@@ -7,16 +7,13 @@ import {
   useAuthContext,
   useGetDataApi,
   useInfoViewActionsContext,
+  useOrgContext,
 } from '@unpod/providers';
-import { useParams, useRouter } from 'next/navigation';
+import {useParams, useRouter} from 'next/navigation';
 import _debounce from 'lodash/debounce';
-import { getDraftData, saveDraftData } from '@unpod/helpers/DraftHelper';
-import { AskAttachmentTypes, PERMISSION_TYPES } from '@unpod/constants';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
+import {getDraftData, saveDraftData} from '@unpod/helpers/DraftHelper';
+import {AskAttachmentTypes, PERMISSION_TYPES} from '@unpod/constants';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
 import {
   StyledBottomBar,
   StyledCloseButton,
@@ -31,61 +28,43 @@ import {
   StylesPilotLogo,
 } from './index.styled';
 import clsx from 'clsx';
-import {
-  Badge,
-  Button,
-  Col,
-  Dropdown,
-  Form,
-  Row,
-  Select,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
+import {Badge, Button, Col, Dropdown, Form, Row, Select, Space, Typography, Upload,} from 'antd';
 import PostPermissionPopover from '../../common/PermissionPopover/PostPermissionPopover';
-import {
-  MdArrowForward,
-  MdClose,
-  MdDelete,
-  MdOutlineAttachment,
-  MdOutlineWorkspaces,
-} from 'react-icons/md';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { BsFillFileEarmarkPersonFill } from 'react-icons/bs';
-import { useOrgContext } from '@unpod/providers';
+import {MdArrowForward, MdClose, MdDelete, MdOutlineAttachment, MdOutlineWorkspaces,} from 'react-icons/md';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {BsFillFileEarmarkPersonFill} from 'react-icons/bs';
 import AppLoader from '../../common/AppLoader';
 import AppImage from '../../next/AppImage';
 import AppSuperbookInputs from '../../common/AppSuperbookInputBlock/AppSuperbookInputs';
-import { getDateObject } from '@unpod/helpers/DateHelper';
-import { getJsonString } from '@unpod/helpers/StringHelper';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
-import { useIntl } from 'react-intl';
+import {getDateObject} from '@unpod/helpers/DateHelper';
+import {getJsonString} from '@unpod/helpers/StringHelper';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
 
 const defaultPilot = {
   handle: 'superpilot',
   name: '@Superpilot',
 };
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 const AppAskWindow = ({
-  position,
-  isStatic,
-  onQuestionSaved,
-  reloadPostApi,
-  pilotHandle,
-  currentHubSlug,
-  onSaved,
-  hideCloseInfo,
-}) => {
+                        position,
+                        isStatic,
+                        onQuestionSaved,
+                        reloadPostApi,
+                        pilotHandle,
+                        currentHubSlug,
+                        onSaved,
+                        hideCloseInfo,
+                      }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated, user } = useAuthContext();
-  const { activeSpace } = useOrgContext();
+  const {isAuthenticated, user} = useAuthContext();
+  const {activeSpace} = useOrgContext();
   const router = useRouter();
-  const { spaceSlug, postSlug } = useParams();
+  const {spaceSlug, postSlug} = useParams();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [focused, setFocused] = React.useState(isStatic || false);
   const [queryTitle, setQueryTitle] = React.useState(null);
@@ -108,7 +87,7 @@ const AppAskWindow = ({
 
   const debounceFn = useCallback(_debounce(saveDraftData, 2000), []);
 
-  const [{ apiData: pilots }] = useGetDataApi(
+  const [{apiData: pilots}] = useGetDataApi(
     `core/pilots/public/`,
     {},
     {
@@ -116,7 +95,7 @@ const AppAskWindow = ({
     },
   );
 
-  const [{ apiData: knBasesData }] = useGetDataApi(
+  const [{apiData: knBasesData}] = useGetDataApi(
     `core/knowledgebase/`,
     {},
     {
@@ -377,7 +356,7 @@ const AppAskWindow = ({
         }
       } else {
         infoViewActionsContext.showError(
-          formatMessage({ id: 'validation.selectSpace' }),
+          formatMessage({id: 'validation.selectSpace'}),
         );
       }
     }
@@ -426,7 +405,7 @@ const AppAskWindow = ({
           !AskAttachmentTypes.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -447,7 +426,7 @@ const AppAskWindow = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Typography.Text style={{ marginRight: 5 }}>
+          <Typography.Text style={{marginRight: 5}}>
             {item.name}
           </Typography.Text>
           <MdDelete
@@ -463,10 +442,10 @@ const AppAskWindow = ({
     <React.Fragment>
       <Form onFinish={onQuerySubmit} form={form}>
         <StyledRoot
-          className={clsx({ sticky: position === 'sticky' })}
+          className={clsx({sticky: position === 'sticky'})}
           onFocus={onFocused}
           onMouseDown={onFocused}
-          style={{ position }}
+          style={{position}}
         >
           <StyledTopBar>
             <Space size="small" align="center">
@@ -483,7 +462,7 @@ const AppAskWindow = ({
                 </StylesPilotLogo>
               ) : (
                 <StyledIconWrapper>
-                  <BsFillFileEarmarkPersonFill fontSize={18} />
+                  <BsFillFileEarmarkPersonFill fontSize={18}/>
                 </StyledIconWrapper>
               )}
 
@@ -509,14 +488,14 @@ const AppAskWindow = ({
 
               {requestPilot && (
                 <StyledCloseButton onClick={onClosePilot}>
-                  <MdClose />
+                  <MdClose/>
                 </StyledCloseButton>
               )}
             </Space>
 
             {requestPilot === 'superpilot' && isAuthenticated && (
               <Space size="small" align="center">
-                <MdOutlineWorkspaces fontSize={20} />
+                <MdOutlineWorkspaces fontSize={20}/>
 
                 <Select
                   variant="borderless"
@@ -527,7 +506,7 @@ const AppAskWindow = ({
                   }}
                   mode="multiple"
                   maxTagCount={1}
-                  placeholder={formatMessage({ id: 'knowledgeBase.pageTitle' })}
+                  placeholder={formatMessage({id: 'knowledgeBase.pageTitle'})}
                   disabled={kbList?.length === 0}
                   value={knowledgeBases}
                   onChange={setKnowledgeBases}
@@ -543,22 +522,22 @@ const AppAskWindow = ({
           </StyledTopBar>
 
           <StyledContainer
-            className={clsx({ active: showDesc, focused: focused })}
+            className={clsx({active: showDesc, focused: focused})}
           >
             {inputFormBlock && (
               <Row gutter={16}>
                 {(inputFormBlock?.input_schema || []).map((item, index) =>
                   item.type === 'checkboxes' ? (
                     <Col key={index} xs={24} sm={24} md={24}>
-                      <AppSuperbookInputs item={item} />
+                      <AppSuperbookInputs item={item}/>
                     </Col>
                   ) : item.type === 'textarea' || item.type === 'json' ? (
                     <Col key={index} xs={24} sm={24} md={24}>
-                      <AppSuperbookInputs item={item} />
+                      <AppSuperbookInputs item={item}/>
                     </Col>
                   ) : (
                     <Col key={index} xs={24} sm={12} md={8}>
-                      <AppSuperbookInputs item={item} />
+                      <AppSuperbookInputs item={item}/>
                     </Col>
                   ),
                 )}
@@ -569,12 +548,12 @@ const AppAskWindow = ({
               <StyledInput
                 placeholder={
                   (inputFormBlock?.input_schema || []).length > 0
-                    ? formatMessage({ id: 'superbook.instructionsOptional' })
-                    : formatMessage({ id: 'superbook.askMeAnything' })
+                    ? formatMessage({id: 'superbook.instructionsOptional'})
+                    : formatMessage({id: 'superbook.askMeAnything'})
                 }
                 maxLength={200}
                 variant="borderless"
-                autoSize={{ minRows: 2, maxRows: 3 }}
+                autoSize={{minRows: 2, maxRows: 3}}
                 size="large"
               />
             </Item>
@@ -588,19 +567,19 @@ const AppAskWindow = ({
                     items: spaceList,
                     onClick: onSpaceChange,
                     selectedKeys: selectedSpace?.key,
-                    style: { maxHeight: 220, overflowY: 'auto' },
+                    style: {maxHeight: 220, overflowY: 'auto'},
                   }}
                   trigger={['click']}
                   arrow
                 >
                   <Button type="default" size="small">
                     <Space align="center">
-                      <MdOutlineWorkspaces fontSize={21} />
+                      <MdOutlineWorkspaces fontSize={21}/>
 
                       <span>
                         {selectedSpace?.label
                           ? selectedSpace.label.slice(0, 20).trim()
-                          : formatMessage({ id: 'space.space' })}
+                          : formatMessage({id: 'space.space'})}
                       </span>
                     </Space>
                   </Button>
@@ -630,7 +609,7 @@ const AppAskWindow = ({
                       <Space align="center">
                         {currentPrivacy?.icon}
                         <span>
-                          {formatMessage({ id: currentPrivacy?.label })}
+                          {formatMessage({id: currentPrivacy?.label})}
                         </span>
                       </Space>
                     </Button>
@@ -638,7 +617,7 @@ const AppAskWindow = ({
                 </PostPermissionPopover>
               </Space>
             ) : (
-              <div />
+              <div/>
             )}
 
             <Space align="center">
@@ -683,7 +662,7 @@ const AppAskWindow = ({
                       <Button
                         type={attachments?.length ? 'primary' : 'default'}
                         shape="circle"
-                        icon={<MdOutlineAttachment fontSize={18} />}
+                        icon={<MdOutlineAttachment fontSize={18}/>}
                       />
                     </Badge>
                   </Dropdown>
@@ -691,15 +670,15 @@ const AppAskWindow = ({
                   <Button
                     type={attachments?.length ? 'primary' : 'default'}
                     shape="circle"
-                    icon={<MdOutlineAttachment fontSize={18} />}
+                    icon={<MdOutlineAttachment fontSize={18}/>}
                   />
                 )}
               </Upload>
 
               <Button type="primary" shape="round" htmlType="submit">
                 <Space>
-                  {formatMessage({ id: 'common.run' })}{' '}
-                  <MdArrowForward fontSize={18} />
+                  {formatMessage({id: 'common.run'})}{' '}
+                  <MdArrowForward fontSize={18}/>
                 </Space>
               </Button>
 
@@ -715,7 +694,7 @@ const AppAskWindow = ({
 
           {!hideCloseInfo && (
             <StyledEscapeText type="secondary">
-              {formatMessage({ id: 'common.esc' })}
+              {formatMessage({id: 'common.esc'})}
             </StyledEscapeText>
           )}
         </StyledRoot>
@@ -724,11 +703,11 @@ const AppAskWindow = ({
       {!isStatic && (
         <StyledOverlay
           onClick={onBlurred}
-          className={clsx({ focused: focused })}
+          className={clsx({focused: focused})}
         />
       )}
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </React.Fragment>
   );
 };

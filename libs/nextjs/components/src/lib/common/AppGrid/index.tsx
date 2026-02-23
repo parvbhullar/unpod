@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import GridFooter from './GridFooter';
 import GridView from './GridView';
 import ListEmptyResult from '../AppList/ListEmptyResult';
@@ -19,10 +19,10 @@ type AppGridProps<T> = {
   [key: string]: unknown;
 };
 
-const AppGrid = <T,>({
-  footerProps,
-  ...rest
-}: AppGridProps<T>) => {
+const AppGrid = <T, >({
+                        footerProps,
+                        ...rest
+                      }: AppGridProps<T>) => {
   return (
     <GridView<T>
       {...rest}

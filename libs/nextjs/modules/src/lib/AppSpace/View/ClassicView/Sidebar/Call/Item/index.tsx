@@ -1,9 +1,6 @@
-import { Flex, Typography } from 'antd';
+import {Flex, Typography} from 'antd';
 import clsx from 'clsx';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
 import {
   StyledHeaderExtra,
   StyledInnerRoot,
@@ -13,23 +10,16 @@ import {
   StyledParagraph,
   StyledRoot,
 } from './index.styled';
-import { useRouter } from 'next/navigation';
-import {
-  MdCallMade,
-  MdCallReceived,
-  MdCancel,
-  MdError,
-  MdPhone,
-  MdPhoneMissed,
-} from 'react-icons/md';
-import { IoCalendarOutline } from 'react-icons/io5';
+import {useRouter} from 'next/navigation';
+import {MdCallMade, MdCallReceived, MdCancel, MdError, MdPhone, MdPhoneMissed,} from 'react-icons/md';
+import {IoCalendarOutline} from 'react-icons/io5';
 import UserAvatar from '@unpod/components/common/UserAvatar';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { useIntl } from 'react-intl';
-import { Call, CallItem } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import {Call, CallItem} from '@unpod/constants/types';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 dayjs.extend(utc);
 
@@ -37,12 +27,12 @@ type CallItemProps = {
   data: CallItem;
 };
 
-const Item = ({ data }: CallItemProps) => {
-  const { setActiveCall, setDocumentMode, setSelectedDocs } =
+const Item = ({data}: CallItemProps) => {
+  const {setActiveCall, setDocumentMode, setSelectedDocs} =
     useAppSpaceActionsContext();
-  const { activeCall, activeTab, currentSpace, selectedDocs } =
+  const {activeCall, activeTab, currentSpace, selectedDocs} =
     useAppSpaceContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const activeCallData = activeCall as Call | null;
   const selectedDocIds = (selectedDocs as Array<string | number>) ?? [];
 
@@ -62,7 +52,7 @@ const Item = ({ data }: CallItemProps) => {
       return callTime.format('HH:mm');
     } else if (callTime.isSame(yesterday, 'day')) {
       // Yesterday
-      return formatMessage({ id: 'day.yesterday' });
+      return formatMessage({id: 'day.yesterday'});
     } else if (callTime.isSame(now, 'year')) {
       // This year: show month and day
       return callTime.format('MMM DD');
@@ -102,31 +92,31 @@ const Item = ({ data }: CallItemProps) => {
   const getCallIcon = () => {
     switch (callStatus) {
       case 'connected':
-        return <MdPhone size={14} />;
+        return <MdPhone size={14}/>;
       case 'completed':
         return isInbound ? (
-          <MdCallReceived size={14} />
+          <MdCallReceived size={14}/>
         ) : (
-          <MdCallMade size={14} />
+          <MdCallMade size={14}/>
         );
       case 'notConnected':
         return isInbound ? (
-          <MdPhoneMissed size={14} />
+          <MdPhoneMissed size={14}/>
         ) : (
-          <MdCallMade size={14} />
+          <MdCallMade size={14}/>
         );
       case 'failed':
-        return <MdError size={14} />;
+        return <MdError size={14}/>;
       case 'cancelled':
-        return <MdCancel size={14} />;
+        return <MdCancel size={14}/>;
       case 'scheduled':
-        return <IoCalendarOutline size={14} />;
+        return <IoCalendarOutline size={14}/>;
       default:
         // Fallback to inbound/outbound icons
         return isInbound ? (
-          <MdCallReceived size={14} />
+          <MdCallReceived size={14}/>
         ) : (
-          <MdCallMade size={14} />
+          <MdCallMade size={14}/>
         );
     }
   };
@@ -150,7 +140,7 @@ const Item = ({ data }: CallItemProps) => {
       >
         <StyledItem>
           <UserAvatar
-            user={{ full_name: data?.name || data?.number }}
+            user={{full_name: data?.name || data?.number}}
             size={36}
           />
         </StyledItem>
@@ -175,7 +165,7 @@ const Item = ({ data }: CallItemProps) => {
             <Flex
               align="center"
               gap={4}
-              style={{ marginTop: -6, color: getStatusColor() }}
+              style={{marginTop: -6, color: getStatusColor()}}
             >
               {getCallIcon()}
               {data?.name ? (
@@ -193,8 +183,8 @@ const Item = ({ data }: CallItemProps) => {
                   ellipsis
                 >
                   {isInbound
-                    ? formatMessage({ id: 'call.incoming' })
-                    : formatMessage({ id: 'call.outgoing' })}
+                    ? formatMessage({id: 'call.incoming'})
+                    : formatMessage({id: 'call.outgoing'})}
                 </StyledParagraph>
               )}
             </Flex>

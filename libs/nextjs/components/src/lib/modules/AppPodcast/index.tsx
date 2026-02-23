@@ -1,26 +1,26 @@
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import AppMiniWindow from '../../common/AppMiniWindow';
 import CreateNote from './CreateNote';
 import UploadPodcast from './UploadPodcast';
 import CreateStream from './CreateStream';
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import KnowledgeBase from './KnowledgeBase';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const AppPodcast = ({
-  startPodcast,
-  setStartPodcast,
-  currentSpace,
-  currentPost,
-  isEdit,
-  onAddPostItem,
-  openLocally,
-  sidebarRef,
-}) => {
+                      startPodcast,
+                      setStartPodcast,
+                      currentSpace,
+                      currentPost,
+                      isEdit,
+                      onAddPostItem,
+                      openLocally,
+                      sidebarRef,
+                    }) => {
   const [creatingPost, setCreatingPost] = useState(false);
   const router = useRouter();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   // const [createdPodcast, setCreatedPodcast] = useState(null);
 
   /* const onLinkClick = useCallback(() => {
@@ -37,38 +37,38 @@ const AppPodcast = ({
       switch (startPodcast) {
         case 'create-note':
           return {
-            drawerTitle: formatMessage({ id: 'podcast.writePost' }),
-            title: formatMessage({ id: 'podcast.notePostedSuccess' }),
+            drawerTitle: formatMessage({id: 'podcast.writePost'}),
+            title: formatMessage({id: 'podcast.notePostedSuccess'}),
           };
 
         case 'upload-podcast':
           return {
-            drawerTitle: formatMessage({ id: 'podcast.uploadMedia' }),
-            title: formatMessage({ id: 'podcast.uploadSuccess' }),
+            drawerTitle: formatMessage({id: 'podcast.uploadMedia'}),
+            title: formatMessage({id: 'podcast.uploadSuccess'}),
           };
 
         case 'video_stream':
           return {
-            drawerTitle: formatMessage({ id: 'podcast.stream' }),
-            title: formatMessage({ id: 'podcast.videoStreaming' }),
+            drawerTitle: formatMessage({id: 'podcast.stream'}),
+            title: formatMessage({id: 'podcast.videoStreaming'}),
           };
 
         case 'knowledge-base':
           return {
-            drawerTitle: formatMessage({ id: 'podcast.addKnowledgeBase' }),
-            title: formatMessage({ id: 'podcast.addKnowledgeBaseTitle' }),
+            drawerTitle: formatMessage({id: 'podcast.addKnowledgeBase'}),
+            title: formatMessage({id: 'podcast.addKnowledgeBaseTitle'}),
           };
 
         case 'audio_stream':
           return {
-            drawerTitle: formatMessage({ id: 'podcast.stream' }),
-            title: formatMessage({ id: 'podcast.audioStreaming' }),
+            drawerTitle: formatMessage({id: 'podcast.stream'}),
+            title: formatMessage({id: 'podcast.audioStreaming'}),
           };
 
         default:
           return {
-            drawerTitle: formatMessage({ id: 'podcast.schedule' }),
-            title: formatMessage({ id: 'podcast.scheduleSuccess' }),
+            drawerTitle: formatMessage({id: 'podcast.schedule'}),
+            title: formatMessage({id: 'podcast.scheduleSuccess'}),
           };
       }
     }

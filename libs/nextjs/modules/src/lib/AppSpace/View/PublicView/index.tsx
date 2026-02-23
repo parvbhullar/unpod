@@ -1,15 +1,15 @@
-import { Fragment } from 'react';
+import {Fragment} from 'react';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
 import AppSpaceHeaderMenus from '@unpod/components/common/AppSpaceHeaderMenus';
 import PageHeader from '../../View/PageHeader';
 import GeneralView from '../../View/GeneralView';
-import { StyledContainer } from '../../View/index.styled';
+import {StyledContainer} from '../../View/index.styled';
 import AppQueryWindow from '@unpod/components/modules/AppQueryWindow';
 
 const PublicView = ({
-  onDataSaved,
-  queryRef,
-}: {
+                      onDataSaved,
+                      queryRef,
+                    }: {
   onDataSaved: (data?: any) => void;
   queryRef?: any;
 }) => {
@@ -34,7 +34,7 @@ const PublicView = ({
           />
         </StyledContainer>
 
-        <GeneralView listingType="list" />
+        <GeneralView listingType="list"/>
       </AppPageContainer>
     </Fragment>
   );

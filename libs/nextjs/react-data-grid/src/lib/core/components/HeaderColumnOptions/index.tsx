@@ -1,14 +1,6 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { Button, Select, Space, Typography } from 'antd';
-import {
-  MdAdd,
-  MdCheck,
-  MdClose,
-  MdDeleteOutline,
-  MdEdit,
-  MdFilterAlt,
-  MdSettings,
-} from 'react-icons/md';
+import React, {Fragment, useEffect, useMemo, useState} from 'react';
+import {Button, Select, Space, Typography} from 'antd';
+import {MdAdd, MdCheck, MdClose, MdDeleteOutline, MdEdit, MdFilterAlt, MdSettings,} from 'react-icons/md';
 import clsx from 'clsx';
 import type {
   CalculatedColumn,
@@ -36,10 +28,10 @@ import {
 } from './index.styled';
 import NewColumnWindow from '../NewColumnWindow';
 import Menus from '../Menus';
-import { BsSortAlphaDown, BsSortAlphaDownAlt } from 'react-icons/bs';
-import { useDataGridConfiguration } from '../../DataGridContext';
+import {BsSortAlphaDown, BsSortAlphaDownAlt} from 'react-icons/bs';
+import {useDataGridConfiguration} from '../../DataGridContext';
 
-const { Paragraph, Text } = Typography;
+const {Paragraph, Text} = Typography;
 
 type OperatorOption = {
   label: string;
@@ -77,19 +69,19 @@ type InputType = string | number;
 type ObjectInputType = { start: InputType; end: InputType };
 
 const HeaderColumnOptions = <R, SR>({
-  open,
-  setOpen,
-  column,
-  columns,
-  onInsertCell,
-  onDeleteCells,
-  onSort,
-  onRenameColumn,
-  onLocalFiltersChange,
-  saveVersionHistory,
-  ...restProps
-}: Props<R, SR>) => {
-  const { headerMenu } = useDataGridConfiguration();
+                                      open,
+                                      setOpen,
+                                      column,
+                                      columns,
+                                      onInsertCell,
+                                      onDeleteCells,
+                                      onSort,
+                                      onRenameColumn,
+                                      onLocalFiltersChange,
+                                      saveVersionHistory,
+                                      ...restProps
+                                    }: Props<R, SR>) => {
+  const {headerMenu} = useDataGridConfiguration();
   const [allowRename, setAllowRename] = useState(false);
   const [filterApplied, setFilterApplied] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -147,7 +139,7 @@ const HeaderColumnOptions = <R, SR>({
     }
   };
 
-  const { items, operators } = useMemo((): {
+  const {items, operators} = useMemo((): {
     items: MenuItemProps[];
     operators: OperatorOption[];
   } => {
@@ -155,14 +147,14 @@ const HeaderColumnOptions = <R, SR>({
 
     if (headerMenu.allowSorting && onSort) {
       menuItems.push({
-        icon: <BsSortAlphaDown fontSize={18} />,
+        icon: <BsSortAlphaDown fontSize={18}/>,
         label: `Sort column A to Z`,
         onClick: (event) => {
           onSort(event.ctrlKey || event.metaKey, 'ASC');
         },
       });
       menuItems.push({
-        icon: <BsSortAlphaDownAlt fontSize={18} />,
+        icon: <BsSortAlphaDownAlt fontSize={18}/>,
         label: `Sort column Z to A`,
         onClick: (event) => {
           onSort(event.ctrlKey || event.metaKey, 'DESC');
@@ -172,7 +164,7 @@ const HeaderColumnOptions = <R, SR>({
 
     if (headerMenu.allowAddColumn && onInsertCell) {
       menuItems.push({
-        icon: <MdAdd fontSize={18} />,
+        icon: <MdAdd fontSize={18}/>,
         label: `Add column`,
         onClick: onClickAddColumn,
       });
@@ -180,7 +172,7 @@ const HeaderColumnOptions = <R, SR>({
 
     if (headerMenu.allowDeleteColumn && onDeleteCells) {
       menuItems.push({
-        icon: <MdDeleteOutline fontSize={20} />,
+        icon: <MdDeleteOutline fontSize={20}/>,
         label: 'Delete column',
         confirmWindowProps: {
           onConfirm: handleDeleteCells,
@@ -192,7 +184,7 @@ const HeaderColumnOptions = <R, SR>({
 
     if (headerMenu.allowRenameColumn && onRenameColumn) {
       menuItems.push({
-        icon: <MdEdit fontSize={16} />,
+        icon: <MdEdit fontSize={16}/>,
         label: `Rename column`,
         onClick: handleRenameColumn,
       });
@@ -268,7 +260,7 @@ const HeaderColumnOptions = <R, SR>({
       );
     }
 
-    return { items: menuItems, operators: operatorOptions };
+    return {items: menuItems, operators: operatorOptions};
   }, [onInsertCell, onDeleteCells, onRenameColumn, headerMenu]);
 
   const handleApplyClick = () => {
@@ -278,7 +270,7 @@ const HeaderColumnOptions = <R, SR>({
         if (isExist) {
           return (prev || []).map((f) =>
             f.columnKey === column.dataIndex
-              ? { ...f, operator: condition, inputVal: inputVal }
+              ? {...f, operator: condition, inputVal: inputVal}
               : f,
           );
         }
@@ -313,12 +305,12 @@ const HeaderColumnOptions = <R, SR>({
     <StyledRoot>
       <StyledTitleContainer>
         <div className="ant-popover-title">
-          <MdSettings fontSize={16} />
+          <MdSettings fontSize={16}/>
           <Text>Column: {column.title}</Text>
         </div>
       </StyledTitleContainer>
 
-      <Menus items={items} />
+      <Menus items={items}/>
 
       {headerMenu.allowRenameColumn && allowRename && (
         <StyledFlexRow>
@@ -334,7 +326,7 @@ const HeaderColumnOptions = <R, SR>({
               size="small"
               shape="circle"
               onClick={handleRenameClick}
-              icon={<MdCheck fontSize={18} />}
+              icon={<MdCheck fontSize={18}/>}
               disabled={!columnName}
             />
 
@@ -343,7 +335,7 @@ const HeaderColumnOptions = <R, SR>({
               size="small"
               shape="circle"
               onClick={() => setAllowRename(false)}
-              icon={<MdClose fontSize={18} />}
+              icon={<MdClose fontSize={18}/>}
               ghost
             />
           </Space>
@@ -353,7 +345,7 @@ const HeaderColumnOptions = <R, SR>({
       {headerMenu.allowFilter && (
         <Fragment>
           <StyledFilterContainer>
-            <Paragraph style={{ marginBottom: 0 }} strong>
+            <Paragraph style={{marginBottom: 0}} strong>
               Filter
             </Paragraph>
             <StyledSelect
@@ -460,8 +452,8 @@ const HeaderColumnOptions = <R, SR>({
         <StyledPopover
           content={content}
           trigger="click"
-          overlayStyle={{ zIndex: 1000 }}
-          overlayInnerStyle={{ padding: 0, borderRadius: 12 }}
+          overlayStyle={{zIndex: 1000}}
+          overlayInnerStyle={{padding: 0, borderRadius: 12}}
           {...restProps}
           onOpenChange={(visible) => {
             setOpen(visible);
@@ -469,8 +461,8 @@ const HeaderColumnOptions = <R, SR>({
           }}
           open={open}
         >
-          <StyledMoreHandle className={clsx({ active: open })}>
-            {filterApplied && <MdFilterAlt fontSize={16} />}
+          <StyledMoreHandle className={clsx({active: open})}>
+            {filterApplied && <MdFilterAlt fontSize={16}/>}
           </StyledMoreHandle>
         </StyledPopover>
       )}

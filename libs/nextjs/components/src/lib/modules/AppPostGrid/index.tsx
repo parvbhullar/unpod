@@ -1,11 +1,11 @@
-import type { CSSProperties } from 'react';
-import { memo } from 'react';
+import type {CSSProperties} from 'react';
+import {memo} from 'react';
 
-import { useRouter } from 'next/navigation';
-import { onEndReached } from '@unpod/helpers/ListHelper';
+import {useRouter} from 'next/navigation';
+import {onEndReached} from '@unpod/helpers/ListHelper';
 import AppGrid from '../../common/AppGrid';
 import GridItem from './GridItem';
-import type { Thread } from '@unpod/constants/types';
+import type {Thread} from '@unpod/constants/types';
 
 type AppPostGridProps = {
   apiData?: Thread[];
@@ -17,20 +17,21 @@ type AppPostGridProps = {
   isLoadingMore?: boolean;
   setLoadingMore?: (loading: boolean) => void;
   containerStyle?: CSSProperties;
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 const AppPostGrid = ({
-  apiData = [],
-  page = 1,
-  setPage = () => undefined,
-  loading = false,
-  pageSize = 10,
-  setData,
-  isLoadingMore = false,
-  setLoadingMore = () => undefined,
-  containerStyle,
-  ...restProps
-}: AppPostGridProps) => {
+                       apiData = [],
+                       page = 1,
+                       setPage = () => undefined,
+                       loading = false,
+                       pageSize = 10,
+                       setData,
+                       isLoadingMore = false,
+                       setLoadingMore = () => undefined,
+                       containerStyle,
+                       ...restProps
+                     }: AppPostGridProps) => {
   const router = useRouter();
 
   const onThreadClick = (thread: Thread) => {

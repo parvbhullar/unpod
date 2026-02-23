@@ -1,22 +1,18 @@
 'use client';
 
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { useAuthContext } from '../context-provider/AuthContextProvider';
+import React, {createContext, ReactNode, useContext, useEffect, useState,} from 'react';
+import {useAuthContext} from '../context-provider/AuthContextProvider';
 
 export type TourContextType = {
-  showTour: boolean;};
+  showTour: boolean;
+};
 
 export type TourActionsContextType = {
   startTour: () => void;
-  completeTour: () => void;};
+  completeTour: () => void;
+};
 
-const TourContext = createContext<TourContextType>({ showTour: false });
+const TourContext = createContext<TourContextType>({showTour: false});
 const TourActionsContext = createContext<TourActionsContextType | undefined>(
   undefined,
 );
@@ -33,13 +29,14 @@ export const useTourActionsContext = (): TourActionsContextType => {
 };
 
 export type TourContextProviderProps = {
-  children: ReactNode;};
+  children: ReactNode;
+};
 
 export const TourContextProvider: React.FC<TourContextProviderProps> = ({
-  children,
-}) => {
+                                                                          children,
+                                                                        }) => {
   const [showTour, setShowTour] = useState(false);
-  const { user, isAuthenticated } = useAuthContext();
+  const {user, isAuthenticated} = useAuthContext();
 
   useEffect(() => {
     // Check if user has already seen the tour
@@ -82,7 +79,7 @@ export const TourContextProvider: React.FC<TourContextProviderProps> = ({
         completeTour,
       }}
     >
-      <TourContext.Provider value={{ showTour }}>
+      <TourContext.Provider value={{showTour}}>
         {children}
       </TourContext.Provider>
     </TourActionsContext.Provider>

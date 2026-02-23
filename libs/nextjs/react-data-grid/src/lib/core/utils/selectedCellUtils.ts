@@ -1,22 +1,17 @@
-import type {
-  CalculatedColumn,
-  CalculatedColumnParent,
-  CellNavigationMode,
-  Maybe,
-  Position,
-} from '../models/data-grid';
-import { getColSpan } from './colSpanUtils';
+import type {CalculatedColumn, CalculatedColumnParent, CellNavigationMode, Maybe, Position,} from '../models/data-grid';
+import {getColSpan} from './colSpanUtils';
 
 type IsSelectedCellEditableOpts<R, SR> = {
   selectedPosition: Position;
   columns: readonly CalculatedColumn<R, SR>[];
-  rows: readonly R[];};
+  rows: readonly R[];
+};
 
 export function isSelectedCellEditable<R, SR>({
-  selectedPosition,
-  columns,
-  rows,
-}: IsSelectedCellEditableOpts<R, SR>): boolean {
+                                                selectedPosition,
+                                                columns,
+                                                rows,
+                                              }: IsSelectedCellEditableOpts<R, SR>): boolean {
   const column = columns[selectedPosition.idx];
   const row = rows[selectedPosition.rowIdx];
   return isCellEditableUtil(column, row);
@@ -49,17 +44,18 @@ type GetNextSelectedCellPositionOpts<R, SR> = {
   currentPosition: Position;
   nextPosition: Position;
   lastLeftFixedColumnIndex: number;
-  isCellWithinBounds: (position: Position) => boolean;};
+  isCellWithinBounds: (position: Position) => boolean;
+};
 
 function getSelectedCellColSpan<R, SR>({
-  rows,
-  topSummaryRows,
-  bottomSummaryRows,
-  rowIdx,
-  mainHeaderRowIdx,
-  lastLeftFixedColumnIndex,
-  column,
-}: Pick<
+                                         rows,
+                                         topSummaryRows,
+                                         bottomSummaryRows,
+                                         rowIdx,
+                                         mainHeaderRowIdx,
+                                         lastLeftFixedColumnIndex,
+                                         column,
+                                       }: Pick<
   GetNextSelectedCellPositionOpts<R, SR>,
   | 'rows'
   | 'topSummaryRows'
@@ -72,7 +68,7 @@ function getSelectedCellColSpan<R, SR>({
 }) {
   const topSummaryRowsCount = topSummaryRows?.length ?? 0;
   if (rowIdx === mainHeaderRowIdx) {
-    return getColSpan(column, lastLeftFixedColumnIndex, { type: 'HEADER' });
+    return getColSpan(column, lastLeftFixedColumnIndex, {type: 'HEADER'});
   }
 
   if (
@@ -88,7 +84,7 @@ function getSelectedCellColSpan<R, SR>({
 
   if (rowIdx >= 0 && rowIdx < rows.length) {
     const row = rows[rowIdx];
-    return getColSpan(column, lastLeftFixedColumnIndex, { type: 'ROW', row });
+    return getColSpan(column, lastLeftFixedColumnIndex, {type: 'ROW', row});
   }
 
   if (bottomSummaryRows) {
@@ -102,23 +98,23 @@ function getSelectedCellColSpan<R, SR>({
 }
 
 export function getNextSelectedCellPosition<R, SR>({
-  moveUp,
-  moveNext,
-  cellNavigationMode,
-  columns,
-  colSpanColumns,
-  rows,
-  topSummaryRows,
-  bottomSummaryRows,
-  minRowIdx,
-  mainHeaderRowIdx,
-  maxRowIdx,
-  currentPosition: { idx: currentIdx, rowIdx: currentRowIdx },
-  nextPosition,
-  lastLeftFixedColumnIndex,
-  isCellWithinBounds,
-}: GetNextSelectedCellPositionOpts<R, SR>): Position {
-  let { idx: nextIdx, rowIdx: nextRowIdx } = nextPosition;
+                                                     moveUp,
+                                                     moveNext,
+                                                     cellNavigationMode,
+                                                     columns,
+                                                     colSpanColumns,
+                                                     rows,
+                                                     topSummaryRows,
+                                                     bottomSummaryRows,
+                                                     minRowIdx,
+                                                     mainHeaderRowIdx,
+                                                     maxRowIdx,
+                                                     currentPosition: {idx: currentIdx, rowIdx: currentRowIdx},
+                                                     nextPosition,
+                                                     lastLeftFixedColumnIndex,
+                                                     isCellWithinBounds,
+                                                   }: GetNextSelectedCellPositionOpts<R, SR>): Position {
+  let {idx: nextIdx, rowIdx: nextRowIdx} = nextPosition;
   const columnsCount = columns.length;
 
   const setColSpan = (moveNext: boolean) => {
@@ -231,7 +227,7 @@ export function getNextSelectedCellPosition<R, SR>({
     }
   }
 
-  return { idx: nextIdx, rowIdx: nextRowIdx };
+  return {idx: nextIdx, rowIdx: nextRowIdx};
 }
 
 type CanExitGridOpts = {
@@ -239,15 +235,16 @@ type CanExitGridOpts = {
   minRowIdx: number;
   maxRowIdx: number;
   selectedPosition: Position;
-  shiftKey: boolean;};
+  shiftKey: boolean;
+};
 
 export function canExitGrid({
-  maxColIdx,
-  minRowIdx,
-  maxRowIdx,
-  selectedPosition: { rowIdx, idx },
-  shiftKey,
-}: CanExitGridOpts): boolean {
+                              maxColIdx,
+                              minRowIdx,
+                              maxRowIdx,
+                              selectedPosition: {rowIdx, idx},
+                              shiftKey,
+                            }: CanExitGridOpts): boolean {
   // Exit the grid if we're at the first or last cell of the grid
   const atLastCellInRow = idx === maxColIdx;
   const atFirstCellInRow = idx === 0;

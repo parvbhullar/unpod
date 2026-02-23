@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { StyledInput } from './index.styled';
-import { useDebounceValue } from '@unpod/custom-hooks';
-import { MdSearch } from 'react-icons/md';
-import { useIntl } from 'react-intl';
-import type { InputRef } from 'antd';
-import type { Spaces } from '@unpod/constants/types';
+import {useEffect, useRef, useState} from 'react';
+import {StyledInput} from './index.styled';
+import {useDebounceValue} from '@unpod/custom-hooks';
+import {MdSearch} from 'react-icons/md';
+import {useIntl} from 'react-intl';
+import type {InputRef} from 'antd';
+import type {Spaces} from '@unpod/constants/types';
 
 type SearchBoxProps = {
   setSearch: (value: string) => void;
@@ -14,12 +14,12 @@ type SearchBoxProps = {
 };
 
 const SearchBox = ({
-  setSearch,
-  search,
-  currentSpace,
-  searchCount,
-}: SearchBoxProps) => {
-  const { formatMessage } = useIntl();
+                     setSearch,
+                     search,
+                     currentSpace,
+                     searchCount,
+                   }: SearchBoxProps) => {
+  const {formatMessage} = useIntl();
   const [searchStr, setSearchStr] = useState('');
   const inputRef = useRef<InputRef | null>(null);
 
@@ -49,13 +49,13 @@ const SearchBox = ({
 
   return (
     <StyledInput
-      placeholder={formatMessage({ id: 'common.searchHere' })}
+      placeholder={formatMessage({id: 'common.searchHere'})}
       variant="borderless"
       size="large"
       value={searchStr}
       onChange={(e) => setSearchStr(e.target.value)}
       ref={inputRef}
-      prefix={<MdSearch size={21} color={'#bbb'} />}
+      prefix={<MdSearch size={21} color={'#bbb'}/>}
     />
   );
 };

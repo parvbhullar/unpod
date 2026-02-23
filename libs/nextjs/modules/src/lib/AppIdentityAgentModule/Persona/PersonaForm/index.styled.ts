@@ -1,8 +1,8 @@
 'use client';
 import styled from 'styled-components';
-import { Card, Flex, Input, Typography } from 'antd';
+import {Card, Flex, Input, Typography} from 'antd';
 
-const { Title, Text } = Typography;
+const {Title, Text} = Typography;
 
 export const StyledInputWrapper = styled.div`
   border-radius: 8px;
@@ -19,30 +19,30 @@ export const StyledItemWrapper = styled.div`
 `;
 
 export const StyledText = styled(Text)`
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 11px !important;
   }
 `;
 
 export const StyledFlex = styled(Flex)`
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     flex-direction: row;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     flex-direction: column;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
   }
 `;
 
 export const Tip = styled(Title)`
-  font-size: ${({ theme }) => theme.font.size.sm} !important;
-  font-weight: ${({ theme }) => theme.font.weight.regular} !important;
+  font-size: ${({theme}) => theme.font.size.sm} !important;
+  font-weight: ${({theme}) => theme.font.weight.regular} !important;
   padding: 16px;
-  border: 1px solid ${({ theme }) => theme.border.color};
+  border: 1px solid ${({theme}) => theme.border.color};
   border-radius: 12px;
   display: flex;
   gap: 4px;
@@ -50,11 +50,11 @@ export const Tip = styled(Title)`
 
 export const TipText = styled.span`
   display: flex;
-  font-size: ${({ theme }) => theme.font.size.sm} !important;
+  font-size: ${({theme}) => theme.font.size.sm} !important;
 `;
 
 export const CardWrapper = styled(Card)`
-  border: 1px solid ${({ theme }) => theme.border.color} !important;
+  border: 1px solid ${({theme}) => theme.border.color} !important;
   margin-bottom: 12px;
 
   .ant-card-body {
@@ -64,7 +64,7 @@ export const CardWrapper = styled(Card)`
   .ant-card-actions {
     padding: 12px;
     margin-top: -27px !important;
-    border-top: 1px solid ${({ theme }) => theme.border.color} !important;
+    border-top: 1px solid ${({theme}) => theme.border.color} !important;
 
     ul {
       margin: 0;
@@ -77,11 +77,11 @@ export const CardWrapper = styled(Card)`
   }
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.palette.primary} !important;
+    border: 1px solid ${({theme}) => theme.palette.primary} !important;
   }
 
   &:focus-within {
-    border-color: ${({ theme }) => theme.palette.primary} !important;
+    border-color: ${({theme}) => theme.palette.primary} !important;
   }
 `;
 

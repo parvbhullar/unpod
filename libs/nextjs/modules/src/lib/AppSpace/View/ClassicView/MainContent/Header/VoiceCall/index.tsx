@@ -1,25 +1,20 @@
-import { useState } from 'react';
-import { Button, Form } from 'antd';
-import { MdAdd, MdDelete, MdOutlineAddIcCall } from 'react-icons/md';
-import { AppInput, AppTextArea } from '@unpod/components/antd';
-import { MOBILE_REGX } from '@unpod/constants';
-import type { Spaces } from '@unpod/constants/types';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import {
-  StyledBottomBar,
-  StyledItemRow,
-  StyledLabel,
-  StyledRoot,
-} from './index.styled';
+import {useState} from 'react';
+import {Button, Form} from 'antd';
+import {MdAdd, MdDelete, MdOutlineAddIcCall} from 'react-icons/md';
+import {AppInput, AppTextArea} from '@unpod/components/antd';
+import {MOBILE_REGX} from '@unpod/constants';
+import type {Spaces} from '@unpod/constants/types';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {StyledBottomBar, StyledItemRow, StyledLabel, StyledRoot,} from './index.styled';
 
-const { ErrorList, Item, List, useForm } = Form;
+const {ErrorList, Item, List, useForm} = Form;
 
 type VoiceCallProps = {
   currentSpace: Spaces | null;
   onCallSent: (data: unknown) => void;
 };
 
-const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
+const VoiceCall = ({currentSpace, onCallSent}: VoiceCallProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
   const [form] = useForm();
@@ -58,7 +53,7 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
         onFinish={onFinish}
         form={form}
         initialValues={{
-          users: [{ name: '', phone_number: '' }],
+          users: [{name: '', phone_number: ''}],
         }}
       >
         <Item
@@ -73,7 +68,7 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
           <AppTextArea
             placeholder="Enter Instructions"
             variant="borderless"
-            autoSize={{ minRows: 3, maxRows: 10 }}
+            autoSize={{minRows: 3, maxRows: 10}}
           />
         </Item>
 
@@ -92,9 +87,9 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
             },
           ]}
         >
-          {(fields, { add, remove }, { errors }) => (
+          {(fields, {add, remove}, {errors}) => (
             <>
-              {fields.map(({ key, name, ...restField }) => (
+              {fields.map(({key, name, ...restField}) => (
                 <StyledItemRow key={key}>
                   <Item
                     {...restField}
@@ -106,7 +101,7 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
                       },
                     ]}
                   >
-                    <AppInput placeholder="Name" asterisk />
+                    <AppInput placeholder="Name" asterisk/>
                   </Item>
 
                   <Item
@@ -132,14 +127,14 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
                       }),
                     ]}
                   >
-                    <AppInput placeholder="Phone No." asterisk />
+                    <AppInput placeholder="Phone No." asterisk/>
                   </Item>
 
                   <Item>
                     <Button
                       type="primary"
                       onClick={() => remove(name)}
-                      icon={<MdDelete fontSize={18} />}
+                      icon={<MdDelete fontSize={18}/>}
                       danger
                       ghost
                     />
@@ -148,12 +143,12 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
               ))}
 
               <Item>
-                <ErrorList errors={errors} />
+                <ErrorList errors={errors}/>
                 <Button
                   type="dashed"
                   onClick={() => add()}
                   block
-                  icon={<MdAdd />}
+                  icon={<MdAdd/>}
                 >
                   Add New
                 </Button>
@@ -167,7 +162,7 @@ const VoiceCall = ({ currentSpace, onCallSent }: VoiceCallProps) => {
             type="primary"
             shape="round"
             htmlType="submit"
-            icon={<MdOutlineAddIcCall fontSize={18} />}
+            icon={<MdOutlineAddIcCall fontSize={18}/>}
             loading={loading}
           >
             Call

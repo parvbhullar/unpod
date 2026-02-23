@@ -1,5 +1,5 @@
-import type { Organization } from '../organization';
-import type { Spaces } from '../space';
+import type {Organization} from '../organization';
+import type {Spaces} from '../space';
 
 export type User = {
   id?: string | number;

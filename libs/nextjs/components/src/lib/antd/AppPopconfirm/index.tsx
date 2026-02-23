@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { Popconfirm } from 'antd';
+import React, {ReactNode} from 'react';
+import {Popconfirm} from 'antd';
 
 type AppPopconfirmProps = {
   title?: string;
@@ -7,20 +7,21 @@ type AppPopconfirmProps = {
   onConfirm?: () => void;
   onCancel?: () => void;
   children?: ReactNode;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppPopconfirm: React.FC<AppPopconfirmProps> = ({
-  title = 'Delete Record',
-  description = 'Are you sure to delete this record?',
-  ...props
-}) => {
+                                                       title = 'Delete Record',
+                                                       description = 'Are you sure to delete this record?',
+                                                       ...props
+                                                     }) => {
   return (
     <Popconfirm
       icon={null}
       okText="Confirm"
       cancelText="Cancel"
-      cancelButtonProps={{ shape: 'round' }}
-      okButtonProps={{ danger: true, shape: 'round' }}
+      cancelButtonProps={{shape: 'round'}}
+      okButtonProps={{danger: true, shape: 'round'}}
       placement="left"
       title={title}
       description={description}

@@ -10,9 +10,9 @@ export const StyledRoot = styled.div`
 
 export const StyledMainContent = styled.div`
   flex: 1;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-radius: ${({ theme }) => theme.component.card.borderRadius}
-    ${({ theme }) => theme.component.card.borderRadius} 0 0;
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-radius: ${({theme}) => theme.component.card.borderRadius}
+    ${({theme}) => theme.component.card.borderRadius} 0 0;
   overflow-y: auto;
 `;
 

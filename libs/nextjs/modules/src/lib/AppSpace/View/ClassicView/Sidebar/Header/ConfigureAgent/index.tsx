@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import type { Pilot, Spaces } from '@unpod/constants/types';
+import {useRef} from 'react';
+import type {Pilot, Spaces} from '@unpod/constants/types';
 import {
   getDataApi,
   uploadPutDataApi,
@@ -7,17 +7,17 @@ import {
   useGetDataApi,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { Button } from 'antd';
-import { StyledContainer, StyledSearchBoxWrapper } from './index.styled';
-import { MdAdd } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
-import { generateHandle } from '@unpod/helpers/StringHelper';
+import {Button} from 'antd';
+import {StyledContainer, StyledSearchBoxWrapper} from './index.styled';
+import {MdAdd} from 'react-icons/md';
+import {useRouter} from 'next/navigation';
+import {generateHandle} from '@unpod/helpers/StringHelper';
 import SearchBox from '@unpod/components/common/AppSidebar/SearchBox';
-import { DrawerBody } from '@unpod/components/antd/AppDrawer/DrawerBody';
-import { DrawerFooter } from '@unpod/components/antd';
+import {DrawerBody} from '@unpod/components/antd/AppDrawer/DrawerBody';
+import {DrawerFooter} from '@unpod/components/antd';
 import AppList from '@unpod/components/common/AppList';
 import LinkAgentItem from './LinkAgentItem';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 type AgentData = {
   id?: string | number;
@@ -35,21 +35,21 @@ type ConfigureAgentModalProps = {
 };
 
 const ConfigureAgentModal = ({
-  currentSpace,
-  onClose,
-  $bodyHeight,
-}: ConfigureAgentModalProps) => {
-  const { activeOrg } = useAuthContext();
+                               currentSpace,
+                               onClose,
+                               $bodyHeight,
+                             }: ConfigureAgentModalProps) => {
+  const {activeOrg} = useAuthContext();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const router = useRouter();
   const listRef = useRef(null);
 
-  const [{ apiData, loading }, { setQueryParams, reCallAPI }] = useGetDataApi<
+  const [{apiData, loading}, {setQueryParams, reCallAPI}] = useGetDataApi<
     Pilot[]
   >(
     'core/pilots/',
-    { data: [] },
+    {data: []},
     {
       domain: activeOrg?.domain_handle,
       page_size: 20,
@@ -75,9 +75,9 @@ const ConfigureAgentModal = ({
         const response = res as { message?: string };
         infoViewActionsContext.showMessage(
           response?.message ||
-            (isLinked
-              ? formatMessage({ id: 'drawer.unlinked' })
-              : formatMessage({ id: 'drawer.updated' })),
+          (isLinked
+            ? formatMessage({id: 'drawer.unlinked'})
+            : formatMessage({id: 'drawer.updated'})),
         );
         queueMicrotask(() => reCallAPI());
       })
@@ -117,10 +117,10 @@ const ConfigureAgentModal = ({
       <DrawerBody
         isTabDrawer={true}
         bodyHeight={$bodyHeight}
-        style={{ overflow: 'auto', paddingTop: 0 }}
+        style={{overflow: 'auto', paddingTop: 0}}
       >
         <StyledSearchBoxWrapper>
-          <SearchBox onSearch={onSearch} variant="borderless" />
+          <SearchBox onSearch={onSearch} variant="borderless"/>
           <Button
             onClick={() => {
               router.push('/ai-studio/new/');
@@ -128,10 +128,10 @@ const ConfigureAgentModal = ({
             type="primary"
             shape="round"
             ghost
-            icon={<MdAdd size={18} />}
+            icon={<MdAdd size={18}/>}
             size="small"
           >
-            {formatMessage({ id: 'drawer.agent' })}
+            {formatMessage({id: 'drawer.agent'})}
           </Button>
         </StyledSearchBoxWrapper>
         <StyledContainer ref={listRef}>
@@ -159,7 +159,7 @@ const ConfigureAgentModal = ({
           type="default"
           size="middle"
         >
-          {formatMessage({ id: 'common.close' })}
+          {formatMessage({id: 'common.close'})}
         </Button>
       </DrawerFooter>
     </>

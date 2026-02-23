@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import CircularVisualizer from './CircularVisualizer';
-import { ConnectionState } from 'livekit-client';
-import { BarVisualizer } from './BarVisualizer';
-import { TrackReferenceOrPlaceholder } from '@livekit/components-react';
+import {ConnectionState} from 'livekit-client';
+import {BarVisualizer} from './BarVisualizer';
+import {TrackReferenceOrPlaceholder} from '@livekit/components-react';
 
 const AudioTileContainer = styled.div`
   display: flex;
@@ -44,10 +44,10 @@ type AudioOutputTileProps = {
 };
 
 const AudioOutputTile: React.FC<AudioOutputTileProps> = ({
-  trackRef,
-  state,
-  config,
-}) => {
+                                                           trackRef,
+                                                           state,
+                                                           config,
+                                                         }) => {
   if (config?.circular) {
     return (
       <CircularVisualizer
@@ -55,7 +55,7 @@ const AudioOutputTile: React.FC<AudioOutputTileProps> = ({
         config={config?.agent}
         trackRef={trackRef}
         barCount={50}
-        options={{ minHeight: 3, maxHeight: 50 }}
+        options={{minHeight: 3, maxHeight: 50}}
       />
     );
   }
@@ -65,7 +65,7 @@ const AudioOutputTile: React.FC<AudioOutputTileProps> = ({
         state={state}
         barCount={25}
         trackRef={trackRef}
-        options={{ minHeight: 40, maxHeight: 70 }}
+        options={{minHeight: 40, maxHeight: 70}}
       />
 
       {state === ConnectionState.Connecting && (

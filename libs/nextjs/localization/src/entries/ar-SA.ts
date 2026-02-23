@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import arMessages from '../locales/ar_SA.json';
 import arEG from 'antd/lib/locale/ar_EG';
 

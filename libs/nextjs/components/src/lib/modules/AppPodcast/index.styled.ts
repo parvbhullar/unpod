@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Form, Input, Upload } from 'antd';
+import {Button, Form, Input, Upload} from 'antd';
 
-const { Dragger } = Upload;
+const {Dragger} = Upload;
 
 export const StyledFormItem = styled(Form.Item)`
   border-bottom: 1px solid #dbdbdb;
@@ -64,7 +64,7 @@ export const StyledDelContainer = styled.div`
   cursor: pointer;
 
   .remove-cover-handle {
-    color: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({theme}) => theme.palette.text.secondary};
     vertical-align: unset;
   }
 
@@ -74,7 +74,7 @@ export const StyledDelContainer = styled.div`
     opacity: 1 !important;
 
     .remove-cover-handle {
-      color: ${({ theme }) => theme.palette.background.default};
+      color: ${({theme}) => theme.palette.background.default};
       opacity: 1;
     }
   }

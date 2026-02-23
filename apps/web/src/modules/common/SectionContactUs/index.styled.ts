@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Typography } from 'antd';
-import { OnestFontFamily } from '../../New/index.styled';
 
 const { Title } = Typography;
 
@@ -53,7 +52,6 @@ export const StyledTitle = styled(Title)`
 `;
 
 export const StyledSubTitle = styled(Title)`
-  ${OnestFontFamily}
   font-size: 18px !important;
   font-weight: 400 !important;
   margin: 0 auto !important;

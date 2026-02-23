@@ -1,28 +1,22 @@
 'use client';
 
-import React, {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, {createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo, useState,} from 'react';
 
 export type HistoryContextType = {
   redirectTo: string | null;
   historyOrg: unknown;
   historySpace: unknown;
   nextStep: string | null;
-  historyData: unknown;};
+  historyData: unknown;
+};
 
 export type HistoryActionsContextType = {
   setRedirectTo: Dispatch<SetStateAction<string | null>>;
   setHistoryOrg: Dispatch<SetStateAction<unknown>>;
   setHistorySpace: Dispatch<SetStateAction<unknown>>;
   setNextStep: Dispatch<SetStateAction<string | null>>;
-  setHistoryData: Dispatch<SetStateAction<unknown>>;};
+  setHistoryData: Dispatch<SetStateAction<unknown>>;
+};
 
 const HistoryActionsContext = createContext<
   HistoryActionsContextType | undefined
@@ -48,11 +42,12 @@ export const useAppHistoryActions = (): HistoryActionsContextType => {
 };
 
 export type AppHistoryProviderProps = {
-  children: ReactNode;};
+  children: ReactNode;
+};
 
 const AppHistoryProvider: React.FC<AppHistoryProviderProps> = ({
-  children,
-}) => {
+                                                                 children,
+                                                               }) => {
   const [redirectTo, setRedirectTo] = useState<string | null>(null);
   const [historyOrg, setHistoryOrg] = useState<unknown>(null);
   const [historySpace, setHistorySpace] = useState<unknown>(null);

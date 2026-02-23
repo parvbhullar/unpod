@@ -1,14 +1,11 @@
 'use client';
 
-import { useLayoutEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthContext } from '@unpod/providers';
-import { desktopAPI } from '@/helpers/desktopNotifications';
+import {useLayoutEffect} from 'react';
+import {useRouter} from 'next/navigation';
+import {useAuthContext} from '@unpod/providers';
+import {desktopAPI} from '@/helpers/desktopNotifications';
 import dynamic from 'next/dynamic';
 
-const SIPLanding = dynamic(() => import('../../modules/landing/SIP'), {
-  loading: () => null,
-});
 const AILanding = dynamic(() => import('../../modules/landing/AI'), {
   loading: () => null,
 });
@@ -42,7 +39,7 @@ const HomePageClient = () => {
   }
 
   // Normal web view - show landing page
-  return process.env.productId === 'unpod.dev' ? <SIPLanding /> : <AILanding />;
+  return <AILanding/>;
 };
 
 export default HomePageClient;

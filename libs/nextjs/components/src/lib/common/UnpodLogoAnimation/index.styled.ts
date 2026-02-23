@@ -1,15 +1,18 @@
-import styled, { keyframes } from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 type SizeProps = {
-  size?: number;};
+  size?: number;
+};
 
 type OrbitProps = {
   duration?: number;
-  $reverse?: boolean;};
+  $reverse?: boolean;
+};
 
 type DotProps = {
   dotSize?: number;
-  gradient?: string;};
+  gradient?: string;
+};
 
 // Keyframe animations
 const orbit = keyframes`
@@ -351,7 +354,7 @@ export const StyledOrbitDot = styled.div<DotProps>`
   width: ${(props) => props.dotSize || 12}px;
   height: ${(props) => props.dotSize || 12}px;
   background: ${(props) =>
-    props.gradient || 'linear-gradient(135deg, #5046e5, #818cf8)'};
+  props.gradient || 'linear-gradient(135deg, #5046e5, #818cf8)'};
   border-radius: 50%;
   top: 0;
   left: 50%;

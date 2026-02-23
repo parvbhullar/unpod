@@ -1,15 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useGetDataApi } from '@unpod/providers';
+import {useEffect, useState} from 'react';
+import {useGetDataApi} from '@unpod/providers';
 import AppTable from '@unpod/components/third-party/AppTable';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import AppLoadingMore from '@unpod/components/common/AppLoadingMore';
 import AppLoader from '@unpod/components/common/AppLoader';
-import { getColumns } from './columns';
-import { StyledRoot } from './index.styled';
+import {getColumns} from './columns';
+import {StyledRoot} from './index.styled';
 import AppColumnZoomView from '@unpod/components/common/AppColumnZoomView';
-import { AppDrawer } from '@unpod/components/antd';
-import { useIntl } from 'react-intl';
+import {AppDrawer} from '@unpod/components/antd';
+import {useIntl} from 'react-intl';
 
 const PAGE_SIZE = 50;
 
@@ -19,23 +19,23 @@ type TasksViewProps = {
 
 const AppTableAny = AppTable as any;
 
-const TasksView = ({ currentKb }: TasksViewProps) => {
+const TasksView = ({currentKb}: TasksViewProps) => {
   const [page, setPage] = useState(1);
   const [records, setRecords] = useState<any[]>([]);
   const [selectedCol, setSelectedCol] = useState<any>(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [
-    { apiData, loading, isLoadingMore },
-    { setQueryParams, setLoadingMore },
-  ] = useGetDataApi(`tasks/space-task/${currentKb?.token}/`, { data: [] }, {
+    {apiData, loading, isLoadingMore},
+    {setQueryParams, setLoadingMore},
+  ] = useGetDataApi(`tasks/space-task/${currentKb?.token}/`, {data: []}, {
     page: 1,
     page_size: PAGE_SIZE,
   }) as any;
 
   useEffect(() => {
     if (currentKb?.token && currentKb?.final_role !== ACCESS_ROLE.GUEST) {
-      setQueryParams({ page: page, page_size: PAGE_SIZE });
+      setQueryParams({page: page, page_size: PAGE_SIZE});
     }
   }, [page, currentKb?.token]);
 
@@ -60,7 +60,7 @@ const TasksView = ({ currentKb }: TasksViewProps) => {
   return (
     <StyledRoot>
       {/*<pre>{JSON.stringify(apiData, null, 4)}</pre>*/}
-      {loading && !isLoadingMore && <AppLoader position="absolute" />}
+      {loading && !isLoadingMore && <AppLoader position="absolute"/>}
 
       <AppTableAny
         rowKey="id"
@@ -79,17 +79,17 @@ const TasksView = ({ currentKb }: TasksViewProps) => {
         extraHeight={33}
       />
 
-      {isLoadingMore && <AppLoadingMore />}
+      {isLoadingMore && <AppLoadingMore/>}
 
       <AppDrawer
         title={selectedCol?.title}
         open={selectedCol !== null}
         destroyOnHidden={true}
         onClose={() => setSelectedCol(null)}
-        styles={{ body: { padding: 0, position: 'relative' } }}
+        styles={{body: {padding: 0, position: 'relative'}}}
         width="60%"
       >
-        <AppColumnZoomView selectedCol={selectedCol} />
+        <AppColumnZoomView selectedCol={selectedCol}/>
       </AppDrawer>
     </StyledRoot>
   );

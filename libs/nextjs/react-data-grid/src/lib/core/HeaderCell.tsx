@@ -1,9 +1,9 @@
 import type * as React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
-import { rgba } from 'polished';
+import {rgba} from 'polished';
 
-import { useRovingTabIndex } from './hooks';
+import {useRovingTabIndex} from './hooks';
 import {
   clampColumnWidth,
   getCellClassname,
@@ -23,11 +23,11 @@ import type {
   TableCellItemProps,
   UndoRedoProcessProps
 } from './models/data-grid';
-import type { HeaderRowProps } from './HeaderRow';
+import type {HeaderRowProps} from './HeaderRow';
 import defaultRenderHeaderCell from './renderHeaderCell';
-import { StyledCellWrapper } from './style/cell';
+import {StyledCellWrapper} from './style/cell';
 import HeaderColumnOptions from './components/HeaderColumnOptions';
-import { useDataGridConfiguration } from './DataGridContext';
+import {useDataGridConfiguration} from './DataGridContext';
 
 export const ResizeHandleClassname = styled.div`
   cursor: col-resize;
@@ -51,7 +51,7 @@ export const StyledInnerCell = styled.div`
 `;
 
 const CellResizable = styled(StyledCellWrapper)`
-  background: ${({ theme }: { theme: any }) => theme.table.headerBgColor};
+  background: ${({theme}: { theme: any }) => theme.table.headerBgColor};
   padding: 0;
 
   &.cell-frozen {
@@ -71,13 +71,13 @@ const CellResizable = styled(StyledCellWrapper)`
   }
 
   &.partially-selected:not(.serial-no-cell) {
-    background: ${({ theme }: { theme: any }) => theme.backgroundColor};
-    border-color: ${({ theme }: { theme: any }) =>
-      rgba(theme.palette.primary, 0.15)};
+    background: ${({theme}: { theme: any }) => theme.backgroundColor};
+    border-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.15)};
 
     & ${StyledInnerCell} {
-      background-color: ${({ theme }: { theme: any }) =>
-        rgba(theme.palette.primary, 0.15)};
+      background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.15)};
     }
   }
 
@@ -129,36 +129,37 @@ export type HeaderCellProps<R, SR> = SharedHeaderRowProps<R, SR> & {
   onSerialNoRowHeaderClick: (cellIdx?: number, rowIdx?: number) => void;
   isPartiallySelected?: boolean;
 
-  saveVersionHistory(data: UndoRedoProcessProps): void;};
+  saveVersionHistory(data: UndoRedoProcessProps): void;
+};
 
 export default function HeaderCell<R, SR>({
-  column,
-  colSpan,
-  rowIdx,
-  isCellSelected,
-  onColumnResize,
-  onColumnsReorder,
-  sortColumns,
-  onSortColumnsChange,
-  selectCell,
-  shouldFocusGrid,
-  direction,
-  dragDropKey,
-  rowSelectionType,
-  filterValue,
-  onFiltersChange,
-  showBorder,
-  columns,
-  onInsertCell,
-  onDeleteCells,
-  onRenameColumn,
-  onLocalFiltersChange,
-  saveVersionHistory,
-  onSerialNoRowHeaderClick,
-  rowCount,
-  isResizedColumn,
-  isPartiallySelected,
-}: HeaderCellProps<R, SR>) {
+                                            column,
+                                            colSpan,
+                                            rowIdx,
+                                            isCellSelected,
+                                            onColumnResize,
+                                            onColumnsReorder,
+                                            sortColumns,
+                                            onSortColumnsChange,
+                                            selectCell,
+                                            shouldFocusGrid,
+                                            direction,
+                                            dragDropKey,
+                                            rowSelectionType,
+                                            filterValue,
+                                            onFiltersChange,
+                                            showBorder,
+                                            columns,
+                                            onInsertCell,
+                                            onDeleteCells,
+                                            onRenameColumn,
+                                            onLocalFiltersChange,
+                                            saveVersionHistory,
+                                            onSerialNoRowHeaderClick,
+                                            rowCount,
+                                            isResizedColumn,
+                                            isPartiallySelected,
+                                          }: HeaderCellProps<R, SR>) {
   const gridConfig = useDataGridConfiguration();
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
@@ -166,7 +167,7 @@ export default function HeaderCell<R, SR>({
 
   const isRtl = direction === 'rtl';
   const rowSpan = getHeaderCellRowSpan(column, rowIdx);
-  const { tabIndex, childTabIndex, onFocus } =
+  const {tabIndex, childTabIndex, onFocus} =
     useRovingTabIndex(isCellSelected);
 
   const sortIndex = sortColumns?.findIndex(
@@ -189,7 +190,7 @@ export default function HeaderCell<R, SR>({
         : 'descending'
       : undefined;
 
-  const { sorter, resizable, draggable } = column;
+  const {sorter, resizable, draggable} = column;
 
   const className = getCellClassname(column, column.headerCellClass, {
     'rdg-cell-resizable': resizable,
@@ -212,13 +213,13 @@ export default function HeaderCell<R, SR>({
     // Fix column resizing on a draggable column in FF
     event.preventDefault();
 
-    const { currentTarget, pointerId } = event;
+    const {currentTarget, pointerId} = event;
     const headerCell = currentTarget.parentElement!;
-    const { right, left } = headerCell.getBoundingClientRect();
+    const {right, left} = headerCell.getBoundingClientRect();
     const offset = isRtl ? event.clientX - left : right - event.clientX;
 
     function onPointerMove(event: PointerEvent) {
-      const { right, left } = headerCell.getBoundingClientRect();
+      const {right, left} = headerCell.getBoundingClientRect();
       const width = isRtl
         ? right + offset - event.clientX
         : event.clientX + offset - left;
@@ -244,7 +245,7 @@ export default function HeaderCell<R, SR>({
     const updatedSortDir = customDir ?? sortDirection;
 
     if (onSortColumnsChange == null) return;
-    const { sortDescendingFirst } = column;
+    const {sortDescendingFirst} = column;
     if (sortColumn === undefined) {
       // not currently sorted
       const nextSort: SortColumn = {
@@ -287,7 +288,7 @@ export default function HeaderCell<R, SR>({
 
   function onFilter(key: string, value: FilterDataType) {
     onFiltersChange?.((prevState) => {
-      const nextState = { ...prevState };
+      const nextState = {...prevState};
       if (!value) {
         delete nextState[key];
       } else {
@@ -299,10 +300,10 @@ export default function HeaderCell<R, SR>({
 
   function clickHandler(/*event: React.MouseEvent<HTMLSpanElement>*/) {
     if (rowIdx === 1 && column.dataIndex === 'serialNoRow') {
-      selectCell({ idx: 1, rowIdx: 2 });
+      selectCell({idx: 1, rowIdx: 2});
       onSerialNoRowHeaderClick(columns.length - 1, rowCount - 1);
     } else {
-      selectCell({ idx: column.idx, rowIdx: rowIdx + 1 });
+      selectCell({idx: column.idx, rowIdx: rowIdx + 1});
       onSerialNoRowHeaderClick(column.idx, rowCount - 1);
     }
   }
@@ -330,7 +331,7 @@ export default function HeaderCell<R, SR>({
     onFocus?.(event);
     if (shouldFocusGrid) {
       // Select the first header cell if there is no selected cell
-      selectCell({ idx: 0, rowIdx });
+      selectCell({idx: 0, rowIdx});
     }
   }
 

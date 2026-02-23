@@ -1,20 +1,20 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
-import { Modal } from 'antd';
-import { useRouter } from 'next/navigation';
-import { LiveKitRoom } from '@livekit/components-react';
-import { deleteDataApi, useAuthContext, useInfoViewActionsContext } from '@unpod/providers';
-import { useTokenGeneration } from '@unpod/livekit/hooks/useTokenGeneration';
-import { isViewDetailAllowed } from '@unpod/helpers/PermissionHelper';
+import {Fragment, useCallback, useEffect, useRef, useState} from 'react';
+import {Modal} from 'antd';
+import {useRouter} from 'next/navigation';
+import {LiveKitRoom} from '@livekit/components-react';
+import {deleteDataApi, useAuthContext, useInfoViewActionsContext} from '@unpod/providers';
+import {useTokenGeneration} from '@unpod/livekit/hooks/useTokenGeneration';
+import {isViewDetailAllowed} from '@unpod/helpers/PermissionHelper';
 import RequestPost from './RequestPost';
 import ReportPost from './ReportPost';
-import { StyledContainer, StyledNoAccessContainer } from './index.styled';
-import { useAgentConnection } from '@unpod/livekit/hooks/useAgentConnection';
+import {StyledContainer, StyledNoAccessContainer} from './index.styled';
+import {useAgentConnection} from '@unpod/livekit/hooks/useAgentConnection';
 import AppConfirmModal from '@unpod/components/antd/AppConfirmModal';
 import AppConversation from '../AppConversation';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 import useCentrifugoDataChannel from '@unpod/livekit/hooks/useCentrifugoDataChannel';
-import { Conversation } from '@unpod/constants';
-import { CENTRIFUGO_URL } from '@unpod/constants/ConfigConsts';
+import {Conversation} from '@unpod/constants';
+import {CENTRIFUGO_URL} from '@unpod/constants/ConfigConsts';
 
 /**
  * AppPostContent - Inner content component for post detail view
@@ -40,18 +40,18 @@ type AppPostContentProps = {
 };
 
 const AppPostContent = ({
-  token,
-  currentPost,
-  onEditPost,
-  onDeletedPost,
-  onStartVoice,
-  isGeneratingToken,
-  centrifugoConfig,
-}: AppPostContentProps) => {
+                          token,
+                          currentPost,
+                          onEditPost,
+                          onDeletedPost,
+                          onStartVoice,
+                          isGeneratingToken,
+                          centrifugoConfig,
+                        }: AppPostContentProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated, visitorId } = useAuthContext();
+  const {isAuthenticated, visitorId} = useAuthContext();
   const router = useRouter();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [isReportOpen, setReportOpen] = useState(false);
@@ -63,7 +63,7 @@ const AppPostContent = ({
   };
 
   if (!isAuthenticated) {
-    params = { session_user: visitorId };
+    params = {session_user: visitorId};
   }
 
   // Use hybrid messaging: LiveKit data channel (voice mode) or WebSocket (text-only mode)
@@ -147,7 +147,7 @@ const AppPostContent = ({
       </StyledContainer>
 
       <Modal
-        title={formatMessage({ id: 'report.title' })}
+        title={formatMessage({id: 'report.title'})}
         footer={false}
         open={isReportOpen}
         destroyOnHidden={true}
@@ -163,7 +163,7 @@ const AppPostContent = ({
       <AppConfirmModal
         open={isDeleteOpen}
         onOk={onDeletePost}
-        message={formatMessage({ id: 'post.deleteConfirm' })}
+        message={formatMessage({id: 'post.deleteConfirm'})}
         onCancel={() => setDeleteOpen(false)}
       />
     </Fragment>
@@ -181,13 +181,13 @@ type AppPostProps = {
 };
 
 const AppPost = ({
-  token,
-  currentPost,
-  onEditPost,
-  onDeletedPost,
-  shouldAutoStartVoice,
-  onVoiceStarted,
-}: AppPostProps) => {
+                   token,
+                   currentPost,
+                   onEditPost,
+                   onDeletedPost,
+                   shouldAutoStartVoice,
+                   onVoiceStarted,
+                 }: AppPostProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const {
     shouldConnect,
@@ -222,7 +222,7 @@ const AppPost = ({
         setConnectionMode(currentPost.content_type);
         const params = {
           source: 'superkik',
-          ...(!isVoiceMode && { multimodality: 'text' }), // Add multimodality:'text' for text/chat mode only
+          ...(!isVoiceMode && {multimodality: 'text'}), // Add multimodality:'text' for text/chat mode only
           ...options,
         };
 
@@ -320,7 +320,7 @@ const AppPost = ({
         </LiveKitRoom>
       ) : (
         <StyledNoAccessContainer>
-          <RequestPost post={currentPost} />
+          <RequestPost post={currentPost}/>
         </StyledNoAccessContainer>
       )}
     </Fragment>

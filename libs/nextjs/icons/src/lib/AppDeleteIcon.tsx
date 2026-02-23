@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 export type AppDeleteIconProps = React.HTMLAttributes<HTMLSpanElement> & {
-  className?: string;};
+  className?: string;
+};
 
 const StyledDeleteWrapper = styled.span`
   &.red {
@@ -11,9 +12,9 @@ const StyledDeleteWrapper = styled.span`
 `;
 
 export const AppDeleteIcon: React.FC<AppDeleteIconProps> = ({
-  className,
-  ...props
-}) => {
+                                                              className,
+                                                              ...props
+                                                            }) => {
   return (
     <StyledDeleteWrapper
       className={`anticon anticon-delete ${className || ''}`}
@@ -65,7 +66,7 @@ export const AppDeleteIcon: React.FC<AppDeleteIconProps> = ({
         </g>
         <defs>
           <clipPath id="clip0_713_26">
-            <rect width="21" height="21" fill="white" />
+            <rect width="21" height="21" fill="white"/>
           </clipPath>
         </defs>
       </svg>

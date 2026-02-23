@@ -1,25 +1,16 @@
-import { useState } from 'react';
-import { Button, Form, Modal, Space, Tooltip } from 'antd';
-import { MdAdd } from 'react-icons/md';
-import { BiBot } from 'react-icons/bi';
-import {
-  postDataApi,
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
+import {useState} from 'react';
+import {Button, Form, Modal, Space, Tooltip} from 'antd';
+import {MdAdd} from 'react-icons/md';
+import {BiBot} from 'react-icons/bi';
+import {postDataApi, useAppSpaceActionsContext, useAppSpaceContext, useInfoViewActionsContext,} from '@unpod/providers';
 import AppAgentPopover from '@unpod/components/modules/AppAgentPopover';
-import { AppInput, AppTextArea } from '@unpod/components/antd';
+import {AppInput, AppTextArea} from '@unpod/components/antd';
 import AppScheduleInputs from '@unpod/components/modules/AppScheduleInputs';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import {
-  StyledBottomBar,
-  StyledContentRoot,
-  StyledFormItem,
-} from './index.styled';
-import type { Document } from '@unpod/constants/types';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {StyledBottomBar, StyledContentRoot, StyledFormItem,} from './index.styled';
+import type {Document} from '@unpod/constants/types';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 type AgentPilot = {
   handle?: string;
@@ -32,9 +23,9 @@ type AddNewTaskProps = {
   onFinishSchedule?: (data: unknown) => void;
 };
 
-const AddNewTask = ({ idKey = 'id', onFinishSchedule }: AddNewTaskProps) => {
-  const { setSelectedDocs } = useAppSpaceActionsContext();
-  const { selectedDocs, connectorData, currentSpace } = useAppSpaceContext();
+const AddNewTask = ({idKey = 'id', onFinishSchedule}: AddNewTaskProps) => {
+  const {setSelectedDocs} = useAppSpaceActionsContext();
+  const {selectedDocs, connectorData, currentSpace} = useAppSpaceContext();
   const documents = (connectorData.apiData as Document[]) ?? [];
   const infoViewActionsContext = useInfoViewActionsContext();
   const [loading, setLoading] = useState(false);
@@ -127,7 +118,7 @@ const AddNewTask = ({ idKey = 'id', onFinishSchedule }: AddNewTaskProps) => {
             },
           ]}
         >
-          <AppInput placeholder="Enter Name" variant="borderless" />
+          <AppInput placeholder="Enter Name" variant="borderless"/>
         </StyledFormItem>
 
         <Item
@@ -142,7 +133,7 @@ const AddNewTask = ({ idKey = 'id', onFinishSchedule }: AddNewTaskProps) => {
           <AppTextArea
             placeholder="Enter Instructions"
             variant="borderless"
-            autoSize={{ minRows: 3, maxRows: 10 }}
+            autoSize={{minRows: 3, maxRows: 10}}
             value={context}
             onChange={(e) => setContext(e.target.value)}
           />
@@ -162,7 +153,7 @@ const AddNewTask = ({ idKey = 'id', onFinishSchedule }: AddNewTaskProps) => {
               setPilot={setPilot}
               renderChildren={() => (
                 <Button type="default" shape="round">
-                  <BiBot fontSize={18} />
+                  <BiBot fontSize={18}/>
                   {pilot?.name || 'Select Agent'}
                 </Button>
               )}
@@ -201,7 +192,7 @@ const AddNewTask = ({ idKey = 'id', onFinishSchedule }: AddNewTaskProps) => {
           type="primary"
           shape="circle"
           size="small"
-          icon={<MdAdd fontSize={24} />}
+          icon={<MdAdd fontSize={24}/>}
           loading={loading}
           onClick={() => setOpen(true)}
         />

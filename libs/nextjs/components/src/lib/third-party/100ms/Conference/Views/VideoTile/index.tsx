@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, CSSProperties } from 'react';
+import React, {CSSProperties, useCallback, useMemo, useState} from 'react';
 import {
   selectAudioTrackByPeerID,
   selectIsPeerAudioEnabled,
@@ -10,9 +10,9 @@ import {
   useHMSStore,
   useVideo,
 } from '@100mslive/react-sdk';
-import { useIsHeadless, useUISettings } from '../../../AppData/useUISettings';
-import { UI_SETTINGS } from '../../../common/constants';
-import { useAppConfig } from '../../../AppData/useAppConfig';
+import {useIsHeadless, useUISettings} from '../../../AppData/useUISettings';
+import {UI_SETTINGS} from '../../../common/constants';
+import {useAppConfig} from '../../../AppData/useAppConfig';
 import {
   AudioIndicator,
   Container,
@@ -23,11 +23,11 @@ import {
   StyledVideo,
 } from './index.styled';
 import TileConnection from '../../Connection/TileConnection';
-import { getVideoTileLabel } from '../../../common/utils';
+import {getVideoTileLabel} from '../../../common/utils';
 import TileMenu from '../../TileMenu';
 import UserThumbnail from './UserThumbnail';
-import { MdMicOff } from 'react-icons/md';
-import { TbHandStop } from 'react-icons/tb';
+import {MdMicOff} from 'react-icons/md';
+import {TbHandStop} from 'react-icons/tb';
 
 type TileSize = 'small' | 'medium';
 type AvatarSize = 'small' | 'medium' | 'large';
@@ -37,7 +37,7 @@ interface PeerMetadataProps {
   size: TileSize;
 }
 
-const PeerMetadata: React.FC<PeerMetadataProps> = ({ peerId, size }) => {
+const PeerMetadata: React.FC<PeerMetadataProps> = ({peerId, size}) => {
   const metaData = useHMSStore(selectPeerMetadata(peerId));
   const isHandRaised = metaData?.isHandRaised || false;
   const isBRB = metaData?.isBRBOn || false;
@@ -46,7 +46,7 @@ const PeerMetadata: React.FC<PeerMetadataProps> = ({ peerId, size }) => {
     <>
       {isHandRaised ? (
         <StyledRaiseHand data-testid="raiseHand_icon_onTile" size={size}>
-          <TbHandStop fontSize={20} />
+          <TbHandStop fontSize={20}/>
         </StyledRaiseHand>
       ) : null}
       {isBRB ? <StyledBRB>BRB</StyledBRB> : null}
@@ -63,8 +63,8 @@ interface VideoProps {
   'data-testid'?: string;
 }
 
-export const Video: React.FC<VideoProps> = ({ trackId, attach, ...props }) => {
-  const { videoRef } = useVideo({ trackId, attach });
+export const Video: React.FC<VideoProps> = ({trackId, attach, ...props}) => {
+  const {videoRef} = useVideo({trackId, attach});
   return (
     <StyledVideo
       autoPlay
@@ -83,7 +83,7 @@ interface ShowAudioMutedParams {
   isAudioMuted: boolean;
 }
 
-const showAudioMuted = ({ hideTileAudioMute, isHeadless, isAudioMuted }: ShowAudioMutedParams): boolean => {
+const showAudioMuted = ({hideTileAudioMute, isHeadless, isAudioMuted}: ShowAudioMutedParams): boolean => {
   if (!isHeadless) {
     return isAudioMuted;
   }
@@ -96,7 +96,7 @@ interface GetPaddingParams {
   hideAudioLevel?: boolean;
 }
 
-const getPadding = ({ isHeadless, tileOffset, hideAudioLevel }: GetPaddingParams): number | undefined => {
+const getPadding = ({isHeadless, tileOffset, hideAudioLevel}: GetPaddingParams): number | undefined => {
   if (!isHeadless || isNaN(Number(tileOffset))) {
     return undefined;
   }
@@ -126,14 +126,14 @@ interface VideoTileProps {
 }
 
 const VideoTile: React.FC<VideoTileProps> = ({
-  peerId,
-  trackId,
-  width,
-  height,
-  objectFit = 'cover',
-  rootCSS = {},
-  containerCSS = {},
-}) => {
+                                               peerId,
+                                               trackId,
+                                               width,
+                                               height,
+                                               objectFit = 'cover',
+                                               rootCSS = {},
+                                               containerCSS = {},
+                                             }) => {
   const trackSelector = trackId
     ? selectVideoTrackByID(trackId)
     : selectVideoTrackByPeerID(peerId);
@@ -246,7 +246,7 @@ const VideoTile: React.FC<VideoTileProps> = ({
                   : 'medium'
               }
             >
-              <MdMicOff fontSize={20} />
+              <MdMicOff fontSize={20}/>
             </AudioIndicator>
           ) : null}
 

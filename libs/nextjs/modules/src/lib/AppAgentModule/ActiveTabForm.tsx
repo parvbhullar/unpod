@@ -11,11 +11,11 @@ type ActiveTabFormProps = {
 };
 
 const ActiveTabForm = ({
-  activeTab,
-  agentData,
-  updateAgentData,
-  headerForm,
-}: ActiveTabFormProps) => {
+                         activeTab,
+                         agentData,
+                         updateAgentData,
+                         headerForm,
+                       }: ActiveTabFormProps) => {
   const OverviewComponent = Overview as any;
   const ModelComponent = ModelForm as any;
   const VoiceComponent = VoiceForm as any;

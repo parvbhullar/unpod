@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { AppDrawer } from '@unpod/components/antd';
+import {useState} from 'react';
+import {AppDrawer} from '@unpod/components/antd';
 import {
   BookingCard,
   BookingCardBody,
@@ -47,7 +47,7 @@ type BookingCardsProps = {
   data?: BookingCardsData;
 };
 
-const BookingCards = ({ data }: BookingCardsProps) => {
+const BookingCards = ({data}: BookingCardsProps) => {
   const bookings = data?.items || [];
   const [selectedBooking, setSelectedBooking] = useState<BookingItem | null>(
     null,
@@ -406,7 +406,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                 {(request.provider_phone ||
                   request.user_name ||
                   request.user_contact) && (
-                  <div style={{ marginBottom: '20px' }}>
+                  <div style={{marginBottom: '20px'}}>
                     <div
                       style={{
                         fontSize: '14px',
@@ -446,9 +446,10 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                             width="20"
                             height="20"
                           >
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            <path
+                              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                           </svg>
-                          <div style={{ flex: 1 }}>
+                          <div style={{flex: 1}}>
                             <div
                               style={{
                                 fontSize: '12px',
@@ -496,7 +497,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                           </svg>
-                          <div style={{ flex: 1 }}>
+                          <div style={{flex: 1}}>
                             <div
                               style={{
                                 fontSize: '12px',
@@ -539,10 +540,11 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                             width="20"
                             height="20"
                           >
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <path
+                              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                             <polyline points="22,6 12,13 2,6"></polyline>
                           </svg>
-                          <div style={{ flex: 1 }}>
+                          <div style={{flex: 1}}>
                             <div
                               style={{
                                 fontSize: '12px',
@@ -579,7 +581,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                       marginBottom: '20px',
                     }}
                   >
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div style={{display: 'flex', gap: '8px'}}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -588,12 +590,12 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                         strokeWidth="2"
                         width="20"
                         height="20"
-                        style={{ flexShrink: 0, marginTop: '2px' }}
+                        style={{flexShrink: 0, marginTop: '2px'}}
                       >
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                       </svg>
-                      <div style={{ flex: 1 }}>
+                      <div style={{flex: 1}}>
                         <div
                           style={{
                             fontSize: '12px',
@@ -685,7 +687,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                             <polyline points="20 6 9 17 4 12"></polyline>
                           </svg>
                         </div>
-                        <div style={{ flex: 1 }}>
+                        <div style={{flex: 1}}>
                           <div
                             style={{
                               fontSize: '12px',
@@ -758,7 +760,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                           <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                       </div>
-                      <div style={{ flex: 1 }}>
+                      <div style={{flex: 1}}>
                         <div
                           style={{
                             fontSize: '12px',
@@ -797,7 +799,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                     }}
                   >
                     {selectedBooking.created_at && (
-                      <div style={{ flex: 1 }}>
+                      <div style={{flex: 1}}>
                         <div
                           style={{
                             fontSize: '11px',
@@ -828,7 +830,7 @@ const BookingCards = ({ data }: BookingCardsProps) => {
                       </div>
                     )}
                     {selectedBooking.confirmed_time && (
-                      <div style={{ flex: 1 }}>
+                      <div style={{flex: 1}}>
                         <div
                           style={{
                             fontSize: '11px',

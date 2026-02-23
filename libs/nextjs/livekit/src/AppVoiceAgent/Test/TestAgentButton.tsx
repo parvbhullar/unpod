@@ -1,5 +1,5 @@
-import { IoMdPlay } from 'react-icons/io';
-import { InfoSection, StyledButton, WidgetContainer } from './TestAgent.styled';
+import {IoMdPlay} from 'react-icons/io';
+import {InfoSection, StyledButton, WidgetContainer} from './TestAgent.styled';
 
 type TestAgentButtonProps = {
   startCallText?: string;
@@ -8,10 +8,10 @@ type TestAgentButtonProps = {
 };
 
 export const TestAgentButton = ({
-  startCallText = 'Start New Test',
-  disable,
-  onClick,
-}: TestAgentButtonProps) => {
+                                  startCallText = 'Start New Test',
+                                  disable,
+                                  onClick,
+                                }: TestAgentButtonProps) => {
   return (
     <WidgetContainer className="chat-widget">
       <InfoSection className="widget-info-section">
@@ -20,7 +20,7 @@ export const TestAgentButton = ({
           className="widget-button"
           onClick={onClick}
           type="primary"
-          icon={<IoMdPlay size={18} />}
+          icon={<IoMdPlay size={18}/>}
         >
           {startCallText}
         </StyledButton>

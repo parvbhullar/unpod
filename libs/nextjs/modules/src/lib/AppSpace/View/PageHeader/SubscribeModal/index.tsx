@@ -1,24 +1,20 @@
-import { Fragment, memo, useState } from 'react';
-import { Button, Form, Input, Modal, Typography } from 'antd';
+import {Fragment, memo, useState} from 'react';
+import {Button, Form, Input, Modal, Typography} from 'antd';
 import AppImage from '@unpod/components/next/AppImage';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { EMAIL_REGX } from '@unpod/constants';
-import {
-  StyledContainer,
-  StyledInfoWrapper,
-  StylesImageWrapper,
-} from './index.styled';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {EMAIL_REGX} from '@unpod/constants';
+import {StyledContainer, StyledInfoWrapper, StylesImageWrapper,} from './index.styled';
 import AppLoader from '@unpod/components/common/AppLoader';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Paragraph, Title } = Typography;
-const { Item, useForm } = Form;
+const {Paragraph, Title} = Typography;
+const {Item, useForm} = Form;
 
-const SubscribeModal = ({ currentSpace }: { currentSpace: any }) => {
+const SubscribeModal = ({currentSpace}: { currentSpace: any }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [form] = useForm();
 
@@ -54,7 +50,7 @@ const SubscribeModal = ({ currentSpace }: { currentSpace: any }) => {
   return (
     <Fragment>
       <Button type="primary" size="small" shape="round" onClick={showModal}>
-        {formatMessage({ id: 'common.subscribe' })}
+        {formatMessage({id: 'common.subscribe'})}
       </Button>
 
       <Modal
@@ -83,7 +79,7 @@ const SubscribeModal = ({ currentSpace }: { currentSpace: any }) => {
             <Title level={2}>{currentSpace?.name}</Title>
 
             <Paragraph>
-              {formatMessage({ id: 'subscribe.description' })}
+              {formatMessage({id: 'subscribe.description'})}
             </Paragraph>
           </StyledInfoWrapper>
 
@@ -93,7 +89,7 @@ const SubscribeModal = ({ currentSpace }: { currentSpace: any }) => {
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.enterEmail' }),
+                  message: formatMessage({id: 'validation.enterEmail'}),
                 },
                 () => ({
                   validator(_rule, value: any) {
@@ -102,7 +98,7 @@ const SubscribeModal = ({ currentSpace }: { currentSpace: any }) => {
                     }
                     if (!EMAIL_REGX.test(value)) {
                       return Promise.reject(
-                        formatMessage({ id: 'validation.validEmail' }),
+                        formatMessage({id: 'validation.validEmail'}),
                       );
                     }
                     return Promise.resolve();
@@ -111,19 +107,19 @@ const SubscribeModal = ({ currentSpace }: { currentSpace: any }) => {
               ]}
             >
               <Input
-                placeholder={formatMessage({ id: 'invite.enterEmails' })}
+                placeholder={formatMessage({id: 'invite.enterEmails'})}
                 size="large"
               />
             </Item>
 
             <Button type="primary" htmlType="submit" block>
-              {formatMessage({ id: 'common.subscribe' })}
+              {formatMessage({id: 'common.subscribe'})}
             </Button>
           </Form>
         </StyledContainer>
       </Modal>
 
-      {loading ? <AppLoader /> : null}
+      {loading ? <AppLoader/> : null}
     </Fragment>
   );
 };

@@ -1,4 +1,3 @@
-
 // import React from "react";
 // import {spring, TransitionMotion,} from "react-motion";
 // import cxs from "cxs";
@@ -258,12 +257,13 @@
 //
 // export default TextLoop;
 
-import type { ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
 type TextLoopProps = {
-  children?: ReactNode;};
+  children?: ReactNode;
+};
 
-const TextLoop = ({ children }: TextLoopProps) => {
+const TextLoop = ({children}: TextLoopProps) => {
   return <div>{children}</div>;
 };
 

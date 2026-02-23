@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin } from 'antd';
+import {Spin} from 'antd';
 import styled from 'styled-components';
 
 const StyledAppLoader = styled.div`
@@ -23,18 +23,18 @@ type AppLoaderProps = {
 };
 
 export const LoadingView = ({
-  position = 'fixed',
-  style,
-  ...restProps
-}: AppLoaderProps) => {
+                              position = 'fixed',
+                              style,
+                              ...restProps
+                            }: AppLoaderProps) => {
   return (
     <StyledAppLoader
       role="progress-loader"
-      style={{ position, ...style }}
+      style={{position, ...style}}
       {...restProps}
     >
       <span role="spin">
-        <Spin />
+        <Spin/>
       </span>
     </StyledAppLoader>
   );

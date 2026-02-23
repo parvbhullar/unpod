@@ -10,15 +10,9 @@ import type {
   Spaces,
 } from '@unpod/constants/types';
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {createContext, useContext, useEffect, useMemo, useState,} from 'react';
 
-import { setOrgHeader } from '@unpod/services';
+import {setOrgHeader} from '@unpod/services';
 
 import {
   getDataApi,
@@ -52,20 +46,20 @@ export const useOrgActionContext = (): OrgActionsContextType => {
 };
 
 export const AppOrgContextProvider: React.FC<AppOrgContextProviderProps> = ({
-  children,
-}) => {
-  const { activeOrg, user } = useAuthContext();
-  const { setActiveOrg } = useAuthActionsContext();
+                                                                              children,
+                                                                            }) => {
+  const {activeOrg, user} = useAuthContext();
+  const {setActiveOrg} = useAuthActionsContext();
   const infoViewActionsContext = useInfoViewActionsContext();
   const [notificationData, setNotificationData] = useState<NotificationData>(
     {},
   );
 
   const [activeSpace, setActiveSpace] = useState<Spaces>(
-    (user?.active_space as Spaces) || { slug: '' },
+    (user?.active_space as Spaces) || {slug: ''},
   );
 
-  const [{ apiData: orgUsers }, { updateInitialUrl }] = useFetchDataApi(
+  const [{apiData: orgUsers}, {updateInitialUrl}] = useFetchDataApi(
     ``,
     [],
     {},

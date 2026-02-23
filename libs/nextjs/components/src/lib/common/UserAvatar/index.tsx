@@ -1,24 +1,25 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { getFirstLetter, getRandomColor } from '@unpod/helpers/StringHelper';
-import { Avatar } from 'antd';
-import { AvatarProps } from 'antd/es/avatar';
-import { User } from './types';
+import React, {useEffect, useState} from 'react';
+import {getFirstLetter, getRandomColor} from '@unpod/helpers/StringHelper';
+import {Avatar} from 'antd';
+import {AvatarProps} from 'antd/es/avatar';
+import {User} from './types';
 
 type UserAvatarProps = AvatarProps & {
   user?: User;
   bgColor?: string;
   allowRandom?: boolean;
-  fontSize?: number;};
+  fontSize?: number;
+};
 
 const UserAvatar: React.FC<UserAvatarProps> = ({
-  user,
-  bgColor,
-  allowRandom = true,
-  fontSize,
-  ...restProps
-}) => {
-  const { style, ...avatarProps } = restProps;
+                                                 user,
+                                                 bgColor,
+                                                 allowRandom = true,
+                                                 fontSize,
+                                                 ...restProps
+                                               }) => {
+  const {style, ...avatarProps} = restProps;
   const [avatarSrc, setAvatarSrc] = useState<string | undefined>(
     user?.profile_picture || undefined,
   );

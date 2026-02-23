@@ -1,4 +1,4 @@
-import { selectDominantSpeaker } from '@100mslive/hms-video-store';
+import {selectDominantSpeaker} from '@100mslive/hms-video-store';
 
 class PeersSorter {
   listeners = new Set();
@@ -11,7 +11,7 @@ class PeersSorter {
     this.speaker = undefined;
   }
 
-  setPeersAndTilesPerPage = ({ peers, tilesPerPage }) => {
+  setPeersAndTilesPerPage = ({peers, tilesPerPage}) => {
     this.tilesPerPage = tilesPerPage;
     const peerIds = new Set(peers.map((peer) => peer.id));
     // remove existing peers which are no longer provided

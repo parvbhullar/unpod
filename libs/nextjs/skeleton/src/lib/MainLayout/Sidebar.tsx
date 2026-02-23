@@ -3,12 +3,13 @@ import SkeletonAvatar from '../common/SkeletonAvatar';
 
 type LayoutSidebarSkeletonProps = {
   topIcon?: number;
-  bottomIcon?: number;};
+  bottomIcon?: number;
+};
 
 const LayoutSidebarSkeleton: React.FC<LayoutSidebarSkeletonProps> = ({
-  topIcon = 5,
-  bottomIcon = 4,
-}) => {
+                                                                       topIcon = 5,
+                                                                       bottomIcon = 4,
+                                                                     }) => {
   return (
     <div
       style={{
@@ -18,18 +19,18 @@ const LayoutSidebarSkeleton: React.FC<LayoutSidebarSkeletonProps> = ({
         padding: '16px',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
         {[...Array(topIcon)].map((_, idx) => (
-          <SkeletonAvatar key={idx} size="large" />
+          <SkeletonAvatar key={idx} size="large"/>
         ))}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
         {[...Array(bottomIcon)].map((_, idx) => (
-          <SkeletonAvatar key={idx} size="default" />
+          <SkeletonAvatar key={idx} size="default"/>
         ))}
       </div>
     </div>
   );
 };
 
-export { LayoutSidebarSkeleton };
+export {LayoutSidebarSkeleton};

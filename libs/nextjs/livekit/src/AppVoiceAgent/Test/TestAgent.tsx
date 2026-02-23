@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { TopContainer } from './TestView.styled';
-import { TestAgentButton } from './TestAgentButton';
+import {useState} from 'react';
+import {TopContainer} from './TestView.styled';
+import {TestAgentButton} from './TestAgentButton';
 import PreviousTests from './PreviousTests';
 import TestView from './TestView';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { Pilot, Spaces } from '@unpod/constants';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {Pilot, Spaces} from '@unpod/constants';
 
 type TestAgentProps = {
   agentData?: Pilot;
@@ -16,7 +16,7 @@ export type ResponseType = {
   label: string;
 };
 
-const TestAgent = ({ agentData, ...rest }: TestAgentProps) => {
+const TestAgent = ({agentData, ...rest}: TestAgentProps) => {
   const [startCall, setStartCall] = useState<boolean>(false);
   const [response, setResponse] = useState<ResponseType>({
     type: '',
@@ -64,10 +64,10 @@ const TestAgent = ({ agentData, ...rest }: TestAgentProps) => {
       </TopContainer>
 
       {startCall && (
-        <TestView agentName={agentData?.name as string} response={response} setStartCall={setStartCall} />
+        <TestView agentName={agentData?.name as string} response={response} setStartCall={setStartCall}/>
       )}
 
-      <PreviousTests agentId={agentData?.handle} startCall={startCall} />
+      <PreviousTests agentId={agentData?.handle} startCall={startCall}/>
     </div>
   );
 };

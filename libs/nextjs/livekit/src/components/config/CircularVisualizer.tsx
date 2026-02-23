@@ -1,11 +1,11 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import {
   TrackReferenceOrPlaceholder,
   useMaybeTrackRefContext,
   useMultibandTrackVolume,
 } from '@livekit/components-react';
-import { useBarAnimator } from './useBarAnimator';
+import {useBarAnimator} from './useBarAnimator';
 
 // Animation for the outer ring
 const rotate = keyframes`
@@ -34,11 +34,11 @@ const Avatar = styled.div<{ $color?: string }>`
   margin-top: 5px;
   background: linear-gradient(
     to top,
-    ${({ $color }) => `${$color ?? '#6a5acd'}`},
-    ${({ $color }) => `${$color ?? '#8a2be2'}`}
+    ${({$color}) => `${$color ?? '#6a5acd'}`},
+    ${({$color}) => `${$color ?? '#8a2be2'}`}
   );
   z-index: 2;
-  box-shadow: 0 0 10px ${({ $color }) => `${$color ?? '#6a5acd'}`};
+  box-shadow: 0 0 10px ${({$color}) => `${$color ?? '#6a5acd'}`};
   overflow: hidden;
 
   img {
@@ -53,7 +53,7 @@ const OuterCircle = styled.div<{ $color?: string }>`
   margin-top: 5px;
   height: 160px;
   border-radius: 50%;
-  border: 3px solid ${({ $color }) => `${$color ?? 'rgba(150, 100, 255, 0.6)'}`};
+  border: 3px solid ${({$color}) => `${$color ?? 'rgba(150, 100, 255, 0.6)'}`};
   //animation: ${rotate} 8s linear infinite;
 `;
 
@@ -62,8 +62,8 @@ const Bar = styled.div<{ $color?: string }>`
   width: 3px;
   background: linear-gradient(
     to top,
-    ${({ $color }) => `${$color ?? '#6a5acd'}`},
-    ${({ $color }) => `${$color ?? '#8a2be2'}`}
+    ${({$color}) => `${$color ?? '#6a5acd'}`},
+    ${({$color}) => `${$color ?? '#8a2be2'}`}
   );
   border-radius: 10px 10px 0 0;
   transform-origin: center bottom;
@@ -103,12 +103,12 @@ type CircularVisualizerProps = {
 };
 
 const CircularVisualizer: React.FC<CircularVisualizerProps> = ({
-  config,
-  state,
-  trackRef,
-  barCount = 40,
-  options,
-}) => {
+                                                                 config,
+                                                                 state,
+                                                                 trackRef,
+                                                                 barCount = 40,
+                                                                 options,
+                                                               }) => {
   let trackReference: TrackReferenceOrPlaceholder | undefined =
     useMaybeTrackRefContext();
 
@@ -134,9 +134,9 @@ const CircularVisualizer: React.FC<CircularVisualizerProps> = ({
   return (
     <VisualizerContainer>
       <Avatar $color={config?.color}>
-        <img src={config?.image || '/images/design-team.png'} alt="" />
+        <img src={config?.image || '/images/design-team.png'} alt=""/>
       </Avatar>
-      <OuterCircle $color={config?.color} />
+      <OuterCircle $color={config?.color}/>
       {volumeBands.map((height, idx) => {
         const angle = (idx / barCount) * 360;
         const isActive = highlightedIndices.includes(idx);
@@ -153,8 +153,8 @@ const CircularVisualizer: React.FC<CircularVisualizerProps> = ({
               transform: `rotate(${angle}deg) translateY(-80px)`,
               background: isActive
                 ? `linear-gradient(to top, ${
-                    config?.activeColor ? config.activeColor : '#ff4500'
-                  }, ${config?.activeColor ? config.activeColor : '#ff8c00'})`
+                  config?.activeColor ? config.activeColor : '#ff4500'
+                }, ${config?.activeColor ? config.activeColor : '#ff8c00'})`
                 : undefined,
             }}
           />

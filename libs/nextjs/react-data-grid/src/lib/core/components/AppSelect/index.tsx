@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
-import type { SelectProps } from 'antd';
-import { Select } from 'antd';
+import type {SelectProps} from 'antd';
+import {Select} from 'antd';
 import AppFloatingOutline from '../AppFloatingOutline';
 
 type Props = {
@@ -18,17 +18,17 @@ type Props = {
 };
 
 export const AppSelect = ({
-  placeholder,
-  children,
-  defaultValue,
-  value,
-  className,
-  style,
-  disabled,
-  onChange,
-  asterisk,
-  ...restProps
-}: SelectProps & Props) => {
+                            placeholder,
+                            children,
+                            defaultValue,
+                            value,
+                            className,
+                            style,
+                            disabled,
+                            onChange,
+                            asterisk,
+                            ...restProps
+                          }: SelectProps & Props) => {
   const [inputVal, setInputVal] = useState<string>();
 
   useEffect(() => {

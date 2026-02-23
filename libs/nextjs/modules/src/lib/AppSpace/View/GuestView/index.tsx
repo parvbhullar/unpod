@@ -1,15 +1,12 @@
-import { Fragment } from 'react';
+import {Fragment} from 'react';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
 import AppSpaceHeaderMenus from '@unpod/components/common/AppSpaceHeaderMenus';
 import PageHeader from '../../View/PageHeader';
-import {
-  StyledNoAccessContainer,
-  StyledNoAccessText,
-} from '../../View/index.styled';
-import { useIntl } from 'react-intl';
+import {StyledNoAccessContainer, StyledNoAccessText,} from '../../View/index.styled';
+import {useIntl} from 'react-intl';
 
 const GuestView = () => {
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const AppSpaceHeaderMenusAny = AppSpaceHeaderMenus as any;
   return (
     <Fragment>
@@ -25,7 +22,7 @@ const GuestView = () => {
       <AppPageContainer>
         <StyledNoAccessContainer>
           <StyledNoAccessText level={2}>
-            {formatMessage({ id: 'auth.signInToAccess' })}
+            {formatMessage({id: 'auth.signInToAccess'})}
           </StyledNoAccessText>
         </StyledNoAccessContainer>
       </AppPageContainer>

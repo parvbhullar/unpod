@@ -1,12 +1,8 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import {
-  selectLocalPeerID,
-  selectPeerByCondition,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import { useMyMetadata } from '../../hooks/useMetadata';
-import { getMetadata } from '../../common/utils';
-import { FeatureFlags } from '../../services/FeatureFlags';
+import {useCallback, useEffect, useMemo} from 'react';
+import {selectLocalPeerID, selectPeerByCondition, useHMSStore,} from '@100mslive/react-sdk';
+import {useMyMetadata} from '../../hooks/useMetadata';
+import {getMetadata} from '../../common/utils';
+import {FeatureFlags} from '../../services/FeatureFlags';
 
 const isWhiteboardOwner = (peer) => {
   return !!getMetadata(peer?.metadata).whiteboardOwner;
@@ -14,7 +10,7 @@ const isWhiteboardOwner = (peer) => {
 
 export const useWhiteboardMetadata = () => {
   const localPeerID = useHMSStore(selectLocalPeerID);
-  const { updateMetaData } = useMyMetadata();
+  const {updateMetaData} = useMyMetadata();
   const whiteboardOwner = useHMSStore(selectPeerByCondition(isWhiteboardOwner));
   const amIWhiteboardOwner = useMemo(
     () => localPeerID === whiteboardOwner?.id,
@@ -30,7 +26,7 @@ export const useWhiteboardMetadata = () => {
     }
     try {
       if (!whiteboardOwner || amIWhiteboardOwner) {
-        await updateMetaData({ whiteboardOwner: !whiteboardOwner });
+        await updateMetaData({whiteboardOwner: !whiteboardOwner});
       } else {
         console.warn(
           'Cannot toggle whiteboard as it was shared by another peer'

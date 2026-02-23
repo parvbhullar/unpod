@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { DatePicker, Input, InputNumber, Popover, Select } from 'antd';
-import { rgba } from 'polished';
+import {DatePicker, Input, InputNumber, Popover, Select} from 'antd';
+import {rgba} from 'polished';
 
 export const StyledRoot = styled.div`
   width: 260px;
@@ -18,8 +18,8 @@ export const StyledPopover = styled(Popover)`
 export const StyledTitleContainer = styled.div`
   padding: 12px 12px 0;
   border-block-end: 1px solid
-    ${({ theme }: { theme: any }) =>
-      rgba(theme.primaryColor ?? theme.palette?.primary ?? '#6c47ff', 0.11)};
+    ${({theme}: { theme: any }) =>
+  rgba(theme.primaryColor ?? theme.palette?.primary ?? '#6c47ff', 0.11)};
 
   & .ant-popover-title {
     display: inline-flex;
@@ -57,7 +57,7 @@ export const StyledFilterContainer = styled.div`
 
 export const StyledInput = styled(Input)`
   height: 36px;
-  border-radius: ${({ theme }) => theme.radius.sm}px !important;
+  border-radius: ${({theme}) => theme.radius.sm}px !important;
 `;
 
 export const StyledSelect = styled(Select)`
@@ -65,7 +65,7 @@ export const StyledSelect = styled(Select)`
   height: 36px;
 
   & .ant-select-selector {
-    border-radius: ${({ theme }) => theme.radius.sm}px !important;
+    border-radius: ${({theme}) => theme.radius.sm}px !important;
   }
 `;
 
@@ -73,32 +73,32 @@ export const StyledInputNumber = styled(InputNumber)`
   width: 100%;
   height: 36px;
   line-height: 2.4;
-  border-radius: ${({ theme }) => theme.radius.sm}px;
+  border-radius: ${({theme}) => theme.radius.sm}px;
 
   & .ant-input-number-handler-wrap {
-    border-start-end-radius: ${({ theme }) => theme.radius.sm}px;
-    border-end-end-radius: ${({ theme }) => theme.radius.sm}px;
+    border-start-end-radius: ${({theme}) => theme.radius.sm}px;
+    border-end-end-radius: ${({theme}) => theme.radius.sm}px;
   }
 `;
 export const StyledDatePicker = styled(DatePicker)`
   width: 100%;
   height: 36px;
-  border-radius: ${({ theme }) => theme.radius.sm}px;
+  border-radius: ${({theme}) => theme.radius.sm}px;
 
   & .ant-input-number-handler-wrap {
-    border-start-end-radius: ${({ theme }) => theme.radius.sm}px;
-    border-end-end-radius: ${({ theme }) => theme.radius.sm}px;
+    border-start-end-radius: ${({theme}) => theme.radius.sm}px;
+    border-end-end-radius: ${({theme}) => theme.radius.sm}px;
   }
 `;
 
 export const StyledRangePicker = styled(DatePicker.RangePicker)`
   width: 100%;
   height: 36px;
-  border-radius: ${({ theme }) => theme.radius.sm}px;
+  border-radius: ${({theme}) => theme.radius.sm}px;
 
   & .ant-input-number-handler-wrap {
-    border-start-end-radius: ${({ theme }) => theme.radius.sm}px;
-    border-end-end-radius: ${({ theme }) => theme.radius.sm}px;
+    border-start-end-radius: ${({theme}) => theme.radius.sm}px;
+    border-end-end-radius: ${({theme}) => theme.radius.sm}px;
   }
 `;
 
@@ -109,7 +109,7 @@ export const StyledActions = styled.div`
   gap: 12px;
   padding: 12px;
   border-block-start: 1px solid
-    ${({ theme }: { theme: any }) =>
-      rgba(theme.primaryColor ?? theme.palette?.primary ?? '#6c47ff', 0.11)};
+    ${({theme}: { theme: any }) =>
+  rgba(theme.primaryColor ?? theme.palette?.primary ?? '#6c47ff', 0.11)};
   margin-block-start: 12px;
 `;

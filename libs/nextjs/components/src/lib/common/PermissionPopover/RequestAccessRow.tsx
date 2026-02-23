@@ -1,15 +1,11 @@
-import { Button, Row, Space, Typography } from 'antd';
-import { useIntl } from 'react-intl';
+import {Button, Row, Space, Typography} from 'antd';
+import {useIntl} from 'react-intl';
 
 import UserAvatar from '../UserAvatar';
-import type {
-  PermissionEntity,
-  PermissionPopoverType,
-  RequestAccessRowProps,
-} from './types';
+import type {PermissionEntity, PermissionPopoverType, RequestAccessRowProps,} from './types';
 
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { maskEmail } from '@unpod/helpers/StringHelper';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {maskEmail} from '@unpod/helpers/StringHelper';
 
 const getAcceptRequestUrl = (
   type: PermissionPopoverType,
@@ -56,14 +52,14 @@ const toErrorMessage = (error: unknown): string => {
 };
 
 const RequestAccessRow = ({
-  type,
-  currentData,
-  member,
-  onAcceptMemberRequest,
-  onDenyMemberRequest,
-}: RequestAccessRowProps) => {
+                            type,
+                            currentData,
+                            member,
+                            onAcceptMemberRequest,
+                            onDenyMemberRequest,
+                          }: RequestAccessRowProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onAccessRequest = (): void => {
     const url = getAcceptRequestUrl(type, currentData, member);
@@ -98,17 +94,17 @@ const RequestAccessRow = ({
   return (
     <Row justify="space-between" align="middle">
       <Space>
-        <UserAvatar user={member} />
+        <UserAvatar user={member}/>
         <Space orientation="vertical" size={0}>
           {member.full_name ? (
             <Typography.Text
               type={member.joined ? undefined : 'secondary'}
-              style={{ marginBottom: -4, display: 'block' }}
+              style={{marginBottom: -4, display: 'block'}}
             >
               {member.full_name}
               {member.role === 'editor'
-                ? formatMessage({ id: 'member.roleEditor' })
-                : formatMessage({ id: 'member.roleViewer' })}
+                ? formatMessage({id: 'member.roleEditor'})
+                : formatMessage({id: 'member.roleViewer'})}
             </Typography.Text>
           ) : null}
 
@@ -119,11 +115,11 @@ const RequestAccessRow = ({
       </Space>
 
       <Space orientation="horizontal">
-        <Button onClick={onAccessRequest} type="text" style={{ color: '#796CFF' }}>
-          {formatMessage({ id: 'member.actionAccept' })}
+        <Button onClick={onAccessRequest} type="text" style={{color: '#796CFF'}}>
+          {formatMessage({id: 'member.actionAccept'})}
         </Button>
         <Button onClick={onRejectRequest} type="text" danger>
-          {formatMessage({ id: 'member.actionReject' })}
+          {formatMessage({id: 'member.actionReject'})}
         </Button>
       </Space>
     </Row>

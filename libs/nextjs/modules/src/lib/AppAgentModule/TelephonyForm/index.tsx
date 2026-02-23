@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Button, Flex, Form } from 'antd';
-import { MdOutlinePhoneEnabled } from 'react-icons/md';
-import { useGetDataApi, useInfoViewContext } from '@unpod/providers';
+import {useEffect, useState} from 'react';
+import {Button, Flex, Form} from 'antd';
+import {MdOutlinePhoneEnabled} from 'react-icons/md';
+import {useGetDataApi, useInfoViewContext} from '@unpod/providers';
 import CardWrapper from '@unpod/components/common/CardWrapper';
-import {
-  StickyFooter,
-  StyledMainContainer,
-  StyledTabRoot,
-} from '../index.styled';
-import { SaveOutlined } from '@ant-design/icons';
-import { useIntl } from 'react-intl';
+import {StickyFooter, StyledMainContainer, StyledTabRoot,} from '../index.styled';
+import {SaveOutlined} from '@ant-design/icons';
+import {useIntl} from 'react-intl';
 import AppPhoneSelect from '@unpod/components/antd/AppPhoneSelect';
-import type { Pilot, TelephonyNumber } from '@unpod/constants/types';
+import type {Pilot, TelephonyNumber} from '@unpod/constants/types';
 
-const { Item } = Form;
+const {Item} = Form;
 
 type TelephonyFormProps = {
   agentData: Pilot;
@@ -27,22 +23,22 @@ type TelephonyFormValues = {
   };
 };
 
-const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
+const TelephonyForm = ({agentData, updateAgentData}: TelephonyFormProps) => {
   const [region, setRegion] = useState<string>(agentData?.region || 'IN');
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const infoViewContext = useInfoViewContext();
 
-  const [{ loading, apiData: telephonyNumbers }, { setQueryParams }] =
+  const [{loading, apiData: telephonyNumbers}, {setQueryParams}] =
     useGetDataApi<TelephonyNumber[]>(
       `core/telephony-numbers/`,
-      { data: [] },
-      { type: 'agent', region: region },
+      {data: []},
+      {type: 'agent', region: region},
       true,
     );
 
   useEffect(() => {
-    setQueryParams({ type: 'agent', region: region });
+    setQueryParams({type: 'agent', region: region});
   }, [region]);
 
   const onFinish = (values: TelephonyFormValues) => {
@@ -80,8 +76,8 @@ const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
       <StyledTabRoot>
         <StyledMainContainer>
           <CardWrapper
-            icon={<MdOutlinePhoneEnabled />}
-            title={formatMessage({ id: 'identityStudio.telephony' })}
+            icon={<MdOutlinePhoneEnabled/>}
+            title={formatMessage({id: 'identityStudio.telephony'})}
           >
             <Item
               name="phone_numbers"
@@ -100,7 +96,7 @@ const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
                 })}
                 loading={loading}
                 mode="multiple"
-                suffixIcon={<MdOutlinePhoneEnabled fontSize={16} />}
+                suffixIcon={<MdOutlinePhoneEnabled fontSize={16}/>}
                 onChange={(val: TelephonyFormValues['phone_numbers']) => {
                   setRegion(val?.region || 'IN');
                 }}
@@ -121,10 +117,10 @@ const TelephonyForm = ({ agentData, updateAgentData }: TelephonyFormProps) => {
           <Button
             type="primary"
             htmlType="submit"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={infoViewContext?.loading}
           >
-            {formatMessage({ id: 'common.save' })}
+            {formatMessage({id: 'common.save'})}
           </Button>
         </Flex>
       </StickyFooter>

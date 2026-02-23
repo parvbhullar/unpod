@@ -1,18 +1,18 @@
-
 import AppPilotSecComponent from './AppPilotSecComponent';
-import { StyledRoot } from './index.styled';
+import {StyledRoot} from './index.styled';
 
 type AppPilotSectionProps = {
   section?: string;
-  components?: any[];};
+  components?: any[];
+};
 
-const AppPilotSection = ({ section, components }: AppPilotSectionProps) => {
+const AppPilotSection = ({section, components}: AppPilotSectionProps) => {
   return (
     <StyledRoot>
       {/*<div>{section}</div>*/}
 
       {components?.map((component, index: number) => (
-        <AppPilotSecComponent key={index} component={component} />
+        <AppPilotSecComponent key={index} component={component}/>
       ))}
     </StyledRoot>
   );

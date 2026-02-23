@@ -1,17 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Badge,
-  Button,
-  Col,
-  Dropdown,
-  Form,
-  Row,
-  Space,
-  Tooltip,
-  Typography,
-  Upload,
-} from 'antd';
+import {Badge, Button, Col, Dropdown, Form, Row, Space, Tooltip, Typography, Upload,} from 'antd';
 import {
   MdArrowForward,
   MdDelete,
@@ -20,21 +9,12 @@ import {
   MdOutlineEdit,
   MdOutlineWorkspaces,
 } from 'react-icons/md';
-import { BsFillFileEarmarkPersonFill } from 'react-icons/bs';
+import {BsFillFileEarmarkPersonFill} from 'react-icons/bs';
 import AppImage from '../../next/AppImage';
-import { AskAttachmentTypes, PERMISSION_TYPES } from '@unpod/constants';
-import {
-  postDataApi,
-  uploadDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
+import {AskAttachmentTypes, PERMISSION_TYPES} from '@unpod/constants';
+import {postDataApi, uploadDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
 import AppLoader from '../AppLoader';
 import AppPopconfirm from '../../antd/AppPopconfirm';
 import PostPermissionPopover from '../PermissionPopover/PostPermissionPopover';
@@ -51,28 +31,28 @@ import {
   StyledTopBar,
   StylesLogoWrapper,
 } from './index.styled';
-import { getDateObject } from '@unpod/helpers/DateHelper';
-import { getJsonString } from '@unpod/helpers/StringHelper';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
-import { useIntl } from 'react-intl';
+import {getDateObject} from '@unpod/helpers/DateHelper';
+import {getJsonString} from '@unpod/helpers/StringHelper';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
 
-const { Text } = Typography;
-const { Item, useForm } = Form;
+const {Text} = Typography;
+const {Item, useForm} = Form;
 
 const ALLOWED_TYPES = '.xls, .xlsx, .csv';
 
 const AppSuperbookInputBlock = ({
-  superBook,
-  inputSchema,
-  isEdit,
-  onEdit,
-  onDelete,
-  onRunFinished,
-}) => {
+                                  superBook,
+                                  inputSchema,
+                                  isEdit,
+                                  onEdit,
+                                  onDelete,
+                                  onRunFinished,
+                                }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated, user } = useAuthContext();
+  const {isAuthenticated, user} = useAuthContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [description, setDescription] = useState(null);
   const [privacyType, setPrivacyType] = useState('public');
@@ -183,7 +163,7 @@ const AppSuperbookInputBlock = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Text style={{ marginRight: 5 }}>{item.name}</Text>
+          <Text style={{marginRight: 5}}>{item.name}</Text>
           <MdDelete
             fontSize={18}
             onClick={(event) => onAttachmentRemove(event, item)}
@@ -306,7 +286,7 @@ const AppSuperbookInputBlock = ({
               </StylesLogoWrapper>
             ) : (
               <StyledIconWrapper>
-                <BsFillFileEarmarkPersonFill fontSize={18} />
+                <BsFillFileEarmarkPersonFill fontSize={18}/>
               </StyledIconWrapper>
             )}
 
@@ -317,7 +297,7 @@ const AppSuperbookInputBlock = ({
             <StyledBlockActions>
               <Tooltip title="Edit">
                 <StyledActionBtn onClick={onEdit}>
-                  <MdOutlineEdit fontSize={20} />
+                  <MdOutlineEdit fontSize={20}/>
                 </StyledActionBtn>
               </Tooltip>
 
@@ -331,7 +311,7 @@ const AppSuperbookInputBlock = ({
                 >
                   <Tooltip title="Delete">
                     <StyledActionBtn>
-                      <MdDeleteOutline fontSize={20} />
+                      <MdDeleteOutline fontSize={20}/>
                     </StyledActionBtn>
                   </Tooltip>
                 </AppPopconfirm>
@@ -345,15 +325,15 @@ const AppSuperbookInputBlock = ({
             {inputSchema.map((item, index) =>
               item.type === 'checkboxes' ? (
                 <Col key={index} xs={24} sm={24} md={24}>
-                  <AppSuperbookInputs item={item} />
+                  <AppSuperbookInputs item={item}/>
                 </Col>
               ) : item.type === 'textarea' || item.type === 'json' ? (
                 <Col key={index} xs={24} sm={24} md={24}>
-                  <AppSuperbookInputs item={item} />
+                  <AppSuperbookInputs item={item}/>
                 </Col>
               ) : (
                 <Col key={index} xs={24} sm={12} md={8}>
-                  <AppSuperbookInputs item={item} />
+                  <AppSuperbookInputs item={item}/>
                 </Col>
               ),
             )}
@@ -370,7 +350,7 @@ const AppSuperbookInputBlock = ({
               onChange={(event) => setDescription(event.target.value)}
               maxLength={200}
               variant="borderless"
-              autoSize={{ minRows: 2, maxRows: 3 }}
+              autoSize={{minRows: 2, maxRows: 3}}
               size="large"
             />
           </Item>
@@ -384,14 +364,14 @@ const AppSuperbookInputBlock = ({
                   items: spaceList,
                   onClick: onSpaceChange,
                   selectedKeys: selectedSpace?.key,
-                  style: { maxHeight: 220, overflowY: 'auto' },
+                  style: {maxHeight: 220, overflowY: 'auto'},
                 }}
                 trigger={['click']}
                 arrow
               >
                 <Button type="default">
                   <Space align="center">
-                    <MdOutlineWorkspaces fontSize={21} />
+                    <MdOutlineWorkspaces fontSize={21}/>
 
                     <span>
                       {selectedSpace?.label
@@ -424,7 +404,7 @@ const AppSuperbookInputBlock = ({
                       {currentPrivacy?.icon}
                       <span>
                         {currentPrivacy?.label
-                          ? formatMessage({ id: currentPrivacy.label })
+                          ? formatMessage({id: currentPrivacy.label})
                           : ''}
                       </span>
                     </Space>
@@ -433,7 +413,7 @@ const AppSuperbookInputBlock = ({
               </PostPermissionPopover>
             </Space>
           ) : (
-            <div />
+            <div/>
           )}
 
           <Space align="center">
@@ -459,7 +439,7 @@ const AppSuperbookInputBlock = ({
                     <Button
                       type={attachments?.length ? 'primary' : 'default'}
                       shape="circle"
-                      icon={<MdOutlineAttachment fontSize={18} />}
+                      icon={<MdOutlineAttachment fontSize={18}/>}
                     />
                   </Badge>
                 </Dropdown>
@@ -467,26 +447,26 @@ const AppSuperbookInputBlock = ({
                 <Button
                   type={attachments?.length ? 'primary' : 'default'}
                   shape="circle"
-                  icon={<MdOutlineAttachment fontSize={18} />}
+                  icon={<MdOutlineAttachment fontSize={18}/>}
                 />
               )}
             </Upload>
 
             <Button type="primary" shape="round" htmlType="submit">
               <Space>
-                Run <MdArrowForward fontSize={18} />
+                Run <MdArrowForward fontSize={18}/>
               </Space>
             </Button>
           </Space>
         </StyledBottomBar>
       </StyledBlock>
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </Form>
   );
 };
 
-const { array, bool, func, object } = PropTypes;
+const {array, bool, func, object} = PropTypes;
 
 AppSuperbookInputBlock.propTypes = {
   superBook: object,

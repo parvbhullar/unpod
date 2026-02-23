@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useHMSActions } from '@100mslive/react-sdk';
-import { useIsHeadless } from '../AppData/useUISettings';
-import { FeatureFlags } from '../services/FeatureFlags';
+import {useEffect} from 'react';
+import {useHMSActions} from '@100mslive/react-sdk';
+import {useIsHeadless} from '../AppData/useUISettings';
+import {FeatureFlags} from '../services/FeatureFlags';
 
 export function BeamSpeakerLabelsLogging() {
   const hmsActions = useHMSActions();

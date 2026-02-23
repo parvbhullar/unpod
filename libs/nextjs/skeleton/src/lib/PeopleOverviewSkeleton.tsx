@@ -1,8 +1,8 @@
 'use client';
-import { Card, Skeleton } from 'antd';
+import {Card, Skeleton} from 'antd';
 import styled from 'styled-components';
 import SkeletonAvatar from './common/SkeletonAvatar';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from 'antd/es/skeleton/Button';
 
 export const StyledRoot = styled.div`
@@ -24,24 +24,24 @@ export const StyledInfoGrid = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     grid-template-columns: repeat(1, 1fr);
   }
 `;
 
 const StyledCard = styled(Card)`
-  background: ${({ theme }) => theme.palette.background.component};
+  background: ${({theme}) => theme.palette.background.component};
   width: 100% !important;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     .ant-card-body {
       padding: 14px;
     }
@@ -49,7 +49,7 @@ const StyledCard = styled(Card)`
 `;
 
 const StyledMainContent = styled.div`
-  max-width: calc(${({ theme }) => theme.sizes.mainContentWidth});
+  max-width: calc(${({theme}) => theme.sizes.mainContentWidth});
   margin: 0 auto;
   width: 100%;
   display: flex;
@@ -59,7 +59,7 @@ const StyledMainContent = styled.div`
 
   overflow: auto !important;
   height: calc(1000vh - 280px) !important;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding-top: 14px;
   }
 `;
@@ -69,17 +69,17 @@ const PeopleOverviewSkeleton: React.FC = () => {
     <StyledRoot>
       <StyledMainContent>
         <StyledTabs>
-          <SkeletonAvatar size={20} />
-          <SkeletonInput style={{ width: 80, height: 18 }} />
+          <SkeletonAvatar size={20}/>
+          <SkeletonInput style={{width: 80, height: 18}}/>
         </StyledTabs>
 
         <StyledCard>
-          <Skeleton active paragraph={{ rows: 4 }} />
+          <Skeleton active paragraph={{rows: 4}}/>
         </StyledCard>
 
         <StyledTabs>
-          <SkeletonAvatar size={20} />
-          <SkeletonInput style={{ width: 80, height: 18 }} />
+          <SkeletonAvatar size={20}/>
+          <SkeletonInput style={{width: 80, height: 18}}/>
         </StyledTabs>
 
         <StyledInfoGrid>
@@ -94,8 +94,8 @@ const PeopleOverviewSkeleton: React.FC = () => {
                 },
               }}
             >
-              <SkeletonInput style={{ width: 80, height: 14 }} />
-              <SkeletonButton active style={{ width: 80, height: 20 }} />
+              <SkeletonInput style={{width: 80, height: 14}}/>
+              <SkeletonButton active style={{width: 80, height: 20}}/>
             </Card>
           ))}
         </StyledInfoGrid>
@@ -104,4 +104,4 @@ const PeopleOverviewSkeleton: React.FC = () => {
   );
 };
 
-export { PeopleOverviewSkeleton };
+export {PeopleOverviewSkeleton};

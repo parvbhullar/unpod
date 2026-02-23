@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
-import { Button, Space } from 'antd';
-import type { TooltipPlacement } from 'antd/es/tooltip';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import {Fragment} from 'react';
+import {Button, Space} from 'antd';
+import type {TooltipPlacement} from 'antd/es/tooltip';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import {
   deleteDataApi,
   getDataApi,
@@ -10,8 +10,8 @@ import {
   useAuthContext,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { AppPopover } from '../../antd';
-import { useRouter } from 'next/navigation';
+import {AppPopover} from '../../antd';
+import {useRouter} from 'next/navigation';
 
 type RequestEntityType = 'org' | 'space' | 'thread' | string;
 
@@ -22,7 +22,8 @@ type RequestEntityData = {
   final_role?: string;
   request_token?: string | null;
   is_requested?: boolean;
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 const getJoinEntityUrl = (
   type: RequestEntityType,
@@ -122,25 +123,26 @@ type RequestPopoverProps = {
   userList?: unknown[];
   currentData: RequestEntityData;
   setCurrentData: (data: RequestEntityData) => void;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const RequestPopover = ({
-  type,
-  placement = 'bottomRight',
-  title = 'Share your thread!',
-  linkShareable = false,
-  userList = [],
-  currentData,
-  setCurrentData,
-  ...restProps
-}: RequestPopoverProps) => {
+                          type,
+                          placement = 'bottomRight',
+                          title = 'Share your thread!',
+                          linkShareable = false,
+                          userList = [],
+                          currentData,
+                          setCurrentData,
+                          ...restProps
+                        }: RequestPopoverProps) => {
   console.log('RequestPopover currentData', currentData);
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { setActiveOrg, updateAuthUser } = useAuthActionsContext();
-  const { user } = useAuthContext();
+  const {setActiveOrg, updateAuthUser} = useAuthActionsContext();
+  const {user} = useAuthContext();
   const router = useRouter();
   const onUpdate = (data: RequestEntityData) => {
-    setCurrentData({ ...currentData, ...data });
+    setCurrentData({...currentData, ...data});
   };
 
   const onJoinEntity = () => {
@@ -255,7 +257,7 @@ const RequestPopover = ({
             organization_list: organizationList,
           });
         } else {
-          onUpdate({ ...data.data, final_role: ACCESS_ROLE.GUEST });
+          onUpdate({...data.data, final_role: ACCESS_ROLE.GUEST});
         }
 
         infoViewActionsContext.showMessage(data.message);

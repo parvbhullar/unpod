@@ -1,18 +1,9 @@
-import {
-  selectUnreadHMSMessagesCount,
-  useHMSStore,
-} from '@100mslive/react-sdk';
-import {
-  useIsSidepaneTypeOpen,
-  useSidepaneToggle,
-} from '../../AppData/useSidepane';
-import { useIsFeatureEnabled } from '../../hooks/useFeatures';
-import { FEATURE_LIST, SIDE_PANE_OPTIONS } from '../../common/constants';
-import { Button, Tooltip } from 'antd';
-import {
-  MdOutlineChatBubbleOutline,
-  MdOutlineMarkChatUnread,
-} from 'react-icons/md';
+import {selectUnreadHMSMessagesCount, useHMSStore,} from '@100mslive/react-sdk';
+import {useIsSidepaneTypeOpen, useSidepaneToggle,} from '../../AppData/useSidepane';
+import {useIsFeatureEnabled} from '../../hooks/useFeatures';
+import {FEATURE_LIST, SIDE_PANE_OPTIONS} from '../../common/constants';
+import {Button, Tooltip} from 'antd';
+import {MdOutlineChatBubbleOutline, MdOutlineMarkChatUnread,} from 'react-icons/md';
 
 export const ChatToggle = () => {
   const countUnreadMessages = useHMSStore(selectUnreadHMSMessagesCount);
@@ -32,9 +23,9 @@ export const ChatToggle = () => {
         data-testid="chat_btn"
         icon={
           countUnreadMessages === 0 ? (
-            <MdOutlineChatBubbleOutline />
+            <MdOutlineChatBubbleOutline/>
           ) : (
-            <MdOutlineMarkChatUnread data-testid="chat_unread_btn" />
+            <MdOutlineMarkChatUnread data-testid="chat_unread_btn"/>
           )
         }
       ></Button>

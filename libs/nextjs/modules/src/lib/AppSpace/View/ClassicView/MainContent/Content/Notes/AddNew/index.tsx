@@ -1,34 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography } from 'antd';
-import { MdEdit } from 'react-icons/md';
-import { RiVideoAddLine } from 'react-icons/ri';
-import {
-  StyledContainer,
-  StyledContent,
-  StyledItemRoot,
-  StyledRoot,
-  StyledTitleWrapper,
-} from './index.styled';
+import {Typography} from 'antd';
+import {MdEdit} from 'react-icons/md';
+import {RiVideoAddLine} from 'react-icons/ri';
+import {StyledContainer, StyledContent, StyledItemRoot, StyledRoot, StyledTitleWrapper,} from './index.styled';
 
 const items = [
   {
     key: 'write',
     title: 'Write',
-    icon: <MdEdit size={24} />,
+    icon: <MdEdit size={24}/>,
     description: 'Create a new note',
   },
   {
     key: 'upload',
     title: 'Upload',
-    icon: <RiVideoAddLine size={24} />,
+    icon: <RiVideoAddLine size={24}/>,
     description: 'Audio, Video file',
   },
 ];
 
-const { Paragraph, Title } = Typography;
+const {Paragraph, Title} = Typography;
 
-const AddNote = ({ onAddClick }) => {
+const AddNote = ({onAddClick}) => {
   const handleItemClick = (key) => {
     onAddClick?.(key);
   };
@@ -55,7 +49,7 @@ const AddNote = ({ onAddClick }) => {
   );
 };
 
-const { func } = PropTypes;
+const {func} = PropTypes;
 
 AddNote.propTypes = {
   onAddClick: func,

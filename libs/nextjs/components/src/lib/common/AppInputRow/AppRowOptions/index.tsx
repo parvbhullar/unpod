@@ -1,20 +1,13 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, ModalProps, Row, Select } from 'antd';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import {
-  AppDate,
-  AppDateTime,
-  AppInput,
-  AppSelect,
-  AppTextArea,
-  AppTime,
-} from '../../../antd';
-import { REQUIRED_CONTACT_FIELDS } from '@unpod/constants';
-import { StyledRoot } from './index.styled';
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Modal, ModalProps, Row, Select} from 'antd';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {AppDate, AppDateTime, AppInput, AppSelect, AppTextArea, AppTime,} from '../../../antd';
+import {REQUIRED_CONTACT_FIELDS} from '@unpod/constants';
+import {StyledRoot} from './index.styled';
 
-const { Item } = Form;
-const { Option } = Select;
+const {Item} = Form;
+const {Option} = Select;
 
 const DEFAULT_VALUE_PLACEHOLDER = 'Enter Default Value';
 
@@ -22,23 +15,25 @@ type SelectedItemType = {
   name?: string;
   type?: string;
   choices?: string[];
-  isEnum?: boolean;};
+  isEnum?: boolean;
+};
 
 type AppRowOptionsProps = Omit<ModalProps, 'onFinish'> & {
   selectedItem?: SelectedItemType;
   onFinish?: (values: Record<string, unknown>) => void;
   initialValues?: Record<string, unknown>;
   contentType?: string;
-  isDecRequired?: boolean;};
+  isDecRequired?: boolean;
+};
 
 const AppRowOptions: React.FC<AppRowOptionsProps> = ({
-  selectedItem,
-  onFinish,
-  initialValues,
-  contentType,
-  isDecRequired,
-  ...restProps
-}) => {
+                                                       selectedItem,
+                                                       onFinish,
+                                                       initialValues,
+                                                       contentType,
+                                                       isDecRequired,
+                                                       ...restProps
+                                                     }) => {
   const [choices, setChoices] = useState<string[]>([]);
   const isRequiredContactField =
     !!selectedItem?.name &&
@@ -64,7 +59,7 @@ const AppRowOptions: React.FC<AppRowOptionsProps> = ({
       <StyledRoot>
         <Form
           layout="vertical"
-          initialValues={initialValues || { choices: [] }}
+          initialValues={initialValues || {choices: []}}
           onFinish={onFinish}
         >
           <Item
@@ -86,7 +81,7 @@ const AppRowOptions: React.FC<AppRowOptionsProps> = ({
               }),
             ]}
           >
-            <AppInput placeholder={`Enter Field Title`} asterisk />
+            <AppInput placeholder={`Enter Field Title`} asterisk/>
           </Item>
 
           {!(contentType === 'contact' && isRequiredContactField) && (
@@ -109,7 +104,7 @@ const AppRowOptions: React.FC<AppRowOptionsProps> = ({
                 }),
               ]}
             >
-              <AppInput placeholder={`Enter Field Name`} asterisk />
+              <AppInput placeholder={`Enter Field Name`} asterisk/>
             </Item>
           )}
 
@@ -165,13 +160,13 @@ const AppRowOptions: React.FC<AppRowOptionsProps> = ({
                 ))}
               </AppSelect>
             ) : selectedItem?.type === 'date' ? (
-              <AppDate placeholder={DEFAULT_VALUE_PLACEHOLDER} />
+              <AppDate placeholder={DEFAULT_VALUE_PLACEHOLDER}/>
             ) : selectedItem?.type === 'time' ? (
-              <AppTime placeholder={DEFAULT_VALUE_PLACEHOLDER} />
+              <AppTime placeholder={DEFAULT_VALUE_PLACEHOLDER}/>
             ) : selectedItem?.type === 'date-time' ? (
-              <AppDateTime placeholder={DEFAULT_VALUE_PLACEHOLDER} />
+              <AppDateTime placeholder={DEFAULT_VALUE_PLACEHOLDER}/>
             ) : (
-              <AppInput placeholder={DEFAULT_VALUE_PLACEHOLDER} />
+              <AppInput placeholder={DEFAULT_VALUE_PLACEHOLDER}/>
             )}
           </Item>
 
@@ -186,7 +181,7 @@ const AppRowOptions: React.FC<AppRowOptionsProps> = ({
           >
             <AppTextArea
               placeholder={`Enter Field Description`}
-              autoSize={{ minRows: 3, maxRows: 10 }}
+              autoSize={{minRows: 3, maxRows: 10}}
               asterisk={isDecRequired}
             />
           </Item>

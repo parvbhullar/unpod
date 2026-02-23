@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Input, type InputRef } from 'antd';
+import {useEffect, useRef} from 'react';
+import {Input, type InputRef} from 'antd';
 import styled from 'styled-components';
 
 const StyledInput = styled(Input)`
@@ -20,7 +20,7 @@ type TextEditorProps = {
   onClose: (commit: boolean, cancel: boolean) => void;
 };
 
-const TextEditor = ({ row, column, onRowChange, onClose }: TextEditorProps) => {
+const TextEditor = ({row, column, onRowChange, onClose}: TextEditorProps) => {
   const editorRef = useRef<InputRef | null>(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const TextEditor = ({ row, column, onRowChange, onClose }: TextEditorProps) => {
       ref={editorRef}
       value={row[column.dataIndex]}
       onChange={(event) =>
-        onRowChange({ ...row, [column.dataIndex]: event.target.value })
+        onRowChange({...row, [column.dataIndex]: event.target.value})
       }
       onBlur={() => onClose(true, false)}
     />

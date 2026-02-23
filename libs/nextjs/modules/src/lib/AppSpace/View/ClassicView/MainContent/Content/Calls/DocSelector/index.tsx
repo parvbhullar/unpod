@@ -1,27 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useAuthContext,
-} from '@unpod/providers';
-import { StyledSearchBoxWrapper } from './index.styled';
+import {useEffect, useMemo, useState} from 'react';
+import {useAppSpaceActionsContext, useAppSpaceContext, useAuthContext,} from '@unpod/providers';
+import {StyledSearchBoxWrapper} from './index.styled';
 import AppList from '@unpod/components/common/AppList';
-import { AppDocumentsSkeleton } from '@unpod/skeleton/AppDocumentsSkeleton';
+import {AppDocumentsSkeleton} from '@unpod/skeleton/AppDocumentsSkeleton';
 import DocItem from './DocItem';
 import SubHeader from '../../../../Sidebar/People/SubHeader';
-import { getUtcTimestamp } from '@unpod/helpers/DateHelper';
+import {getUtcTimestamp} from '@unpod/helpers/DateHelper';
 
-const DocSelector = ({ allowSelection = false }) => {
+const DocSelector = ({allowSelection = false}) => {
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, any>>({});
 
-  const { setSelectedDocs, connectorActions } = useAppSpaceActionsContext();
-  const { selectedDocs, connectorData } = useAppSpaceContext();
-  const { isAuthenticated } = useAuthContext();
-  const { apiData, count, loading, isLoadingMore, page, hasMoreRecord } =
-    connectorData || {};
+  const {setSelectedDocs, connectorActions} = useAppSpaceActionsContext();
+  const {selectedDocs, connectorData} = useAppSpaceContext();
+  const {isAuthenticated} = useAuthContext();
+  const {apiData, count, loading, isLoadingMore, page, hasMoreRecord} =
+  connectorData || {};
 
-  const { setLoadingMore, setQueryParams, setPage } = connectorActions || {};
+  const {setLoadingMore, setQueryParams, setPage} = connectorActions || {};
   const records = connectorData?.apiData || [];
   const isDocsLoading = loading;
 
@@ -83,9 +79,9 @@ const DocSelector = ({ allowSelection = false }) => {
           height: 'calc(100vh - 120px)',
         }}
         data={apiData}
-        initialLoader={<AppDocumentsSkeleton />}
+        initialLoader={<AppDocumentsSkeleton/>}
         loading={loading}
-        renderItem={(data, index) => <DocItem key={index} data={data} />}
+        renderItem={(data, index) => <DocItem key={index} data={data}/>}
         onEndReached={onEndReached}
         footerProps={{
           loading: isLoadingMore,

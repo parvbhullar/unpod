@@ -5,7 +5,7 @@ export const StyledContainer = styled.div`
   margin-bottom: 12px;
   cursor: pointer;
   position: relative;
-  background-color: ${({ theme }) => theme.palette.background.component};
+  background-color: ${({theme}) => theme.palette.background.component};
   border-radius: 8px;
 `;
 

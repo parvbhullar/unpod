@@ -1,19 +1,16 @@
-import { useMemo, useState } from 'react';
+import {useMemo, useState} from 'react';
 import SubHeader from './SubHeader';
 import AppDocuments from '@unpod/components/modules/AppDocuments';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-} from '@unpod/providers';
-import { StyledSearchBoxWrapper } from './index.styled';
+import {useAppSpaceActionsContext, useAppSpaceContext,} from '@unpod/providers';
+import {StyledSearchBoxWrapper} from './index.styled';
 
 const People = () => {
   const [search, setSearch] = useState('');
   const [isDocsLoading, setDocsLoading] = useState(false);
   const [filters, setFilters] = useState({});
 
-  const { setSelectedDocs } = useAppSpaceActionsContext();
-  const { selectedDocs = [], connectorData } = useAppSpaceContext();
+  const {setSelectedDocs} = useAppSpaceActionsContext();
+  const {selectedDocs = [], connectorData} = useAppSpaceContext();
 
   const records = (connectorData?.apiData || []) as any[];
 

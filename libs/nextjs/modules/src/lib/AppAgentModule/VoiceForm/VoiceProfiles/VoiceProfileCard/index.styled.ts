@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Typography } from 'antd';
+import {Button, Typography} from 'antd';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 export const StyledButton = styled(Button)`
   position: absolute;
@@ -19,7 +19,7 @@ export const StyledCard = styled.div`
   margin-bottom: 16px;
   gap: 16px;
   padding: 14px 24px;
-  background: ${({ theme }) => theme.palette.background.default};
+  background: ${({theme}) => theme.palette.background.default};
   cursor: pointer;
   transition: all 0.15s ease;
   border: 1px solid ${(props) => props.theme.border.color};
@@ -34,21 +34,21 @@ export const StyledCard = styled.div`
     }
 
     .profile-name {
-      color: ${({ theme }) => theme.palette.primary || '#796cff'};
+      color: ${({theme}) => theme.palette.primary || '#796cff'};
     }
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     gap: 12px;
     padding: 12px 20px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     padding: 12px 16px;
     gap: 10px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     padding: 10px 12px;
   }
 `;
@@ -122,7 +122,7 @@ export const StyledCostLabel = styled(Text)`
   text-transform: uppercase;
   letter-spacing: 0.3px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 9px;
   }
 `;
@@ -132,7 +132,7 @@ export const StyledValueTag = styled(Text)`
   color: #374151;
   font-weight: 500;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 10px;
   }
 `;
@@ -146,16 +146,16 @@ export const PlayButton = styled(Button)<{
   width: 36px !important;
   height: 36px;
   min-width: 36px !important;
-  border: 1.5px solid ${({ borderColor }) => borderColor};
+  border: 1.5px solid ${({borderColor}) => borderColor};
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: ${({ isPlaying, isSelected, primaryColor }) =>
-    isPlaying || isSelected ? primaryColor : 'inherit'};
+  color: ${({isPlaying, isSelected, primaryColor}) =>
+  isPlaying || isSelected ? primaryColor : 'inherit'};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xs}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xs}px) {
     width: 32px !important;
     height: 32px;
     min-width: 32px !important;

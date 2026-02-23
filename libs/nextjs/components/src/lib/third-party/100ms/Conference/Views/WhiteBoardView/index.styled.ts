@@ -13,7 +13,7 @@ export const StyledSidePaneContainer = styled.div`
   padding: 16px;
   flex: 0 0 20%;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     flex-direction: row;
     flex: 1 1 0;
   }
@@ -24,7 +24,7 @@ export const StyledEditorRoot = styled.div`
   margin-inline: 16px;
   flex: 3 1 0;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.lg}px) {
     flex: 2 1 0;
 
     & video {

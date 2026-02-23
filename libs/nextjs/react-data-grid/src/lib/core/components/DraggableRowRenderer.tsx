@@ -1,29 +1,30 @@
-import { useDrag, useDrop } from 'react-dnd';
+import {useDrag, useDrop} from 'react-dnd';
 import clsx from 'clsx';
-import { type RenderRowProps } from '../models/data-grid';
-import { Row } from '..';
+import {type RenderRowProps} from '../models/data-grid';
+import {Row} from '..';
 
 type DraggableRowRenderProps<R, SR> = RenderRowProps<R, SR> & {
-  onRowReorder: (sourceIndex: number, targetIndex: number) => void;};
+  onRowReorder: (sourceIndex: number, targetIndex: number) => void;
+};
 
 export function DraggableRowRenderer<R, SR>({
-  rowIdx,
-  isRowSelected,
-  className,
-  onRowReorder,
-  ...props
-}: DraggableRowRenderProps<R, SR>) {
-  const [{ isDragging }, drag] = useDrag({
+                                              rowIdx,
+                                              isRowSelected,
+                                              className,
+                                              onRowReorder,
+                                              ...props
+                                            }: DraggableRowRenderProps<R, SR>) {
+  const [{isDragging}, drag] = useDrag({
     type: 'ROW_DRAG',
-    item: { index: rowIdx },
+    item: {index: rowIdx},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
-  const [{ isOver }, drop] = useDrop({
+  const [{isOver}, drop] = useDrop({
     accept: 'ROW_DRAG',
-    drop({ index }: { index: number }) {
+    drop({index}: { index: number }) {
       onRowReorder(index, rowIdx);
     },
     collect: (monitor) => ({

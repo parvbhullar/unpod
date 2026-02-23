@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import type { ComponentPropsWithoutRef } from 'react';
+import type {ComponentPropsWithoutRef} from 'react';
 
 const StyledFormFooter = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-top: 1px solid ${({ theme }) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-top: 1px solid ${({theme}) => theme.border.color};
   width: 100%;
   z-index: 2;
   display: flex;

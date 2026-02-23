@@ -1,7 +1,7 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type {Dispatch, ReactNode, SetStateAction} from 'react';
 
-import type { NotificationData } from './app';
-import type { Spaces } from '../space';
+import type {NotificationData} from './app';
+import type {Spaces} from '../space';
 
 export type OrgContextType = {
   activeSpace: Spaces;

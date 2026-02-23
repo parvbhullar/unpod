@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { Space } from 'antd';
+import {Space} from 'antd';
 
 export const StyledSpace = styled(Space)`
   display: flex;
   border-radius: 4px;
-  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
-  border: 1px solid ${({ theme }) => theme.border.color};
+  padding: ${({theme}) => theme.space.sm} ${({theme}) => theme.space.md};
+  border: 1px solid ${({theme}) => theme.border.color};
   margin-bottom: 12px;
   cursor: pointer;
 `;

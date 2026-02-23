@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 
-import type {
-  RenderSortIconProps,
-  RenderSortPriorityProps,
-  RenderSortStatusProps,
-} from './models/data-grid';
+import type {RenderSortIconProps, RenderSortPriorityProps, RenderSortStatusProps,} from './models/data-grid';
 
 const StyledSorters = styled.span`
   display: inline-flex;
@@ -32,10 +28,10 @@ const StyledSorterTop = styled.span<{ fillColor: string }>`
   text-rendering: optimizeLegibility;
 
   svg {
-    fill: ${({ fillColor }: { fillColor: string }) =>
-      fillColor !== ''
-        ? fillColor
-        : ({ theme }: { theme: any }) => theme.table.headerIconColor};
+    fill: ${({fillColor}: { fillColor: string }) =>
+  fillColor !== ''
+    ? fillColor
+    : ({theme}: { theme: any }) => theme.table.headerIconColor};
   }
 `;
 
@@ -44,18 +40,18 @@ const StyledSorterBottom = styled(StyledSorterTop)`
 `;
 
 export default function renderSortStatus({
-  sortDirection,
-  priority,
-}: RenderSortStatusProps) {
+                                           sortDirection,
+                                           priority,
+                                         }: RenderSortStatusProps) {
   return (
     <>
-      {renderSortIcon({ sortDirection })}
-      {renderSortPriority({ priority })}
+      {renderSortIcon({sortDirection})}
+      {renderSortPriority({priority})}
     </>
   );
 }
 
-function Sorter({ sortDirection }: { sortDirection?: string }) {
+function Sorter({sortDirection}: { sortDirection?: string }) {
   return (
     <StyledSorters aria-hidden="true">
       <StyledSorterTop
@@ -71,7 +67,8 @@ function Sorter({ sortDirection }: { sortDirection?: string }) {
           height="1em"
           aria-hidden="true"
         >
-          <path d="M858.9 689L530.5 308.2c-9.4-10.9-27.5-10.9-37 0L165.1 689c-12.2 14.2-1.2 35 18.5 35h656.8c19.7 0 30.7-20.8 18.5-35z" />
+          <path
+            d="M858.9 689L530.5 308.2c-9.4-10.9-27.5-10.9-37 0L165.1 689c-12.2 14.2-1.2 35 18.5 35h656.8c19.7 0 30.7-20.8 18.5-35z"/>
         </svg>
       </StyledSorterTop>
       <StyledSorterBottom
@@ -93,19 +90,20 @@ function Sorter({ sortDirection }: { sortDirection?: string }) {
           height="1em"
           aria-hidden="true"
         >
-          <path d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z" />
+          <path
+            d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"/>
         </svg>
       </StyledSorterBottom>
     </StyledSorters>
   );
 }
 
-export function renderSortIcon({ sortDirection }: RenderSortIconProps) {
-  if (sortDirection === undefined) return <Sorter />;
+export function renderSortIcon({sortDirection}: RenderSortIconProps) {
+  if (sortDirection === undefined) return <Sorter/>;
 
-  return <Sorter sortDirection={sortDirection} />;
+  return <Sorter sortDirection={sortDirection}/>;
 }
 
-export function renderSortPriority({ priority }: RenderSortPriorityProps) {
+export function renderSortPriority({priority}: RenderSortPriorityProps) {
   return priority;
 }

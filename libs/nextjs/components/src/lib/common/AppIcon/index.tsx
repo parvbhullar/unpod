@@ -1,6 +1,6 @@
-import React, { CSSProperties, MouseEventHandler, ReactNode } from 'react';
-import { theme, Tooltip } from 'antd';
-import { TooltipPlacement } from 'antd/es/tooltip';
+import React, {CSSProperties, MouseEventHandler, ReactNode} from 'react';
+import {theme, Tooltip} from 'antd';
+import {TooltipPlacement} from 'antd/es/tooltip';
 
 import {
   AppBusinessIcon,
@@ -13,8 +13,8 @@ import {
   AppViewIcon,
 } from '@unpod/icons';
 
-import { StyledButton, StyledIconButton, StyledSpace } from './index.styled';
-import { getAssetsUrl } from '@unpod/helpers/UrlHelper';
+import {StyledButton, StyledIconButton, StyledSpace} from './index.styled';
+import {getAssetsUrl} from '@unpod/helpers/UrlHelper';
 
 type AppIconType =
   | 'user'
@@ -43,42 +43,42 @@ const getIcon = (icon: AppIconType): ReactNode => {
   switch (icon) {
     case 'user':
     case 'saas':
-      return <AppUserIcon />;
+      return <AppUserIcon/>;
     case 'business':
     case 'building':
     case 'company':
     case 'd2c':
-      return <AppBusinessIcon />;
+      return <AppBusinessIcon/>;
     case 'mentor':
     case 'talent':
     case 'mentorship':
     case 'influencer':
     case 'graduation-hat':
-      return <AppMentorIcon />;
+      return <AppMentorIcon/>;
     case 'investor':
     case 'briefcase':
     case 'marketplace':
     case 'feedback':
     case 'funding':
-      return <AppInvestorIcon />;
+      return <AppInvestorIcon/>;
     case 'edit':
-      return <AppEditIcon />;
+      return <AppEditIcon/>;
     case 'delete':
-      return <AppDeleteIcon />;
+      return <AppDeleteIcon/>;
     case 'view':
-      return <AppViewIcon />;
+      return <AppViewIcon/>;
     case 'download':
-      return <AppDownloadIcon />;
+      return <AppDownloadIcon/>;
     default:
       return (
         <span className={`pointer anticon anticon-${icon}`}>
-          <img src={getAssetsUrl(`icons/${icon}.svg`)} alt={icon as string} />
+          <img src={getAssetsUrl(`icons/${icon}.svg`)} alt={icon as string}/>
         </span>
       );
   }
 };
 
-const { useToken } = theme;
+const {useToken} = theme;
 
 type AppIconProps = {
   title?: string;
@@ -89,20 +89,21 @@ type AppIconProps = {
   showToolTip?: boolean;
   btnWrapper?: boolean;
   disabled?: boolean;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 export const AppIcon: React.FC<AppIconProps> = ({
-  title,
-  onClick,
-  icon,
-  placement,
-  style,
-  showToolTip = true,
-  btnWrapper,
-  disabled = false,
-  ...rest
-}) => {
-  const { token } = useToken();
+                                                  title,
+                                                  onClick,
+                                                  icon,
+                                                  placement,
+                                                  style,
+                                                  showToolTip = true,
+                                                  btnWrapper,
+                                                  disabled = false,
+                                                  ...rest
+                                                }) => {
+  const {token} = useToken();
   if (showToolTip)
     return (
       <Tooltip title={title} placement={placement} mi-role={'title'}>

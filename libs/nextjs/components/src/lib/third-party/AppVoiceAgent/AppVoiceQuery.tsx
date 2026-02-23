@@ -1,23 +1,7 @@
-import React, {
-  Fragment,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {Fragment, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Badge,
-  Dropdown,
-  Form,
-  Row,
-  Space,
-  Tooltip,
-  Typography,
-  Upload,
-} from 'antd';
-import { MdArrowForward, MdDelete, MdOutlineAttachment } from 'react-icons/md';
+import {Badge, Dropdown, Form, Row, Space, Tooltip, Typography, Upload,} from 'antd';
+import {MdArrowForward, MdDelete, MdOutlineAttachment} from 'react-icons/md';
 import {
   localPostDataApi,
   postDataApi,
@@ -25,16 +9,11 @@ import {
   useAuthContext,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { useRouter } from 'next/navigation';
-import { AskAttachmentTypes, PERMISSION_TYPES } from '@unpod/constants';
+import {useRouter} from 'next/navigation';
+import {AskAttachmentTypes, PERMISSION_TYPES} from '@unpod/constants';
 import PostPermissionPopover from '../../common/PermissionPopover/PostPermissionPopover';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { useOrgContext } from '@unpod/providers';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
 import AppLoader from '../../common/AppLoader';
 import AppPilotPopover from '../../modules/AppPilotPopover';
 import AppKbPopover from '../../modules/AppKbPopover';
@@ -49,36 +28,33 @@ import {
   VoiceOverlay,
 } from '../../modules/AppQueryWindow/index.styled';
 import ContextView from '../../modules/AppQueryWindow/ContextView';
-import {
-  AgentConnectionProvider,
-  useAgentConnection,
-} from '@unpod/livekit/hooks/useAgentConnection';
+import {AgentConnectionProvider, useAgentConnection,} from '@unpod/livekit/hooks/useAgentConnection';
 import AgentView from '../../third-party/AppVoiceAgent/AgentView';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
-const { Item, useForm } = Form;
-const { Text } = Typography;
+const {Item, useForm} = Form;
+const {Text} = Typography;
 
 const UserQuery = ({
-  scheduleBtn,
-  kbPopover,
-  pilotPopover,
-  hideAttachment,
-  onDataSaved,
-  isMySpace,
-  defaultKbs,
-  executionType,
-  ref,
-}) => {
+                     scheduleBtn,
+                     kbPopover,
+                     pilotPopover,
+                     hideAttachment,
+                     onDataSaved,
+                     isMySpace,
+                     defaultKbs,
+                     executionType,
+                     ref,
+                   }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { visitorId, isAuthenticated, user } = useAuthContext();
+  const {visitorId, isAuthenticated, user} = useAuthContext();
   const router = useRouter();
   const [form] = useForm();
 
   const [privacyType, setPrivacyType] = useState('private');
   const [loadingToken, setLoadingToken] = useState(false);
-  const { roomToken, updateRoomToken } = useAgentConnection();
+  const {roomToken, updateRoomToken} = useAgentConnection();
   const [currentPrivacy, setCurrentPrivacy] = useState(null);
   const [selectedSpace, setSelectedSpace] = useState(null);
   const [open, setOpen] = useState(false);
@@ -90,7 +66,7 @@ const UserQuery = ({
   const [knowledgeBases, setKnowledgeBases] = useState([]);
   const [pilot, setPilot] = useState(null);
   const [focus, setFocus] = useState(isMySpace ? 'my_space' : 'public');
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const inputRef = useRef(null);
 
@@ -186,7 +162,7 @@ const UserQuery = ({
     };
 
     if (isAuthenticated) {
-      const { content, ...rest } = values;
+      const {content, ...rest} = values;
       payload = {
         // title: title,
         content: content || '',
@@ -222,7 +198,7 @@ const UserQuery = ({
       }
     } else {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.enterQueryFirst' }),
+        formatMessage({id: 'validation.enterQueryFirst'}),
       );
     }
   };
@@ -245,7 +221,7 @@ const UserQuery = ({
           !AskAttachmentTypes.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'upload.errorInvalidFileType' }),
+        formatMessage({id: 'upload.errorInvalidFileType'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -293,7 +269,7 @@ const UserQuery = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Text style={{ marginRight: 5 }}>{item.name}</Text>
+          <Text style={{marginRight: 5}}>{item.name}</Text>
           <MdDelete
             fontSize={18}
             onClick={(event) => onAttachmentRemove(event, item)}
@@ -344,14 +320,14 @@ const UserQuery = ({
         <StyledContainer>
           <StyledMainContent>
             {context && (
-              <ContextView context={context} onContextClose={onContextClose} />
+              <ContextView context={context} onContextClose={onContextClose}/>
             )}
 
             <Item name="content">
               <StyledInput
-                placeholder={formatMessage({ id: 'common.askAnything' })}
+                placeholder={formatMessage({id: 'common.askAnything'})}
                 variant="borderless"
-                autoSize={{ minRows: 2, maxRows: 10 }}
+                autoSize={{minRows: 2, maxRows: 10}}
                 size="large"
                 onChange={(e) => setQuery(e.target.value)}
                 onPressEnter={form.submit}
@@ -402,7 +378,7 @@ const UserQuery = ({
                       arrow
                     >
                       <Tooltip
-                        title={formatMessage({ id: currentPrivacy?.label })}
+                        title={formatMessage({id: currentPrivacy?.label})}
                       >
                         <StyledIconButton type="text" shape="round">
                           {currentPrivacy?.iconOnly}
@@ -436,13 +412,13 @@ const UserQuery = ({
                     >
                       <Badge count={attachments?.length} offset={[-5, 2]}>
                         <StyledIconButton type="text" shape="round">
-                          <MdOutlineAttachment fontSize={24} />
+                          <MdOutlineAttachment fontSize={24}/>
                         </StyledIconButton>
                       </Badge>
                     </Dropdown>
                   ) : (
                     <StyledIconButton type="text" shape="round">
-                      <MdOutlineAttachment fontSize={24} />
+                      <MdOutlineAttachment fontSize={24}/>
                     </StyledIconButton>
                   )}
                 </Upload>
@@ -453,13 +429,13 @@ const UserQuery = ({
                   attachments={attachments}
                   query={query}
                   onSchedule={(values) =>
-                    onQuerySubmit({ ...values, content: query })
+                    onQuerySubmit({...values, content: query})
                   }
                 />
               ) : query ? (
                 <StyledButton type="primary" shape="round" htmlType="submit">
-                  {formatMessage({ id: 'common.submit' })}{' '}
-                  <MdArrowForward fontSize={18} />
+                  {formatMessage({id: 'common.submit'})}{' '}
+                  <MdArrowForward fontSize={18}/>
                 </StyledButton>
               ) : (
                 <StyledButton
@@ -468,8 +444,8 @@ const UserQuery = ({
                   loading={loadingToken}
                   onClick={onStartVoice}
                 >
-                  {formatMessage({ id: 'common.talk' })}{' '}
-                  <MdArrowForward fontSize={18} />
+                  {formatMessage({id: 'common.talk'})}{' '}
+                  <MdArrowForward fontSize={18}/>
                 </StyledButton>
               )}
             </Space>
@@ -498,13 +474,13 @@ const UserQuery = ({
         </StyledContainer>
       </Form>
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </Fragment>
   );
 };
 UserQuery.displayName = 'UserQuery';
 
-const { array, bool, func, string } = PropTypes;
+const {array, bool, func, string} = PropTypes;
 
 UserQuery.propTypes = {
   scheduleBtn: bool,
@@ -520,7 +496,7 @@ UserQuery.propTypes = {
 const AppQueryWindow = () => {
   return (
     <AgentConnectionProvider>
-      <UserQuery />
+      <UserQuery/>
     </AgentConnectionProvider>
   );
 };

@@ -1,8 +1,8 @@
 'use client';
-import type { ChangeEvent, KeyboardEvent, MouseEvent, ReactNode } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { SendOutlined } from '@ant-design/icons';
-import { ChatInputBox, ChatSendButton } from './index.styled';
+import type {ChangeEvent, KeyboardEvent, MouseEvent, ReactNode} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import {SendOutlined} from '@ant-design/icons';
+import {ChatInputBox, ChatSendButton} from './index.styled';
 import {
   StyledBottomBar,
   StyledContentWrapper,
@@ -10,17 +10,17 @@ import {
   StyledPilotContainer,
   StyledPilotRoot,
 } from '../AppPost/PilotInputWindow/index.styled';
-import { Badge, Button, Dropdown, Row, Typography, Upload } from 'antd';
-import type { TextAreaRef } from 'antd/es/input/TextArea';
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { AskAttachmentTypes } from '@unpod/constants';
-import { MdDelete, MdOutlineAttachment } from 'react-icons/md';
-import { RiVoiceprintLine } from 'react-icons/ri';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { uploadDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { useIntl } from 'react-intl';
+import {Badge, Button, Dropdown, Row, Typography, Upload} from 'antd';
+import type {TextAreaRef} from 'antd/es/input/TextArea';
+import type {RcFile, UploadProps} from 'antd/es/upload/interface';
+import {AskAttachmentTypes} from '@unpod/constants';
+import {MdDelete, MdOutlineAttachment} from 'react-icons/md';
+import {RiVoiceprintLine} from 'react-icons/ri';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {uploadDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {useIntl} from 'react-intl';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type ChatInputPayload = {
   content: string;
@@ -37,13 +37,13 @@ type ChatInputProps = {
 };
 
 const ChatInput = ({
-  onSend,
-  disabled,
-  onStartVoice,
-  thinking,
-  isGeneratingToken,
-  children,
-}: ChatInputProps) => {
+                     onSend,
+                     disabled,
+                     onStartVoice,
+                     thinking,
+                     isGeneratingToken,
+                     children,
+                   }: ChatInputProps) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<TextAreaRef | null>(null);
   const infoViewActionsContext = useInfoViewActionsContext();
@@ -51,7 +51,7 @@ const ChatInput = ({
   const [hasNewline, setHasNewline] = useState(false);
   const [uploading, setUploading] = useState(false);
   const shouldFocusRef = useRef(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const uploadAttachments = (callback: (files: unknown) => void) => {
     const formData = new FormData();
@@ -69,7 +69,7 @@ const ChatInput = ({
       })
       .catch((response) => {
         infoViewActionsContext.showError(
-          response.message || formatMessage({ id: 'bridge.uploadFailed' }),
+          response.message || formatMessage({id: 'bridge.uploadFailed'}),
         );
       })
       .finally(() => {
@@ -80,7 +80,7 @@ const ChatInput = ({
   const sendMessage = (files?: unknown) => {
     const messageData: ChatInputPayload = {
       content: message.trim(),
-      ...(files ? { files } : {}),
+      ...(files ? {files} : {}),
     };
     console.log('sending message', messageData);
     onSend(messageData);
@@ -180,17 +180,17 @@ const ChatInput = ({
       ? true
       : Array.isArray(allowedTypes)
         ? allowedTypes.includes(extensionValue) ||
-          (!!file.type &&
-            (allowedTypes.includes(file.type) ||
-              allowedTypes.includes(file.type.split('/')[0])))
+        (!!file.type &&
+          (allowedTypes.includes(file.type) ||
+            allowedTypes.includes(file.type.split('/')[0])))
         : allowedTypes.includes(extensionValue) ||
-          (!!file.type &&
-            (allowedTypes.includes(file.type) ||
-              allowedTypes.split('/').includes(file.type.split('/')[0])));
+        (!!file.type &&
+          (allowedTypes.includes(file.type) ||
+            allowedTypes.split('/').includes(file.type.split('/')[0])));
 
     if (!isAllowed) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'upload.errorInvalidFileType' }),
+        formatMessage({id: 'upload.errorInvalidFileType'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -211,7 +211,7 @@ const ChatInput = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Text style={{ marginRight: 5 }}>{item.name}</Text>
+          <Text style={{marginRight: 5}}>{item.name}</Text>
           <MdDelete
             fontSize={18}
             onClick={(event) => onAttachmentRemove(event, item)}
@@ -229,7 +229,7 @@ const ChatInput = ({
             <ChatInputBox
               bordered={false}
               ref={textareaRef}
-              autoSize={{ minRows: 1, maxRows: 10 }}
+              autoSize={{minRows: 1, maxRows: 10}}
               value={message}
               onChange={(e) => {
                 handleChange(e);
@@ -238,10 +238,10 @@ const ChatInput = ({
               onKeyDown={handleKeyDown}
               placeholder={
                 uploading
-                  ? formatMessage({ id: 'common.uploading' })
+                  ? formatMessage({id: 'common.uploading'})
                   : disabled
-                    ? formatMessage({ id: 'common.wait' })
-                    : formatMessage({ id: 'chat.typeMessage' })
+                    ? formatMessage({id: 'common.wait'})
+                    : formatMessage({id: 'chat.typeMessage'})
               }
               disabled={disabled || uploading}
             />
@@ -274,7 +274,7 @@ const ChatInput = ({
                       type={attachments?.length ? 'primary' : 'default'}
                       shape="circle"
                       size="small"
-                      icon={<MdOutlineAttachment fontSize={18} />}
+                      icon={<MdOutlineAttachment fontSize={18}/>}
                     />
                   </Badge>
                 </Dropdown>
@@ -283,7 +283,7 @@ const ChatInput = ({
                   type={attachments?.length ? 'primary' : 'default'}
                   shape="circle"
                   size="small"
-                  icon={<MdOutlineAttachment fontSize={18} />}
+                  icon={<MdOutlineAttachment fontSize={18}/>}
                 />
               )}
             </Upload>
@@ -299,7 +299,7 @@ const ChatInput = ({
                   (attachments?.length === 0 && !message.trim())
                 }
                 $hasContent={!!message.trim()}
-                icon={<SendOutlined />}
+                icon={<SendOutlined/>}
               />
             ) : children ? (
               children
@@ -309,7 +309,7 @@ const ChatInput = ({
                 size="small"
                 loading={isGeneratingToken}
                 onClick={() => onStartVoice?.(true)}
-                icon={<RiVoiceprintLine fontSize={18} />}
+                icon={<RiVoiceprintLine fontSize={18}/>}
               />
             )}
           </StyledBottomBar>

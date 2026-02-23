@@ -37,7 +37,7 @@ export const AppDownloadIcon: React.FC<AppIconProps> = (props) => {
         </g>
         <defs>
           <clipPath id="clip0_715_54">
-            <rect width="21" height="21" fill="white" />
+            <rect width="21" height="21" fill="white"/>
           </clipPath>
         </defs>
       </svg>

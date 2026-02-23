@@ -19,7 +19,7 @@ import taLang from './entries/ta-IN';
 import teLang from './entries/te-IN';
 import zhLang from './entries/zh-CN';
 
-export type { LocaleEntry, LanguageData, Direction } from './types';
+export type {LocaleEntry, LanguageData, Direction} from './types';
 
 const AppLocale: Record<string, import('./types').LocaleEntry> = {
   en: enLang,

@@ -1,26 +1,25 @@
-import { useAppSpaceContext } from '@unpod/providers';
-import { StyledTabContent } from './index.styled';
-import { clsx } from 'clsx';
+import {useAppSpaceContext} from '@unpod/providers';
+import {StyledTabContent} from './index.styled';
+import {clsx} from 'clsx';
 import Documents from './Documents';
-import { SpaceSkeleton } from '@unpod/skeleton';
 import Tasks from './Tasks';
 import Dashboard from './Dashboard';
 import CallLogs from './Calls';
 
 const Content = ({
-  onTabChange,
-  threadType,
-  setThreadType,
-  tasksRef,
-  dashboardRef,
-}: {
+                   onTabChange,
+                   threadType,
+                   setThreadType,
+                   tasksRef,
+                   dashboardRef,
+                 }: {
   onTabChange: (tab: string) => void;
   threadType: any;
   setThreadType: (val: any) => void;
   tasksRef: any;
   dashboardRef: any;
 }) => {
-  const { activeTab, currentSpace, notesRef } = useAppSpaceContext();
+  const {activeTab, currentSpace} = useAppSpaceContext();
   const DashboardAny = Dashboard as any;
   const TasksAny = Tasks as any;
 
@@ -31,7 +30,7 @@ const Content = ({
           active: activeTab === 'call',
         })}
       >
-        {activeTab === 'call' && <CallLogs />}
+        {activeTab === 'call' && <CallLogs/>}
       </StyledTabContent>
 
       <StyledTabContent
@@ -39,7 +38,7 @@ const Content = ({
           active: activeTab === 'doc',
         })}
       >
-        {activeTab === 'doc' && <Documents />}
+        {activeTab === 'doc' && <Documents/>}
       </StyledTabContent>
 
       {/*
@@ -61,7 +60,7 @@ const Content = ({
         })}
       >
         {activeTab === 'analytics' && (
-          <DashboardAny currentSpace={currentSpace} ref={dashboardRef} />
+          <DashboardAny currentSpace={currentSpace} ref={dashboardRef}/>
         )}
       </StyledTabContent>
 
@@ -71,7 +70,7 @@ const Content = ({
         })}
       >
         {activeTab === 'logs' && (
-          <TasksAny currentSpace={currentSpace} ref={tasksRef} />
+          <TasksAny currentSpace={currentSpace} ref={tasksRef}/>
         )}
       </StyledTabContent>
     </>

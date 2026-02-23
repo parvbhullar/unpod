@@ -1,22 +1,17 @@
 'use client';
-import { Fragment, type ReactNode, useEffect, useState } from 'react';
-import {
-  getPostIcon,
-  isShareBtnAccessAllowed,
-} from '@unpod/helpers/PermissionHelper';
-import { Badge } from 'antd';
-import { useAuthContext } from '@unpod/providers';
+import {Fragment, type ReactNode, useEffect, useState} from 'react';
+import {getPostIcon, isShareBtnAccessAllowed,} from '@unpod/helpers/PermissionHelper';
+import {Badge} from 'antd';
+import {useAuthContext} from '@unpod/providers';
 import PermissionPopover from '@unpod/components/common/PermissionPopover';
-import type { PermissionMember } from '@unpod/components/common/PermissionPopover/types';
-import { useMediaQuery } from 'react-responsive';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import type {PermissionMember} from '@unpod/components/common/PermissionPopover/types';
+import {useMediaQuery} from 'react-responsive';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import AppSharedUsers from '@unpod/components/modules/AppSharedUsers';
 import RequestPopover from '@unpod/components/common/RequestPopover';
-import AppPageHeader, {
-  AppHeaderButton,
-} from '@unpod/components/common/AppPageHeader';
-import { TabWidthQuery } from '@unpod/constants';
-import { useIntl } from 'react-intl';
+import AppPageHeader, {AppHeaderButton,} from '@unpod/components/common/AppPageHeader';
+import {TabWidthQuery} from '@unpod/constants';
+import {useIntl} from 'react-intl';
 
 type PageHeaderProps = {
   currentKb: any;
@@ -30,18 +25,18 @@ type PageHeaderProps = {
 };
 
 const PageHeader = ({
-  currentKb,
-  setCurrentKb,
-  rightOptions,
-  pageTitle,
-  dropdownMenu,
-  documents,
-  selectedRowKeys,
-  setSelectedRowKeys,
-}: PageHeaderProps) => {
+                      currentKb,
+                      setCurrentKb,
+                      rightOptions,
+                      pageTitle,
+                      dropdownMenu,
+                      documents,
+                      selectedRowKeys,
+                      setSelectedRowKeys,
+                    }: PageHeaderProps) => {
   const isTabletOrMobile = useMediaQuery(TabWidthQuery);
-  const { isAuthenticated } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {isAuthenticated} = useAuthContext();
+  const {formatMessage} = useIntl();
   const [openPermissionManager, setOpenPermissionManager] = useState(false);
   const [openRequestManager, setOpenRequestManager] = useState(false);
   const [userList, setUserList] = useState<PermissionMember[]>([]);
@@ -87,14 +82,14 @@ const PageHeader = ({
               {/*  />*/}
               {/*)}*/}
 
-              <AppSharedUsers users={userList} />
+              <AppSharedUsers users={userList}/>
 
               {isAuthenticated &&
                 (isShareBtnAccessAllowed(null, null, currentKb) ? (
                   <PermissionPopover
                     open={openPermissionManager}
                     onOpenChange={setOpenPermissionManager}
-                    title={formatMessage({ id: 'common.share' })}
+                    title={formatMessage({id: 'common.share'})}
                     placement="bottomRight"
                     currentData={currentKb}
                     setCurrentData={setCurrentKb}
@@ -110,14 +105,14 @@ const PageHeader = ({
                         icon={
                           <span
                             className="anticon"
-                            style={{ verticalAlign: 'middle' }}
+                            style={{verticalAlign: 'middle'}}
                           >
                             {getPostIcon(currentKb?.privacy_type)}
                           </span>
                         }
                         onClick={() => setOpenPermissionManager(true)}
                       >
-                        {formatMessage({ id: getBtnText() })}
+                        {formatMessage({id: getBtnText()})}
                       </AppHeaderButton>
                     </Badge>
                   </PermissionPopover>
@@ -128,7 +123,7 @@ const PageHeader = ({
                     currentData={currentKb}
                     setCurrentData={setCurrentKb}
                     type="space"
-                    title={formatMessage({ id: 'common.requestAccess' })}
+                    title={formatMessage({id: 'common.requestAccess'})}
                     placement="bottomRight"
                   >
                     <AppHeaderButton
@@ -137,14 +132,14 @@ const PageHeader = ({
                       icon={
                         <span
                           className="anticon"
-                          style={{ verticalAlign: 'middle' }}
+                          style={{verticalAlign: 'middle'}}
                         >
                           {getPostIcon(currentKb?.privacy_type)}
                         </span>
                       }
                       onClick={() => setOpenRequestManager(true)}
                     >
-                      {formatMessage({ id: getBtnText() })}
+                      {formatMessage({id: getBtnText()})}
                     </AppHeaderButton>
                   </RequestPopover>
                 ))}

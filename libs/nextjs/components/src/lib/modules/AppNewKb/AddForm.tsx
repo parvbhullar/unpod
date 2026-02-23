@@ -1,33 +1,18 @@
 'use client';
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {Fragment, useCallback, useEffect, useMemo, useState,} from 'react';
 import PropTypes from 'prop-types';
-import { uploadDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { useOrgActionContext } from '@unpod/providers';
-import {
-  allowedFileTypes,
-  CONTACT_SPACE_FIELDS,
-  contentTypeData,
-  PERMISSION_TYPES,
-} from '@unpod/constants';
-import { Button, Dropdown, Form, Row, Select, Space, Typography } from 'antd';
-import { MdAdd, MdArrowUpward } from 'react-icons/md';
+import {uploadDataApi, useInfoViewActionsContext, useOrgActionContext} from '@unpod/providers';
+import {allowedFileTypes, CONTACT_SPACE_FIELDS, contentTypeData, PERMISSION_TYPES,} from '@unpod/constants';
+import {Button, Dropdown, Form, Row, Select, Space, Typography} from 'antd';
+import {MdAdd, MdArrowUpward} from 'react-icons/md';
 import _debounce from 'lodash/debounce';
-import { getDraftData, saveDraftData } from '@unpod/helpers/DraftHelper';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { getMachineName } from '@unpod/helpers/StringHelper';
-import { randomId } from '@unpod/helpers/GlobalHelper';
-import { generateKbSchema } from '@unpod/helpers/AppKbHelper';
+import {getDraftData, saveDraftData} from '@unpod/helpers/DraftHelper';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {getMachineName} from '@unpod/helpers/StringHelper';
+import {randomId} from '@unpod/helpers/GlobalHelper';
+import {generateKbSchema} from '@unpod/helpers/AppKbHelper';
 import PostPermissionPopover from '../../common/PermissionPopover/PostPermissionPopover';
-import {
-  AppMiniWindowBody,
-  AppMiniWindowFooter,
-} from '../../common/AppMiniWindow';
+import {AppMiniWindowBody, AppMiniWindowFooter,} from '../../common/AppMiniWindow';
 import AppInputSelector from '../../antd/AppInputSelector';
 import InputRow from '../AppKbSchemaManager/InputRow';
 import ManageDetails from '../AppKbSchemaManager/ManageDetails';
@@ -43,15 +28,15 @@ import {
   StyledStickyButton,
   StyledTextArea,
 } from './index.styled';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
-const { Link, Paragraph, Text } = Typography;
+const {Link, Paragraph, Text} = Typography;
 
-const AddForm = ({ onSaved }) => {
+const AddForm = ({onSaved}) => {
   const [form] = Form.useForm();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { currentSpace } = useOrgActionContext();
+  const {currentSpace} = useOrgActionContext();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [privacyType, setPrivacyType] = useState('shared');
@@ -235,7 +220,7 @@ const AddForm = ({ onSaved }) => {
           !acceptFileTypes?.includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setMedia(file);
@@ -252,7 +237,7 @@ const AddForm = ({ onSaved }) => {
     setFormInputs((fields) =>
       fields.map((data) => {
         if (selectedItem.id === data.id) {
-          data = { ...data, ...values };
+          data = {...data, ...values};
         }
 
         return data;
@@ -288,7 +273,7 @@ const AddForm = ({ onSaved }) => {
     const validInputs = formInputs.filter((input) => input.title);
     const schema = generateKbSchema(validInputs);
 
-    createKnowledgeBase({ ...payload, schema: JSON.stringify(schema) });
+    createKnowledgeBase({...payload, schema: JSON.stringify(schema)});
   };
 
   const createKnowledgeBase = (payload) => {
@@ -360,7 +345,7 @@ const AddForm = ({ onSaved }) => {
                 ]}
               >
                 <StyledInput
-                  placeholder={formatMessage({ id: 'knowledgeBase.pageTitle' })}
+                  placeholder={formatMessage({id: 'knowledgeBase.pageTitle'})}
                   variant="borderless"
                   onChange={onTitleChange}
                 />
@@ -378,21 +363,21 @@ const AddForm = ({ onSaved }) => {
                 ]}
               >
                 <StyledSelect
-                  placeholder={formatMessage({ id: 'form.contentType' })}
+                  placeholder={formatMessage({id: 'form.contentType'})}
                   variant="borderless"
                   onChange={setContentType}
                 >
                   {contentTypeData?.map((role) => (
                     <Select.Option key={role.id} value={role.id}>
-                      {formatMessage({ id: role.name })}
+                      {formatMessage({id: role.name})}
                     </Select.Option>
                   ))}
                 </StyledSelect>
               </StyledFormItem>
 
-              <StyledFormItem name="description" style={{ borderBottom: 0 }}>
+              <StyledFormItem name="description" style={{borderBottom: 0}}>
                 <StyledTextArea
-                  placeholder={formatMessage({ id: 'form.description' })}
+                  placeholder={formatMessage({id: 'form.description'})}
                   variant="borderless"
                   autoSize={{
                     minRows: 5,
@@ -407,7 +392,7 @@ const AddForm = ({ onSaved }) => {
           {step === 2 && (
             <StyledContainer>
               <Paragraph strong>
-                {formatMessage({ id: 'knowledgeBase.addSchemaFields' })}
+                {formatMessage({id: 'knowledgeBase.addSchemaFields'})}
               </Paragraph>
 
               {formInputs.length > 0 && (
@@ -458,8 +443,8 @@ const AddForm = ({ onSaved }) => {
                   onClick={() => setInputModalOpen(!inputModalOpen)}
                   ghost
                 >
-                  <MdAdd fontSize={16} />
-                  <span>{formatMessage({ id: 'common.addField' })}</span>
+                  <MdAdd fontSize={16}/>
+                  <span>{formatMessage({id: 'common.addField'})}</span>
                 </StyledStickyButton>
               </AppInputSelector>
             </StyledContainer>
@@ -480,13 +465,13 @@ const AddForm = ({ onSaved }) => {
                   <Space direction="vertical" size={4}>
                     <Button
                       shape="circle"
-                      icon={<MdArrowUpward fontSize={21} />}
+                      icon={<MdArrowUpward fontSize={21}/>}
                       css={`
                         margin-bottom: 8px;
                       `}
                     />
 
-                    <Text>{formatMessage({ id: 'upload.dragText' })}</Text>
+                    <Text>{formatMessage({id: 'upload.dragText'})}</Text>
                   </Space>
                 </StyledDragger>
               </StyledMediaWrapper>
@@ -538,7 +523,7 @@ const AddForm = ({ onSaved }) => {
                   {currentPrivacy?.icon}
                   <span>
                     {currentPrivacy?.label
-                      ? formatMessage({ id: currentPrivacy.label })
+                      ? formatMessage({id: currentPrivacy.label})
                       : ''}
                   </span>
                 </Space>
@@ -554,7 +539,7 @@ const AddForm = ({ onSaved }) => {
                     loading={loading}
                     ghost
                   >
-                    {formatMessage({ id: 'common.back' })}
+                    {formatMessage({id: 'common.back'})}
                   </StyledButton>
                 )}
 
@@ -564,7 +549,7 @@ const AddForm = ({ onSaved }) => {
                     onClick={onCreateClick}
                     loading={loading}
                   >
-                    {formatMessage({ id: 'common.create' })}
+                    {formatMessage({id: 'common.create'})}
                   </StyledButton>
                 ) : (
                   <StyledButton
@@ -573,7 +558,7 @@ const AddForm = ({ onSaved }) => {
                     disabled={validInputs.length === 0}
                     loading={loading}
                   >
-                    {formatMessage({ id: 'common.next' })}
+                    {formatMessage({id: 'common.next'})}
                   </StyledButton>
                 )}
 
@@ -584,15 +569,15 @@ const AddForm = ({ onSaved }) => {
                     loading={loading}
                     ghost
                   >
-                    {formatMessage({ id: 'common.skip' })}
+                    {formatMessage({id: 'common.skip'})}
                   </StyledButton>
                 )}
               </Space>
             ) : (
               <StyledButton type="primary" htmlType="submit" loading={loading}>
                 {contentType === 'table' || contentType === 'contact'
-                  ? formatMessage({ id: 'common.next' })
-                  : formatMessage({ id: 'common.create' })}
+                  ? formatMessage({id: 'common.next'})
+                  : formatMessage({id: 'common.create'})}
               </StyledButton>
             )}
           </Row>

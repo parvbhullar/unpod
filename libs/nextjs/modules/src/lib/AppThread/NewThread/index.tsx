@@ -1,42 +1,42 @@
-import { Fragment, type ReactNode } from 'react';
-import { Typography } from 'antd';
+import {Fragment, type ReactNode} from 'react';
+import {Typography} from 'antd';
 import AppPageContainer from '@unpod/components/common/AppPageContainer';
 import AppQueryWindow from '@unpod/components/modules/AppQueryWindow';
 import AppPostGrid from '@unpod/components/modules/AppPostGrid';
 import AppPostList from '@unpod/components/modules/AppPostList';
 import AppLoader from '@unpod/components/common/AppLoader';
-import { useAppContext, useFetchDataApi } from '@unpod/providers';
-import { StyledContainer } from './index.styled';
+import {useAppContext, useFetchDataApi} from '@unpod/providers';
+import {StyledContainer} from './index.styled';
 import AppPageHeader from '@unpod/components/common/AppPageHeader';
 import AppEmptyWorkSpace from '@unpod/components/modules/AppEmptyWorkSpace';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 type NewThreadProps = {
   pageTitle?: ReactNode;
 };
 
-const NewThread = ({ pageTitle }: NewThreadProps) => {
-  const { listingType } = useAppContext();
-  const { formatMessage } = useIntl();
+const NewThread = ({pageTitle}: NewThreadProps) => {
+  const {listingType} = useAppContext();
+  const {formatMessage} = useIntl();
 
   const [
-    { apiData, loading, page, isLoadingMore },
-    { setPage, setLoadingMore },
+    {apiData, loading, page, isLoadingMore},
+    {setPage, setLoadingMore},
   ] = useFetchDataApi(`threads/explore/trending/`, [], {});
 
   return (
     <Fragment>
-      <AppPageHeader pageTitle={pageTitle} hideToggleBtn isListingPage />
+      <AppPageHeader pageTitle={pageTitle} hideToggleBtn isListingPage/>
 
       <AppPageContainer>
         <StyledContainer>
-          <AppQueryWindow {...({ pilotPopover: true } as any)} />
+          <AppQueryWindow {...({pilotPopover: true} as any)} />
         </StyledContainer>
 
         <Title level={2} className="text-center">
-          {formatMessage({ id: 'common.trending' })}
+          {formatMessage({id: 'common.trending'})}
         </Title>
 
         {apiData?.length ? (
@@ -61,9 +61,9 @@ const NewThread = ({ pageTitle }: NewThreadProps) => {
             />
           )
         ) : loading ? (
-          <AppLoader />
+          <AppLoader/>
         ) : (
-          <AppEmptyWorkSpace />
+          <AppEmptyWorkSpace/>
         )}
       </AppPageContainer>
     </Fragment>

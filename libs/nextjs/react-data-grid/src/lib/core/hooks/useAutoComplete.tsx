@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 export const useAutoComplete = () => {
   const [filled, setFilled] = useState<boolean>(false);
@@ -7,9 +7,9 @@ export const useAutoComplete = () => {
     function handleAutoComplete(e: any) {
       setFilled(
         e.target.hasAttribute('autocompleted') &&
-          e.target.type !== 'file' &&
-          e.target.type !== 'checkbox' &&
-          e.target.type !== 'radio',
+        e.target.type !== 'file' &&
+        e.target.type !== 'checkbox' &&
+        e.target.type !== 'radio',
       );
       // e.preventDefault(); // prevent autocomplete
     }
@@ -20,5 +20,5 @@ export const useAutoComplete = () => {
       document.removeEventListener('onautocomplete', handleAutoComplete);
   }, []);
 
-  return { filled, setFilled } as const;
+  return {filled, setFilled} as const;
 };

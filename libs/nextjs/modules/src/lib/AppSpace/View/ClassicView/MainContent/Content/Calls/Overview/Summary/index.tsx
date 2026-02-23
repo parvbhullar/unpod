@@ -1,41 +1,32 @@
-import { useEffect, useState } from 'react';
-import { StyledContainer, StyledRoot, StyledSummaryCard } from './index.styled';
-import {
-  IoCalendarOutline,
-  IoDocumentTextOutline,
-  IoEyeOutline,
-  IoPlayCircleOutline,
-} from 'react-icons/io5';
-import { GrActions } from 'react-icons/gr';
-import { HiOutlineDatabase } from 'react-icons/hi';
+import {useEffect, useState} from 'react';
+import {StyledContainer, StyledRoot, StyledSummaryCard} from './index.styled';
+import {IoCalendarOutline, IoDocumentTextOutline, IoEyeOutline, IoPlayCircleOutline,} from 'react-icons/io5';
+import {GrActions} from 'react-icons/gr';
+import {HiOutlineDatabase} from 'react-icons/hi';
 
-import { MdOutlineBarChart } from 'react-icons/md';
+import {MdOutlineBarChart} from 'react-icons/md';
 import AppMarkdownViewer from '@unpod/components/third-party/AppMarkdownViewer';
-import {
-  getDataApi,
-  useAppSpaceContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { AppDrawer } from '@unpod/components/antd';
+import {getDataApi, useAppSpaceContext, useInfoViewActionsContext,} from '@unpod/providers';
+import {AppDrawer} from '@unpod/components/antd';
 import AppJsonViewer from '@unpod/components/third-party/AppJsonViewer';
-import { formatDuration } from '@unpod/helpers/DateHelper';
+import {formatDuration} from '@unpod/helpers/DateHelper';
 import Metrics from '../../../components/Metrics';
 import HeadingView from '../../../components/HeadingView';
-import { Flex, List, Space, Tag, Typography } from 'antd';
+import {Flex, List, Space, Tag, Typography} from 'antd';
 import AppList from '@unpod/components/common/AppList';
-import { useIntl } from 'react-intl';
-import { IoMdClose } from 'react-icons/io';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import { useMediaQuery } from 'react-responsive';
-import { TabWidthQuery } from '@unpod/constants';
-import { PeopleOverviewSkeleton } from '@unpod/skeleton/PeopleOverviewSkeleton';
+import {useIntl} from 'react-intl';
+import {IoMdClose} from 'react-icons/io';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {useMediaQuery} from 'react-responsive';
+import {TabWidthQuery} from '@unpod/constants';
+import {PeopleOverviewSkeleton} from '@unpod/skeleton/PeopleOverviewSkeleton';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 const Summary = () => {
-  const { activeCall } = useAppSpaceContext();
+  const {activeCall} = useAppSpaceContext();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [showOutputDrawer, setShowOutputDrawer] = useState(false);
 
@@ -158,56 +149,56 @@ const Summary = () => {
   const metricsData = [
     {
       key: 'interest_level',
-      label: formatMessage({ id: 'callSummary.interestLevel' }),
+      label: formatMessage({id: 'callSummary.interestLevel'}),
       value:
-        activeCall?.output?.post_call_data?.profile_summary?.interest_level,
+      activeCall?.output?.post_call_data?.profile_summary?.interest_level,
     },
     {
       key: 'agent_details',
-      label: formatMessage({ id: 'callSummary.agent' }),
+      label: formatMessage({id: 'callSummary.agent'}),
       value: getAgentNameFromSlug(activeCall?.assignee),
       link: activeCall?.assignee ? `/ai-studio/${activeCall?.assignee}/` : null,
     },
     {
       key: 'outcome',
-      label: formatMessage({ id: 'callSummary.outcome' }),
+      label: formatMessage({id: 'callSummary.outcome'}),
       value: activeCall?.output?.post_call_data?.profile_summary?.outcome,
     },
     {
       key: 'cost',
-      label: formatMessage({ id: 'callSummary.cost' }),
+      label: formatMessage({id: 'callSummary.cost'}),
       value: activeCall?.output?.cost
         ? `$${activeCall?.output?.cost.toFixed(4)}`
-        : formatMessage({ id: 'callSummary.notAvailable' }),
+        : formatMessage({id: 'callSummary.notAvailable'}),
     },
     {
       key: 'tone',
-      label: formatMessage({ id: 'callSummary.tone' }),
+      label: formatMessage({id: 'callSummary.tone'}),
       value: activeCall?.output?.post_call_data?.profile_summary?.tone,
     },
     {
       key: 'engagement',
-      label: formatMessage({ id: 'callSummary.engagement' }),
+      label: formatMessage({id: 'callSummary.engagement'}),
       value: activeCall?.output?.post_call_data?.profile_summary?.engagement,
     },
     {
       key: 'average_call_duration',
-      label: formatMessage({ id: 'callSummary.averageCallDuration' }),
+      label: formatMessage({id: 'callSummary.averageCallDuration'}),
       value: formatDuration(activeCall?.output?.duration),
     },
     {
       key: 'sentiment_score',
-      label: formatMessage({ id: 'callSummary.sentimentScore' }),
+      label: formatMessage({id: 'callSummary.sentimentScore'}),
       value: activeCall?.output?.santiment,
     },
     ...(activeCall?.input?.call_type !== 'inbound'
       ? [
-          {
-            key: 'call_triggered_by',
-            label: formatMessage({ id: 'callSummary.callTriggeredBy' }),
-            value: activeCall?.user_info?.full_name,
-          },
-        ]
+        {
+          key: 'call_triggered_by',
+          label: formatMessage({id: 'callSummary.callTriggeredBy'}),
+          value: activeCall?.user_info?.full_name,
+        },
+      ]
       : []),
   ];
   const metricsDataWithExtra = metricsData.map((item) => ({
@@ -216,7 +207,7 @@ const Summary = () => {
   }));
 
   if (!activeCall?.output) {
-    return <PeopleOverviewSkeleton />;
+    return <PeopleOverviewSkeleton/>;
   }
 
 
@@ -224,15 +215,15 @@ const Summary = () => {
     <StyledRoot>
       <StyledContainer>
         <HeadingView
-          icon={<IoDocumentTextOutline />}
-          name={formatMessage({ id: 'callSummary.summary' })}
+          icon={<IoDocumentTextOutline/>}
+          name={formatMessage({id: 'callSummary.summary'})}
           extra={
             activeCall?.output && (
               <div
-                style={{ cursor: 'pointer' }}
+                style={{cursor: 'pointer'}}
                 onClick={() => setShowOutputDrawer(true)}
               >
-                <IoEyeOutline size={20} />
+                <IoEyeOutline size={20}/>
               </div>
             )
           }
@@ -241,7 +232,7 @@ const Summary = () => {
           <AppMarkdownViewer
             markdown={
               overview?.summary ||
-              formatMessage({ id: 'callSummary.noSummary' })
+              formatMessage({id: 'callSummary.noSummary'})
             }
           />
         </StyledSummaryCard>
@@ -250,17 +241,17 @@ const Summary = () => {
         {playingUrl && (
           <>
             <HeadingView
-              icon={<IoPlayCircleOutline />}
-              name={formatMessage({ id: 'callSummary.callRecording' })}
+              icon={<IoPlayCircleOutline/>}
+              name={formatMessage({id: 'callSummary.callRecording'})}
             />
             <StyledSummaryCard bordered={false}>
               <audio
                 controls
-                style={{ width: '100%' }}
+                style={{width: '100%'}}
                 src={playingUrl}
-                controlsList={formatMessage({ id: 'common.download' })}
+                controlsList={formatMessage({id: 'common.download'})}
               >
-                {formatMessage({ id: 'callSummary.browserSupportMessage' })}
+                {formatMessage({id: 'callSummary.browserSupportMessage'})}
               </audio>
             </StyledSummaryCard>
           </>
@@ -268,16 +259,16 @@ const Summary = () => {
 
         {/* Page Header */}
         <HeadingView
-          icon={<MdOutlineBarChart />}
-          name={formatMessage({ id: 'callSummary.analytics' })}
+          icon={<MdOutlineBarChart/>}
+          name={formatMessage({id: 'callSummary.analytics'})}
         />
-        <Metrics data={metricsDataWithExtra} />
+        <Metrics data={metricsDataWithExtra}/>
 
         {getNextActionItems().length > 0 && (
           <>
             <HeadingView
-              icon={<GrActions size={18} />}
-              name={formatMessage({ id: 'callSummary.nextAction' })}
+              icon={<GrActions size={18}/>}
+              name={formatMessage({id: 'callSummary.nextAction'})}
             />
             <AppList
               size="small"
@@ -295,19 +286,19 @@ const Summary = () => {
         {getFollowUpData() && (
           <>
             <HeadingView
-              icon={<IoCalendarOutline size={20} />}
-              name={formatMessage({ id: 'callSummary.followUp' })}
+              icon={<IoCalendarOutline size={20}/>}
+              name={formatMessage({id: 'callSummary.followUp'})}
             />
             <StyledSummaryCard variant="borderless">
               <Space
                 orientation="vertical"
                 size="middle"
-                style={{ width: '100%' }}
+                style={{width: '100%'}}
               >
                 {/* Required Status */}
                 <div>
                   <Text strong>
-                    {formatMessage({ id: 'common.required' })}:{' '}
+                    {formatMessage({id: 'common.required'})}:{' '}
                   </Text>
                   <Tag
                     color={
@@ -319,8 +310,8 @@ const Summary = () => {
                   >
                     {getFollowUpData()?.required === 'true' ||
                     getFollowUpData()?.required === true
-                      ? formatMessage({ id: 'common.yes' })
-                      : formatMessage({ id: 'common.no' })}
+                      ? formatMessage({id: 'common.yes'})
+                      : formatMessage({id: 'common.no'})}
                   </Tag>
                 </div>
 
@@ -329,7 +320,7 @@ const Summary = () => {
                   getFollowUpData()?.time !== 'N/A' && (
                     <div>
                       <Text strong>
-                        {formatMessage({ id: 'callSummary.scheduledTime' })}
+                        {formatMessage({id: 'callSummary.scheduledTime'})}
                         :{' '}
                       </Text>
                       <Text>{formatFollowUpDate(getFollowUpData()?.time)}</Text>
@@ -340,7 +331,7 @@ const Summary = () => {
                 {getFollowUpData()?.status && (
                   <div>
                     <Text strong>
-                      {formatMessage({ id: 'table.status' })}:{' '}
+                      {formatMessage({id: 'table.status'})}:{' '}
                     </Text>
                     <Tag color={getStatusColor(getFollowUpData()?.status)}>
                       {formatStatusText(getFollowUpData()?.status)}
@@ -352,7 +343,7 @@ const Summary = () => {
                 {getFollowUpData()?.reason && (
                   <div>
                     <Text strong>
-                      {formatMessage({ id: 'callSummary.reason' })}:{' '}
+                      {formatMessage({id: 'callSummary.reason'})}:{' '}
                     </Text>
                     <Text>{getFollowUpData()?.reason}</Text>
                   </div>
@@ -373,10 +364,10 @@ const Summary = () => {
             }}
           >
             <HeadingView
-              icon={<HiOutlineDatabase size={20} />}
-              name={formatMessage({ id: 'callSummary.structuredData' })}
+              icon={<HiOutlineDatabase size={20}/>}
+              name={formatMessage({id: 'callSummary.structuredData'})}
             />
-            <Metrics data={getStructuredDataMetrics()} />
+            <Metrics data={getStructuredDataMetrics()}/>
           </div>
         )}
       </StyledContainer>
@@ -385,10 +376,10 @@ const Summary = () => {
       <AppDrawer
         title={
           <Flex align="center" justify="space-between">
-            {formatMessage({ id: 'callSummary.callOutput' })}
+            {formatMessage({id: 'callSummary.callOutput'})}
             <AppHeaderButton
               shape="circle"
-              icon={<IoMdClose size={16} />}
+              icon={<IoMdClose size={16}/>}
               onClick={() => setShowOutputDrawer(false)}
             />
           </Flex>
@@ -397,7 +388,7 @@ const Summary = () => {
         open={showOutputDrawer}
         onClose={() => setShowOutputDrawer(false)}
         destroyOnClose={true}
-        styles={{ body: { padding: 0, position: 'relative' } }}
+        styles={{body: {padding: 0, position: 'relative'}}}
         size={isTablet ? '100%' : 'calc(100% - 405px)'}
       >
         {activeCall?.output && (

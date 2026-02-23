@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import {
   selectIsConnectedToRoom,
   selectPeerCount,
@@ -6,23 +6,22 @@ import {
   useHMSActions,
   useHMSStore,
 } from '@100mslive/react-sdk';
-import { isStreamingKit } from '../../common/utils';
-import { useParams, useRouter } from 'next/navigation';
-import { IoMdAlert } from 'react-icons/io';
-import { ImPhoneHangUp } from 'react-icons/im';
-import { Button, Checkbox, Dropdown, Modal, Space, Tooltip } from 'antd';
-import { MdCallEnd, MdExitToApp } from 'react-icons/md';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { useStreamContext } from '../../StreamContextProvider';
-import { useOrgActionContext } from '@unpod/providers';
-import { isHostUser } from '@unpod/helpers/StreamHelper';
+import {isStreamingKit} from '../../common/utils';
+import {useParams, useRouter} from 'next/navigation';
+import {IoMdAlert} from 'react-icons/io';
+import {ImPhoneHangUp} from 'react-icons/im';
+import {Button, Checkbox, Dropdown, Modal, Space, Tooltip} from 'antd';
+import {MdCallEnd, MdExitToApp} from 'react-icons/md';
+import {getDataApi, useInfoViewActionsContext, useOrgActionContext} from '@unpod/providers';
+import {useStreamContext} from '../../StreamContextProvider';
+import {isHostUser} from '@unpod/helpers/StreamHelper';
 
 export const LeaveRoom = () => {
   const router = useRouter();
-  const { orgSlug, spaceSlug, postSlug } = useParams();
+  const {orgSlug, spaceSlug, postSlug} = useParams();
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { setCallRecording } = useOrgActionContext();
-  const { post } = useStreamContext();
+  const {setCallRecording} = useOrgActionContext();
+  const {post} = useStreamContext();
 
   const [showEndRoomModal, setShowEndRoomModal] = useState(false);
   const [lockRoom, setLockRoom] = useState(false);
@@ -62,7 +61,7 @@ export const LeaveRoom = () => {
     {
       label: (
         <Space gap={4}>
-          <IoMdAlert fontSize={20} />
+          <IoMdAlert fontSize={20}/>
           <div>End Call for All</div>
         </Space>
       ),
@@ -71,7 +70,7 @@ export const LeaveRoom = () => {
     {
       label: (
         <Space gap={4}>
-          <MdExitToApp fontSize={20} />
+          <MdExitToApp fontSize={20}/>
           <div>Leave {isStreamKit ? 'Studio' : 'Call'}</div>
         </Space>
       ),
@@ -79,7 +78,7 @@ export const LeaveRoom = () => {
     },
   ];
 
-  const onMenuClick = ({ key }) => {
+  const onMenuClick = ({key}) => {
     switch (key) {
       case 'end-all':
         return setShowEndRoomModal(true);
@@ -95,19 +94,19 @@ export const LeaveRoom = () => {
   return (
     <>
       {isHostUser(post) ? (
-        <Dropdown menu={{ items, onClick: onMenuClick }}>
+        <Dropdown menu={{items, onClick: onMenuClick}}>
           <Button
             type="primary"
             shape="round"
             key="LeaveRoom"
             data-testid="leave_room_btn"
-            css={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            css={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
             // onClick={leaveRoom}
             icon={
               !isStreamKit ? (
-                <ImPhoneHangUp key="hangUp" fontSize={20} />
+                <ImPhoneHangUp key="hangUp" fontSize={20}/>
               ) : (
-                <MdExitToApp key="hangUp" fontSize={20} />
+                <MdExitToApp key="hangUp" fontSize={20}/>
               )
             }
             danger
@@ -153,9 +152,9 @@ export const LeaveRoom = () => {
             data-testid="leave_room_btn"
             icon={
               isStreamKit ? (
-                <MdExitToApp fontSize={20} />
+                <MdExitToApp fontSize={20}/>
               ) : (
-                <MdCallEnd key="hangUp" fontSize={20} />
+                <MdCallEnd key="hangUp" fontSize={20}/>
               )
             }
             danger

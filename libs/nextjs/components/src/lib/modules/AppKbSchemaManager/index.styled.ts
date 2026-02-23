@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Button } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Button} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledHeaderRow = styled.div`
   display: flex;
@@ -11,9 +11,9 @@ export const StyledHeaderRow = styled.div`
   top: 0;
   //margin-bottom: 1em;
   border-bottom: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.border.color};
-  background: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
+    ${({theme}: { theme: GlobalTheme }) => theme.border.color};
+  background: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
   padding: 1px 6px 6px;
   z-index: 101;
 `;
@@ -26,9 +26,9 @@ export const StyledActionRow = styled.div`
   position: sticky;
   bottom: 0;
   border-top: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => theme.border.color};
-  background: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
+    ${({theme}: { theme: GlobalTheme }) => theme.border.color};
+  background: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
   padding: 16px 0;
   z-index: 101;
 `;
@@ -40,8 +40,8 @@ export const StyledList = styled.div`
   //margin-bottom: 20px;
   padding-top: 12px;
 
-  @media screen and (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     row-gap: 24px;
   }
 `;

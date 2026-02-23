@@ -1,8 +1,8 @@
 'use client';
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
+import type {SyntheticEvent} from 'react';
+import {useState} from 'react';
 
-import { AppDrawer } from '@unpod/components/antd';
+import {AppDrawer} from '@unpod/components/antd';
 import {
   QueryHeader,
   WebCard,
@@ -41,7 +41,7 @@ type WebCardsProps = {
   data?: WebCardsData;
 };
 
-const WebCards = ({ data }: WebCardsProps) => {
+const WebCards = ({data}: WebCardsProps) => {
   const webItems = data?.items || [];
   const query = data?.query;
   const [selectedItem, setSelectedItem] = useState<WebItem | null>(null);
@@ -81,7 +81,8 @@ const WebCards = ({ data }: WebCardsProps) => {
                       >
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                       </svg>
                       {item.source}
                     </WebCardSource>
@@ -138,7 +139,8 @@ const WebCards = ({ data }: WebCardsProps) => {
                       width="12"
                       height="12"
                     >
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
                     {(item.score * 100).toFixed(0)}% match
                   </WebCardScore>
@@ -196,7 +198,7 @@ const WebCards = ({ data }: WebCardsProps) => {
             >
               {selectedItem.source && (
                 <div
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                  style={{display: 'flex', alignItems: 'center', gap: '8px'}}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -206,13 +208,14 @@ const WebCards = ({ data }: WebCardsProps) => {
                     strokeWidth="2"
                     width="16"
                     height="16"
-                    style={{ flexShrink: 0 }}
+                    style={{flexShrink: 0}}
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    <path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                   </svg>
-                  <span style={{ fontSize: '14px', color: '#666' }}>
+                  <span style={{fontSize: '14px', color: '#666'}}>
                     <strong>Source:</strong> {selectedItem.source}
                   </span>
                 </div>
@@ -220,7 +223,7 @@ const WebCards = ({ data }: WebCardsProps) => {
 
               {selectedItem.author && (
                 <div
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                  style={{display: 'flex', alignItems: 'center', gap: '8px'}}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -230,12 +233,12 @@ const WebCards = ({ data }: WebCardsProps) => {
                     strokeWidth="2"
                     width="16"
                     height="16"
-                    style={{ flexShrink: 0 }}
+                    style={{flexShrink: 0}}
                   >
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                  <span style={{ fontSize: '14px', color: '#666' }}>
+                  <span style={{fontSize: '14px', color: '#666'}}>
                     <strong>Author:</strong> {selectedItem.author}
                   </span>
                 </div>
@@ -243,7 +246,7 @@ const WebCards = ({ data }: WebCardsProps) => {
 
               {selectedItem.published_date && (
                 <div
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                  style={{display: 'flex', alignItems: 'center', gap: '8px'}}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -253,7 +256,7 @@ const WebCards = ({ data }: WebCardsProps) => {
                     strokeWidth="2"
                     width="16"
                     height="16"
-                    style={{ flexShrink: 0 }}
+                    style={{flexShrink: 0}}
                   >
                     <rect
                       x="3"
@@ -267,7 +270,7 @@ const WebCards = ({ data }: WebCardsProps) => {
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span style={{ fontSize: '14px', color: '#666' }}>
+                  <span style={{fontSize: '14px', color: '#666'}}>
                     <strong>Published:</strong>{' '}
                     {new Date(selectedItem.published_date).toLocaleDateString(
                       'en-US',
@@ -283,7 +286,7 @@ const WebCards = ({ data }: WebCardsProps) => {
 
               {selectedItem.score && (
                 <div
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                  style={{display: 'flex', alignItems: 'center', gap: '8px'}}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -293,11 +296,12 @@ const WebCards = ({ data }: WebCardsProps) => {
                     strokeWidth="2"
                     width="16"
                     height="16"
-                    style={{ flexShrink: 0 }}
+                    style={{flexShrink: 0}}
                   >
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                   </svg>
-                  <span style={{ fontSize: '14px', color: '#666' }}>
+                  <span style={{fontSize: '14px', color: '#666'}}>
                     <strong>Match Score:</strong>{' '}
                     {(selectedItem.score * 100).toFixed(0)}%
                   </span>

@@ -1,15 +1,15 @@
 import React from 'react';
-import { ConnectionIndicator } from './ConnectionIndicator';
+import {ConnectionIndicator} from './ConnectionIndicator';
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const TileConnection = ({ name, peerId, hideLabel, isMouseHovered }) => {
+const TileConnection = ({name, peerId, hideLabel, isMouseHovered}) => {
   return (
     <StyledWrapper $isMouseHovered={isMouseHovered}>
       {!hideLabel ? (
         <Typography.Paragraph ellipsis={true}>{name}</Typography.Paragraph>
       ) : null}
-      <ConnectionIndicator isTile peerId={peerId} />
+      <ConnectionIndicator isTile peerId={peerId}/>
     </StyledWrapper>
   );
 };
@@ -28,7 +28,7 @@ const StyledWrapper = styled.div`
   z-index: 1;
   padding: 3px 8px;
   max-width: calc(100% - 16px);
-  opacity: ${({ $isMouseHovered }) => ($isMouseHovered ? 1 : 0.8)};
+  opacity: ${({$isMouseHovered}) => ($isMouseHovered ? 1 : 0.8)};
   transition: opacity 0.2s ease-in;
 
   & .ant-typography {

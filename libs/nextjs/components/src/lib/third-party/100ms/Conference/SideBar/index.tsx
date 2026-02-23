@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyledRoot } from './index.styled';
+import {StyledRoot} from './index.styled';
 import PostDetails from './PostDetails';
 
 const SideBar = () => {
   return (
     <StyledRoot>
-      <PostDetails />
+      <PostDetails/>
     </StyledRoot>
   );
 };

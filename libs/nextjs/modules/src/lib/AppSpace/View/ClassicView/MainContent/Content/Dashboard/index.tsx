@@ -1,25 +1,21 @@
 'use client';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
-import { useAuthContext, useGetDataApi } from '@unpod/providers';
+import {forwardRef, useEffect, useImperativeHandle} from 'react';
+import {useAuthContext, useGetDataApi} from '@unpod/providers';
 import AppGrid from '@unpod/components/common/AppGrid';
 import CallStatusBreakdown from './CallStatus';
 import MetricItem from './MetricItem';
-import {
-  callAnalyticsData,
-  getCallAnalyticsData,
-  getCallStatusData,
-} from './data';
-import { StyledCardContainer, StyledRoot } from './index.styled';
+import {callAnalyticsData, getCallAnalyticsData, getCallStatusData,} from './data';
+import {StyledCardContainer, StyledRoot} from './index.styled';
 import AnalyticsSkeleton from '@unpod/skeleton/AnalyticsSkeleton';
 
 const AppGridAny = AppGrid as any;
 
-const Dashboard = ({ currentSpace }: { currentSpace: any }, ref: any) => {
-  const { isAuthenticated } = useAuthContext();
+const Dashboard = ({currentSpace}: { currentSpace: any }, ref: any) => {
+  const {isAuthenticated} = useAuthContext();
 
-  const [{ apiData, loading }, { reCallAPI }] = useGetDataApi(
+  const [{apiData, loading}, {reCallAPI}] = useGetDataApi(
     `spaces/${currentSpace?.slug}/analytics/`,
-    { data: [] },
+    {data: []},
     {},
     false,
   ) as any;
@@ -51,11 +47,11 @@ const Dashboard = ({ currentSpace }: { currentSpace: any }, ref: any) => {
       }}
     >
       {loading ? (
-        <AnalyticsSkeleton />
+        <AnalyticsSkeleton/>
       ) : (
         <StyledCardContainer>
           <AppGridAny
-            containerStyle={{ marginBottom: 0, marginTop: 0 }}
+            containerStyle={{marginBottom: 0, marginTop: 0}}
             data={getValue(apiData?.data?.call_analytics)}
             itemPadding={24}
             responsive={{

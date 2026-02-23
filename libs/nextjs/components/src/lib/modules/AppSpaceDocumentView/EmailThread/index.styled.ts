@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row } from 'antd';
+import {Row} from 'antd';
 
 export const StyledDetailsRoot = styled.div`
   margin: 0;
@@ -13,11 +13,11 @@ export const StyledSummaryContent = styled.div`
   margin: 16px 16px 0 16px;
 
   & .ant-collapse {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 
   & .ant-collapse-content {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
     font-size: 16px;
     line-height: 1.7;
   }

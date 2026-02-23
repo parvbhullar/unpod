@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import mrMessages from '../locales/mr_IN.json';
 import enUS from 'antd/lib/locale/en_US';
 

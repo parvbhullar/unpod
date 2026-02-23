@@ -1,19 +1,15 @@
 import Summary from './Summary';
 import ContentWrapper from '../../components/ContentWrapper';
-import {
-  useAppSpaceContext,
-  useAuthContext,
-  useGetDataApi,
-} from '@unpod/providers';
-import { PeopleOverviewSkeleton } from '@unpod/skeleton/PeopleOverviewSkeleton';
+import {useAppSpaceContext, useAuthContext, useGetDataApi,} from '@unpod/providers';
+import {PeopleOverviewSkeleton} from '@unpod/skeleton/PeopleOverviewSkeleton';
 
 const PeopleOverview = () => {
-  const { activeDocument, currentSpace } = useAppSpaceContext();
-  const { activeOrg } = useAuthContext();
+  const {activeDocument, currentSpace} = useAppSpaceContext();
+  const {activeOrg} = useAuthContext();
 
-  const [{ apiData, loading }] = useGetDataApi(
+  const [{apiData, loading}] = useGetDataApi(
     `knowledge_base/${currentSpace?.token}/connector-doc-data/${activeDocument?.document_id}/`,
-    { data: {} },
+    {data: {}},
     {
       domain: activeOrg?.domain_handle,
       page_size: 20,
@@ -22,11 +18,11 @@ const PeopleOverview = () => {
   ) as unknown as [{ apiData?: { data?: unknown }; loading: boolean }];
 
   if (loading) {
-    return <PeopleOverviewSkeleton />;
+    return <PeopleOverviewSkeleton/>;
   }
   return (
     <ContentWrapper>
-      <Summary data={apiData?.data ?? null} />
+      <Summary data={apiData?.data ?? null}/>
     </ContentWrapper>
   );
 };

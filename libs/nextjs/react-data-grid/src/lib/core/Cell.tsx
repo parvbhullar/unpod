@@ -1,16 +1,11 @@
-import { memo } from 'react';
+import {memo} from 'react';
 import styled from 'styled-components';
-import { rgba } from 'polished';
+import {rgba} from 'polished';
 
-import { useRovingTabIndex } from './hooks';
-import {
-  createCellEvent,
-  getCellClassname,
-  getCellStyle,
-  isCellEditableUtil,
-} from './utils';
-import type { CellRendererProps } from './models/data-grid';
-import { StyledCellWrapper } from './style/cell';
+import {useRovingTabIndex} from './hooks';
+import {createCellEvent, getCellClassname, getCellStyle, isCellEditableUtil,} from './utils';
+import type {CellRendererProps} from './models/data-grid';
+import {StyledCellWrapper} from './style/cell';
 
 const StyledCell = styled(StyledCellWrapper)`
   transition: background-color 0.3s ease;
@@ -19,7 +14,7 @@ const StyledCell = styled(StyledCellWrapper)`
   justify-content: center;
 
   &.serial-no-cell {
-    background: ${({ theme }: { theme: any }) => theme.table.headerBgColor};
+    background: ${({theme}: { theme: any }) => theme.table.headerBgColor};
     padding: 0;
 
     & .serial-no-inner-cell {
@@ -32,39 +27,39 @@ const StyledCell = styled(StyledCellWrapper)`
 
     &.partially-selected {
       &:not(.rdg-cell-dragged-over) {
-        border-color: ${({ theme }: { theme: any }) =>
-          rgba(theme.palette.primary, 0.11)};
+        border-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.11)};
       }
 
       & .serial-no-inner-cell {
-        background-color: ${({ theme }: { theme: any }) =>
-          rgba(theme.palette.primary, 0.11)};
+        background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.11)};
       }
     }
 
     &.rdg-cell-dragged-over {
-      border-color: ${({ theme }: { theme: any }) =>
-        rgba(theme.palette.primary, 0.11)};
+      border-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.11)};
 
       & .serial-no-inner-cell {
-        background-color: ${({ theme }: { theme: any }) =>
-          rgba(theme.palette.primary, 0.17)};
+        background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.17)};
       }
     }
   }
 
   &[aria-selected='true'] {
-    outline: 2px solid ${({ theme }: { theme: any }) => theme.palette.primary};
+    outline: 2px solid ${({theme}: { theme: any }) => theme.palette.primary};
     outline-offset: -2px;
   }
 
   &.rdg-cell-copied {
-    background-color: ${({ theme }: { theme: any }) => theme.copiedBgColor};
+    background-color: ${({theme}: { theme: any }) => theme.copiedBgColor};
   }
 
   &.rdg-cell-dragged-over:not(.serial-no-cell) {
-    background-color: ${({ theme }: { theme: any }) =>
-      rgba(theme.palette.primary, 0.17)};
+    background-color: ${({theme}: { theme: any }) =>
+  rgba(theme.palette.primary, 0.17)};
 
     &[aria-selected='true'] {
       outline-width: 2px;
@@ -79,51 +74,51 @@ const StyledCell = styled(StyledCellWrapper)`
 
   &.left-selected-cell {
     border-left: 2px solid
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
   }
 
   &.right-selected-cell {
     border-right: 2px solid
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
   }
 
   &.top-selected-cell {
     border-top: 2px solid
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
   }
 
   &.bottom-selected-cell {
     border-bottom: 2px solid
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
 
     .last-row & {
       border-bottom: 2px solid
-        ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+        ${({theme}: { theme: any }) => theme.palette.primary} !important;
     }
   }
 
   &.left-copied-cell {
     border-left: 2px dashed
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
   }
 
   &.right-copied-cell {
     border-right: 2px dashed
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
   }
 
   &.top-copied-cell {
     border-top: 2px dashed
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
   }
 
   &.bottom-copied-cell {
     border-bottom: 2px dashed
-      ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+      ${({theme}: { theme: any }) => theme.palette.primary} !important;
 
     .last-row & {
       border-bottom: 2px dashed
-        ${({ theme }: { theme: any }) => theme.palette.primary} !important;
+        ${({theme}: { theme: any }) => theme.palette.primary} !important;
     }
   }
 
@@ -137,49 +132,49 @@ const StyledCell = styled(StyledCellWrapper)`
 `;
 
 function Cell<R, SR>({
-  column,
-  colSpan,
-  isCellSelected,
-  isCopied,
-  isDraggedOver,
-  row,
-  rowIdx,
-  showBorder,
-  rowSelectionType,
-  onClick,
-  onDoubleClick,
-  onContextMenu,
-  onRowChange,
-  selectCell,
-  autoRowHeight,
-  setDragging,
-  setDraggedOverCellIdx,
-  latestDraggedOverCellIdx,
-  latestDraggedOverRowIdx,
-  isLeftSelectedCell,
-  isRightSelectedCell,
-  isTopSelectedCell,
-  isBottomSelectedCell,
-  isLeftCopiedCell,
-  isRightCopiedCell,
-  isTopCopiedCell,
-  isBottomCopiedCell,
-  isPartiallySelected,
-  unsetRangeSelection,
-  idx,
-  onDragSerialNoRow,
-  isStickyRowDragRef,
-  columnCount,
-  formulas,
-  getParsedRow,
-  cellSavedStyles = [],
-  rowKeyId,
-  ...props
-}: CellRendererProps<R, SR>) {
-  const { tabIndex, childTabIndex, onFocus } =
+                       column,
+                       colSpan,
+                       isCellSelected,
+                       isCopied,
+                       isDraggedOver,
+                       row,
+                       rowIdx,
+                       showBorder,
+                       rowSelectionType,
+                       onClick,
+                       onDoubleClick,
+                       onContextMenu,
+                       onRowChange,
+                       selectCell,
+                       autoRowHeight,
+                       setDragging,
+                       setDraggedOverCellIdx,
+                       latestDraggedOverCellIdx,
+                       latestDraggedOverRowIdx,
+                       isLeftSelectedCell,
+                       isRightSelectedCell,
+                       isTopSelectedCell,
+                       isBottomSelectedCell,
+                       isLeftCopiedCell,
+                       isRightCopiedCell,
+                       isTopCopiedCell,
+                       isBottomCopiedCell,
+                       isPartiallySelected,
+                       unsetRangeSelection,
+                       idx,
+                       onDragSerialNoRow,
+                       isStickyRowDragRef,
+                       columnCount,
+                       formulas,
+                       getParsedRow,
+                       cellSavedStyles = [],
+                       rowKeyId,
+                       ...props
+                     }: CellRendererProps<R, SR>) {
+  const {tabIndex, childTabIndex, onFocus} =
     useRovingTabIndex(isCellSelected);
 
-  const { cellClass } = column;
+  const {cellClass} = column;
 
   const className = getCellClassname(
     column,
@@ -229,7 +224,7 @@ function Cell<R, SR>({
     }
     if (onClick) {
       const cellEvent = createCellEvent(event);
-      onClick({ row, column, selectCell: selectCellWrapper }, cellEvent);
+      onClick({row, column, selectCell: selectCellWrapper}, cellEvent);
       if (cellEvent.isGridDefaultPrevented()) return;
     }
     selectCellWrapper();
@@ -238,7 +233,7 @@ function Cell<R, SR>({
   function handleContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     if (onContextMenu) {
       const cellEvent = createCellEvent(event);
-      onContextMenu({ row, column, selectCell: selectCellWrapper }, cellEvent);
+      onContextMenu({row, column, selectCell: selectCellWrapper}, cellEvent);
       if (cellEvent.isGridDefaultPrevented()) return;
     }
     selectCellWrapper();
@@ -247,7 +242,7 @@ function Cell<R, SR>({
   function handleDoubleClick(event: React.MouseEvent<HTMLDivElement>) {
     if (onDoubleClick) {
       const cellEvent = createCellEvent(event);
-      onDoubleClick({ row, column, selectCell: selectCellWrapper }, cellEvent);
+      onDoubleClick({row, column, selectCell: selectCellWrapper}, cellEvent);
       if (cellEvent.isGridDefaultPrevented()) return;
     }
     selectCellWrapper(true);
@@ -289,7 +284,7 @@ function Cell<R, SR>({
     setDragging(false);
   };
 
-  const rowSpan = column.rowSpan?.({ type: 'ROW', row }) ?? undefined;
+  const rowSpan = column.rowSpan?.({type: 'ROW', row}) ?? undefined;
   const cellFormula =
     formulas?.find(
       (item) =>
@@ -311,18 +306,18 @@ function Cell<R, SR>({
   const cellContents = () =>
     column.render
       ? column.render(
-          updatedRow[column.dataIndex as keyof R],
-          updatedRow,
-          rowIdx,
-        )
+        updatedRow[column.dataIndex as keyof R],
+        updatedRow,
+        rowIdx,
+      )
       : column.renderCell({
-          column,
-          row: updatedRow,
-          isCellEditable: isEditable,
-          tabIndex: childTabIndex,
-          onRowChange: handleRowChange,
-          rowSelectionType,
-        });
+        column,
+        row: updatedRow,
+        isCellEditable: isEditable,
+        tabIndex: childTabIndex,
+        onRowChange: handleRowChange,
+        rowSelectionType,
+      });
 
   return (
     <StyledCell
@@ -334,7 +329,7 @@ function Cell<R, SR>({
       aria-readonly={!isEditable || undefined}
       tabIndex={tabIndex}
       className={className}
-      style={{ ...getCellStyle(column, colSpan), ...cellSavedStyle }}
+      style={{...getCellStyle(column, colSpan), ...cellSavedStyle}}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}

@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import ptMessages from '../locales/pt_PT.json';
 import ptPT from 'antd/lib/locale/pt_PT';
 

@@ -13,7 +13,7 @@ export const StyledCopyWrapper = styled.div`
 
 export const StyledContainer = styled.div`
   position: relative;
-  background: ${({ theme }) => theme.palette.background.component};
+  background: ${({theme}) => theme.palette.background.component};
   padding: 12px;
   overflow-x: auto;
   max-width: 100%;

@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  postDataApi,
-  putDataApi,
-  uploadDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { PERMISSION_TYPES } from '@unpod/constants';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
+import {postDataApi, putDataApi, uploadDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {PERMISSION_TYPES} from '@unpod/constants';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
 import CommonFields from './CommonFields';
-import { StyledContainer, StyledPostContainer } from './index.styled';
+import {StyledContainer, StyledPostContainer} from './index.styled';
 
 const ANONYMOUS_TITLE = 'Write Title';
 
-const WriteThread = ({ post, tagsData, currentSpace, setThreadType, onDataSaved }) => {
+const WriteThread = ({post, tagsData, currentSpace, setThreadType, onDataSaved}) => {
   const infoViewActionsContext = useInfoViewActionsContext();
 
   const [queryTitle, setQueryTitle] = useState(null);
@@ -156,7 +147,7 @@ const WriteThread = ({ post, tagsData, currentSpace, setThreadType, onDataSaved 
     };
 
     if (coverImage) {
-      uploadCoverImage(({ media_id }) => {
+      uploadCoverImage(({media_id}) => {
         payload.cover_image = {
           media_id: media_id,
           file_name: coverImage.name,
@@ -202,7 +193,7 @@ const WriteThread = ({ post, tagsData, currentSpace, setThreadType, onDataSaved 
   );
 };
 
-const { func, object } = PropTypes;
+const {func, object} = PropTypes;
 
 WriteThread.propTypes = {
   post: object,

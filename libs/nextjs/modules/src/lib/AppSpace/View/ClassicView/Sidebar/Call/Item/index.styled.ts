@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 type MissedProps = { $missed?: boolean };
 
 export const StyledRoot = styled.div`
@@ -12,12 +12,12 @@ export const StyledRoot = styled.div`
   padding: 10px 10px 10px 16px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 
   &.active,
   &.selected {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 `;
 
@@ -45,11 +45,11 @@ export const StyledMeta = styled(Typography.Paragraph)<MissedProps>`
 
   & .ant-typography {
     margin-bottom: 0 !important;
-    color: ${({ $missed }) => ($missed ? 'red' : '')} !important;
+    color: ${({$missed}) => ($missed ? 'red' : '')} !important;
     font-size: 14px !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     margin-bottom: 3px !important;
   }
 `;
@@ -71,6 +71,6 @@ export const StyledHeaderExtra = styled.div`
 export const StyledParagraph = styled(Paragraph)<MissedProps>`
   font-size: 12px !important;
   max-width: 90% !important;
-  color: ${({ $missed, theme }) =>
-    $missed ? 'red' : theme.palette.text.secondary} !important;
+  color: ${({$missed, theme}) =>
+  $missed ? 'red' : theme.palette.text.secondary} !important;
 `;

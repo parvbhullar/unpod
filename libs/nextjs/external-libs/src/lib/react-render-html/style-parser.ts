@@ -32,7 +32,8 @@ const convertKey = (key: string): string => {
 };
 
 export type StyleObject = {
-  [key: string]: string;};
+  [key: string]: string;
+};
 
 const styleParser = (styleStr: string): StyleObject => {
   return styleStr

@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import type { InputProps } from 'antd';
-import { Input } from 'antd';
+import React, {ChangeEvent, useEffect, useState} from 'react';
+import type {InputProps} from 'antd';
+import {Input} from 'antd';
 import clsx from 'clsx';
 import AppFloatingOutline from '../AppFloatingOutline';
 
@@ -16,16 +16,16 @@ type Props = {
 };
 
 export const AppInput = ({
-  placeholder,
-  className,
-  style,
-  value,
-  disabled,
-  defaultValue,
-  onChange,
-  asterisk,
-  ...restProps
-}: InputProps & Props) => {
+                           placeholder,
+                           className,
+                           style,
+                           value,
+                           disabled,
+                           defaultValue,
+                           onChange,
+                           asterisk,
+                           ...restProps
+                         }: InputProps & Props) => {
   const [inputVal, setInputVal] = useState<string>('');
 
   useEffect(() => {

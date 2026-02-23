@@ -1,16 +1,16 @@
 'use client';
-import React, { useMemo, useState } from 'react';
-import { StyledRoot, StyledTabsWrapper } from './index.styled';
-import { useAppSpaceContext } from '@unpod/providers';
-import { AppTabs } from '@unpod/components/antd';
-import { getTabItems } from './constants';
+import React, {useMemo, useState} from 'react';
+import {StyledRoot, StyledTabsWrapper} from './index.styled';
+import {useAppSpaceContext} from '@unpod/providers';
+import {AppTabs} from '@unpod/components/antd';
+import {getTabItems} from './constants';
 import LandingView from './LandingView';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const CallLogs = () => {
-  const { activeCall } = useAppSpaceContext();
+  const {activeCall} = useAppSpaceContext();
   const [activeTab, setActiveTab] = useState('overview');
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   // Memoize tab items to prevent recreating components on every render
   const tabItems = useMemo(
@@ -19,7 +19,7 @@ const CallLogs = () => {
   );
 
   if (!activeCall) {
-    return <LandingView />;
+    return <LandingView/>;
   }
 
   return (

@@ -1,33 +1,20 @@
-import { Fragment, useEffect, useState } from 'react';
+import {Fragment, useEffect, useState} from 'react';
 
-import { Button, Col, Form, Select } from 'antd';
-import { MdDownload } from 'react-icons/md';
-import {
-  changeDateStringFormat,
-  getDateObject,
-  getUtcTimestamp,
-} from '@unpod/helpers/DateHelper';
-import {
-  useDownloadData,
-  useGetDataApi,
-  usePaginatedDataApi,
-} from '@unpod/providers';
+import {Button, Col, Form, Select} from 'antd';
+import {MdDownload} from 'react-icons/md';
+import {changeDateStringFormat, getDateObject, getUtcTimestamp,} from '@unpod/helpers/DateHelper';
+import {useDownloadData, useGetDataApi, usePaginatedDataApi,} from '@unpod/providers';
 import AppDrawer from '../../../antd/AppDrawer';
-import {
-  AppGridContainer,
-  DrawerBody,
-  DrawerForm,
-  DrawerFormFooter,
-} from '../../../antd';
+import {AppGridContainer, DrawerBody, DrawerForm, DrawerFormFooter,} from '../../../antd';
 import AppInput from '../../../antd/AppInput';
 import AppDateTime from '../../../antd/AppDateTime';
 import AppSelect from '../../../antd/AppSelect';
-import { AppHeaderButton } from '../../../common/AppPageHeader';
-import { useIntl } from 'react-intl';
-import { Spaces, User } from '@unpod/constants';
+import {AppHeaderButton} from '../../../common/AppPageHeader';
+import {useIntl} from 'react-intl';
+import {Spaces, User} from '@unpod/constants';
 
-const { Item, useForm } = Form;
-const { Option } = Select;
+const {Item, useForm} = Form;
+const {Option} = Select;
 
 type RunItem = {
   run_id: string | number;
@@ -43,13 +30,13 @@ type AgentsResponse = {
   data?: AgentItem[];
 };
 
-const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
+const ExportTasks = ({currentSpace}: { currentSpace: Spaces }) => {
   const [form] = useForm();
   const [open, setOpen] = useState(false);
   const [userList, setUserList] = useState<User[]>([]);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
-  const [{ apiData: runs }, { reCallAPI }] = usePaginatedDataApi(
+  const [{apiData: runs}, {reCallAPI}] = usePaginatedDataApi(
     `tasks/space-runs/${currentSpace?.token}/`,
     [],
     {
@@ -59,11 +46,11 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
     false,
   ) as [{ apiData: RunItem[] }, { reCallAPI: () => void }];
 
-  const [{ apiData: agents }, { setQueryParams, reCallAPI: reCallPilotsAPI }] =
+  const [{apiData: agents}, {setQueryParams, reCallAPI: reCallPilotsAPI}] =
     useGetDataApi(
       `core/pilots/org/`,
-      { data: [] },
-      { type: 'Voice', search: '' },
+      {data: []},
+      {type: 'Voice', search: ''},
       false,
     ) as [
       { apiData: AgentsResponse },
@@ -73,7 +60,7 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
       },
     ];
 
-  const { downloading, downloadData } = useDownloadData(
+  const {downloading, downloadData} = useDownloadData(
     `tasks/space-task/${currentSpace?.token}/export/`,
     ``,
   );
@@ -92,11 +79,11 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
   }, [currentSpace?.users]);
 
   const onSearch = (value: string) => {
-    setQueryParams({ search: value, type: 'Voice' });
+    setQueryParams({search: value, type: 'Voice'});
   };
 
   const onSubmitSuccess = (formData: Record<string, any>) => {
-    const params = { ...formData };
+    const params = {...formData};
     if (formData.from_ts) {
       params['from_ts'] = getUtcTimestamp(formData.from_ts);
     }
@@ -132,10 +119,10 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
         shape="circle"
         size="small"
         onClick={() => setOpen(true)}
-        icon={<MdDownload fontSize={20} />}
+        icon={<MdDownload fontSize={20}/>}
       />
       <AppDrawer
-        title={formatMessage({ id: 'logs.download' })}
+        title={formatMessage({id: 'logs.download'})}
         open={open}
         onClose={() => setOpen(false)}
         size={600}
@@ -149,7 +136,7 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
                     placeholder={formatMessage({
                       id: 'downloadLogs.from',
                     })}
-                    showTime={{ format: 'HH:mm:ss' }}
+                    showTime={{format: 'HH:mm:ss'}}
                     format="DD-MM-YYYY HH:mm:ss"
                   />
                 </Item>
@@ -158,8 +145,8 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
               <Col md={12} sm={24}>
                 <Item name="to_ts">
                   <AppDateTime
-                    placeholder={formatMessage({ id: 'downloadLogs.to' })}
-                    showTime={{ format: 'HH:mm:ss' }}
+                    placeholder={formatMessage({id: 'downloadLogs.to'})}
+                    showTime={{format: 'HH:mm:ss'}}
                     format="DD-MM-YYYY HH:mm:ss"
                   />
                 </Item>
@@ -168,7 +155,7 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
 
             <Item name="runs">
               <AppSelect
-                placeholder={formatMessage({ id: 'downloadLogs.runIds' })}
+                placeholder={formatMessage({id: 'downloadLogs.runIds'})}
                 mode="multiple"
                 optionLabelProp="label"
                 optionFilterProp="children"
@@ -190,7 +177,7 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
 
             <Item name="agents">
               <AppSelect
-                placeholder={formatMessage({ id: 'downloadLogs.agents' })}
+                placeholder={formatMessage({id: 'downloadLogs.agents'})}
                 mode="multiple"
                 onSearch={onSearch}
                 allowClear
@@ -205,7 +192,7 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
 
             <Item name="user_token">
               <AppSelect
-                placeholder={formatMessage({ id: 'downloadLogs.user' })}
+                placeholder={formatMessage({id: 'downloadLogs.user'})}
               >
                 {userList.map((user, index) => (
                   <Option key={index} value={user.token}>
@@ -234,10 +221,10 @@ const ExportTasks = ({ currentSpace }: { currentSpace: Spaces }) => {
 
           <DrawerFormFooter>
             <Button onClick={onClearForm}>
-              {formatMessage({ id: 'common.close' })}
+              {formatMessage({id: 'common.close'})}
             </Button>
             <Button type="primary" htmlType="submit" loading={downloading}>
-              {formatMessage({ id: 'common.download' })}
+              {formatMessage({id: 'common.download'})}
             </Button>
           </DrawerFormFooter>
         </DrawerForm>

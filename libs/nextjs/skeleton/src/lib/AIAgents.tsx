@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, Col, Row, Skeleton } from 'antd';
+import {Card, Col, Row, Skeleton} from 'antd';
 import styled from 'styled-components';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from './common/SkeletonButton';
 
 const StyledCard = styled(Card)`
@@ -18,11 +18,11 @@ const CardContent = styled.div`
   align-items: center;
   gap: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.md}px) {
     gap: 16px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -38,7 +38,7 @@ const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 56px;
     height: 56px;
   }
@@ -57,7 +57,7 @@ const RowBetween = styled.div`
   align-items: center;
   width: 100%;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
@@ -67,7 +67,7 @@ const RowBetween = styled.div`
 const DescriptionWrapper = styled.div`
   width: 80%;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
   }
 `;
@@ -75,7 +75,7 @@ const DescriptionWrapper = styled.div`
 const ButtonWrapper = styled.div`
   min-width: 90px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
   }
 `;
@@ -84,13 +84,13 @@ const FooterSkeleton = styled(SkeletonInput)`
   width: 20%;
   min-width: 50px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 40%;
   }
 `;
 
 const AiAgentsSkeleton: React.FC = () => {
-  const skeletonItems = Array.from({ length: 8 });
+  const skeletonItems = Array.from({length: 8});
 
   return (
     <Row gutter={[16, 16]}>
@@ -99,15 +99,15 @@ const AiAgentsSkeleton: React.FC = () => {
           <StyledCard>
             <CardContent>
               <IconWrapper>
-                <Skeleton.Image style={{ width: '80%', height: '80%' }} />
+                <Skeleton.Image style={{width: '80%', height: '80%'}}/>
               </IconWrapper>
 
               <ContentWrapper>
-                <SkeletonInput style={{ width: '60%', height: 18 }} />
+                <SkeletonInput style={{width: '60%', height: 18}}/>
 
                 <RowBetween>
                   <DescriptionWrapper>
-                    <SkeletonInput style={{ width: '100%', height: 14 }} />
+                    <SkeletonInput style={{width: '100%', height: 14}}/>
                   </DescriptionWrapper>
 
                   <ButtonWrapper>
@@ -122,7 +122,7 @@ const AiAgentsSkeleton: React.FC = () => {
                   </ButtonWrapper>
                 </RowBetween>
 
-                <FooterSkeleton style={{ height: 14 }} />
+                <FooterSkeleton style={{height: 14}}/>
               </ContentWrapper>
             </CardContent>
           </StyledCard>
@@ -132,4 +132,4 @@ const AiAgentsSkeleton: React.FC = () => {
   );
 };
 
-export { AiAgentsSkeleton };
+export {AiAgentsSkeleton};

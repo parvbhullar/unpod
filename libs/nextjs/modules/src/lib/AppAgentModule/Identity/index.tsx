@@ -1,26 +1,18 @@
-import { useEffect, useState } from 'react';
-import type { FormInstance } from 'antd';
-import { Button, Divider, Flex, Form } from 'antd';
-import { SaveOutlined, TagsOutlined } from '@ant-design/icons';
-import {
-  useAuthContext,
-  useGetDataApi,
-  useInfoViewActionsContext,
-  useInfoViewContext,
-} from '@unpod/providers';
+import {useEffect, useState} from 'react';
+import type {FormInstance} from 'antd';
+import {Button, Divider, Flex, Form} from 'antd';
+import {SaveOutlined, TagsOutlined} from '@ant-design/icons';
+import {useAuthContext, useGetDataApi, useInfoViewActionsContext, useInfoViewContext,} from '@unpod/providers';
 import IdentityForm from './IdentityForm';
-import {
-  StickyFooter,
-  StyledTabRoot,
-} from '../../AppIdentityAgentModule/index.styled';
-import { StyledMainContainer } from './index.styled';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import {StickyFooter, StyledTabRoot,} from '../../AppIdentityAgentModule/index.styled';
+import {StyledMainContainer} from './index.styled';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import CardWrapper from '@unpod/components/common/CardWrapper';
-import { AppSelect } from '@unpod/components/antd';
+import {AppSelect} from '@unpod/components/antd';
 import PurposeList from './PurposeList';
-import { useIntl } from 'react-intl';
-import { PURPOSE_CATEGORIES } from '@unpod/constants/CommonConsts';
-import type { InviteMember, Pilot } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import {PURPOSE_CATEGORIES} from '@unpod/constants/CommonConsts';
+import type {InviteMember, Pilot} from '@unpod/constants/types';
 
 type IdentityProps = {
   agentData: Pilot;
@@ -42,24 +34,24 @@ export type HeaderFormValues = {
 };
 
 const Identity = ({
-  agentData,
-  updateAgentData,
-  headerForm,
-  hideNameField,
-}: IdentityProps) => {
+                    agentData,
+                    updateAgentData,
+                    headerForm,
+                    hideNameField,
+                  }: IdentityProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { loading } = useInfoViewContext();
+  const {loading} = useInfoViewContext();
   const [form] = Form.useForm();
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [userList, setUserList] = useState<InviteMember[]>([]);
   const privacyType = Form.useWatch('privacy_type', form);
-  const { isAuthenticated } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {isAuthenticated} = useAuthContext();
+  const {formatMessage} = useIntl();
 
 
-  const [{ apiData }, { reCallAPI }] = useGetDataApi<Tags[]>(
+  const [{apiData}, {reCallAPI}] = useGetDataApi<Tags[]>(
     'core/tags/',
-    { data: [] },
+    {data: []},
     {},
     false,
   );
@@ -71,7 +63,7 @@ const Identity = ({
   useEffect(() => {
     if (privacyType === 'public') {
       setUserList([]);
-      form.setFieldsValue({ sharedFields: [] });
+      form.setFieldsValue({sharedFields: []});
     }
   }, [privacyType]);
 
@@ -84,7 +76,7 @@ const Identity = ({
   const onFormSave = (value: HeaderFormValues) => {
     if (privacyType === 'shared' && userList.length === 0) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.addAtLeastOneUser' }),
+        formatMessage({id: 'validation.addAtLeastOneUser'}),
       );
       return;
     }
@@ -93,9 +85,9 @@ const Identity = ({
     const filteredUsers =
       privacyType === 'shared'
         ? userList.filter(
-            (user: InviteMember) =>
-              user && user.role_code !== ACCESS_ROLE.OWNER,
-          )
+          (user: InviteMember) =>
+            user && user.role_code !== ACCESS_ROLE.OWNER,
+        )
         : [];
 
     formData.append('user_list', JSON.stringify(filteredUsers));
@@ -142,8 +134,8 @@ const Identity = ({
           />
 
           <CardWrapper
-            icon={<TagsOutlined />}
-            title={formatMessage({ id: 'aiStudio.identityClassification' })}
+            icon={<TagsOutlined/>}
+            title={formatMessage({id: 'aiStudio.identityClassification'})}
           >
             <Form.Item
               help={formatMessage({
@@ -184,7 +176,7 @@ const Identity = ({
             >
               <PurposeList
                 items={PURPOSE_CATEGORIES}
-                label={formatMessage({ id: 'identityOnboarding.purpose' })}
+                label={formatMessage({id: 'identityOnboarding.purpose'})}
               />
             </Form.Item>
           </CardWrapper>
@@ -192,15 +184,15 @@ const Identity = ({
       </StyledTabRoot>
 
       <StickyFooter>
-        <Divider />
+        <Divider/>
         <Flex justify="end">
           <Button
             htmlType="submit"
             type="primary"
-            icon={<SaveOutlined />}
+            icon={<SaveOutlined/>}
             loading={loading}
           >
-            {formatMessage({ id: 'common.save' })}
+            {formatMessage({id: 'common.save'})}
           </Button>
         </Flex>
       </StickyFooter>

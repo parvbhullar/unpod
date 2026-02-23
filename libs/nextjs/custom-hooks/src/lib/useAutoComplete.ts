@@ -1,13 +1,15 @@
 'use client';
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 export type AutoCompleteResult = {
   filled: boolean;
-  setFilled: Dispatch<SetStateAction<boolean>>;};
+  setFilled: Dispatch<SetStateAction<boolean>>;
+};
 
 type AutocompleteEvent = Event & {
-  target: HTMLInputElement & EventTarget;};
+  target: HTMLInputElement & EventTarget;
+};
 
 export const useAutoComplete = (): AutoCompleteResult => {
   const [filled, setFilled] = useState<boolean>(false);
@@ -18,9 +20,9 @@ export const useAutoComplete = (): AutoCompleteResult => {
       console.info('onautocomplete: ', event.target.type);
       setFilled(
         event.target.hasAttribute('autocompleted') &&
-          event.target.type !== 'file' &&
-          event.target.type !== 'checkbox' &&
-          event.target.type !== 'radio',
+        event.target.type !== 'file' &&
+        event.target.type !== 'checkbox' &&
+        event.target.type !== 'radio',
       );
       // e.preventDefault(); // prevent autocomplete
     }
@@ -31,5 +33,5 @@ export const useAutoComplete = (): AutoCompleteResult => {
       document.removeEventListener('onautocomplete', handleAutoComplete);
   }, []);
 
-  return { filled, setFilled };
+  return {filled, setFilled};
 };

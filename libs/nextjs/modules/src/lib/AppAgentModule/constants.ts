@@ -1,5 +1,5 @@
-import type { Pilot } from '@unpod/constants/types';
-import type { FormInstance } from 'antd';
+import type {Pilot} from '@unpod/constants/types';
+import type {FormInstance} from 'antd';
 
 type GetTabItemsParams = {
   agentType?: string;
@@ -10,12 +10,12 @@ type GetTabItemsParams = {
 };
 
 export const getTabItems = ({
-  agentType,
-  isNewAgent,
-  agentData,
-  updateAgentData,
-  headerForm,
-}: GetTabItemsParams) => {
+                              agentType,
+                              isNewAgent,
+                              agentData,
+                              updateAgentData,
+                              headerForm,
+                            }: GetTabItemsParams) => {
   void agentType;
   void isNewAgent;
   void agentData;

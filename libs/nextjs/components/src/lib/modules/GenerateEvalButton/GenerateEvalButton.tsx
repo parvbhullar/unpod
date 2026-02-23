@@ -1,10 +1,10 @@
 import React from 'react';
-import type { ButtonProps } from 'antd';
-import { Button } from 'antd';
-import { useIntl } from 'react-intl';
+import type {ButtonProps} from 'antd';
+import {Button} from 'antd';
+import {useIntl} from 'react-intl';
 import styled from 'styled-components';
-import { postDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import type { Spaces } from '@unpod/constants/types';
+import {postDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import type {Spaces} from '@unpod/constants/types';
 
 type GenerateEvalButtonProps = {
   type?: 'pilot' | 'knowledgebase';
@@ -25,33 +25,33 @@ type StyledButtonProps = {
 
 export const StyledButton = styled(Button)<StyledButtonProps>`
   display: flex;
-  padding-right: ${({ $padding }) => ($padding ? '4px' : '12px')} !important;
-  padding-left: ${({ $padding }) => ($padding ? '4px' : '12px')} !important;
-  border-color: ${({ theme }) => theme.palette.primary};
+  padding-right: ${({$padding}) => ($padding ? '4px' : '12px')} !important;
+  padding-left: ${({$padding}) => ($padding ? '4px' : '12px')} !important;
+  border-color: ${({theme}) => theme.palette.primary};
 
-  color: ${({ theme, type }) => type != 'primary' && theme.palette.primary};
+  color: ${({theme, type}) => type != 'primary' && theme.palette.primary};
 
   &:hover {
-    background-color: ${({ theme, type }) =>
-      type === 'text' && theme.palette.primary} !important;
-    color: ${({ theme, type }) =>
-      type === 'text' && theme.palette.common.white} !important;
+    background-color: ${({theme, type}) =>
+  type === 'text' && theme.palette.primary} !important;
+    color: ${({theme, type}) =>
+  type === 'text' && theme.palette.common.white} !important;
   }
 `;
 
 const GenerateEvalButton: React.FC<GenerateEvalButtonProps> = ({
-  type = 'knowledgebase',
-  token,
-  buttonType = 'text',
-  size = 'small',
-  padding = false,
-  onClick: userOnClick,
-  force = false,
-  text = 'common.generateEvals',
-  reCallAPI,
-  ...rest
-}) => {
-  const { formatMessage } = useIntl();
+                                                                 type = 'knowledgebase',
+                                                                 token,
+                                                                 buttonType = 'text',
+                                                                 size = 'small',
+                                                                 padding = false,
+                                                                 onClick: userOnClick,
+                                                                 force = false,
+                                                                 text = 'common.generateEvals',
+                                                                 reCallAPI,
+                                                                 ...rest
+                                                               }) => {
+  const {formatMessage} = useIntl();
   const infoViewActionsContext = useInfoViewActionsContext();
 
   const payload = {
@@ -69,7 +69,7 @@ const GenerateEvalButton: React.FC<GenerateEvalButtonProps> = ({
       payload,
     )
       .then((res) => {
-        if (userOnClick) userOnClick({ response: res?.data[0] });
+        if (userOnClick) userOnClick({response: res?.data[0]});
         reCallAPI?.();
         infoViewActionsContext.showMessage(
           res.message || 'Eval generated successfully',
@@ -91,7 +91,7 @@ const GenerateEvalButton: React.FC<GenerateEvalButtonProps> = ({
       {...rest}
       $padding={padding}
     >
-      {formatMessage({ id: text })}
+      {formatMessage({id: text})}
     </StyledButton>
   );
 };

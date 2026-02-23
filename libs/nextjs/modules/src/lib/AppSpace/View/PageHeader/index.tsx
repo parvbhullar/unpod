@@ -1,14 +1,8 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import {
-  getPostIcon,
-  isEditAccessAllowed,
-  isShareAccessAllowed,
-} from '@unpod/helpers/PermissionHelper';
-import { Badge, Dropdown, Modal } from 'antd';
-import { MdDashboard, MdEdit, MdOutlineSettings } from 'react-icons/md';
-import AppPageHeader, {
-  AppHeaderButton,
-} from '@unpod/components/common/AppPageHeader';
+import {Fragment, useEffect, useMemo, useState} from 'react';
+import {getPostIcon, isEditAccessAllowed, isShareAccessAllowed,} from '@unpod/helpers/PermissionHelper';
+import {Badge, Dropdown, Modal} from 'antd';
+import {MdDashboard, MdEdit, MdOutlineSettings} from 'react-icons/md';
+import AppPageHeader, {AppHeaderButton,} from '@unpod/components/common/AppPageHeader';
 import {
   deleteDataApi,
   useAppSpaceActionsContext,
@@ -17,39 +11,36 @@ import {
   useInfoViewActionsContext,
   useOrgActionContext,
 } from '@unpod/providers';
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import PermissionPopover from '@unpod/components/common/PermissionPopover';
-import { useMediaQuery } from 'react-responsive';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
+import {useMediaQuery} from 'react-responsive';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
 import AppSharedUsers from '@unpod/components/modules/AppSharedUsers';
 import RequestPopover from '@unpod/components/common/RequestPopover';
-import AppConnectorsSetting from '@unpod/components/modules/AppConnectorsSetting';
-import AppConnectorList from '@unpod/components/modules/AppConnectorList';
-import { AppDrawer } from '@unpod/components/antd';
-import { SITE_URL, TabWidthQuery } from '@unpod/constants';
+import {AppDrawer} from '@unpod/components/antd';
+import {TabWidthQuery} from '@unpod/constants';
 import SubscribeModal from './SubscribeModal';
 import EditSpace from './EditSpace';
-import { IconWrapper } from './index.styled';
+import {IconWrapper} from './index.styled';
 import AppKbSchemaManager from '@unpod/components/modules/AppKbSchemaManager';
-import { getKbInputsStructure } from '@unpod/helpers/AppKbHelper';
-import { useIntl } from 'react-intl';
+import {getKbInputsStructure} from '@unpod/helpers/AppKbHelper';
+import {useIntl} from 'react-intl';
 
-const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
-  const { currentSpace, spaceSchema } = useAppSpaceContext();
-  const { setCurrentSpace, setSpaceSchema } = useAppSpaceActionsContext();
+const PageHeader = ({pageTitle}: { pageTitle?: any }) => {
+  const {currentSpace, spaceSchema} = useAppSpaceContext();
+  const {setCurrentSpace, setSpaceSchema} = useAppSpaceActionsContext();
   const isTabletOrMobile = useMediaQuery(TabWidthQuery);
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { setActiveSpace } = useOrgActionContext();
+  const {setActiveSpace} = useOrgActionContext();
   const [openPermissionManager, setOpenPermissionManager] = useState(false);
   const [openRequestManager, setOpenRequestManager] = useState(false);
   const router = useRouter();
-  const { isAuthenticated } = useAuthContext();
-  const { formatMessage } = useIntl();
+  const {isAuthenticated} = useAuthContext();
+  const {formatMessage} = useIntl();
   const [isEditOpen, setEditOpen] = useState(false);
   const [isSchemaOpen, setSchemaOpen] = useState(false);
   const [userList, setUserList] = useState<any[]>([]);
   const [inputs, setInputs] = useState<any[]>([]);
-  const [openConnectors, setOpenConnectors] = useState(false);
 
   useEffect(() => {
     if (spaceSchema) {
@@ -77,7 +68,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
         label: 'Edit Space',
         icon: (
           <span className="ant-icon">
-            <MdEdit fontSize={16} />
+            <MdEdit fontSize={16}/>
           </span>
         ),
       },
@@ -86,7 +77,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
         label: 'Dashboard',
         icon: (
           <span className="ant-icon">
-            <MdDashboard fontSize={16} />
+            <MdDashboard fontSize={16}/>
           </span>
         ),
       },
@@ -98,7 +89,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
         label: 'Edit Schema',
         icon: (
           <span className="ant-icon">
-            <MdEdit fontSize={16} />
+            <MdEdit fontSize={16}/>
           </span>
         ),
       });
@@ -165,8 +156,6 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
     setActiveSpace(newSpace);
   };
 
-  const [connector] = (currentSpace?.connected_apps || []) as any[];
-
   const PermissionPopoverAny = PermissionPopover as any;
   const RequestPopoverAny = RequestPopover as any;
   const AppSharedUsersAny = AppSharedUsers as any;
@@ -180,7 +169,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
         isListingPage={!isAuthenticated}
         rightOptions={
           <Fragment>
-            <AppSharedUsersAny users={userList} />
+            <AppSharedUsersAny users={userList}/>
 
             {isAuthenticated &&
               !isTabletOrMobile &&
@@ -202,7 +191,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
                       icon={
                         <span
                           className={`anticon ${currentSpace?.privacy_type}-icon`}
-                          style={{ verticalAlign: 'middle' }}
+                          style={{verticalAlign: 'middle'}}
                         >
                           {getPostIcon(currentSpace?.privacy_type)}
                         </span>
@@ -219,7 +208,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
                   onOpenChange={setOpenRequestManager}
                   currentData={currentSpace}
                   setCurrentData={onSpaceUpdate}
-                  title={formatMessage({ id: 'common.requestAccess' })}
+                  title={formatMessage({id: 'common.requestAccess'})}
                   type="space"
                 >
                   <AppHeaderButton
@@ -228,7 +217,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
                     icon={
                       <span
                         className={`anticon ${currentSpace?.privacy_type}-icon`}
-                        style={{ verticalAlign: 'middle' }}
+                        style={{verticalAlign: 'middle'}}
                       >
                         {getPostIcon(currentSpace?.privacy_type)}
                       </span>
@@ -243,25 +232,9 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
             {!isAuthenticated &&
               currentSpace?.token &&
               currentSpace?.privacy_type === 'public' && (
-                <SubscribeModal currentSpace={currentSpace} />
+                <SubscribeModal currentSpace={currentSpace}/>
               )}
 
-            {currentSpace?.content_type === 'email' &&
-              (connector ? (
-                <AppConnectorsSetting
-                  data={currentSpace}
-                  setData={onSpaceUpdate}
-                />
-              ) : (
-                <AppHeaderButton
-                  type="primary"
-                  shape="round"
-                  onClick={() => setOpenConnectors(true)}
-                  ghost
-                >
-                  Connect
-                </AppHeaderButton>
-              ))}
 
             {isEditAccessAllowed(null, null, currentSpace) && (
               <Dropdown
@@ -273,7 +246,7 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
                 trigger={['click']}
               >
                 <IconWrapper>
-                  <MdOutlineSettings fontSize={24} />
+                  <MdOutlineSettings fontSize={24}/>
                 </IconWrapper>
               </Dropdown>
             )}
@@ -281,19 +254,6 @@ const PageHeader = ({ pageTitle }: { pageTitle?: any }) => {
         }
       />
 
-      <AppDrawer
-        title="Connect"
-        open={openConnectors}
-        onClose={() => setOpenConnectors(false)}
-        width={560}
-      >
-        <AppConnectorList
-          defaultPayload={{
-            redirect_route: `${SITE_URL}/spaces/${currentSpace?.slug}/`,
-            space: currentSpace?.slug,
-          }}
-        />
-      </AppDrawer>
 
       <Modal
         title="Update Space"

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'antd';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import { StyledPagination } from './index.styled';
+import {Button} from 'antd';
+import {MdChevronLeft, MdChevronRight} from 'react-icons/md';
+import {StyledPagination} from './index.styled';
 
 interface ThumbPaginationProps {
   page: number;
@@ -9,7 +9,7 @@ interface ThumbPaginationProps {
   numPages: number;
 }
 
-const ThumbPagination: React.FC<ThumbPaginationProps> = ({ page, setPage, numPages }) => {
+const ThumbPagination: React.FC<ThumbPaginationProps> = ({page, setPage, numPages}) => {
   const disableLeft = page === 0;
   const disableRight = page === numPages - 1;
   // const pinnedTrack = usePinnedTrack();
@@ -28,9 +28,9 @@ const ThumbPagination: React.FC<ThumbPaginationProps> = ({ page, setPage, numPag
         size="small"
         disabled={disableLeft}
         onClick={prevPage}
-        style={{ cursor: disableLeft ? 'not-allowed' : 'pointer' }}
+        style={{cursor: disableLeft ? 'not-allowed' : 'pointer'}}
       >
-        <MdChevronLeft width={16} height={16} />
+        <MdChevronLeft width={16} height={16}/>
       </Button>
       {/*<StyledPagination.Dots>
         {!pinnedTrack &&
@@ -49,9 +49,9 @@ const ThumbPagination: React.FC<ThumbPaginationProps> = ({ page, setPage, numPag
         size="small"
         disabled={disableRight}
         onClick={nextPage}
-        style={{ cursor: disableRight ? 'not-allowed' : 'pointer' }}
+        style={{cursor: disableRight ? 'not-allowed' : 'pointer'}}
       >
-        <MdChevronRight width={16} height={16} />
+        <MdChevronRight width={16} height={16}/>
       </Button>
     </StyledPagination>
   );

@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import plMessages from '../locales/pl_PL.json';
 import plPL from 'antd/lib/locale/pl_PL';
 

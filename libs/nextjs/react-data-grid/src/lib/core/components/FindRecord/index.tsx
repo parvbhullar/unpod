@@ -1,18 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import type { InputRef } from 'antd';
-import { Button, Divider, Tooltip } from 'antd';
-import {
-  MdClose,
-  MdKeyboardArrowDown,
-  MdKeyboardArrowUp,
-  MdOutlineMoreVert,
-} from 'react-icons/md';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import type {InputRef} from 'antd';
+import {Button, Divider, Tooltip} from 'antd';
+import {MdClose, MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineMoreVert,} from 'react-icons/md';
 import clsx from 'clsx';
-import { CalculatedColumn } from '../../models/data-grid';
-import { EditCellState, SelectCellState } from '../../DataGrid';
-import { PartialPosition } from '../../ScrollToCell';
-import { StyledActions, StyledContainer, StyledInput } from './index.styled';
-import { useDataGridConfiguration } from '../../DataGridContext';
+import {CalculatedColumn} from '../../models/data-grid';
+import {EditCellState, SelectCellState} from '../../DataGrid';
+import {PartialPosition} from '../../ScrollToCell';
+import {StyledActions, StyledContainer, StyledInput} from './index.styled';
+import {useDataGridConfiguration} from '../../DataGridContext';
 
 type Props<R> = {
   isOpen?: boolean;
@@ -38,17 +33,17 @@ type FoundRecords = {
 }[];
 
 function FindRecord<R>({
-  isOpen,
-  rows,
-  columns,
-  setFindString,
-  setSelectedPosition,
-  setScrollToPosition,
-  onMoreOptionsClick,
-  onClose,
-  rowKeyId,
-}: Props<R>) {
-  const { allowFindReplace } = useDataGridConfiguration();
+                         isOpen,
+                         rows,
+                         columns,
+                         setFindString,
+                         setSelectedPosition,
+                         setScrollToPosition,
+                         onMoreOptionsClick,
+                         onClose,
+                         rowKeyId,
+                       }: Props<R>) {
+  const {allowFindReplace} = useDataGridConfiguration();
 
   const [totalMatches, setTotalMatches] = useState(0);
   const [findStr, setFindStr] = useState('');
@@ -130,7 +125,7 @@ function FindRecord<R>({
       rowKey: rows[rowIdx]?.[rowKeyId as keyof R] as string | number,
       colKey: columns[idx].dataIndex,
     });
-    setScrollToPosition({ idx: idx, rowIdx });
+    setScrollToPosition({idx: idx, rowIdx});
   };
 
   const onFindUp = () => {
@@ -188,7 +183,7 @@ function FindRecord<R>({
   };
 
   return (
-    <StyledContainer className={clsx({ open: isOpen })}>
+    <StyledContainer className={clsx({open: isOpen})}>
       <StyledInput
         ref={inputRef}
         placeholder="Find in data"
@@ -213,32 +208,32 @@ function FindRecord<R>({
       <StyledActions>
         <Button
           type="text"
-          icon={<MdKeyboardArrowUp fontSize={16} />}
+          icon={<MdKeyboardArrowUp fontSize={16}/>}
           disabled={findStr.length === 0}
           onClick={onFindUp}
         />
         <Button
           type="text"
-          icon={<MdKeyboardArrowDown fontSize={16} />}
+          icon={<MdKeyboardArrowDown fontSize={16}/>}
           disabled={findStr.length === 0}
           onClick={onFindDown}
         />
 
-        <Divider type="vertical" style={{ borderColor: 'rgba(0,0,0,0.88)' }} />
+        <Divider type="vertical" style={{borderColor: 'rgba(0,0,0,0.88)'}}/>
 
         {allowFindReplace && (
           <Tooltip title="More options">
             <Button
               type="text"
               onClick={onMoreOptionsClick}
-              icon={<MdOutlineMoreVert fontSize={16} />}
+              icon={<MdOutlineMoreVert fontSize={16}/>}
             />
           </Tooltip>
         )}
 
         <Button
           type="text"
-          icon={<MdClose fontSize={16} />}
+          icon={<MdClose fontSize={16}/>}
           onClick={onClose}
         />
       </StyledActions>

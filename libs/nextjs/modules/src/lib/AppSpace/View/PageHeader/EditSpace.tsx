@@ -1,33 +1,25 @@
-import { memo, useEffect, useState } from 'react';
-import { Button, Col, Form, Row, Upload } from 'antd';
+import {memo, useEffect, useState} from 'react';
+import {Button, Col, Form, Row, Upload} from 'antd';
 import AppImage from '@unpod/components/next/AppImage';
-import {
-  AppGridContainer,
-  AppInput,
-  AppTextArea,
-} from '@unpod/components/antd';
-import {
-  putDataApi,
-  uploadPutDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { StyledRoot, StylesImageWrapper } from './index.styled';
-import { useIntl } from 'react-intl';
+import {AppGridContainer, AppInput, AppTextArea,} from '@unpod/components/antd';
+import {putDataApi, uploadPutDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {StyledRoot, StylesImageWrapper} from './index.styled';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 const EditSpace = ({
-  onClose,
-  currentSpace,
-  setCurrentSpace,
-}: {
+                     onClose,
+                     currentSpace,
+                     setCurrentSpace,
+                   }: {
   onClose: () => void;
   currentSpace: any;
   setCurrentSpace: (space: any) => void;
 }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const [spaceLogo, setSpaceLogo] = useState(currentSpace?.logo || '');
 
@@ -83,12 +75,12 @@ const EditSpace = ({
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.spaceName' }),
+                  message: formatMessage({id: 'validation.spaceName'}),
                 },
               ]}
             >
               <AppInput
-                placeholder={formatMessage({ id: 'editSpace.namePlaceholder' })}
+                placeholder={formatMessage({id: 'editSpace.namePlaceholder'})}
               />
             </Item>
           </Col>
@@ -98,7 +90,7 @@ const EditSpace = ({
               name="description"
               rules={[
                 {
-                  message: formatMessage({ id: 'validation.spaceDesc' }),
+                  message: formatMessage({id: 'validation.spaceDesc'}),
                 },
               ]}
             >
@@ -134,7 +126,7 @@ const EditSpace = ({
 
         <Row>
           <Button type="primary" htmlType="submit">
-            {formatMessage({ id: 'space.update' })}
+            {formatMessage({id: 'space.update'})}
           </Button>
         </Row>
       </Form>

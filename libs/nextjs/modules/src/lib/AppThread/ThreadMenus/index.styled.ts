@@ -11,10 +11,10 @@ export const StyledIconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   padding: 5px;
-  background-color: ${({ theme }) => theme.palette.primary}33;
-  border: 1px solid ${({ theme }) => theme.palette.primary}77;
+  background-color: ${({theme}) => theme.palette.primary}33;
+  border: 1px solid ${({theme}) => theme.palette.primary}77;
   border-radius: 12px;
-  color: ${({ theme }) => theme.palette.primary}99 !important;
+  color: ${({theme}) => theme.palette.primary}99 !important;
 `;
 
 export const StyledSubMenuItem = styled.span`
@@ -22,7 +22,7 @@ export const StyledSubMenuItem = styled.span`
   align-items: center;
 
   &.add-new-title {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 
   & > svg {

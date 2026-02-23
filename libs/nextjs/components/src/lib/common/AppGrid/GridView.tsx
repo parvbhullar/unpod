@@ -1,10 +1,10 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useBottomScrollListener } from 'react-bottom-scroll-listener';
-import { Grid } from 'antd';
+import React, {ReactNode, useEffect, useState} from 'react';
+import {useBottomScrollListener} from 'react-bottom-scroll-listener';
+import {Grid} from 'antd';
 // import AppAnimateGroup from '../AppAnimateGroup';
-import { StyledGridColumnCount, StyledGridContainer } from './index.styled';
+import {StyledGridColumnCount, StyledGridContainer} from './index.styled';
 
-const { useBreakpoint } = Grid;
+const {useBreakpoint} = Grid;
 
 const getEmptyContainer = (ListEmptyComponent: ReactNode) => {
   if (ListEmptyComponent)
@@ -46,20 +46,20 @@ type GridViewProps<T> = {
   ListEmptyComponent?: ReactNode;
 };
 
-const GridView = <T,>({
-  column = 3,
-  responsive,
-  itemPadding = 12,
-  renderItem,
-  onEndReached = () => {
-    console.log('onEndReached');
-  },
-  data = [],
-  containerStyle,
-  border = false,
-  ListFooterComponent,
-  ListEmptyComponent,
-}: GridViewProps<T>) => {
+const GridView = <T, >({
+                         column = 3,
+                         responsive,
+                         itemPadding = 12,
+                         renderItem,
+                         onEndReached = () => {
+                           console.log('onEndReached');
+                         },
+                         data = [],
+                         containerStyle,
+                         border = false,
+                         ListFooterComponent,
+                         ListEmptyComponent,
+                       }: GridViewProps<T>) => {
   const [displayColumn, setColumn] = useState(column);
   const width = useBreakpoint();
 
@@ -124,7 +124,7 @@ const GridView = <T,>({
 
   let style = containerStyle;
   if (border) {
-    style = { ...style, ...borderStyle };
+    style = {...style, ...borderStyle};
   }
 
   useBottomScrollListener(onEndReached, {
@@ -162,19 +162,19 @@ const GridView = <T,>({
       >*/}
       {data?.length > 0
         ? data.map((item, index) => (
-            <StyledGridColumnCount
-              key={'grid-' + index}
-              style={{
-                flexGrow: 0,
-                maxWidth: `calc(${100 / displayColumn}% - ${oneColumnGap}px)`,
-                flexBasis: `calc(${100 / displayColumn}% - ${oneColumnGap}px)`,
-                // padding: itemPadding,
-                boxSizing: 'border-box',
-              }}
-            >
-              {renderItem(item, index)}
-            </StyledGridColumnCount>
-          ))
+          <StyledGridColumnCount
+            key={'grid-' + index}
+            style={{
+              flexGrow: 0,
+              maxWidth: `calc(${100 / displayColumn}% - ${oneColumnGap}px)`,
+              flexBasis: `calc(${100 / displayColumn}% - ${oneColumnGap}px)`,
+              // padding: itemPadding,
+              boxSizing: 'border-box',
+            }}
+          >
+            {renderItem(item, index)}
+          </StyledGridColumnCount>
+        ))
         : null}
       {/*      </AppAnimateGroup>*/}
       {data?.length === 0 ? getEmptyContainer(ListEmptyComponent) : null}

@@ -567,7 +567,7 @@ export const taxIdData: TaxIdData[] = [
     taxIdName: 'NIF',
     regex: '^\\d{9}$',
   },
-  { country: 'Qatar', countryCode: 'QA', flag: '🇶🇦', taxIdName: '', regex: '' },
+  {country: 'Qatar', countryCode: 'QA', flag: '🇶🇦', taxIdName: '', regex: ''},
   {
     country: 'Romania',
     countryCode: 'RO',

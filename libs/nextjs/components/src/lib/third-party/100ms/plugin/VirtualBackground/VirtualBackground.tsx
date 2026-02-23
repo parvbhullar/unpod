@@ -2,8 +2,8 @@
  * Please refer the following docs for more detals.
  * https://www.100ms.live/docs/javascript/v2/how--to-guides/extend-capabilities/plugins/virtual-background
  */
-import { useEffect, useRef, useState } from 'react';
-import { HMSVirtualBackgroundTypes } from '@100mslive/hms-virtual-background';
+import {useEffect, useRef, useState} from 'react';
+import {HMSVirtualBackgroundTypes} from '@100mslive/hms-virtual-background';
 import {
   selectIsAllowedToPublish,
   selectIsLocalVideoPluginPresent,
@@ -12,11 +12,11 @@ import {
   useHMSActions,
   useHMSStore,
 } from '@100mslive/react-sdk';
-import { useIsFeatureEnabled } from '../../hooks/useFeatures';
-import { getRandomVirtualBackground } from './vbutils';
-import { FEATURE_LIST } from '../../common/constants';
-import { Button, Tooltip } from 'antd';
-import { RxShadow } from 'react-icons/rx';
+import {useIsFeatureEnabled} from '../../hooks/useFeatures';
+import {getRandomVirtualBackground} from './vbutils';
+import {FEATURE_LIST} from '../../common/constants';
+import {Button, Tooltip} from 'antd';
+import {RxShadow} from 'react-icons/rx';
 
 export const VirtualBackground = () => {
   const pluginRef = useRef(null);
@@ -33,7 +33,7 @@ export const VirtualBackground = () => {
 
   async function createPlugin() {
     if (!pluginRef.current) {
-      const { HMSVBPlugin } = await import('@100mslive/hms-virtual-background');
+      const {HMSVBPlugin} = await import('@100mslive/hms-virtual-background');
       pluginRef.current = new HMSVBPlugin(
         HMSVirtualBackgroundTypes.NONE,
         HMSVirtualBackgroundTypes.NONE
@@ -64,7 +64,7 @@ export const VirtualBackground = () => {
       if (window?.HMS?.virtualBackground)
         window.HMS.virtualBackground = pluginRef.current;
       console.log('addPlugin 3');
-      const { background, backgroundType } = getRandomVirtualBackground();
+      const {background, backgroundType} = getRandomVirtualBackground();
       console.log('addPlugin 4');
       await pluginRef.current.setBackground(background, backgroundType);
       console.log('addPlugin 5');
@@ -109,7 +109,7 @@ export const VirtualBackground = () => {
         type={isVBPresent ? 'primary' : 'default'}
         loading={isVBLoading}
         shape="circle"
-        icon={<RxShadow fontSize={20} />}
+        icon={<RxShadow fontSize={20}/>}
       />
     </Tooltip>
   );

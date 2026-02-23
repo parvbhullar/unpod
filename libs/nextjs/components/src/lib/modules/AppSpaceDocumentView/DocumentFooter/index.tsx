@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
-import { memo } from 'react';
+import type {ReactNode} from 'react';
+import {memo} from 'react';
 
-import { Button } from 'antd';
-import { PiStarFourBold } from 'react-icons/pi';
-import { StyledContainer, StyledSuggestionRoot } from './index.styled';
+import {Button} from 'antd';
+import {PiStarFourBold} from 'react-icons/pi';
+import {StyledContainer, StyledSuggestionRoot} from './index.styled';
 
 const suggestions = [
   'Provide a brief Summary',
@@ -19,11 +19,11 @@ type DocumentFooterProps = {
 };
 
 const DocumentFooter = ({
-  children,
-  summary,
-  onSuggestionsClick,
-  hideSuggestions = false,
-}: DocumentFooterProps) => {
+                          children,
+                          summary,
+                          onSuggestionsClick,
+                          hideSuggestions = false,
+                        }: DocumentFooterProps) => {
   const items = suggestions.filter(
     (suggestion) => (summary && !suggestion.includes('Summary')) || !summary,
   );
@@ -37,7 +37,7 @@ const DocumentFooter = ({
               key={suggestion}
               type="default"
               shape="round"
-              icon={<PiStarFourBold fontSize={18} />}
+              icon={<PiStarFourBold fontSize={18}/>}
               onClick={() => onSuggestionsClick?.(suggestion)}
             >
               {suggestion}

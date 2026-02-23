@@ -1,19 +1,19 @@
-
 import React from 'react';
 import JSONPretty from 'react-json-pretty';
 import AppCopyToClipboard from '../AppCopyToClipboard';
-import { StyledContainer, StyledCopyWrapper } from './index.styled';
+import {StyledContainer, StyledCopyWrapper} from './index.styled';
 
 type AppJsonViewerProps = {
   showCopyClipboard?: boolean;
   json: unknown;
-  space?: number;};
+  space?: number;
+};
 
 const AppJsonViewer: React.FC<AppJsonViewerProps> = ({
-  showCopyClipboard = false,
-  json,
-  space = 4,
-}) => {
+                                                       showCopyClipboard = false,
+                                                       json,
+                                                       space = 4,
+                                                     }) => {
   return (
     <StyledContainer>
       {showCopyClipboard ? (
@@ -24,7 +24,7 @@ const AppJsonViewer: React.FC<AppJsonViewerProps> = ({
           />
         </StyledCopyWrapper>
       ) : null}
-      <JSONPretty data={json} space={space} />
+      <JSONPretty data={json} space={space}/>
     </StyledContainer>
   );
 };

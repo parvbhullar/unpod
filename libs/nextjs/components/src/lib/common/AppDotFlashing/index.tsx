@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 export const StyledDotWrapper = styled(Text)`
   display: inline-flex;
@@ -18,8 +18,8 @@ export const StyledDotFlashing = styled.div`
   width: 6px;
   height: 6px;
   border-radius: 5px;
-  background-color: ${({ theme }) => theme.palette.primary};
-  color: ${({ theme }) => theme.palette.primary};
+  background-color: ${({theme}) => theme.palette.primary};
+  color: ${({theme}) => theme.palette.primary};
   animation: dot-flashing 1s infinite linear alternate;
   animation-delay: 0.5s;
 
@@ -36,8 +36,8 @@ export const StyledDotFlashing = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 5px;
-    background-color: ${({ theme }) => theme.palette.primary};
-    color: ${({ theme }) => theme.palette.primary};
+    background-color: ${({theme}) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
     animation: dot-flashing 1s infinite alternate;
     animation-delay: 0s;
   }
@@ -47,20 +47,21 @@ export const StyledDotFlashing = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 5px;
-    background-color: ${({ theme }) => theme.palette.primary};
-    color: ${({ theme }) => theme.palette.primary};
+    background-color: ${({theme}) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
     animation: dot-flashing 1s infinite alternate;
     animation-delay: 1s;
   }
 `;
 
 type AppDotFlashingProps = {
-  [key: string]: any;};
+  [key: string]: any;
+};
 
 const AppDotFlashing: React.FC<AppDotFlashingProps> = (props) => {
   return (
     <StyledDotWrapper {...props}>
-      <StyledDotFlashing />
+      <StyledDotFlashing/>
     </StyledDotWrapper>
   );
 };

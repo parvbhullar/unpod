@@ -1,12 +1,12 @@
-import { Avatar, Typography } from 'antd';
+import {Avatar, Typography} from 'antd';
 import styled from 'styled-components';
 
-const { Title, Text } = Typography;
+const {Title, Text} = Typography;
 
 export const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
 `;
 
 export const IconWrapper = styled.div`
@@ -29,8 +29,8 @@ export const StyledMainHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: ${({ theme }) => theme.palette.background.header};
-  border-bottom: 1px solid ${({ theme }) => theme.border.color};
+  background: ${({theme}) => theme.palette.background.header};
+  border-bottom: 1px solid ${({theme}) => theme.border.color};
   height: 64px !important;
 `;
 
@@ -47,14 +47,14 @@ export const StyledHeaderActions = styled.div`
   align-items: center;
   gap: 10px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
     gap: 6px;
   }
 `;
 
 export const StyledHeaderTitle = styled(Title)`
   font-size: 16px !important;
-  font-weight: ${({ theme }) => theme.font.weight.medium} !important;
+  font-weight: ${({theme}) => theme.font.weight.medium} !important;
   margin: 0 !important;
   white-space: nowrap;
   overflow: hidden;
@@ -66,24 +66,24 @@ export const StyledHeaderTitle = styled(Title)`
     flex-shrink: 0;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 14px !important;
     max-width: 190px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
     font-size: 12px !important;
     max-width: 135px;
   }
 `;
 
 export const StyledHeaderIcon = styled(Avatar)`
-  background: ${({ theme }) => theme.palette.primary};
-  color: ${({ theme }) => theme.palette.common.white};
+  background: ${({theme}) => theme.palette.primary};
+  color: ${({theme}) => theme.palette.common.white};
   flex-shrink: 0;
   text-transform: uppercase;
   transition: opacity 0.2s;
-  border-radius: ${({ theme }) => theme.radius.base - 5}px !important;
+  border-radius: ${({theme}) => theme.radius.base - 5}px !important;
   font-size: 14px !important;
 
   & > * {
@@ -97,7 +97,7 @@ export const StyledHeaderIcon = styled(Avatar)`
 
 export const StyledHeaderSubtitle = styled(Text)`
   font-size: 12px;
-  color: ${({ theme }) => theme.palette.text.secondary};
+  color: ${({theme}) => theme.palette.text.secondary};
   margin: 0;
   max-width: 400px;
   white-space: nowrap;
@@ -105,7 +105,7 @@ export const StyledHeaderSubtitle = styled(Text)`
   text-overflow: ellipsis;
   cursor: pointer;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     font-size: 10px !important;
     max-width: 200px;
   }
@@ -125,12 +125,12 @@ export const StyledCallTypeTag = styled(Typography.Text)`
     color: #1890ff;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
     border-radius: 50px !important;
     padding: 7px !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xss}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xss}px) {
     display: none;
   }
 `;
@@ -148,10 +148,10 @@ export const StyledStatusTag = styled(Text)<StatusTagProps>`
   align-items: center;
   gap: 6px;
 
-  background-color: ${({ $bg }) => $bg};
-  color: ${({ $color }) => $color};
+  background-color: ${({$bg}) => $bg};
+  color: ${({$color}) => $color};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.xl}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.xl}px) {
     border-radius: 50px !important;
     padding: 9px !important;
   }

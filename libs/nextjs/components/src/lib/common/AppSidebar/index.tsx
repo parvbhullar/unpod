@@ -1,19 +1,13 @@
-import React, { ReactNode } from 'react';
-import {
-  StyledActionContainer,
-  StyledHeader,
-  StyledRoot,
-  StyledStickyContainer,
-  StyledTitle,
-} from './index.styled';
+import React, {ReactNode} from 'react';
+import {StyledActionContainer, StyledHeader, StyledRoot, StyledStickyContainer, StyledTitle,} from './index.styled';
 import SearchBox from './SearchBox';
 import AppMenu from '../../antd/AppMenu';
 import AppLoadingMore from '../AppLoadingMore';
-import { Button, Divider, Typography } from 'antd';
-import { MdAdd, MdOutlinePhone } from 'react-icons/md';
-import { MenuProps } from 'antd/es/menu';
+import {Button, Divider, Typography} from 'antd';
+import {MdAdd, MdOutlinePhone} from 'react-icons/md';
+import {MenuProps} from 'antd/es/menu';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 type AppSidebarProps = {
   title?: string;
@@ -26,28 +20,29 @@ type AppSidebarProps = {
   onEndReached?: () => void;
   onClickAdd?: () => void;
   onSearch?: (value: string) => void;
-  isLoadingMore?: boolean;};
+  isLoadingMore?: boolean;
+};
 
 const AppSidebar: React.FC<AppSidebarProps> = ({
-  title,
-  items,
-  loading,
-  initialLoader,
-  noDataMessage = 'No records found',
-  selectedKeys,
-  onSelectMenu,
-  onEndReached,
-  onClickAdd,
-  onSearch,
-  isLoadingMore,
-}) => {
+                                                 title,
+                                                 items,
+                                                 loading,
+                                                 initialLoader,
+                                                 noDataMessage = 'No records found',
+                                                 selectedKeys,
+                                                 onSelectMenu,
+                                                 onEndReached,
+                                                 onClickAdd,
+                                                 onSearch,
+                                                 isLoadingMore,
+                                               }) => {
   return (
     <StyledRoot>
       <StyledStickyContainer>
         <StyledHeader>
           <StyledTitle>
-            <MdOutlinePhone fontSize={21} />
-            <Title level={4} style={{ margin: 0 }}>
+            <MdOutlinePhone fontSize={21}/>
+            <Title level={4} style={{margin: 0}}>
               {title}
             </Title>
           </StyledTitle>
@@ -58,16 +53,16 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
               shape="circle"
               size="small"
               onClick={onClickAdd}
-              icon={<MdAdd fontSize={18} />}
+              icon={<MdAdd fontSize={18}/>}
             />
           ) : null}
         </StyledHeader>
 
-        <Divider style={{ margin: 0 }} />
+        <Divider style={{margin: 0}}/>
 
         {onSearch ? (
           <StyledActionContainer>
-            <SearchBox onSearch={onSearch} />
+            <SearchBox onSearch={onSearch}/>
           </StyledActionContainer>
         ) : null}
       </StyledStickyContainer>
@@ -80,7 +75,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         onSelect={onSelectMenu}
         onEndReached={onEndReached}
       />
-      {isLoadingMore && <AppLoadingMore />}
+      {isLoadingMore && <AppLoadingMore/>}
     </StyledRoot>
   );
 };

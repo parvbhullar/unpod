@@ -1,22 +1,13 @@
-import type { ReactNode } from 'react';
-import { useMemo } from 'react';
+import type {ReactNode} from 'react';
+import {useMemo} from 'react';
 
-import { Spin, Tooltip } from 'antd';
-import { useRouter } from 'next/navigation';
-import { downloadFile } from '@unpod/helpers/FileHelper';
-import {
-  getDataApi,
-  useAuthContext,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
+import {Spin, Tooltip} from 'antd';
+import {useRouter} from 'next/navigation';
+import {downloadFile} from '@unpod/helpers/FileHelper';
+import {getDataApi, useAuthContext, useInfoViewActionsContext,} from '@unpod/providers';
 import UserAvatar from '../../../common/UserAvatar';
 import clsx from 'clsx';
-import {
-  StyledAvatar,
-  StyledContent,
-  StyledContentWrapper,
-  StyledReplyContainer,
-} from '../index.styled';
+import {StyledAvatar, StyledContent, StyledContentWrapper, StyledReplyContainer,} from '../index.styled';
 import UserMessage from './UserMessage';
 import SystemMessage from './SystemMessage';
 
@@ -29,18 +20,18 @@ const items = [
 ];
 
 const ReplyItem = ({
-  reply,
-  onReplyClick,
-  onClapClick,
-  replyParent,
-  children,
-  actionsStyle,
-  onMenuClick,
-  noteTitle,
-  onSaveNote,
-  hideReply = false,
-  hideDelete = false,
-}: {
+                     reply,
+                     onReplyClick,
+                     onClapClick,
+                     replyParent,
+                     children,
+                     actionsStyle,
+                     onMenuClick,
+                     noteTitle,
+                     onSaveNote,
+                     hideReply = false,
+                     hideDelete = false,
+                   }: {
   reply: any;
   onReplyClick?: (reply: any) => void;
   onClapClick?: (
@@ -59,7 +50,7 @@ const ReplyItem = ({
   hideDelete?: boolean;
 }) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isAuthenticated } = useAuthContext();
+  const {isAuthenticated} = useAuthContext();
   const router = useRouter();
 
   const onDownloadClick = (item: any) => {
@@ -74,7 +65,7 @@ const ReplyItem = ({
       });
   };
 
-  const { attachmentImages, attachmentFiles } = useMemo(() => {
+  const {attachmentImages, attachmentFiles} = useMemo(() => {
     const filteredFiles = reply?.data?.files?.filter(
       (item: any) => item.file_type === 'image',
     );
@@ -88,7 +79,7 @@ const ReplyItem = ({
       (item: any) => item.file_type !== 'image',
     );
 
-    return { attachmentImages: mappedFiles || [], attachmentFiles };
+    return {attachmentImages: mappedFiles || [], attachmentFiles};
   }, [reply?.data?.files]);
 
   const onClickName = () => {
@@ -101,17 +92,17 @@ const ReplyItem = ({
 
   return reply.user.role === 'system' ? (
     <StyledReplyContainer
-      className={clsx({ 'user-question': reply.block === 'html' })}
+      className={clsx({'user-question': reply.block === 'html'})}
     >
       <StyledAvatar>
         <Tooltip title={reply.user.full_name}>
-          <UserAvatar user={reply.user} />
+          <UserAvatar user={reply.user}/>
         </Tooltip>
       </StyledAvatar>
 
       <StyledContent>
         <StyledContentWrapper className="system-message">
-          <Spin size="small" /> {reply.data.content}
+          <Spin size="small"/> {reply.data.content}
         </StyledContentWrapper>
       </StyledContent>
     </StyledReplyContainer>

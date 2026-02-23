@@ -1,31 +1,27 @@
 'use client';
-import React, { useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import {
-  useAuthActionsContext,
-  useAuthContext,
-  useFetchDataApi,
-} from '@unpod/providers';
+import React, {useEffect, useMemo} from 'react';
+import {useRouter} from 'next/navigation';
+import {useAuthActionsContext, useAuthContext, useFetchDataApi,} from '@unpod/providers';
 import GridItem from './GridItem';
-import { StyledRoot } from './index.styled';
+import {StyledRoot} from './index.styled';
 import AppGrid from '../AppGrid';
-import { KnowledgeBaseCardSkeleton } from '@unpod/skeleton';
-import { SPACE_VISIBLE_CONTENT_TYPES } from '@unpod/constants';
-import { useIntl } from 'react-intl';
-import type { Spaces } from '@unpod/constants/types';
+import {KnowledgeBaseCardSkeleton} from '@unpod/skeleton';
+import {SPACE_VISIBLE_CONTENT_TYPES} from '@unpod/constants';
+import {useIntl} from 'react-intl';
+import type {Spaces} from '@unpod/constants/types';
 
 type AppSpaceGridProps = {
   type?: 'space' | 'kb';
   domainHandle?: string;
 };
 
-const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
+const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({type = 'kb'}) => {
   const router = useRouter();
-  const { isAuthenticated, activeOrg, user } = useAuthContext();
-  const { updateAuthUser } = useAuthActionsContext();
-  const { formatMessage } = useIntl();
+  const {isAuthenticated, activeOrg, user} = useAuthContext();
+  const {updateAuthUser} = useAuthActionsContext();
+  const {formatMessage} = useIntl();
 
-  const [{ apiData, loading }, { reCallAPI, setData }] = useFetchDataApi<
+  const [{apiData, loading}, {reCallAPI, setData}] = useFetchDataApi<
     Spaces[]
   >(
     `spaces/`,
@@ -89,10 +85,10 @@ const AppSpaceGrid: React.FC<AppSpaceGridProps> = ({ type = 'kb' }) => {
         loading={loading}
         noDataMessage={
           type === 'space'
-            ? formatMessage({ id: 'space.noSpacesFound' })
-            : formatMessage({ id: 'knowledgeBase.noKnowledgeBaseFound' })
+            ? formatMessage({id: 'space.noSpacesFound'})
+            : formatMessage({id: 'knowledgeBase.noKnowledgeBaseFound'})
         }
-        initialLoader={<KnowledgeBaseCardSkeleton />}
+        initialLoader={<KnowledgeBaseCardSkeleton/>}
         renderItem={(item, index) => (
           <GridItem
             key={index}

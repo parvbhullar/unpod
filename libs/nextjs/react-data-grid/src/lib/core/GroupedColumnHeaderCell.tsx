@@ -1,18 +1,18 @@
 import clsx from 'clsx';
 
-import { useRovingTabIndex } from './hooks';
-import { getHeaderCellRowSpan, getHeaderCellStyle } from './utils';
-import type { CalculatedColumnParent } from './models/data-grid';
-import { type GroupedColumnHeaderRowProps } from './GroupedColumnHeaderRow';
-import { cellClassname } from './style/cell';
+import {useRovingTabIndex} from './hooks';
+import {getHeaderCellRowSpan, getHeaderCellStyle} from './utils';
+import type {CalculatedColumnParent} from './models/data-grid';
+import {type GroupedColumnHeaderRowProps} from './GroupedColumnHeaderRow';
+import {cellClassname} from './style/cell';
 import styled from 'styled-components';
 
 const StyledGroupCell = styled.div`
-  color: ${({ theme }: { theme: any }) => theme.table.textColor};
-  background: ${({ theme }: { theme: any }) => theme.table.headerBgColor};
+  color: ${({theme}: { theme: any }) => theme.table.textColor};
+  background: ${({theme}: { theme: any }) => theme.table.headerBgColor};
   border-bottom: 1px solid;
   border-right: 1px solid;
-  border-color: ${({ theme }: { theme: any }) => theme.table.borderColor};
+  border-color: ${({theme}: { theme: any }) => theme.table.borderColor};
 
   &.rdg-cell {
     position: sticky;
@@ -32,18 +32,18 @@ type GroupedColumnHeaderCellProps<R, SR> = SharedGroupedColumnHeaderRowProps<R, 
 };
 
 export default function GroupedColumnHeaderCell<R, SR>({
-  column,
-  rowIdx,
-  isCellSelected,
-  selectCell,
-}: GroupedColumnHeaderCellProps<R, SR>) {
-  const { tabIndex, onFocus } = useRovingTabIndex(isCellSelected);
-  const { colSpan } = column;
+                                                         column,
+                                                         rowIdx,
+                                                         isCellSelected,
+                                                         selectCell,
+                                                       }: GroupedColumnHeaderCellProps<R, SR>) {
+  const {tabIndex, onFocus} = useRovingTabIndex(isCellSelected);
+  const {colSpan} = column;
   const rowSpan = getHeaderCellRowSpan(column, rowIdx);
   const index = column.idx + 1;
 
   function onClick() {
-    selectCell({ idx: column.idx, rowIdx });
+    selectCell({idx: column.idx, rowIdx});
   }
 
   return (

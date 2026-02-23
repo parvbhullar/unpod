@@ -10,7 +10,7 @@ export const StyledRowWrapper = styled.div`
   }
 
   &.row-over {
-    background: ${({ theme }: { theme: any }) => theme.table.rowOverBgColor};
+    background: ${({theme}: { theme: any }) => theme.table.rowOverBgColor};
   }
 
   /*&.last-row {
@@ -21,19 +21,19 @@ export const StyledRowWrapper = styled.div`
 
   &:hover {
     .rdg-cell {
-      background: ${({ theme }: { theme: any }) => theme.palette.primaryHover};
+      background: ${({theme}: { theme: any }) => theme.palette.primaryHover};
     }
   }
 
   &[aria-selected='true'] {
     .rdg-cell {
-      background: ${({ theme }: { theme: any }) => theme.palette.primaryActive};
+      background: ${({theme}: { theme: any }) => theme.palette.primaryActive};
     }
 
     &:hover {
       .rdg-cell {
-        background: ${({ theme }: { theme: any }) =>
-          theme.palette.primaryActiveHover};
+        background: ${({theme}: { theme: any }) =>
+  theme.palette.primaryActiveHover};
       }
     }
   }

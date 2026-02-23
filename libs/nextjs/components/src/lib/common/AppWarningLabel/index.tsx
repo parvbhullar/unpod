@@ -1,19 +1,20 @@
-import { Tooltip } from 'antd';
-import { IoWarning } from 'react-icons/io5';
-import { useIntl } from 'react-intl';
-import type { CSSProperties } from 'react';
+import {Tooltip} from 'antd';
+import {IoWarning} from 'react-icons/io5';
+import {useIntl} from 'react-intl';
+import type {CSSProperties} from 'react';
 
 type AppWarningTooltipProps = {
   message?: string;
-  style?: CSSProperties;};
+  style?: CSSProperties;
+};
 
 const AppWarningTooltip = ({
-  message = 'bridge.providerWarning',
-  style,
-}: AppWarningTooltipProps) => {
-  const { formatMessage } = useIntl();
+                             message = 'bridge.providerWarning',
+                             style,
+                           }: AppWarningTooltipProps) => {
+  const {formatMessage} = useIntl();
   return (
-    <Tooltip title={formatMessage({ id: message })}>
+    <Tooltip title={formatMessage({id: message})}>
       <IoWarning
         style={{
           color: '#ffaa00ff',

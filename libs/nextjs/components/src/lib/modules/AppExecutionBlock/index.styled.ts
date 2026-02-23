@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Button, Collapse } from 'antd';
-import { rgba } from 'polished';
-import { GlobalTheme } from '@unpod/constants';
+import {Button, Collapse} from 'antd';
+import {rgba} from 'polished';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledCollapse = styled(Collapse)`
   background-color: transparent;
@@ -12,17 +12,17 @@ export const StyledCollapse = styled(Collapse)`
   & .ant-collapse-item,
   & .ant-collapse-item:last-child {
     border: 1px solid
-      ${({ theme }: { theme: GlobalTheme }) => theme.palette.background.default};
-    border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.component.card.borderRadius};
-    box-shadow: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.component.card.boxShadow};
+      ${({theme}: { theme: GlobalTheme }) => theme.palette.background.default};
+    border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
+    box-shadow: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.boxShadow};
 
     & .ant-collapse-header {
-      background-color: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.palette.background.default};
-      border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.component.card.borderRadius};
+      background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
+      border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
       align-items: center;
     }
 
@@ -35,12 +35,12 @@ export const StyledCollapse = styled(Collapse)`
 
     & .ant-collapse-content-box {
       padding-block: 16px 6px !important;
-      background-color: ${({ theme }: { theme: GlobalTheme }) =>
-        rgba(theme.palette.primary, 0.16)};
-      border-bottom-left-radius: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.component.card.borderRadius};
-      border-bottom-right-radius: ${({ theme }: { theme: GlobalTheme }) =>
-        theme.component.card.borderRadius};
+      background-color: ${({theme}: { theme: GlobalTheme }) =>
+  rgba(theme.palette.primary, 0.16)};
+      border-bottom-left-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
+      border-bottom-right-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
     }
   }
 `;
@@ -56,16 +56,16 @@ export const StyledIconButton = styled(Button)`
 `;
 
 export const StyledSuccessButton = styled(StyledIconButton)`
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.success};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.success};
 `;
 
 export const StyledErrorButton = styled(StyledIconButton)`
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.error};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.error};
 `;
 
 export const StyledWarningButton = styled(StyledIconButton)`
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.warning};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.warning};
 `;

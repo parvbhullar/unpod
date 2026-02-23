@@ -1,21 +1,16 @@
 import React from 'react';
-import { selectPeers, selectRoomID, useHMSStore } from '@100mslive/react-sdk';
-import { SidePane } from '../screenShareView';
-import { Whiteboard } from '../../../plugin/whiteboard';
-import {
-  StyledContainer,
-  StyledEditorContainer,
-  StyledEditorRoot,
-  StyledSidePaneContainer,
-} from './index.styled';
-import { useMediaQuery } from 'react-responsive';
-import { DesktopWidthQuery } from '@unpod/constants';
+import {selectPeers, selectRoomID, useHMSStore} from '@100mslive/react-sdk';
+import {SidePane} from '../screenShareView';
+import {Whiteboard} from '../../../plugin/whiteboard';
+import {StyledContainer, StyledEditorContainer, StyledEditorRoot, StyledSidePaneContainer,} from './index.styled';
+import {useMediaQuery} from 'react-responsive';
+import {DesktopWidthQuery} from '@unpod/constants';
 
-const Editor = React.memo(({ roomId }) => {
+const Editor = React.memo(({roomId}) => {
   return (
     <StyledEditorRoot>
       <StyledEditorContainer>
-        <Whiteboard roomId={roomId} />
+        <Whiteboard roomId={roomId}/>
       </StyledEditorContainer>
     </StyledEditorRoot>
   );
@@ -28,9 +23,9 @@ const WhiteBoardView = () => {
   const roomId = useHMSStore(selectRoomID);
   return (
     <StyledContainer
-      style={{ flexDirection: showSidebarInBottom ? 'column' : 'row' }}
+      style={{flexDirection: showSidebarInBottom ? 'column' : 'row'}}
     >
-      <Editor roomId={roomId} />
+      <Editor roomId={roomId}/>
       <StyledSidePaneContainer>
         <SidePane
           showSidebarInBottom={showSidebarInBottom}

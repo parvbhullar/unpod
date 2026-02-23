@@ -1,30 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  getDataApi,
-  postDataApi,
-  uploadDataApi,
-  useGetDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { contentTypeData, PERMISSION_TYPES } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import {
-  Button,
-  Dropdown,
-  Form,
-  Progress,
-  Row,
-  Select,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
+import {getDataApi, postDataApi, uploadDataApi, useGetDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {contentTypeData, PERMISSION_TYPES} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {Button, Dropdown, Form, Progress, Row, Select, Space, Typography, Upload,} from 'antd';
 import * as UpChunk from '@mux/upchunk';
-import {
-  AppMiniWindowBody,
-  AppMiniWindowFooter,
-} from '../../common/AppMiniWindow';
+import {AppMiniWindowBody, AppMiniWindowFooter,} from '../../common/AppMiniWindow';
 import {
   StyledButton,
   StyledCoverWrapper,
@@ -33,40 +14,30 @@ import {
   StyledFormItem,
   StyledInput,
 } from './index.styled';
-import {
-  MdArrowUpward,
-  MdClear,
-  MdFormatColorText,
-  MdOutlineImage,
-  MdOutlineWorkspaces,
-} from 'react-icons/md';
-import { useParams, useRouter } from 'next/navigation';
+import {MdArrowUpward, MdClear, MdFormatColorText, MdOutlineImage, MdOutlineWorkspaces,} from 'react-icons/md';
+import {useParams, useRouter} from 'next/navigation';
 import AppImage from '../../next/AppImage';
 import AppEditor from '../../third-party/AppEditor';
 import PostPermissionPopover from '../../common/PermissionPopover/PostPermissionPopover';
-import {
-  ACCESS_ROLE,
-  POST_CONTENT_TYPE,
-  POST_TYPE,
-} from '@unpod/constants/AppEnums';
+import {ACCESS_ROLE, POST_CONTENT_TYPE, POST_TYPE,} from '@unpod/constants/AppEnums';
 import AppSelect from '../../antd/AppSelect';
 import AppInput from '../../antd/AppInput';
-import { tagsData } from '../../lib/modules/AppPodcast/data';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
-import { useIntl } from 'react-intl';
+import {tagsData} from '../../lib/modules/AppPodcast/data';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
 
 const acceptTypes = '.png, .jpg, .jpeg';
 const acceptMediaTypes = 'audio/*,video/*';
 
 const KnowledgeBase = ({
-  onSaved,
-  currentSpace,
-  currentPost,
-  setCreatingPost,
-  isEdit,
-}) => {
+                         onSaved,
+                         currentSpace,
+                         currentPost,
+                         setCreatingPost,
+                         isEdit,
+                       }) => {
   const router = useRouter();
-  const { spaceSlug, postSlug } = useParams();
+  const {spaceSlug, postSlug} = useParams();
   const infoViewActionsContext = useInfoViewActionsContext();
   const [open, setOpen] = useState(false);
   const [privacyType, setPrivacyType] = useState('private');
@@ -82,12 +53,12 @@ const KnowledgeBase = ({
   const [userList, setUserList] = useState([]);
   const [visible, setSetVisible] = useState(false);
   const uploadedMediaRef = useRef(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
-  const [{ apiData }] = useGetDataApi(
+  const [{apiData}] = useGetDataApi(
     'spaces/',
     {},
-    { case: 'all' },
+    {case: 'all'},
     !spaceSlug && !postSlug,
   );
 
@@ -176,7 +147,7 @@ const KnowledgeBase = ({
           !acceptTypes?.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setCoverPreviewUrl(window.URL.createObjectURL(file));
@@ -201,7 +172,7 @@ const KnowledgeBase = ({
           !acceptMediaTypes?.includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setMediaList([file]);
@@ -304,7 +275,7 @@ const KnowledgeBase = ({
   const onSubmitSuccess = (postData) => {
     if (!selectedSpace) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.selectSpace' }),
+        formatMessage({id: 'validation.selectSpace'}),
       );
     } else {
       setCreatingPost(true);
@@ -328,7 +299,7 @@ const KnowledgeBase = ({
         };
 
         if (coverImage) {
-          uploadCoverImage(({ media_id }) => {
+          uploadCoverImage(({media_id}) => {
             payload.cover_image = {
               media_id: media_id,
               file_name: coverImage.name,
@@ -362,12 +333,12 @@ const KnowledgeBase = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'common.titleError' }),
+              message: formatMessage({id: 'common.titleError'}),
             },
           ]}
         >
           <StyledInput
-            placeholder={formatMessage({ id: 'form.title' })}
+            placeholder={formatMessage({id: 'form.title'})}
             variant="borderless"
           />
         </StyledFormItem>
@@ -376,12 +347,12 @@ const KnowledgeBase = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'validation.handleRequired' }),
+              message: formatMessage({id: 'validation.handleRequired'}),
             },
           ]}
         >
           <AppInput
-            placeholder={formatMessage({ id: 'form.handle' })}
+            placeholder={formatMessage({id: 'form.handle'})}
             variant="borderless"
           />
         </Form.Item>
@@ -391,17 +362,17 @@ const KnowledgeBase = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'common.titleError' }),
+              message: formatMessage({id: 'common.titleError'}),
             },
           ]}
         >
           <AppSelect
-            placeholder={formatMessage({ id: 'post.content' })}
+            placeholder={formatMessage({id: 'post.content'})}
             asterisk
           >
             {contentTypeData?.map((role) => (
               <Select.Option key={role.id} value={role.id}>
-                {formatMessage({ id: role.name })}
+                {formatMessage({id: role.name})}
               </Select.Option>
             ))}
           </AppSelect>
@@ -411,11 +382,11 @@ const KnowledgeBase = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'validation.tagRequired' }),
+              message: formatMessage({id: 'validation.tagRequired'}),
             },
           ]}
         >
-          <AppSelect placeholder={formatMessage({ id: 'agent.tags' })} asterisk>
+          <AppSelect placeholder={formatMessage({id: 'agent.tags'})} asterisk>
             {tagsData?.map((role) => (
               <Select.Option key={role.id} value={role.id}>
                 {role.name}
@@ -426,18 +397,18 @@ const KnowledgeBase = ({
 
         <AppEditor
           name="content"
-          placeholder={formatMessage({ id: 'post.content' })}
+          placeholder={formatMessage({id: 'post.content'})}
           visible={visible}
           value={isEdit ? currentPost.content : ''}
           isCoverImage={!!coverPreviewUrl}
         >
           <Form.Item
-            label={formatMessage({ id: 'common.uploadVideoAudio' })}
+            label={formatMessage({id: 'common.uploadVideoAudio'})}
             name="media"
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'validation.chooseFile' }),
+                message: formatMessage({id: 'validation.chooseFile'}),
               },
             ]}
           >
@@ -461,14 +432,14 @@ const KnowledgeBase = ({
                 <Space direction="vertical" size={4}>
                   <Button
                     shape="circle"
-                    icon={<MdArrowUpward fontSize={21} />}
+                    icon={<MdArrowUpward fontSize={21}/>}
                     css={`
                       margin-bottom: 8px;
                     `}
                   />
 
                   <Typography.Text>
-                    {formatMessage({ id: 'post.dragMediaToUpload' })}
+                    {formatMessage({id: 'post.dragMediaToUpload'})}
                   </Typography.Text>
                 </Space>
               </StyledDragger>
@@ -476,12 +447,12 @@ const KnowledgeBase = ({
           </Form.Item>
 
           {coverUploadPercent > 0 && coverUploadPercent < 100 ? (
-            <Form.Item label={formatMessage({ id: 'post.coverImage' })}>
-              <Progress percent={coverUploadPercent} width={70} />
+            <Form.Item label={formatMessage({id: 'post.coverImage'})}>
+              <Progress percent={coverUploadPercent} width={70}/>
             </Form.Item>
           ) : (
             !!coverPreviewUrl && (
-              <Form.Item label={formatMessage({ id: 'post.coverImage' })}>
+              <Form.Item label={formatMessage({id: 'post.coverImage'})}>
                 <StyledCoverWrapper>
                   <AppImage
                     src={coverPreviewUrl}
@@ -519,12 +490,12 @@ const KnowledgeBase = ({
               >
                 <Typography.Link>
                   <Space>
-                    <MdOutlineWorkspaces fontSize={21} />
+                    <MdOutlineWorkspaces fontSize={21}/>
 
                     <span>
                       {selectedSpace?.label
                         ? selectedSpace.label.slice(0, 20).trim()
-                        : formatMessage({ id: 'space.space' })}
+                        : formatMessage({id: 'space.space'})}
                     </span>
                   </Space>
                 </Typography.Link>
@@ -544,7 +515,7 @@ const KnowledgeBase = ({
               <Typography.Link>
                 <Space>
                   {currentPrivacy?.icon}
-                  <span>{formatMessage({ id: currentPrivacy?.label })}</span>
+                  <span>{formatMessage({id: currentPrivacy?.label})}</span>
                 </Space>
               </Typography.Link>
             </Dropdown>
@@ -559,7 +530,7 @@ const KnowledgeBase = ({
                 margin-bottom: 2px;
               `}
             >
-              <MdFormatColorText fontSize={20} />
+              <MdFormatColorText fontSize={20}/>
             </Typography.Link>
 
             <Upload
@@ -571,12 +542,12 @@ const KnowledgeBase = ({
               showUploadList={false}
             >
               <Typography.Link>
-                <MdOutlineImage fontSize={24} />
+                <MdOutlineImage fontSize={24}/>
               </Typography.Link>
             </Upload>
 
             <StyledButton type="primary" shape="round" htmlType="submit">
-              {formatMessage({ id: 'common.post' })}
+              {formatMessage({id: 'common.post'})}
             </StyledButton>
           </Space>
         </Row>

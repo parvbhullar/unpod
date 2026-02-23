@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CellEvent } from '../models/data-grid';
+import type {CellEvent} from '../models/data-grid';
 
 export function createCellEvent<E extends React.SyntheticEvent<HTMLDivElement>>(
   event: E,

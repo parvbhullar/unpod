@@ -1,17 +1,14 @@
-import { Button, Dropdown, Row, Space, Typography } from 'antd';
-import type { MenuProps } from 'antd';
-import { RiArrowDownSFill } from 'react-icons/ri';
+import type {MenuProps} from 'antd';
+import {Button, Dropdown, Row, Space, Typography} from 'antd';
+import {RiArrowDownSFill} from 'react-icons/ri';
 
 import UserAvatar from '../UserAvatar';
-import type { GlobalRoleMap, PermissionMember, RoleRecord } from './types';
+import type {GlobalRoleMap, PermissionMember, RoleRecord} from './types';
 
-import { useAuthContext, useOrgContext } from '@unpod/providers';
-import { ACCESS_ROLE } from '@unpod/constants/AppEnums';
-import {
-  getPostAllowedRoles,
-  isShareBtnAccessAllowed,
-} from '@unpod/helpers/PermissionHelper';
-import { maskEmail } from '@unpod/helpers/StringHelper';
+import {useAuthContext, useOrgContext} from '@unpod/providers';
+import {ACCESS_ROLE} from '@unpod/constants/AppEnums';
+import {getPostAllowedRoles, isShareBtnAccessAllowed,} from '@unpod/helpers/PermissionHelper';
+import {maskEmail} from '@unpod/helpers/StringHelper';
 
 type PostMemberRowProps = {
   member: PermissionMember;
@@ -20,12 +17,12 @@ type PostMemberRowProps = {
 };
 
 const PostMemberRow = ({
-  member,
-  onRemoveInvitedMember,
-  onUpdateInvitedMember,
-}: PostMemberRowProps) => {
-  const { user, globalData, activeOrg } = useAuthContext();
-  const { activeSpace } = useOrgContext();
+                         member,
+                         onRemoveInvitedMember,
+                         onUpdateInvitedMember,
+                       }: PostMemberRowProps) => {
+  const {user, globalData, activeOrg} = useAuthContext();
+  const {activeSpace} = useOrgContext();
 
   const roles = (globalData.roles as GlobalRoleMap) || {};
   const currentPostUsers = activeSpace?.users || [];
@@ -39,7 +36,7 @@ const PostMemberRow = ({
     }
 
     if (nextKey !== 'divider') {
-      onUpdateInvitedMember({ ...member, role_code: nextKey, role: nextKey });
+      onUpdateInvitedMember({...member, role_code: nextKey, role: nextKey});
     }
   };
 
@@ -60,7 +57,7 @@ const PostMemberRow = ({
       }));
 
     if (roleList.length > 1 || !member.joined) {
-      roleList.push({ type: 'divider' });
+      roleList.push({type: 'divider'});
     }
 
     if (isShareBtnAccessAllowed(activeOrg, undefined, activeSpace)) {
@@ -81,12 +78,12 @@ const PostMemberRow = ({
   return (
     <Row justify="space-between" align="middle">
       <Space>
-        <UserAvatar user={member} />
+        <UserAvatar user={member}/>
         <Space orientation="vertical" size={0}>
           {member.full_name ? (
             <Typography.Text
               type={member.joined ? undefined : 'secondary'}
-              style={{ marginBottom: -4, display: 'block' }}
+              style={{marginBottom: -4, display: 'block'}}
             >
               {member.full_name}
             </Typography.Text>
@@ -99,7 +96,7 @@ const PostMemberRow = ({
       </Space>
 
       {member.role === ACCESS_ROLE.OWNER ? (
-        <Typography.Text style={{ marginRight: 24 }}>Owner</Typography.Text>
+        <Typography.Text style={{marginRight: 24}}>Owner</Typography.Text>
       ) : (
         <Dropdown
           menu={{

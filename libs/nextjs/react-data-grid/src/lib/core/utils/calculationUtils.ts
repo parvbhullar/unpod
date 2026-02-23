@@ -1,6 +1,6 @@
-import { Parser as FormulaParser } from 'hot-formula-parser';
-import { CalculatedColumn } from '..';
-import { getHeaderCellAlphaIdx, getHeaderCellNumIdx } from '.';
+import {Parser as FormulaParser} from 'hot-formula-parser';
+import {CalculatedColumn} from '..';
+import {getHeaderCellAlphaIdx, getHeaderCellNumIdx} from '.';
 
 const parser = new FormulaParser();
 const cellReferenceRegex = /([A-Z]+)([0-9]+)/g;
@@ -81,14 +81,14 @@ export function evaluateFormula<R, SR>(
 
 export const isCorrectFormula = (formula: string) => {
   if (formula) {
-    const { startBracCount, endBracCount } = formula.split('').reduce(
+    const {startBracCount, endBracCount} = formula.split('').reduce(
       (acc, val) => {
         if (val === '(') ++acc.startBracCount;
         else if (val === ')') ++acc.endBracCount;
 
         return acc;
       },
-      { startBracCount: 0, endBracCount: 0 },
+      {startBracCount: 0, endBracCount: 0},
     );
     return endBracCount > 0 && startBracCount === endBracCount;
   }

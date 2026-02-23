@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import AppList from '../../common/AppList';
-import { Row } from 'antd';
+import {Row} from 'antd';
 import SimpleBar from 'simplebar-react';
-import { GlobalTheme } from '@unpod/constants';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledRow = styled(Row)`
   padding: 16px;
@@ -10,7 +10,7 @@ export const StyledRow = styled(Row)`
 
 export const StyledRootContainer = styled.div`
   flex: 1;
-  width: ${({ theme }: { theme: GlobalTheme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}: { theme: GlobalTheme }) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto;
   display: flex;

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import { Space } from 'antd';
+import {Space} from 'antd';
 
 export const StyledRoot = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 7px 10px 7px 10px;
-  border-bottom: 1px solid ${({ theme }) => theme.border.color};
-  background-color: ${({ theme }) => theme.palette.background.default};
+  border-bottom: 1px solid ${({theme}) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
   z-index: 2;
 `;
 
@@ -26,10 +26,10 @@ export const StyledContent = styled.div`
 export const StyledSpace = styled(Space)`
   align-items: flex-end;
   .ant-btn-text {
-    color: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({theme}) => theme.palette.text.secondary};
     &:hover,
     &.active {
-      color: ${({ theme }) => theme.palette.primary};
+      color: ${({theme}) => theme.palette.primary};
     }
   }
 `;

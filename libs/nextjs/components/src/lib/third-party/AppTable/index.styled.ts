@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Space, Table } from 'antd';
-import { rgba } from 'polished';
+import {Space, Table} from 'antd';
+import {rgba} from 'polished';
 
 export const TableResponsive = styled(Table)`
   & .ant-table-cell {
@@ -9,8 +9,8 @@ export const TableResponsive = styled(Table)`
   }
 
   & .table-row-dark {
-    background-color: ${({ theme }) =>
-      theme.palette.background.default} !important;
+    background-color: ${({theme}) =>
+  theme.palette.background.default} !important;
   }
 
   & .ant-table .ant-table-thead > tr > th {
@@ -26,32 +26,32 @@ export const TableResponsive = styled(Table)`
   }
 
   & .ant-table-bordered > .ant-table-container {
-    border-color: ${({ theme }) => theme.border.color} !important;
+    border-color: ${({theme}) => theme.border.color} !important;
 
     & > .ant-table-content > table {
       & > thead > tr > th,
       & > tbody > tr > td {
-        border-color: ${({ theme }) => theme.border.color} !important;
+        border-color: ${({theme}) => theme.border.color} !important;
       }
     }
 
     & .ant-table-cell-row-hover {
-      background: ${({ theme }) =>
-        rgba(theme.palette.primary, 0.15)} !important;
+      background: ${({theme}) =>
+  rgba(theme.palette.primary, 0.15)} !important;
     }
   }
 
   &.summery {
     & .ant-table .ant-table-thead > tr > th {
-      background: ${({ theme }) => theme.palette.background.default} !important;
+      background: ${({theme}) => theme.palette.background.default} !important;
     }
 
     & .ant-table .ant-table-tbody > tr > td {
-      background: ${({ theme }) => theme.palette.background.default} !important;
+      background: ${({theme}) => theme.palette.background.default} !important;
 
       &:hover {
-        background: ${({ theme }) =>
-          theme.palette.background.default} !important;
+        background: ${({theme}) =>
+  theme.palette.background.default} !important;
       }
     }
 

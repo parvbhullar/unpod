@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { TbShare3 } from 'react-icons/tb';
-import { Divider, Space, Typography } from 'antd';
+import {useState} from 'react';
+import {TbShare3} from 'react-icons/tb';
+import {Divider, Space, Typography} from 'antd';
 import styled from 'styled-components';
 import AppCopyToClipboard from '../../third-party/AppCopyToClipboard';
 
-import { SITE_URL } from '@unpod/constants';
-import { AppPopover } from '../../antd';
-import { useInfoViewActionsContext } from '@unpod/providers';
-import { useIntl } from 'react-intl';
+import {SITE_URL} from '@unpod/constants';
+import {AppPopover} from '../../antd';
+import {useInfoViewActionsContext} from '@unpod/providers';
+import {useIntl} from 'react-intl';
 
 export const StyledItemWrapper = styled(Space)`
   cursor: pointer;
   user-select: none;
 
   &:hover .ant-typography {
-    color: ${({ theme }) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.primary};
   }
 `;
 export const StyledShareItemWrapper = styled(Space)`
@@ -29,10 +29,10 @@ export type PostShare = {
 
 const getLinkText = (post?: PostShare) => `${SITE_URL}/thread/${post?.slug}/`;
 
-const AppShare = ({ post }: { post?: PostShare }) => {
+const AppShare = ({post}: { post?: PostShare }) => {
   const [open, setOpen] = useState(false);
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onClose = () => {
     setOpen(false);
@@ -54,12 +54,12 @@ const AppShare = ({ post }: { post?: PostShare }) => {
         })
         .then(() => {
           infoViewActionsContext.showMessage(
-            formatMessage({ id: 'common.shareSuccess' }),
+            formatMessage({id: 'common.shareSuccess'}),
           );
         })
         .catch((error) => {
           infoViewActionsContext.showError(
-            error || formatMessage({ id: 'common.somethingWentWrong' }),
+            error || formatMessage({id: 'common.somethingWentWrong'}),
           );
         });
     }
@@ -78,7 +78,7 @@ const AppShare = ({ post }: { post?: PostShare }) => {
               onCopy={() => {
                 onClose();
               }}
-              title={formatMessage({ id: 'common.copyLink' })}
+              title={formatMessage({id: 'common.copyLink'})}
             />
             {typeof navigator !== 'undefined' && 'share' in navigator && (
               <>
@@ -89,7 +89,7 @@ const AppShare = ({ post }: { post?: PostShare }) => {
                 />
 
                 <StyledShareItemWrapper onClick={onShare}>
-                  {formatMessage({ id: 'common.shareLink' })}
+                  {formatMessage({id: 'common.shareLink'})}
                 </StyledShareItemWrapper>
               </>
             )}
@@ -98,7 +98,7 @@ const AppShare = ({ post }: { post?: PostShare }) => {
         getPopupContainer={(trigger) => trigger.parentElement || document.body}
       >
         <Typography.Text type="secondary">
-          <TbShare3 fontSize={20} />
+          <TbShare3 fontSize={20}/>
         </Typography.Text>
       </AppPopover>
     </StyledItemWrapper>

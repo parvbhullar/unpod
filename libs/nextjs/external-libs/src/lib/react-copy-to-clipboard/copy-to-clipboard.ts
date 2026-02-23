@@ -1,4 +1,4 @@
-import { deselectCurrent } from './toggle-selection';
+import {deselectCurrent} from './toggle-selection';
 
 type WindowWithClipboardData = Window & {
   clipboardData?: {

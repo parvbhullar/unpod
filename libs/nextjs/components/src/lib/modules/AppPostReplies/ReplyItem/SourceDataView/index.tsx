@@ -1,16 +1,13 @@
-import type { MouseEvent } from 'react';
-import { Fragment, memo, useEffect, useRef, useState } from 'react';
+import type {MouseEvent} from 'react';
+import {Fragment, memo, useEffect, useRef, useState} from 'react';
 
-import { Button, Space, Tooltip, Typography } from 'antd';
+import {Button, Space, Tooltip, Typography} from 'antd';
 import AppCopyToClipboard from '../../../../third-party/AppCopyToClipboard';
-import { MdArrowBack, MdOutlineZoomIn } from 'react-icons/md';
+import {MdArrowBack, MdOutlineZoomIn} from 'react-icons/md';
 import clsx from 'clsx';
-import {
-  capitalizedAllWords,
-  convertMachineNameToName,
-} from '@unpod/helpers/StringHelper';
-import { getDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { isJson } from '@unpod/helpers/GlobalHelper';
+import {capitalizedAllWords, convertMachineNameToName,} from '@unpod/helpers/StringHelper';
+import {getDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {isJson} from '@unpod/helpers/GlobalHelper';
 import AppMarkdownViewer from '../../../../third-party/AppMarkdownViewer';
 import AppTable from '../../../../third-party/AppTable';
 import {
@@ -29,7 +26,7 @@ import {
 import AppLink from '../../../../next/AppLink';
 import AppJsonViewer from '../../../../third-party/AppJsonViewer';
 
-const { Paragraph, Text, Title } = Typography;
+const {Paragraph, Text, Title} = Typography;
 
 type FrameData = { title?: string; content?: string; url?: string };
 type SelectedCol = { title?: string; content?: string; url?: string };
@@ -39,9 +36,9 @@ type ReferenceData = {
 };
 
 const SourceDataView = ({
-  reply,
-  highlightedDoc,
-}: {
+                          reply,
+                          highlightedDoc,
+                        }: {
   reply: any;
   highlightedDoc?: string | null;
 }) => {
@@ -74,7 +71,7 @@ const SourceDataView = ({
       })
         .then((res: any) => {
           if (url.includes('.pdf') || url.includes('.PDF')) {
-            setFrameData({ title, content, url: res.data.url });
+            setFrameData({title, content, url: res.data.url});
           } else {
             window.open(res.data.url, '_blank');
           }
@@ -84,7 +81,7 @@ const SourceDataView = ({
         });
     } else {
       const highlightedContent = content || 'No content';
-      setSelectedCol({ title, content: highlightedContent, url: '' });
+      setSelectedCol({title, content: highlightedContent, url: ''});
     }
   };
 
@@ -152,7 +149,7 @@ const SourceDataView = ({
                   )
                 }
               >
-                <MdOutlineZoomIn fontSize={20} />
+                <MdOutlineZoomIn fontSize={20}/>
               </StyledZoomContainer>
             </StyledCellContent>
           ),
@@ -182,7 +179,7 @@ const SourceDataView = ({
                     <StyledCellContent>
                       <Paragraph
                         className="mb-0"
-                        style={{ margin: 0, maxWidth: 300 }}
+                        style={{margin: 0, maxWidth: 300}}
                         ellipsis={{
                           rows: 1,
                         }}
@@ -191,9 +188,9 @@ const SourceDataView = ({
                       </Paragraph>
 
                       <StyledZoomContainer
-                        onClick={() => setSelectedCol({ title, content: text })}
+                        onClick={() => setSelectedCol({title, content: text})}
                       >
-                        <MdOutlineZoomIn fontSize={20} />
+                        <MdOutlineZoomIn fontSize={20}/>
                       </StyledZoomContainer>
                     </StyledCellContent>
                   );
@@ -229,7 +226,7 @@ const SourceDataView = ({
                     <StyledCellContent>
                       <Paragraph
                         className="mb-0"
-                        style={{ margin: 0, maxWidth: 300 }}
+                        style={{margin: 0, maxWidth: 300}}
                         ellipsis={{
                           rows: 1,
                         }}
@@ -239,10 +236,10 @@ const SourceDataView = ({
 
                       <StyledZoomContainer
                         onClick={() =>
-                          setSelectedCol({ title: col.title, content: text })
+                          setSelectedCol({title: col.title, content: text})
                         }
                       >
-                        <MdOutlineZoomIn fontSize={20} />
+                        <MdOutlineZoomIn fontSize={20}/>
                       </StyledZoomContainer>
                     </StyledCellContent>
                   );
@@ -388,7 +385,7 @@ const SourceDataView = ({
 
       <StyledFullContent
         ref={frameContentRef}
-        className={clsx({ open: frameData })}
+        className={clsx({open: frameData})}
       >
         <StyledTitleContainer>
           <Space>
@@ -399,7 +396,7 @@ const SourceDataView = ({
                 shape="circle"
                 onClick={onPdfBackClick}
               >
-                <MdArrowBack fontSize={18} />
+                <MdArrowBack fontSize={18}/>
               </Button>
             </Tooltip>
             <Text strong>{frameData?.title}</Text>
@@ -408,7 +405,7 @@ const SourceDataView = ({
 
         <StyledDocWrapper>
           <Typography>
-            <AppMarkdownViewer markdown={frameData?.content} />
+            <AppMarkdownViewer markdown={frameData?.content}/>
           </Typography>
 
           {frameData?.url && (
@@ -418,7 +415,7 @@ const SourceDataView = ({
                 // width="100%"
                 // height="100%"
                 // frameBorder={0}
-                style={{ border: 0, height: '100%', width: '100%' }}
+                style={{border: 0, height: '100%', width: '100%'}}
               />
             </StyledIframeContainer>
           )}
@@ -427,7 +424,7 @@ const SourceDataView = ({
 
       <StyledFullContent
         ref={contentRef}
-        className={clsx({ open: selectedCol })}
+        className={clsx({open: selectedCol})}
       >
         <StyledTitleContainer>
           <Space>
@@ -438,7 +435,7 @@ const SourceDataView = ({
                 shape="circle"
                 onClick={onBackClick}
               >
-                <MdArrowBack fontSize={18} />
+                <MdArrowBack fontSize={18}/>
               </Button>
             </Tooltip>
             <Text strong>{selectedCol?.title}</Text>
@@ -446,17 +443,17 @@ const SourceDataView = ({
         </StyledTitleContainer>
 
         <StyledContentContainer
-          className={clsx({ 'json-content': isJsonContent })}
+          className={clsx({'json-content': isJsonContent})}
         >
           <StyledCopyWrapper>
             <AppCopyToClipboard
               text={
                 isJsonContent
                   ? JSON.stringify(
-                      JSON.parse(selectedCol?.content || '{}'),
-                      null,
-                      2,
-                    )
+                    JSON.parse(selectedCol?.content || '{}'),
+                    null,
+                    2,
+                  )
                   : selectedCol?.content || ''
               }
               showToolTip
@@ -465,9 +462,9 @@ const SourceDataView = ({
 
           <StyledContentWrapper>
             {isJsonContent ? (
-              <AppJsonViewer json={JSON.parse(selectedCol?.content || '{}')} />
+              <AppJsonViewer json={JSON.parse(selectedCol?.content || '{}')}/>
             ) : (
-              <AppMarkdownViewer markdown={selectedCol?.content} />
+              <AppMarkdownViewer markdown={selectedCol?.content}/>
             )}
           </StyledContentWrapper>
         </StyledContentContainer>
@@ -475,7 +472,7 @@ const SourceDataView = ({
 
       <StyledFullContent
         ref={refContentRef}
-        className={clsx('ref-content', { open: referenceData })}
+        className={clsx('ref-content', {open: referenceData})}
       >
         <StyledTitleContainer>
           <Space>
@@ -486,7 +483,7 @@ const SourceDataView = ({
                 shape="circle"
                 onClick={onRefDataBackClick}
               >
-                <MdArrowBack fontSize={18} />
+                <MdArrowBack fontSize={18}/>
               </Button>
             </Tooltip>
             <Text strong>{referenceData?.title}</Text>
@@ -499,7 +496,7 @@ const SourceDataView = ({
               item.content ? (
                 <StyledRefRow
                   key={item.keyName}
-                  className={clsx({ 'json-content': isJsonContent })}
+                  className={clsx({'json-content': isJsonContent})}
                 >
                   <StyledCopyWrapper>
                     <AppCopyToClipboard
@@ -516,12 +513,12 @@ const SourceDataView = ({
 
                   <Typography>
                     {item.content && isJson(item.content) ? (
-                      <AppJsonViewer json={JSON.parse(item?.content || '{}')} />
+                      <AppJsonViewer json={JSON.parse(item?.content || '{}')}/>
                     ) : (
                       <AppMarkdownViewer
                         markdown={item?.content}
                         components={{
-                          a: ({ children, ...props }) => {
+                          a: ({children, ...props}) => {
                             return (
                               <a
                                 {...props}
@@ -541,7 +538,7 @@ const SourceDataView = ({
                   </Typography>
                 </StyledRefRow>
               ) : (
-                <Fragment key={item.keyName} />
+                <Fragment key={item.keyName}/>
               ),
             )}
           </StyledContentWrapper>

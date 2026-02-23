@@ -1,4 +1,4 @@
-import type { LocaleEntry } from '../types';
+import type {LocaleEntry} from '../types';
 import hiMessages from '../locales/hi_IN.json';
 import hiIN from 'antd/lib/locale/hi_IN';
 

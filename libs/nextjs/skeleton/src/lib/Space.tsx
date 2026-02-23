@@ -1,16 +1,16 @@
 'use client';
 import React from 'react';
 import styled from 'styled-components';
-import { Card, Divider } from 'antd';
-import { SkeletonInput } from './common/SkeletonInput';
+import {Card, Divider} from 'antd';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonAvatar from './common/SkeletonAvatar';
 import SkeletonButton from './common/SkeletonButton';
 
 const StyledContainer = styled.div`
   flex: 1;
-  border-radius: ${({ theme }) => theme.component.card.borderRadius}
-    ${({ theme }) => theme.component.card.borderRadius} 0 0;
-  box-shadow: ${({ theme }) => theme.component.card.boxShadow};
+  border-radius: ${({theme}) => theme.component.card.borderRadius}
+    ${({theme}) => theme.component.card.borderRadius} 0 0;
+  box-shadow: ${({theme}) => theme.component.card.boxShadow};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +18,7 @@ const StyledContainer = styled.div`
 
 const StyledRoot = styled.div`
   display: flex;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   height: 100vh;
   flex-direction: column;
 `;
@@ -48,12 +48,12 @@ const SpaceHeader: React.FC = () => {
             width: '100%',
           }}
         >
-          <SkeletonAvatar size={36} shape="square" />
-          <SkeletonInput style={{ width: '50%', height: 25 }} />
+          <SkeletonAvatar size={36} shape="square"/>
+          <SkeletonInput style={{width: '50%', height: 25}}/>
         </div>
-        <SkeletonInput style={{ width: '50%', height: 14 }} />
+        <SkeletonInput style={{width: '50%', height: 14}}/>
       </div>
-      <SkeletonButton size="default" style={{ width: 100, height: 32 }} />
+      <SkeletonButton size="default" style={{width: 100, height: 32}}/>
     </StyledHeaderRoot>
   );
 };
@@ -61,8 +61,8 @@ const SpaceHeader: React.FC = () => {
 const SpaceSkeleton: React.FC = () => {
   return (
     <StyledRoot>
-      <SpaceHeader />
-      <Divider />
+      <SpaceHeader/>
+      <Divider/>
       <StyledContainer>
         <div
           style={{
@@ -71,7 +71,7 @@ const SpaceSkeleton: React.FC = () => {
             gap: 16,
           }}
         >
-          {Array.from({ length: 3 }).map((_, idx) => (
+          {Array.from({length: 3}).map((_, idx) => (
             <Card
               key={idx}
               style={{
@@ -87,9 +87,9 @@ const SpaceSkeleton: React.FC = () => {
                 }}
               >
                 <SkeletonInput
-                  style={{ width: 40, height: 20, minWidth: 110 }}
+                  style={{width: 40, height: 20, minWidth: 110}}
                 />
-                <SkeletonAvatar size={40} />
+                <SkeletonAvatar size={40}/>
               </div>
 
               <div
@@ -99,15 +99,15 @@ const SpaceSkeleton: React.FC = () => {
                 }}
               >
                 <SkeletonInput
-                  style={{ width: '100%', height: 12, marginBottom: -4 }}
+                  style={{width: '100%', height: 12, marginBottom: -4}}
                   size="small"
                 />
                 <SkeletonInput
-                  style={{ width: '100%', height: 12 }}
+                  style={{width: '100%', height: 12}}
                   size="small"
                 />
                 <SkeletonInput
-                  style={{ width: '40%', height: 12 }}
+                  style={{width: '40%', height: 12}}
                   size="small"
                 />
               </div>
@@ -119,4 +119,4 @@ const SpaceSkeleton: React.FC = () => {
   );
 };
 
-export { SpaceSkeleton };
+export {SpaceSkeleton};

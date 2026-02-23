@@ -1,28 +1,24 @@
-import {
-  type HTMLAttributes,
-  isValidElement,
-  memo,
-  type ReactNode,
-} from 'react';
+import {type HTMLAttributes, isValidElement, memo, type ReactNode,} from 'react';
 
-import { Typography } from 'antd';
-import { StyledExtraWrapper, StyledSectionHeader } from './index.styled';
+import {Typography} from 'antd';
+import {StyledExtraWrapper, StyledSectionHeader} from './index.styled';
 
 type AppSectionHeaderProps = HTMLAttributes<HTMLDivElement> & {
   heading?: ReactNode;
   subHeading?: ReactNode;
   description?: ReactNode;
   headerMaxWidth?: number;
-  extra?: ReactNode;};
+  extra?: ReactNode;
+};
 
 const AppSectionHeader = ({
-  heading,
-  subHeading,
-  description,
-  headerMaxWidth = 600,
-  extra,
-  ...restProps
-}: AppSectionHeaderProps) => {
+                            heading,
+                            subHeading,
+                            description,
+                            headerMaxWidth = 600,
+                            extra,
+                            ...restProps
+                          }: AppSectionHeaderProps) => {
   return (
     (heading || subHeading || description || extra) && (
       <StyledSectionHeader $maxWidth={headerMaxWidth} {...restProps}>

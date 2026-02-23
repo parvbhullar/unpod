@@ -1,17 +1,9 @@
-import type { CSSProperties, Ref } from 'react';
-import {
-  Fragment,
-  memo,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import type {CSSProperties, Ref} from 'react';
+import {Fragment, memo, useCallback, useEffect, useImperativeHandle, useRef, useState,} from 'react';
 
-import { Button, Row, Spin, Typography } from 'antd';
-import { MdRefresh } from 'react-icons/md';
-import { RiArrowDownLine } from 'react-icons/ri';
+import {Button, Row, Spin, Typography} from 'antd';
+import {MdRefresh} from 'react-icons/md';
+import {RiArrowDownLine} from 'react-icons/ri';
 import clsx from 'clsx';
 import {
   deleteDataApi,
@@ -21,13 +13,10 @@ import {
   useGetDataApi,
   useInfoViewActionsContext,
 } from '@unpod/providers';
-import { tablePageSize } from '@unpod/constants';
-import {
-  isScrolledToBottom,
-  scrollToPostBottom,
-} from '@unpod/helpers/GlobalHelper';
-import { getRandomColor } from '@unpod/helpers/StringHelper';
-import { POST_TYPE } from '@unpod/constants/AppEnums';
+import {tablePageSize} from '@unpod/constants';
+import {isScrolledToBottom, scrollToPostBottom,} from '@unpod/helpers/GlobalHelper';
+import {getRandomColor} from '@unpod/helpers/StringHelper';
+import {POST_TYPE} from '@unpod/constants/AppEnums';
 import AppDotFlashing from '../../common/AppDotFlashing';
 import ReplyItem from './ReplyItem';
 import {
@@ -39,7 +28,7 @@ import {
   StyledScrollBottom,
 } from './index.styled';
 import AppConfirmModal from '../../antd/AppConfirmModal';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
 const ConversationState = {
   IDLE: 'idle',
@@ -48,7 +37,7 @@ const ConversationState = {
   ALREADY_STREAMED: 'already_streamed',
 };
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 type AppPostRepliesProps = {
   activePost: any;
@@ -63,25 +52,26 @@ type AppPostRepliesProps = {
   onSaveNote?: (data: any) => void;
   conversationState?: string;
   setConversationState?: (state: string) => void;
-  ref?: Ref<any>;};
+  ref?: Ref<any>;
+};
 
 const AppPostReplies = ({
-  activePost,
-  lastMessage,
-  replyParent,
-  setReplyParent,
-  actionsStyle,
-  thinking,
-  setThinking,
-  setStreaming,
-  setDataLoading,
-  onSaveNote,
-  conversationState,
-  setConversationState,
-  ref,
-}: AppPostRepliesProps) => {
+                          activePost,
+                          lastMessage,
+                          replyParent,
+                          setReplyParent,
+                          actionsStyle,
+                          thinking,
+                          setThinking,
+                          setStreaming,
+                          setDataLoading,
+                          onSaveNote,
+                          conversationState,
+                          setConversationState,
+                          ref,
+                        }: AppPostRepliesProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
-  const { isLoading, visitorId, isAuthenticated } = useAuthContext();
+  const {isLoading, visitorId, isAuthenticated} = useAuthContext();
   const [selectedBlock, setSelectedBlock] = useState<any | null>(null);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -92,17 +82,17 @@ const AppPostReplies = ({
   const [hasMoreRecords, setHasMoreRecords] = useState(false);
   const [systemMessage, setSystemMessage] = useState<any | null>(null);
   const [noteTitle, setNoteTitle] = useState<string | null>(null);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [{ apiData, loading }, { setData, updateInitialUrl, setQueryParams }] =
-    (useGetDataApi(
-      `conversation/${activePost.post_id}/messages/`,
-      { data: [] },
-      { page: 1, page_size: tablePageSize },
-      false,
-    ) as any) || [];
+  const [{apiData, loading}, {setData, updateInitialUrl, setQueryParams}] =
+  (useGetDataApi(
+    `conversation/${activePost.post_id}/messages/`,
+    {data: []},
+    {page: 1, page_size: tablePageSize},
+    false,
+  ) as any) || [];
 
   useEffect(() => {
     if (apiData?.data?.length === tablePageSize) {
@@ -149,7 +139,7 @@ const AppPostReplies = ({
       setPage(1);
 
       if (isAuthenticated) {
-        setQueryParams({ page: 1, page_size: tablePageSize });
+        setQueryParams({page: 1, page_size: tablePageSize});
       } else {
         setQueryParams({
           page: 1,
@@ -161,7 +151,7 @@ const AppPostReplies = ({
 
     return () => {
       setItems([]);
-      setData({ data: [] });
+      setData({data: []});
     };
   }, [activePost.post_id, isLoading, isAuthenticated, visitorId]);
   useEffect(() => {
@@ -534,10 +524,10 @@ const AppPostReplies = ({
             infoViewActionsContext.showMessage(res.message);
 
             setItems((prevState) => {
-              const selectedReply = { ...reply };
+              const selectedReply = {...reply};
 
               if (isSubReply && parentReply) {
-                const selectedParentReply = { ...parentReply };
+                const selectedParentReply = {...parentReply};
                 selectedReply.reaction_count =
                   +selectedReply.reaction_count + reactionCount;
 
@@ -565,10 +555,10 @@ const AppPostReplies = ({
             });
 
             setStreamItems((prevState) => {
-              const selectedReply = { ...reply };
+              const selectedReply = {...reply};
 
               if (isSubReply && parentReply) {
-                const selectedParentReply = { ...parentReply };
+                const selectedParentReply = {...parentReply};
 
                 selectedReply.reaction_count =
                   +selectedReply.reaction_count + reactionCount;
@@ -646,7 +636,7 @@ const AppPostReplies = ({
         } else {
           setHasMoreRecords(false);
           infoViewActionsContext.showMessage(
-            formatMessage({ id: 'common.noMoreData' }),
+            formatMessage({id: 'common.noMoreData'}),
           );
         }
       })
@@ -669,7 +659,7 @@ const AppPostReplies = ({
       deleteDataApi(
         `threads/${selectedBlock.block_id}/action/`,
         infoViewActionsContext,
-        { post_type: 'block' },
+        {post_type: 'block'},
         true,
       )
         .then((data: any) => {
@@ -707,7 +697,7 @@ const AppPostReplies = ({
               onClick={loadOlderMessages}
               loading={loadingMore}
               ghost
-              icon={<MdRefresh fontSize={16} />}
+              icon={<MdRefresh fontSize={16}/>}
             >
               Load Older Messages
             </Button>
@@ -715,8 +705,8 @@ const AppPostReplies = ({
         )}
 
         {loading ? (
-          <Row align="middle" justify="center" style={{ height: 200 }}>
-            <Spin />
+          <Row align="middle" justify="center" style={{height: 200}}>
+            <Spin/>
           </Row>
         ) : (
           <Fragment>
@@ -780,18 +770,18 @@ const AppPostReplies = ({
         {thinking && !systemMessage && (
           <StyledMsgChat>
             <Text>Analysing</Text>
-            <AppDotFlashing />
+            <AppDotFlashing/>
           </StyledMsgChat>
         )}
       </StyledInnerContainer>
 
       <StyledScrollBottom
-        className={clsx({ 'scrolled-to-bottom': isReachBottom })}
+        className={clsx({'scrolled-to-bottom': isReachBottom})}
       >
         <Button
           size="large"
           shape="circle"
-          icon={<RiArrowDownLine fontSize={24} />}
+          icon={<RiArrowDownLine fontSize={24}/>}
           onClick={scrollToPostBottom}
         />
       </StyledScrollBottom>
@@ -799,7 +789,7 @@ const AppPostReplies = ({
       <AppConfirmModal
         open={isDeleteOpen}
         onOk={onBlockDelete}
-        message={formatMessage({ id: 'common.deleteMessage' })}
+        message={formatMessage({id: 'common.deleteMessage'})}
         onCancel={() => setDeleteOpen(false)}
       />
     </StyledRootContainer>

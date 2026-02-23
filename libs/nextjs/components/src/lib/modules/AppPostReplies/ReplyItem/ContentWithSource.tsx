@@ -1,13 +1,13 @@
-import { Fragment, memo, useEffect, useRef, useState } from 'react';
+import {Fragment, memo, useEffect, useRef, useState} from 'react';
 
 import AppMarkdownViewer from '../../../third-party/AppMarkdownViewer';
 import SourceDataView from './SourceDataView';
 import AppDrawer from '../../../antd/AppDrawer';
-import { StyledContentWrapper } from '../index.styled';
+import {StyledContentWrapper} from '../index.styled';
 
 const regex = /\[\d\]+/g;
 
-const ContentWithSource = ({ reply }: { reply: any }) => {
+const ContentWithSource = ({reply}: { reply: any }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [highlightedDoc, setHighlightedDoc] = useState<string | null>(null);
 
@@ -54,10 +54,10 @@ const ContentWithSource = ({ reply }: { reply: any }) => {
         open={highlightedDoc !== null}
         destroyOnHidden={true}
         onClose={() => setHighlightedDoc(null)}
-        styles={{ body: { padding: 0, position: 'relative' } }}
+        styles={{body: {padding: 0, position: 'relative'}}}
         width="60%"
       >
-        <SourceDataView reply={reply} highlightedDoc={highlightedDoc} />
+        <SourceDataView reply={reply} highlightedDoc={highlightedDoc}/>
       </AppDrawer>
     </Fragment>
   );

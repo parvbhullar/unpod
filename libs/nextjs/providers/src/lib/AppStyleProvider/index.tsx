@@ -1,16 +1,17 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import { DefaultTheme, ThemeProvider } from 'styled-components';
+import React, {ReactNode} from 'react';
+import {DefaultTheme, ThemeProvider} from 'styled-components';
 
 export type AppStyleProviderProps = {
   theme: DefaultTheme;
-  children: ReactNode;};
+  children: ReactNode;
+};
 
 export const AppStyleProvider: React.FC<AppStyleProviderProps> = ({
-  theme,
-  children,
-}) => {
+                                                                    theme,
+                                                                    children,
+                                                                  }) => {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
 

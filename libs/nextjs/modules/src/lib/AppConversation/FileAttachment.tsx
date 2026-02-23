@@ -65,7 +65,7 @@ const ImagePreview = styled.a<FileUserProps>`
 
   &:hover {
     border-color: ${(props) =>
-      props.$isUser ? 'rgba(255,255,255,0.3)' : '#c0c0c0'};
+  props.$isUser ? 'rgba(255,255,255,0.3)' : '#c0c0c0'};
   }
 
   img {
@@ -100,9 +100,9 @@ const FileCard = styled.a<FileUserProps>`
 
   &:hover {
     background: ${(props) =>
-      props.$isUser ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)'};
+  props.$isUser ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)'};
     border-color: ${(props) =>
-      props.$isUser ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.15)'};
+  props.$isUser ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.15)'};
   }
 `;
 
@@ -131,7 +131,7 @@ const FileName = styled.div<FileUserProps>`
   font-weight: 500;
   font-size: 13px;
   color: ${(props) =>
-    props.$isUser ? props.theme.palette.text.primary : '#111827'};
+  props.$isUser ? props.theme.palette.text.primary : '#111827'};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -141,7 +141,7 @@ const FileSize = styled.div<FileUserProps>`
   font-size: 11px;
   font-weight: 400;
   color: ${(props) =>
-    props.$isUser ? props.theme.palette.text.secondary : '#6b7280'};
+  props.$isUser ? props.theme.palette.text.secondary : '#6b7280'};
   white-space: nowrap;
   flex-shrink: 0;
 `;
@@ -155,39 +155,39 @@ const getFileIcon = (fileName?: string, fileType?: string) => {
     type === 'image' ||
     ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(ext)
   ) {
-    return { icon: FileImageOutlined, color: '#10b981' };
+    return {icon: FileImageOutlined, color: '#10b981'};
   }
   if (type === 'application/pdf' || ext === 'pdf') {
-    return { icon: FilePdfOutlined, color: '#ef4444' };
+    return {icon: FilePdfOutlined, color: '#ef4444'};
   }
   if (
     type?.includes('word') ||
     type?.includes('msword') ||
     ['doc', 'docx'].includes(ext)
   ) {
-    return { icon: FileWordOutlined, color: '#3b82f6' };
+    return {icon: FileWordOutlined, color: '#3b82f6'};
   }
   if (
     type?.includes('excel') ||
     type?.includes('spreadsheet') ||
     ['xls', 'xlsx', 'csv'].includes(ext)
   ) {
-    return { icon: FileExcelOutlined, color: '#10b981' };
+    return {icon: FileExcelOutlined, color: '#10b981'};
   }
   if (
     type?.includes('presentation') ||
     type?.includes('powerpoint') ||
     ['ppt', 'pptx'].includes(ext)
   ) {
-    return { icon: FilePptOutlined, color: '#f59e0b' };
+    return {icon: FilePptOutlined, color: '#f59e0b'};
   }
   if (type?.startsWith('text/') || ['txt', 'md', 'json', 'xml'].includes(ext)) {
-    return { icon: FileTextOutlined, color: '#06b6d4' };
+    return {icon: FileTextOutlined, color: '#06b6d4'};
   }
   if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
-    return { icon: FileZipOutlined, color: '#8b5cf6' };
+    return {icon: FileZipOutlined, color: '#8b5cf6'};
   }
-  return { icon: FileOutlined, color: '#6b7280' };
+  return {icon: FileOutlined, color: '#6b7280'};
 };
 
 const formatFileSize = (bytes?: number) => {
@@ -208,7 +208,7 @@ const isImageFile = (fileName?: string, mediaType?: string) => {
   );
 };
 
-const FileAttachment = ({ files, isUser, hasContent }: FileAttachmentProps) => {
+const FileAttachment = ({files, isUser, hasContent}: FileAttachmentProps) => {
   if (!files || files.length === 0) return null;
 
   const images = files.filter((file) =>
@@ -234,7 +234,7 @@ const FileAttachment = ({ files, isUser, hasContent }: FileAttachmentProps) => {
                 rel="noopener noreferrer"
                 $isUser={isUser}
               >
-                <img src={imageUrl} alt={fileName} />
+                <img src={imageUrl} alt={fileName}/>
               </ImagePreview>
             );
           })}
@@ -246,7 +246,7 @@ const FileAttachment = ({ files, isUser, hasContent }: FileAttachmentProps) => {
           {otherFiles.map((file, index) => {
             const fileName = file.name || 'Attachment';
             const fileUrl = file.media_url || file.url;
-            const { icon: IconComponent, color } = getFileIcon(
+            const {icon: IconComponent, color} = getFileIcon(
               fileName,
               file.media_type,
             );
@@ -261,7 +261,7 @@ const FileAttachment = ({ files, isUser, hasContent }: FileAttachmentProps) => {
                 $isUser={isUser}
               >
                 <FileIconWrapper $color={color}>
-                  <IconComponent />
+                  <IconComponent/>
                 </FileIconWrapper>
                 <FileInfo>
                   <FileName $isUser={isUser}>{fileName}</FileName>

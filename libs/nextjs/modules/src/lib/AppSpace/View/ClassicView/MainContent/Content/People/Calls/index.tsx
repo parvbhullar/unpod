@@ -1,33 +1,28 @@
 'use client';
-import { useState } from 'react';
+import {useState} from 'react';
 import AppList from '@unpod/components/common/AppList';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useAuthContext,
-  useGetDataApi,
-} from '@unpod/providers';
+import {useAppSpaceActionsContext, useAppSpaceContext, useAuthContext, useGetDataApi,} from '@unpod/providers';
 import CallItem from './CallItem';
-import type { Call } from '@unpod/constants/types';
-import { AppDrawer } from '@unpod/components/antd';
+import type {Call} from '@unpod/constants/types';
+import {AppDrawer} from '@unpod/components/antd';
 import CallLogs from '../../Calls';
 import CallHeader from '../../../Header/CallHeader';
-import { IoMdClose } from 'react-icons/io';
-import { AppHeaderButton } from '@unpod/components/common/AppPageHeader';
-import { StyledHeaderTitle } from './index.styled';
-import { useMediaQuery } from 'react-responsive';
-import { TabWidthQuery } from '@unpod/constants';
+import {IoMdClose} from 'react-icons/io';
+import {AppHeaderButton} from '@unpod/components/common/AppPageHeader';
+import {StyledHeaderTitle} from './index.styled';
+import {useMediaQuery} from 'react-responsive';
+import {TabWidthQuery} from '@unpod/constants';
 
 const Calls = () => {
-  const { activeOrg } = useAuthContext();
-  const { currentSpace, activeDocument, activeCall } = useAppSpaceContext();
-  const { setActiveCall } = useAppSpaceActionsContext();
+  const {activeOrg} = useAuthContext();
+  const {currentSpace, activeDocument, activeCall} = useAppSpaceContext();
+  const {setActiveCall} = useAppSpaceActionsContext();
   const [showDrawer, setShowDrawer] = useState(false);
   const isTablet = useMediaQuery(TabWidthQuery);
 
-  const [{ apiData, loading }] = useGetDataApi(
+  const [{apiData, loading}] = useGetDataApi(
     `knowledge_base/${currentSpace?.token}/connector-doc-data/${activeDocument?.document_id}/tasks/`,
-    { data: [] },
+    {data: []},
     {
       domain: activeOrg?.domain_handle,
       page_size: 20,
@@ -48,7 +43,7 @@ const Calls = () => {
   return (
     <>
       <AppList
-        style={{ height: 'calc(100vh - 135px)', padding: '24px 14px' }}
+        style={{height: 'calc(100vh - 135px)', padding: '24px 14px'}}
         data={apiData?.data ?? []}
         loading={loading}
         itemSpacing={16}
@@ -71,14 +66,14 @@ const Calls = () => {
         {activeCall && (
           <>
             <StyledHeaderTitle>
-              <CallHeader />
+              <CallHeader/>
               <AppHeaderButton
                 shape="circle"
-                icon={<IoMdClose size={16} />}
+                icon={<IoMdClose size={16}/>}
                 onClick={onClose}
               />
             </StyledHeaderTitle>
-            <CallLogs />
+            <CallLogs/>
           </>
         )}
       </AppDrawer>

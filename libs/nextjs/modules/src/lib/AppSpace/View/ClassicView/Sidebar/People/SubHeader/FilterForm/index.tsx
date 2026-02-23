@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
-import { Button, Form } from 'antd';
+import type {ReactNode} from 'react';
+import {Button, Form} from 'antd';
 import AppDateTime from '@unpod/components/antd/AppDateTime';
 import Labels from './Labels';
-import { StyledActions, StyledRoot } from './index.styled';
-import { useIntl } from 'react-intl';
+import {StyledActions, StyledRoot} from './index.styled';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 type FilterFormProps = {
   tags: Array<{ slug?: string; name?: string; icon?: ReactNode }>;
@@ -15,13 +15,13 @@ type FilterFormProps = {
 };
 
 const FilterForm = ({
-  tags,
-  filters,
-  onApplyFilters,
-  clearFilter,
-}: FilterFormProps) => {
+                      tags,
+                      filters,
+                      onApplyFilters,
+                      clearFilter,
+                    }: FilterFormProps) => {
   const [form] = useForm();
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   const onFinish = (values: Record<string, any>) => {
     onApplyFilters(values);
@@ -41,8 +41,8 @@ const FilterForm = ({
         initialValues={filters}
         layout="vertical"
       >
-        <Item name="tag" label={formatMessage({ id: 'space.labels' })}>
-          <Labels data={tags} onChange={() => null} />
+        <Item name="tag" label={formatMessage({id: 'space.labels'})}>
+          <Labels data={tags} onChange={() => null}/>
         </Item>
 
         {/*<Item name="status" label="Status">
@@ -51,30 +51,30 @@ const FilterForm = ({
 
         <Item
           name="from_ts"
-          label={formatMessage({ id: 'common.createdTime' })}
+          label={formatMessage({id: 'common.createdTime'})}
         >
           <AppDateTime
-            placeholder={formatMessage({ id: 'downloadLogs.from' })}
-            showTime={{ format: 'HH:mm:ss' }}
+            placeholder={formatMessage({id: 'downloadLogs.from'})}
+            showTime={{format: 'HH:mm:ss'}}
             format="DD-MM-YYYY HH:mm:ss"
           />
         </Item>
 
         <Item name="to_ts">
           <AppDateTime
-            placeholder={formatMessage({ id: 'downloadLogs.to' })}
-            showTime={{ format: 'HH:mm:ss' }}
+            placeholder={formatMessage({id: 'downloadLogs.to'})}
+            showTime={{format: 'HH:mm:ss'}}
             format="DD-MM-YYYY HH:mm:ss"
           />
         </Item>
 
         <StyledActions>
           <Button type="default" htmlType="button" onClick={onClear}>
-            {formatMessage({ id: 'common.clear' })}
+            {formatMessage({id: 'common.clear'})}
           </Button>
 
           <Button type="primary" htmlType="submit">
-            {formatMessage({ id: 'common.apply' })}
+            {formatMessage({id: 'common.apply'})}
           </Button>
         </StyledActions>
       </Form>

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Button, Input } from 'antd';
-import { lighten } from 'polished';
+import {Button, Input} from 'antd';
+import {lighten} from 'polished';
 import AppCustomMenus from '../../common/AppCustomMenus';
-import { GlobalTheme } from '@unpod/constants';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledIconButton = styled(Button)`
   display: inline-flex;
@@ -38,7 +38,7 @@ export const StyledMenus = styled(AppCustomMenus as any)`
 export const StyledInputWrapper = styled.div`
   padding: 0 10px 10px 10px;
   border-bottom: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => lighten(0.05, theme.border.color)};
+    ${({theme}: { theme: GlobalTheme }) => lighten(0.05, theme.border.color)};
 `;
 
 export const StyledSearchInput = styled(Input)`
@@ -46,9 +46,9 @@ export const StyledSearchInput = styled(Input)`
 `;
 
 export const StyledKbActions = styled.div`
-  color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.text.primary};
+  color: ${({theme}: { theme: GlobalTheme }) => theme.palette.text.primary};
   border-top: 1px solid
-    ${({ theme }: { theme: GlobalTheme }) => lighten(0.05, theme.border.color)};
+    ${({theme}: { theme: GlobalTheme }) => lighten(0.05, theme.border.color)};
   display: flex;
   align-items: center;
   gap: 8px;
@@ -57,6 +57,6 @@ export const StyledKbActions = styled.div`
 
   &.all-selected,
   &:hover {
-    color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary};
+    color: ${({theme}: { theme: GlobalTheme }) => theme.palette.primary};
   }
 `;

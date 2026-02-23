@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { Divider, Input, Select, Upload } from 'antd';
+import {Divider, Input, Select, Upload} from 'antd';
 
-const { Dragger } = Upload;
+const {Dragger} = Upload;
 
 export const StyledContainer = styled.div`
   flex: 1;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  /*width: ${({ theme }) => theme.sizes.mainContentWidth};
+  background-color: ${({theme}) => theme.palette.background.default};
+  /*width: ${({theme}) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 0 auto 0 auto;*/
 `;
@@ -42,7 +42,7 @@ export const StyledMediaList = styled.div`
   gap: 16px;
   padding: 8px 12px;
   border: 1px solid #d9d9d9;
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border-radius: ${({theme}) => theme.radius.base}px;
   margin-bottom: 16px;
 `;
 
@@ -50,7 +50,7 @@ export const StyledCoverWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 130px;
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border-radius: ${({theme}) => theme.radius.base}px;
   overflow: hidden;
 `;
 
@@ -67,7 +67,7 @@ export const StyledDelContainer = styled.div`
   cursor: pointer;
 
   .remove-cover-handle {
-    color: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({theme}) => theme.palette.text.secondary};
     vertical-align: unset;
   }
 
@@ -77,7 +77,7 @@ export const StyledDelContainer = styled.div`
     opacity: 1 !important;
 
     .remove-cover-handle {
-      color: ${({ theme }) => theme.palette.background.default};
+      color: ${({theme}) => theme.palette.background.default};
       opacity: 1;
     }
   }
@@ -86,7 +86,7 @@ export const StyledDelContainer = styled.div`
 export const StyledPostContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   padding: 16px 16px 0 16px;
   height: 100%;
   min-height: 100%;
@@ -95,8 +95,8 @@ export const StyledPostContainer = styled.div`
 export const StyledActionBar = styled.div`
   position: sticky;
   bottom: 0;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  border-top: 1px solid ${({ theme }) => theme.border.color};
+  background-color: ${({theme}) => theme.palette.background.default};
+  border-top: 1px solid ${({theme}) => theme.border.color};
   padding: 16px 0;
   display: flex;
   align-items: center;
@@ -129,7 +129,7 @@ export const StyledTagsSelect = styled(Select)`
 
   & .ant-select-selection-placeholder {
     font-weight: 500;
-    color: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({theme}) => theme.palette.text.secondary};
     inset-inline-start: 0;
   }
 `;

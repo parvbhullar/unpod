@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
-import { Modal } from 'antd';
-import { useIntl } from 'react-intl';
+import React, {ReactNode} from 'react';
+import {Modal} from 'antd';
+import {useIntl} from 'react-intl';
 
 type AppConfirmModalProps = {
   open?: boolean;
@@ -11,20 +11,21 @@ type AppConfirmModalProps = {
   cancelText?: string;
   okText?: string;
   isDanger?: boolean;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppConfirmModal: React.FC<AppConfirmModalProps> = ({
-  open,
-  title = 'alert.title',
-  message = 'Are you sure you want to proceed?',
-  onOk,
-  onCancel,
-  cancelText = 'common.cancel',
-  okText = 'common.delete',
-  isDanger = true,
-  ...restProps
-}) => {
-  const { formatMessage } = useIntl();
+                                                           open,
+                                                           title = 'alert.title',
+                                                           message = 'Are you sure you want to proceed?',
+                                                           onOk,
+                                                           onCancel,
+                                                           cancelText = 'common.cancel',
+                                                           okText = 'common.delete',
+                                                           isDanger = true,
+                                                           ...restProps
+                                                         }) => {
+  const {formatMessage} = useIntl();
 
   const onActionConfirm = () => {
     if (onOk) onOk();
@@ -33,7 +34,7 @@ const AppConfirmModal: React.FC<AppConfirmModalProps> = ({
   return (
     <Modal
       title={
-        formatMessage({ id: title }) || formatMessage({ id: 'alert.confirm' })
+        formatMessage({id: title}) || formatMessage({id: 'alert.confirm'})
       }
       open={open}
       centered
@@ -41,9 +42,9 @@ const AppConfirmModal: React.FC<AppConfirmModalProps> = ({
       destroyOnHidden={true}
       onOk={onActionConfirm}
       onCancel={onCancel}
-      okText={formatMessage({ id: okText })}
-      okButtonProps={{ danger: isDanger }}
-      cancelText={formatMessage({ id: cancelText })}
+      okText={formatMessage({id: okText})}
+      okButtonProps={{danger: isDanger}}
+      cancelText={formatMessage({id: cancelText})}
       {...restProps}
     >
       {message}

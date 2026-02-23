@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import { Card, Col, Divider, Row, Skeleton } from 'antd';
+import {Card, Col, Divider, Row, Skeleton} from 'antd';
 import styled from 'styled-components';
 import SkeletonAvatar from './common/SkeletonAvatar';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonButton from './common/SkeletonButton';
 
 const StyledStickyHeader = styled.div`
@@ -58,7 +58,7 @@ const StyledInputBox = styled.div`
   padding: 8px;
   align-items: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
   }
 `;
@@ -73,7 +73,7 @@ const StyledRowBox = styled.div`
   flex-wrap: wrap;
   gap: 16px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -95,7 +95,7 @@ const StyledButtonInner = styled.div`
   align-items: center;
   padding: 24px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     width: 100%;
     padding: 12px;
   }
@@ -130,7 +130,8 @@ const StyledSkeleton = styled(Skeleton)`
 `;
 
 type BridgeStudioSkeletonProps = {
-  lastBox?: number;};
+  lastBox?: number;
+};
 
 const BridgeStudioSkeleton: React.FC<BridgeStudioSkeletonProps> = (
   props,
@@ -141,43 +142,43 @@ const BridgeStudioSkeleton: React.FC<BridgeStudioSkeletonProps> = (
       <StyledStickyHeader>
         <StyledHeaderContent>
           <StyledHeaderRow>
-            <SkeletonAvatar size="small" style={{ marginRight: 10 }} />
-            <SkeletonInput block style={{ width: '20%', height: 30 }} />
+            <SkeletonAvatar size="small" style={{marginRight: 10}}/>
+            <SkeletonInput block style={{width: '20%', height: 30}}/>
             <StyledButtonGroup>
-              <SkeletonButton style={{ width: 100 }} />
-              <SkeletonAvatar size="default" />
+              <SkeletonButton style={{width: 100}}/>
+              <SkeletonAvatar size="default"/>
             </StyledButtonGroup>
           </StyledHeaderRow>
         </StyledHeaderContent>
-        <Divider style={{ margin: 0 }} />
+        <Divider style={{margin: 0}}/>
         <StyledButtonRow gutter={16}>
-          {Array.from({ length: 2 }).map((_, idx) => (
+          {Array.from({length: 2}).map((_, idx) => (
             <Col key={idx}>
-              <SkeletonButton style={{ width: 90, height: 30 }} />
+              <SkeletonButton style={{width: 90, height: 30}}/>
             </Col>
           ))}
         </StyledButtonRow>
-        <Divider style={{ marginBottom: 14, marginTop: 0 }} />
+        <Divider style={{marginBottom: 14, marginTop: 0}}/>
       </StyledStickyHeader>
       <StyledMainContent>
-        <SkeletonInput block style={{ width: '100%', height: 40 }} />
-        <SkeletonInput block style={{ width: '30%', height: 20 }} />
-        <SkeletonInput active block style={{ width: '60%', height: 20 }} />
+        <SkeletonInput block style={{width: '100%', height: 40}}/>
+        <SkeletonInput block style={{width: '30%', height: 20}}/>
+        <SkeletonInput active block style={{width: '60%', height: 20}}/>
         <StyledInputBox>
-          <SkeletonAvatar size="small" style={{ marginRight: 10 }} />
-          <SkeletonInput block style={{ width: '100%', height: 20 }} />
+          <SkeletonAvatar size="small" style={{marginRight: 10}}/>
+          <SkeletonInput block style={{width: '100%', height: 20}}/>
         </StyledInputBox>
-        <SkeletonInput block style={{ width: '30%', height: 20 }} />
-        {Array.from({ length: lastBox }).map((_, idx) => (
+        <SkeletonInput block style={{width: '30%', height: 20}}/>
+        {Array.from({length: lastBox}).map((_, idx) => (
           <StyledRowBox key={idx}>
             <StyledInnerBox>
-              <SkeletonAvatar size="small" />
-              <SkeletonInput block style={{ width: '100%', height: 20 }} />
+              <SkeletonAvatar size="small"/>
+              <SkeletonInput block style={{width: '100%', height: 20}}/>
             </StyledInnerBox>
             <StyledButtonInner>
-              <SkeletonAvatar size="small" shape="square" />
-              <SkeletonInput block style={{ width: '90%', height: 20 }} />
-              <SkeletonAvatar size="small" />
+              <SkeletonAvatar size="small" shape="square"/>
+              <SkeletonInput block style={{width: '90%', height: 20}}/>
+              <SkeletonAvatar size="small"/>
             </StyledButtonInner>
           </StyledRowBox>
         ))}
@@ -214,29 +215,29 @@ const IsNewStudioSkeleton: React.FC = () => {
     <StyledContainer>
       <StyledHeader>
         <StyledHeaderRowButtons>
-          <SkeletonAvatar active size="small" />
-          <SkeletonInput block style={{ width: '20%', height: 30 }} />
+          <SkeletonAvatar active size="small"/>
+          <SkeletonInput block style={{width: '20%', height: 30}}/>
           <StyledButtonGroup>
-            <SkeletonButton active style={{ width: 100 }} />
-            <SkeletonButton active style={{ width: 100 }} />
-            <SkeletonButton active style={{ width: 100 }} />
+            <SkeletonButton active style={{width: 100}}/>
+            <SkeletonButton active style={{width: 100}}/>
+            <SkeletonButton active style={{width: 100}}/>
           </StyledButtonGroup>
         </StyledHeaderRowButtons>
         <SkeletonInput
           block
-          style={{ width: '30%', height: 30, borderRadius: 0 }}
+          style={{width: '30%', height: 30, borderRadius: 0}}
         />
-        <SkeletonInput block style={{ width: '100%', height: 20 }} />
-        <Divider style={{ marginTop: 20 }} />
+        <SkeletonInput block style={{width: '100%', height: 20}}/>
+        <Divider style={{marginTop: 20}}/>
       </StyledHeader>
       <Row gutter={16}>
-        {Array.from({ length: 3 }).map((_, idx) => (
+        {Array.from({length: 3}).map((_, idx) => (
           <Col key={idx}>
-            <SkeletonButton active style={{ width: 110, height: 20 }} />
+            <SkeletonButton active style={{width: 110, height: 20}}/>
           </Col>
         ))}
       </Row>
-      <Divider style={{ marginBottom: 20, marginTop: 0 }} />
+      <Divider style={{marginBottom: 20, marginTop: 0}}/>
       <StyledCardGroup gutter={[24, 24]}>
         {[1, 2, 3].map((item) => (
           <Col xs={24} md={8} key={item}>
@@ -254,11 +255,11 @@ const IsNewStudioSkeleton: React.FC = () => {
                   gap: 24,
                 }}
               >
-                <SkeletonAvatar active size={40} />
-                <SkeletonInput style={{ width: 160, height: 25 }} />
+                <SkeletonAvatar active size={40}/>
+                <SkeletonInput style={{width: 160, height: 25}}/>
                 <StyledSkeleton
                   title={false}
-                  paragraph={{ rows: 5, width: ['100%'] }}
+                  paragraph={{rows: 5, width: ['100%']}}
                   active
                 />
               </div>
@@ -266,14 +267,14 @@ const IsNewStudioSkeleton: React.FC = () => {
           </Col>
         ))}
       </StyledCardGroup>
-      <div style={{ marginTop: 40 }}>
+      <div style={{marginTop: 40}}>
         <SkeletonButton
           active
-          style={{ width: 140, height: 40, borderRadius: 8 }}
+          style={{width: 140, height: 40, borderRadius: 8}}
         />
       </div>
     </StyledContainer>
   );
 };
 
-export { BridgeStudioSkeleton, IsNewStudioSkeleton };
+export {BridgeStudioSkeleton, IsNewStudioSkeleton};

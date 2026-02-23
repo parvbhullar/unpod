@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Button } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Button} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
 export const WidgetContainer = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export const Avatar = styled.div`
   height: 48px;
   border-radius: 50%;
   overflow: hidden;
-  border: 1px solid ${({ theme }: { theme: GlobalTheme }) => theme.border.color};
+  border: 1px solid ${({theme}: { theme: GlobalTheme }) => theme.border.color};
 
   img {
     width: 100%;

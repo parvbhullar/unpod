@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import SkeletonButton from './common/SkeletonButton';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 
 const InvitationSkeleton: React.FC = () => {
   return (
@@ -15,12 +15,12 @@ const InvitationSkeleton: React.FC = () => {
       }}
     >
       {/* Title */}
-      <SkeletonInput style={{ width: '60%', height: 16, borderRadius: 6 }} />
+      <SkeletonInput style={{width: '60%', height: 16, borderRadius: 6}}/>
 
       {/* Subtitle (2 lines) */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <SkeletonInput style={{ width: '90%', height: 13, borderRadius: 6 }} />
-        <SkeletonInput style={{ width: '75%', height: 13, borderRadius: 6 }} />
+      <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
+        <SkeletonInput style={{width: '90%', height: 13, borderRadius: 6}}/>
+        <SkeletonInput style={{width: '75%', height: 13, borderRadius: 6}}/>
       </div>
 
       {/* Buttons */}
@@ -34,11 +34,11 @@ const InvitationSkeleton: React.FC = () => {
       >
         <SkeletonButton
           shape="round"
-          style={{ width: 70, height: 28, borderRadius: 8 }}
+          style={{width: 70, height: 28, borderRadius: 8}}
         />
         <SkeletonButton
           shape="round"
-          style={{ width: 70, height: 28, borderRadius: 8 }}
+          style={{width: 70, height: 28, borderRadius: 8}}
         />
       </div>
     </div>
@@ -49,10 +49,10 @@ const Notification: React.FC = () => {
   return (
     <Fragment>
       {[...Array(10)].map((_, idx) => (
-        <InvitationSkeleton key={idx} />
+        <InvitationSkeleton key={idx}/>
       ))}
     </Fragment>
   );
 };
 
-export { Notification };
+export {Notification};

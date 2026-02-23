@@ -1,18 +1,9 @@
 import styled from 'styled-components';
-import {
-  Button,
-  Form,
-  Input,
-  Row,
-  Select,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Button, Form, Input, Row, Select, Space, Typography, Upload,} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
-const { Dragger } = Upload;
-const { Text } = Typography;
+const {Dragger} = Upload;
+const {Text} = Typography;
 
 export const StyledInvitationRow = styled(Space)`
   display: flex;
@@ -65,8 +56,8 @@ export const StyledButton = styled(Button)`
 `;
 
 export const StyledStickyButton = styled(StyledButton)`
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default} !important;
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default} !important;
   position: sticky;
   bottom: 5px;
   z-index: 100;
@@ -90,8 +81,8 @@ export const StyledRowHeader = styled.div`
     margin-bottom: 16px;
   }
 
-  @media screen and (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     display: none;
   }
 `;
@@ -107,8 +98,8 @@ export const StyledList = styled.div`
   row-gap: 12px;
   margin-bottom: 20px;
 
-  @media screen and (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     row-gap: 24px;
   }
 `;
@@ -117,8 +108,8 @@ export const StyledActionLabel = styled(Text)`
   display: block;
   text-align: right;
 
-  @media screen and (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media screen and (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     text-align: left;
   }
 `;

@@ -1,25 +1,21 @@
-import { Fragment, useEffect } from 'react';
-import { Spin } from 'antd';
-import {
-  useAppSpaceActionsContext,
-  useAppSpaceContext,
-  useGetDataApi,
-} from '@unpod/providers';
+import {Fragment, useEffect} from 'react';
+import {Spin} from 'antd';
+import {useAppSpaceActionsContext, useAppSpaceContext, useGetDataApi,} from '@unpod/providers';
 import ContactViewCard from './ContactViewCard';
-import { StyledDetailsRoot, StyledRow } from './index.styled';
+import {StyledDetailsRoot, StyledRow} from './index.styled';
 
 type ContactData = Record<string, any>;
 
 const ContactView = () => {
-  const { currentSpace, spaceSchema, activeDocument } = useAppSpaceContext();
-  const { setActiveTab, setSelectedDocs } = useAppSpaceActionsContext();
+  const {currentSpace, spaceSchema, activeDocument} = useAppSpaceContext();
+  const {setActiveTab, setSelectedDocs} = useAppSpaceActionsContext();
 
-  const [{ apiData, loading }, { setData, updateInitialUrl }] = useGetDataApi(
+  const [{apiData, loading}, {setData, updateInitialUrl}] = useGetDataApi(
     `knowledge_base/${currentSpace?.token}/connector-doc-data/${activeDocument?.document_id}/`,
-    { data: {} as ContactData },
+    {data: {} as ContactData},
     {},
     false,
-    ({ data }: { data: ContactData }) => {
+    ({data}: { data: ContactData }) => {
       if (data.document_id) {
         setSelectedDocs([String(data.document_id)]);
       }
@@ -31,7 +27,7 @@ const ContactView = () => {
 
   useEffect(() => {
     if (currentSpace?.token && activeDocument?.document_id) {
-      setData({ data: {} as ContactData });
+      setData({data: {} as ContactData});
       updateInitialUrl(
         `knowledge_base/${currentSpace.token}/connector-doc-data/${activeDocument.document_id}/`,
       );
@@ -60,7 +56,7 @@ const ContactView = () => {
     <StyledDetailsRoot>
       {loading && (
         <StyledRow align="middle" justify="center">
-          <Spin />
+          <Spin/>
         </StyledRow>
       )}
 

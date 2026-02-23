@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { StyledRowWrapper } from './row';
+import {StyledRowWrapper} from './row';
 
 export const StyledDataGrid = styled.div`
   *,
@@ -12,13 +12,13 @@ export const StyledDataGrid = styled.div`
   contain: content;
   content-visibility: auto;
   block-size: 350px;
-  border: 1px solid ${({ theme }: { theme: any }) => theme.table.borderColor};
+  border: 1px solid ${({theme}: { theme: any }) => theme.table.borderColor};
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   box-sizing: border-box;
   overflow-x: auto;
   overflow-y: auto;
-  background-color: ${({ theme }: { theme: any }) => theme.backgroundColor};
+  background-color: ${({theme}: { theme: any }) => theme.backgroundColor};
   padding-bottom: 10px;
   margin-bottom: -10px;
 
@@ -76,11 +76,12 @@ export const StyledTreeGridWrapper = styled.div`
     /* Should have a higher value than 3 to show up above header and summary rows */
     z-index: 3;
   }
+
   &.row-selected {
-    outline: 2px solid
-      ${({ theme }: { theme: any }) => theme.table.selectedHoverColor};
+    outline: 2px solid ${({theme}: { theme: any }) => theme.table.selectedHoverColor};
     outline-offset: -2px;
   }
+
   &.row-selected-frozen {
     &::before {
       content: '';
@@ -88,8 +89,7 @@ export const StyledTreeGridWrapper = styled.div`
       height: 100%;
       position: sticky;
       inset-inline-start: 0;
-      border-inline-start: 2px solid
-        ${({ theme }: { theme: any }) => theme.table.selectedHoverColor};
+      border-inline-start: 2px solid ${({theme}: { theme: any }) => theme.table.selectedHoverColor};
     }
   }
 `;

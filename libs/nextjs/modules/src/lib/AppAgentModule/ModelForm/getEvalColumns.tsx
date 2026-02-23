@@ -1,9 +1,9 @@
-import { Flex, Typography } from 'antd';
+import {Flex, Typography} from 'antd';
 import GenerateEvalButton from '@unpod/components/modules/GenerateEvalButton/GenerateEvalButton';
-import type { ColumnsType } from 'antd/es/table';
-import { AppStatusBadge } from '@unpod/components/common/AppStatusBadge';
+import type {ColumnsType} from 'antd/es/table';
+import {AppStatusBadge} from '@unpod/components/common/AppStatusBadge';
 
-const { Text } = Typography;
+const {Text} = Typography;
 
 
 export type EvalRow = {
@@ -29,12 +29,12 @@ export const getEvalColumns = (
       render: (text: string) => <Text>{text || '-'}</Text>,
     },
     {
-      title: formatMessage({ id: 'aiStudio.knowledgeBase' }),
+      title: formatMessage({id: 'aiStudio.knowledgeBase'}),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: formatMessage({ id: 'apiKey.actions' }),
+      title: formatMessage({id: 'apiKey.actions'}),
       key: 'actions',
       render: (_: unknown, record: EvalRow) => (
         <Flex justify="center">
@@ -49,7 +49,7 @@ export const getEvalColumns = (
               text={record.hasEval ? 'common.refresh' : 'common.generateEvals'}
             />
           ) : (
-            <AppStatusBadge status={record.status} name={record.status} />
+            <AppStatusBadge status={record.status} name={record.status}/>
           )}
         </Flex>
       ),

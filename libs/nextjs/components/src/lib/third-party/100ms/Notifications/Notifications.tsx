@@ -1,21 +1,21 @@
 /* eslint-disable no-case-declarations */
-import React, { useEffect } from 'react';
-import { HMSNotificationTypes, useHMSNotifications } from '@100mslive/react-sdk';
-import { ToastBatcher } from '../Toast/ToastBatcher';
-import { ToastManager } from '../Toast/ToastManager';
-import { AutoplayBlockedModal } from './AutoplayBlockedModal';
-import { InitErrorModal } from './InitErrorModal';
-import { MessageNotifications } from './MessageNotifications';
-import { PeerNotifications } from './PeerNotifications';
-import { PermissionErrorModal } from './PermissionErrorModal';
-import { ReconnectNotifications } from './ReconnectNotifications';
-import { TrackBulkUnmuteModal } from './TrackBulkUnmuteModal';
-import { TrackNotifications } from './TrackNotifications';
-import { TrackUnmuteModal } from './TrackUnmuteModal';
-import { useHLSViewerRole, useIsHeadless, useSubscribedNotifications } from '../AppData/useUISettings';
-import { getMetadata } from '../common/utils';
-import { useRouter } from 'next/navigation';
-import { Button } from 'antd';
+import React, {useEffect} from 'react';
+import {HMSNotificationTypes, useHMSNotifications} from '@100mslive/react-sdk';
+import {ToastBatcher} from '../Toast/ToastBatcher';
+import {ToastManager} from '../Toast/ToastManager';
+import {AutoplayBlockedModal} from './AutoplayBlockedModal';
+import {InitErrorModal} from './InitErrorModal';
+import {MessageNotifications} from './MessageNotifications';
+import {PeerNotifications} from './PeerNotifications';
+import {PermissionErrorModal} from './PermissionErrorModal';
+import {ReconnectNotifications} from './ReconnectNotifications';
+import {TrackBulkUnmuteModal} from './TrackBulkUnmuteModal';
+import {TrackNotifications} from './TrackNotifications';
+import {TrackUnmuteModal} from './TrackUnmuteModal';
+import {useHLSViewerRole, useIsHeadless, useSubscribedNotifications} from '../AppData/useUISettings';
+import {getMetadata} from '../common/utils';
+import {useRouter} from 'next/navigation';
+import {Button} from 'antd';
 
 export function Notifications() {
   const notification = useHMSNotifications();
@@ -39,13 +39,13 @@ export function Notifications() {
 
         console.debug('Metadata updated', notification.data);
         if (!subscribedNotifications.METADATA_UPDATED) return;
-        ToastBatcher.showToast({ notification });
+        ToastBatcher.showToast({notification});
         break;
       case HMSNotificationTypes.NAME_UPDATED:
         console.log(
           notification.data.id +
-            ' changed their name to ' +
-            notification.data.name
+          ' changed their name to ' +
+          notification.data.name
         );
         break;
       case HMSNotificationTypes.ERROR:
@@ -132,9 +132,9 @@ export function Notifications() {
         ToastManager.addToast({
           title: `${notification.message}.
               ${
-                notification.data.reason &&
-                `Reason: ${notification.data.reason}`
-              }`,
+            notification.data.reason &&
+            `Reason: ${notification.data.reason}`
+          }`,
         });
         setTimeout(() => {
           /*const leaveLocation = window.location.pathname.replace(
@@ -164,15 +164,15 @@ export function Notifications() {
 
   return (
     <>
-      {!isHeadless && <TrackUnmuteModal />}
-      {!isHeadless && <TrackBulkUnmuteModal />}
-      <TrackNotifications />
-      <PeerNotifications />
-      <ReconnectNotifications />
-      <AutoplayBlockedModal />
-      <PermissionErrorModal />
-      <MessageNotifications />
-      <InitErrorModal notification={notification} />
+      {!isHeadless && <TrackUnmuteModal/>}
+      {!isHeadless && <TrackBulkUnmuteModal/>}
+      <TrackNotifications/>
+      <PeerNotifications/>
+      <ReconnectNotifications/>
+      <AutoplayBlockedModal/>
+      <PermissionErrorModal/>
+      <MessageNotifications/>
+      <InitErrorModal notification={notification}/>
     </>
   );
 }

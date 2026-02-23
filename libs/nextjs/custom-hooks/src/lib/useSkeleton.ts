@@ -1,5 +1,5 @@
-import { usePathname, useRouter } from 'next/navigation';
-import { ComponentType, useEffect, useRef, useState } from 'react';
+import {usePathname, useRouter} from 'next/navigation';
+import {ComponentType, useEffect, useRef, useState} from 'react';
 
 export type UseSkeletonResult<T extends ComponentType<unknown>> = {
   isPageLoading: boolean;
@@ -38,5 +38,5 @@ export const useSkeleton = <T extends ComponentType<unknown>>(
     };
   }, [router, key, MainSkeleton, NewSkeleton]);
 
-  return { isPageLoading, skeleton };
+  return {isPageLoading, skeleton};
 };

@@ -1,17 +1,10 @@
 'use client';
-import React, {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {CSSProperties, ReactNode, useEffect, useMemo, useRef, useState,} from 'react';
 import clsx from 'clsx';
-import { Select } from 'antd';
+import {Select} from 'antd';
 import AppFloatingOutline from '../AppFloatingOutline';
-import type { BaseSelectRef } from '@rc-component/select';
-import type { SelectProps } from 'antd/es/select';
+import type {BaseSelectRef} from '@rc-component/select';
+import type {SelectProps} from 'antd/es/select';
 
 type AppSelectProps = {
   placeholder?: ReactNode;
@@ -26,22 +19,23 @@ type AppSelectProps = {
   loading?: boolean;
   suffixIcon?: ReactNode;
   id?: string;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppSelect: React.FC<AppSelectProps> = ({
-  placeholder,
-  children,
-  defaultValue,
-  value,
-  className = '',
-  style,
-  disabled = false,
-  onChange,
-  asterisk,
-  loading,
-  suffixIcon,
-  ...restProps
-}) => {
+                                               placeholder,
+                                               children,
+                                               defaultValue,
+                                               value,
+                                               className = '',
+                                               style,
+                                               disabled = false,
+                                               onChange,
+                                               asterisk,
+                                               loading,
+                                               suffixIcon,
+                                               ...restProps
+                                             }) => {
   const [inputVal, setInputVal] = useState<
     string | number | object | unknown[] | null
   >(value ?? defaultValue ?? null);

@@ -1,6 +1,6 @@
-import { StyledRoot, StyledRootWrapper } from './index.styled';
+import {StyledRoot, StyledRootWrapper} from './index.styled';
 
-const ContentWrapper = ({ children }: { children?: any }) => {
+const ContentWrapper = ({children}: { children?: any }) => {
   return (
     <StyledRootWrapper>
       <StyledRoot>{children}</StyledRoot>

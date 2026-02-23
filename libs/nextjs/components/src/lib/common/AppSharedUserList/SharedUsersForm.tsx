@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { Button, Flex, Select, Space, Typography } from 'antd';
-import { AppSelect } from '../../antd';
-import { useOrgContext } from '@unpod/providers';
+import React, {useMemo, useState} from 'react';
+import {Button, Flex, Select, Space, Typography} from 'antd';
+import {AppSelect} from '../../antd';
+import {useOrgContext} from '@unpod/providers';
 import UserAvatar from '../../common/UserAvatar';
-import { useIntl } from 'react-intl';
-import type { DefaultOptionType } from 'antd/es/select';
-import type { InviteMember } from '@unpod/constants/types';
+import {useIntl} from 'react-intl';
+import type {DefaultOptionType} from 'antd/es/select';
+import type {InviteMember} from '@unpod/constants/types';
 
 type RoleOption = {
   key: string;
@@ -25,15 +25,15 @@ type SharedUsersFormProps = {
 };
 
 const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
-  onAddUsers,
-  allowedRoles,
-  defaultRole = 'viewer',
-  selectedUsers,
-}) => {
+                                                           onAddUsers,
+                                                           allowedRoles,
+                                                           defaultRole = 'viewer',
+                                                           selectedUsers,
+                                                         }) => {
   const [userEmails, setUserEmails] = useState<string[]>([]);
   const [role, setRole] = useState(defaultRole);
-  const { orgUsers } = useOrgContext();
-  const { formatMessage } = useIntl();
+  const {orgUsers} = useOrgContext();
+  const {formatMessage} = useIntl();
   const roleOptions = allowedRoles ?? [];
 
   const handleAddUsers = () => {
@@ -55,7 +55,7 @@ const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
   return (
     <Flex align="vertical" gap={12}>
       <AppSelect
-        placeholder={formatMessage({ id: 'common.selectUsers' })}
+        placeholder={formatMessage({id: 'common.selectUsers'})}
         mode="tags"
         filterOption={(input: string, option?: DefaultOptionType) =>
           String(option?.label ?? '')
@@ -76,12 +76,12 @@ const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
             label={`${orgUser.full_name} ${orgUser.user_email}`}
           >
             <Space>
-              <UserAvatar user={orgUser} />
+              <UserAvatar user={orgUser}/>
               <Space orientation="vertical" size={0}>
                 {orgUser?.full_name && (
                   <Typography.Text
                     type={'secondary'}
-                    style={{ marginBottom: -4, display: 'block' }}
+                    style={{marginBottom: -4, display: 'block'}}
                   >
                     {orgUser?.full_name}
                   </Typography.Text>
@@ -96,7 +96,7 @@ const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
       </AppSelect>
       {roleOptions.length > 0 && (
         <AppSelect
-          placeholder={formatMessage({ id: 'common.selectRole' })}
+          placeholder={formatMessage({id: 'common.selectRole'})}
           value={role}
           onChange={(value: string | number | object | unknown[] | null) =>
             setRole(typeof value === 'string' ? value : defaultRole)
@@ -104,7 +104,7 @@ const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
         >
           {roleOptions.map((item, index) => (
             <Select.Option key={index} value={item.key}>
-              {formatMessage({ id: item.label })}
+              {formatMessage({id: item.label})}
             </Select.Option>
           ))}
         </AppSelect>
@@ -114,7 +114,7 @@ const SharedUsersForm: React.FC<SharedUsersFormProps> = ({
         disabled={!role || userEmails.length === 0}
         onClick={handleAddUsers}
       >
-        {formatMessage({ id: 'common.add' })}
+        {formatMessage({id: 'common.add'})}
       </Button>
     </Flex>
   );

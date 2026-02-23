@@ -1,18 +1,12 @@
 'use client';
-import { Button, DatePicker, Input, Select, Space } from 'antd';
-import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
-import { isEmptyObject } from './GlobalHelper';
-import { getFormattedDate } from './DateHelper';
-import { tablePageSize } from '@unpod/constants';
-import dayjs, { Dayjs } from 'dayjs';
-import { FormatMessageFn } from './LocalizationFormatHelper';
+import {Button, DatePicker, Input, Select, Space} from 'antd';
+import {FilterOutlined, SearchOutlined} from '@ant-design/icons';
+import {Dispatch, ReactNode, SetStateAction, useEffect, useState,} from 'react';
+import {isEmptyObject} from './GlobalHelper';
+import {getFormattedDate} from './DateHelper';
+import {tablePageSize} from '@unpod/constants';
+import dayjs, {Dayjs} from 'dayjs';
+import {FormatMessageFn} from './LocalizationFormatHelper';
 
 export type FilterSortValue = {
   sortedInfo: SortedInfo;
@@ -67,14 +61,14 @@ export type TablePaginationActions = {
 };
 
 export const useTablePagination = ({
-  initialFilterData = {},
-  otherParams = {},
-  dependencies = [],
-  setQueryParams,
-  setSummaryQueryParams,
-  extraInfo,
-  dependentCallback,
-}: UseTablePaginationProps): [TablePaginationState, TablePaginationActions] => {
+                                     initialFilterData = {},
+                                     otherParams = {},
+                                     dependencies = [],
+                                     setQueryParams,
+                                     setSummaryQueryParams,
+                                     extraInfo,
+                                     dependentCallback,
+                                   }: UseTablePaginationProps): [TablePaginationState, TablePaginationActions] => {
   const [pageSize, setPageSize] = useState(tablePageSize);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -85,7 +79,7 @@ export const useTablePagination = ({
   });
 
   const setFilterData = (data: Record<string, unknown>) => {
-    updateFilterData({ ...filterData, ...data });
+    updateFilterData({...filterData, ...data});
   };
 
   useEffect(() => {
@@ -218,7 +212,7 @@ export const useTablePagination = ({
 export const getSortColumnData = (
   data: SortedInfo,
 ): Record<string, string | undefined> => {
-  if (data.field) return { [data.field]: data.order };
+  if (data.field) return {[data.field]: data.order};
   return {};
 };
 
@@ -328,12 +322,12 @@ export const getColumnSearchProps = (
 ): ColumnSearchProps => {
   return {
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters = () => void 0,
-    }: FilterDropdownProps) => (
-      <div style={{ padding: 8 }}>
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters = () => void 0,
+                     }: FilterDropdownProps) => (
+      <div style={{padding: 8}}>
         <Input
           placeholder={`Search ${title}`}
           value={selectedKeys[0] as string}
@@ -341,28 +335,28 @@ export const getColumnSearchProps = (
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => handleSearch(selectedKeys, confirm)}
-          style={{ marginBottom: 8, display: 'block' }}
+          style={{marginBottom: 8, display: 'block'}}
         />
         <Space>
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
           >
-            {formatMessage({ id: 'common.search' })}
+            {formatMessage({id: 'common.search'})}
           </Button>
           <Button
             onClick={() => handleReset(clearFilters, confirm)}
             size="small"
           >
-            {formatMessage({ id: 'common.reset' })}
+            {formatMessage({id: 'common.reset'})}
           </Button>
         </Space>
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <FilterOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      <FilterOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
     ),
     render: (text: string) => text,
   };
@@ -381,19 +375,19 @@ export const getColumnSelectBoxProps = (
 ): ColumnSearchProps => {
   return {
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters = () => void 0,
-    }: FilterDropdownProps) => (
-      <div style={{ padding: 8 }}>
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters = () => void 0,
+                     }: FilterDropdownProps) => (
+      <div style={{padding: 8}}>
         <Select
           placeholder={`Search ${title}`}
           value={selectedKeys[0] as string}
           onChange={(newValue: string) =>
             setSelectedKeys(newValue ? [newValue] : [])
           }
-          style={{ marginBottom: 8, display: 'block' }}
+          style={{marginBottom: 8, display: 'block'}}
         >
           {options?.map((unit) => (
             <Select.Option key={unit.id} value={unit.id}>
@@ -405,22 +399,22 @@ export const getColumnSelectBoxProps = (
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
           >
-            {formatMessage({ id: 'common.search' })}
+            {formatMessage({id: 'common.search'})}
           </Button>
           <Button
             onClick={() => handleReset(clearFilters, confirm)}
             size="small"
           >
-            {formatMessage({ id: 'common.reset' })}
+            {formatMessage({id: 'common.reset'})}
           </Button>
         </Space>
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <FilterOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      <FilterOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
     ),
     render: (text: string) => text,
   };
@@ -433,16 +427,16 @@ export const getColumnDateProps = (
 ): ColumnSearchProps => {
   return {
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters = () => void 0,
-    }: FilterDropdownProps) => (
-      <div style={{ padding: 8 }}>
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters = () => void 0,
+                     }: FilterDropdownProps) => (
+      <div style={{padding: 8}}>
         <DatePicker.RangePicker
           placeholder={[
-            formatMessage({ id: 'common.startTime' }),
-            formatMessage({ id: 'common.endTime' }),
+            formatMessage({id: 'common.startTime'}),
+            formatMessage({id: 'common.endTime'}),
           ]}
           picker="date"
           format="DD-MM-YYYY"
@@ -453,28 +447,28 @@ export const getColumnDateProps = (
           onOk={() => {
             handleSearch(selectedKeys, confirm);
           }}
-          style={{ marginRight: 8 }}
+          style={{marginRight: 8}}
         />
         <Space>
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
           >
-            {formatMessage({ id: 'common.search' })}
+            {formatMessage({id: 'common.search'})}
           </Button>
           <Button
             onClick={() => handleReset(clearFilters, confirm)}
             size="small"
           >
-            {formatMessage({ id: 'common.reset' })}
+            {formatMessage({id: 'common.reset'})}
           </Button>
         </Space>
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <FilterOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      <FilterOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
     ),
     render: (text: string) => text,
   };
@@ -487,12 +481,12 @@ export const getColumnDateTimeProps = (
 ): ColumnSearchProps => {
   return {
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters = () => void 0,
-    }: FilterDropdownProps) => (
-      <div style={{ padding: 8 }}>
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters = () => void 0,
+                     }: FilterDropdownProps) => (
+      <div style={{padding: 8}}>
         <DatePicker
           placeholder={title}
           format="DD-MM-YYYY HH:mm:ss A"
@@ -508,7 +502,7 @@ export const getColumnDateTimeProps = (
               setSelectedKeys([]);
             }
           }}
-          style={{ marginRight: 8 }}
+          style={{marginRight: 8}}
         />
         <Space>
           <Button
@@ -516,22 +510,22 @@ export const getColumnDateTimeProps = (
             onClick={() => {
               handleSearch(selectedKeys, confirm);
             }}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
           >
-            {formatMessage({ id: 'common.search' })}
+            {formatMessage({id: 'common.search'})}
           </Button>
           <Button
             onClick={() => handleReset(clearFilters, confirm)}
             size="small"
           >
-            {formatMessage({ id: 'common.reset' })}
+            {formatMessage({id: 'common.reset'})}
           </Button>
         </Space>
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <FilterOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      <FilterOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
     ),
     render: (text: string) => text,
   };
@@ -544,12 +538,12 @@ export const getColumnReturnPeriodProps = (
 ): ColumnSearchProps => {
   return {
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters = () => void 0,
-    }: FilterDropdownProps) => (
-      <div style={{ padding: 8 }}>
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters = () => void 0,
+                     }: FilterDropdownProps) => (
+      <div style={{padding: 8}}>
         <DatePicker.RangePicker
           placeholder={['Start date', 'End date']}
           value={selectedKeys as [Dayjs | null, Dayjs | null]}
@@ -560,28 +554,28 @@ export const getColumnReturnPeriodProps = (
           onOk={() => {
             handleSearch(selectedKeys, confirm);
           }}
-          style={{ marginBottom: 8 }}
+          style={{marginBottom: 8}}
         />
         <Space>
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
           >
-            {formatMessage({ id: 'common.search' })}
+            {formatMessage({id: 'common.search'})}
           </Button>
           <Button
             onClick={() => handleReset(clearFilters, confirm)}
             size="small"
           >
-            {formatMessage({ id: 'common.reset' })}
+            {formatMessage({id: 'common.reset'})}
           </Button>
         </Space>
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <FilterOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+      <FilterOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
     ),
     render: (text: string) => text,
   };
@@ -597,27 +591,27 @@ export type ColumnConfig = {
 };
 
 export const getActionColumn = (): ColumnConfig => {
-  return { align: 'center', fixed: 'right' };
+  return {align: 'center', fixed: 'right'};
 };
 
 export const getFirstColumn = (): ColumnConfig => {
-  return { align: 'left' };
+  return {align: 'left'};
 };
 
 export const getAmountColumn = (): ColumnConfig => {
-  return { align: 'right' };
+  return {align: 'right'};
 };
 
 export const getNumberColumn = (): ColumnConfig => {
-  return { align: 'right' };
+  return {align: 'right'};
 };
 
 export const getSpecialColumn = (): ColumnConfig => {
-  return { align: 'center' };
+  return {align: 'center'};
 };
 
 export const getDateColumn = (): ColumnConfig => {
-  return { align: 'right' };
+  return {align: 'right'};
 };
 
 const handleReset = (clearFilters: () => void, confirm: () => void): void => {

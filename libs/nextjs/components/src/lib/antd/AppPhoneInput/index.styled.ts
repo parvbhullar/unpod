@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Select } from 'antd';
-import { AppInput } from '../index';
+import {Select} from 'antd';
+import {AppInput} from '../index';
 
 export const StyledAppInput = styled(AppInput as any)`
   .ant-input-group-addon {

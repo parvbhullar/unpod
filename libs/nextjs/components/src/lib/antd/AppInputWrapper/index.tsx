@@ -1,24 +1,24 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import clsx from 'clsx';
 import styled from 'styled-components';
 
 const StyledInputWrapper = styled.div`
   display: inline-flex;
   align-items: center;
-  border: ${({ theme }) => theme.border.width}
-    ${({ theme }) => theme.border.style} ${({ theme }) => theme.border.color};
-  border-radius: ${({ theme }) => theme.radius.base}px;
+  border: ${({theme}) => theme.border.width}
+    ${({theme}) => theme.border.style} ${({theme}) => theme.border.color};
+  border-radius: ${({theme}) => theme.radius.base}px;
   font-size: 14px;
   padding: 0 11px;
   height: 40px;
 
-  /*@media screen and (min-width: ${({ theme }) => theme.breakpoints.xxl}px) {
+  /*@media screen and (min-width: ${({theme}) => theme.breakpoints.xxl}px) {
     height: 45px;
-    font-size: ${({ theme }) => theme.font.size.lg};
+    font-size: ${({theme}) => theme.font.size.lg};
   }
 
-  @media screen and (min-width: ${({ theme }) =>
-    theme.breakpoints.md + 320}px) {
+  @media screen and (min-width: ${({theme}) =>
+  theme.breakpoints.md + 320}px) {
     height: 50px;
   }*/
 
@@ -30,12 +30,13 @@ const StyledInputWrapper = styled.div`
 type AppInputWrapperProps = {
   className?: string;
   children?: ReactNode;
-  [key: string]: unknown;};
+  [key: string]: unknown;
+};
 
 const AppInputWrapper: React.FC<AppInputWrapperProps> = ({
-  className,
-  ...props
-}) => {
+                                                           className,
+                                                           ...props
+                                                         }) => {
   return (
     <StyledInputWrapper
       role="input-wrapper"

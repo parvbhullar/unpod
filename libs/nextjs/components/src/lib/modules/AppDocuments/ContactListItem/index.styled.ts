@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
-const { Paragraph } = Typography;
+const {Paragraph} = Typography;
 
 export const StyledRoot = styled.div`
   display: flex;
@@ -11,12 +11,12 @@ export const StyledRoot = styled.div`
   padding: 10px 10px 10px 16px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 
   &.active,
   &.selected {
-    background-color: ${({ theme }) => theme.palette.primaryHover};
+    background-color: ${({theme}) => theme.palette.primaryHover};
   }
 `;
 
@@ -47,7 +47,7 @@ export const StyledMeta = styled(Typography.Paragraph)`
     font-size: 14px !important;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.sm}px) {
     margin-bottom: 3px !important;
   }
 `;

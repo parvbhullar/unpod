@@ -1,5 +1,5 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { useDebounce } from 'react-use';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import {useDebounce} from 'react-use';
 import {
   selectAudioTrackByPeerID,
   selectLocalPeerID,
@@ -11,27 +11,24 @@ import {
   useParticipants,
 } from '@100mslive/react-sdk';
 
-import { ConnectionIndicator } from '../../Connection/ConnectionIndicator';
-import { RoleChangeModal } from '../RoleChangeModal';
-import { TbHandOff } from 'react-icons/tb';
+import {ConnectionIndicator} from '../../Connection/ConnectionIndicator';
+import {RoleChangeModal} from '../RoleChangeModal';
+import {TbHandOff} from 'react-icons/tb';
 // import { ParticipantFilter } from './ParticipantFilter';
-import {
-  useIsSidepaneTypeOpen,
-  useSidepaneToggle,
-} from '../../../AppData/useSidepane';
+import {useIsSidepaneTypeOpen, useSidepaneToggle,} from '../../../AppData/useSidepane';
 // import { isInternalRole } from '../../../common/utils';
-import { SIDE_PANE_OPTIONS } from '../../../common/constants';
-import { Avatar, Button, Dropdown, Input, Slider, Space } from 'antd';
-import { StyledContainer } from './index.styled';
+import {SIDE_PANE_OPTIONS} from '../../../common/constants';
+import {Avatar, Button, Dropdown, Input, Slider, Space} from 'antd';
+import {StyledContainer} from './index.styled';
 // import { FiUserMinus } from 'react-icons/fi';
-import { MdMoreVert, MdPeople } from 'react-icons/md';
-import { getFirstLetter } from '@unpod/helpers/StringHelper';
-import { isInternalRole } from '../../../common/utils';
-import { HiOutlineSpeakerWave } from 'react-icons/hi2';
+import {MdMoreVert, MdPeople} from 'react-icons/md';
+import {getFirstLetter} from '@unpod/helpers/StringHelper';
+import {isInternalRole} from '../../../common/utils';
+import {HiOutlineSpeakerWave} from 'react-icons/hi2';
 
 export const ParticipantList = () => {
   const [filter, setFilter] = useState();
-  const { participants, isConnected, peerCount, rolesWithParticipants } =
+  const {participants, isConnected, peerCount, rolesWithParticipants} =
     useParticipants(filter);
   const [selectedPeerId, setSelectedPeerId] = useState(null);
   const onSearch = useCallback((value) => {
@@ -40,7 +37,7 @@ export const ParticipantList = () => {
         filterValue = {};
       }
       filterValue.search = value;
-      return { ...filterValue };
+      return {...filterValue};
     });
   }, []);
   if (peerCount === 0) {
@@ -49,9 +46,9 @@ export const ParticipantList = () => {
 
   return (
     <Fragment>
-      <StyledContainer direction="column" css={{ size: '100%' }}>
+      <StyledContainer direction="column" css={{size: '100%'}}>
         {!filter?.search && participants.length === 0 ? null : (
-          <ParticipantSearch onSearch={onSearch} />
+          <ParticipantSearch onSearch={onSearch}/>
         )}
         {participants.length === 0 && (
           <StyledContainer
@@ -114,7 +111,7 @@ export const ParticipantCount = () => {
       }}
       active={!isParticipantsOpen}
       data-testid="participant_list"
-      icon={<MdPeople />}
+      icon={<MdPeople/>}
     >
       {peerCount}
     </Button>
@@ -126,10 +123,10 @@ function itemKey(index, data) {
 }
 
 const VirtualizedParticipants = ({
-  participants,
-  isConnected,
-  setSelectedPeerId,
-}) => {
+                                   participants,
+                                   isConnected,
+                                   setSelectedPeerId,
+                                 }) => {
   return (
     <div
       style={{
@@ -149,7 +146,7 @@ const VirtualizedParticipants = ({
   );
 };
 
-const Participant = ({ peer, isConnected, setSelectedPeerId }) => {
+const Participant = ({peer, isConnected, setSelectedPeerId}) => {
   const metaData = useHMSStore(selectPeerMetadata(peer.id));
   return (
     <StyledContainer
@@ -174,8 +171,8 @@ const Participant = ({ peer, isConnected, setSelectedPeerId }) => {
       >
         {getFirstLetter(peer.name)}
       </Avatar>
-      <StyledContainer direction="column" css={{ flex: '1 1 0' }}>
-        <div style={{ fontWeight: 500 }}>{peer.name}</div>
+      <StyledContainer direction="column" css={{flex: '1 1 0'}}>
+        <div style={{fontWeight: 500}}>{peer.name}</div>
         <div>{peer.roleName}</div>
       </StyledContainer>
       {isConnected && (
@@ -194,7 +191,7 @@ const Participant = ({ peer, isConnected, setSelectedPeerId }) => {
 /**
  * shows settings to change for a participant like changing their role
  */
-const ParticipantActions = React.memo(({ onSettings, peerId, role }) => {
+const ParticipantActions = React.memo(({onSettings, peerId, role}) => {
   const isHandRaised = useHMSStore(selectPeerMetadata(peerId))?.isHandRaised;
   const canChangeRole = useHMSStore(selectPermissions)?.changeRole;
   const audioTrack = useHMSStore(selectAudioTrackByPeerID(peerId));
@@ -211,8 +208,8 @@ const ParticipantActions = React.memo(({ onSettings, peerId, role }) => {
         fontSize: 20,
       }}
     >
-      <ConnectionIndicator peerId={peerId} />
-      {isHandRaised && <TbHandOff />}
+      <ConnectionIndicator peerId={peerId}/>
+      {isHandRaised && <TbHandOff/>}
       {shouldShowMoreActions && !isInternalRole(role) && (
         <ParticipantMoreActions
           onRoleChange={onSettings}
@@ -224,8 +221,8 @@ const ParticipantActions = React.memo(({ onSettings, peerId, role }) => {
   );
 });
 
-const ParticipantMoreActions = ({ onRoleChange, peerId }) => {
-  const { changeRole: canChangeRole, removeOthers: canRemoveOthers } =
+const ParticipantMoreActions = ({onRoleChange, peerId}) => {
+  const {changeRole: canChangeRole, removeOthers: canRemoveOthers} =
     useHMSStore(selectPermissions);
   const localPeerId = useHMSStore(selectLocalPeerID);
   const isLocal = localPeerId === peerId;
@@ -240,7 +237,7 @@ const ParticipantMoreActions = ({ onRoleChange, peerId }) => {
         key: 'changeRole',
       });
     }
-    const volume = ParticipantVolume({ peerId });
+    const volume = ParticipantVolume({peerId});
     if (volume) {
       items.push({
         label: volume,
@@ -260,7 +257,7 @@ const ParticipantMoreActions = ({ onRoleChange, peerId }) => {
     await actions.removePeer(peerId, '');
   };
 
-  const onClick = ({ key }) => {
+  const onClick = ({key}) => {
     switch (key) {
       case 'changeRole':
         return onRoleChange(peerId);
@@ -270,15 +267,15 @@ const ParticipantMoreActions = ({ onRoleChange, peerId }) => {
   };
   return (
     <Dropdown
-      menu={{ items: getItems(), onClick: onClick }}
+      menu={{items: getItems(), onClick: onClick}}
       trigger={['click']}
     >
-      <MdMoreVert />
+      <MdMoreVert/>
     </Dropdown>
   );
 };
 
-const ParticipantVolume = ({ peerId }) => {
+const ParticipantVolume = ({peerId}) => {
   const audioTrack = useHMSStore(selectAudioTrackByPeerID(peerId));
   const localPeerId = useHMSStore(selectLocalPeerID);
   const hmsActions = useHMSActions();
@@ -288,13 +285,13 @@ const ParticipantVolume = ({ peerId }) => {
   }
 
   return (
-    <StyledContainer style={{ width: '100%', minWidth: 220 }}>
+    <StyledContainer style={{width: '100%', minWidth: 220}}>
       <Space>
-        <HiOutlineSpeakerWave />
+        <HiOutlineSpeakerWave/>
         <span>Volume{audioTrack.volume ? `(${audioTrack.volume})` : ''}</span>
       </Space>
       <Slider
-        style={{ marginTop: '0.5rem' }}
+        style={{marginTop: '0.5rem'}}
         step={5}
         value={audioTrack?.volume}
         onChange={(value) => {
@@ -306,7 +303,7 @@ const ParticipantVolume = ({ peerId }) => {
   );
 };
 
-export const ParticipantSearch = ({ onSearch, placeholder }) => {
+export const ParticipantSearch = ({onSearch, placeholder}) => {
   const [value, setValue] = React.useState('');
   useDebounce(
     () => {
@@ -316,11 +313,11 @@ export const ParticipantSearch = ({ onSearch, placeholder }) => {
     [value, onSearch]
   );
   return (
-    <div style={{ margin: ' 0 16px', marginTop: 12, position: 'relative' }}>
+    <div style={{margin: ' 0 16px', marginTop: 12, position: 'relative'}}>
       <Input
         type="text"
         placeholder={placeholder || 'Find what you are looking for'}
-        style={{ width: '100%', paddingLeft: 14 }}
+        style={{width: '100%', paddingLeft: 14}}
         value={value}
         onKeyDown={(event) => {
           event.stopPropagation();

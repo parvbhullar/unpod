@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { Button, Input } from 'antd';
-import { GlobalTheme } from '@unpod/constants';
+import {Button, Input} from 'antd';
+import {GlobalTheme} from '@unpod/constants';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 export const StyledContainer = styled.div`
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.paper};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.paper};
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
@@ -16,15 +16,15 @@ export const StyledContainer = styled.div`
   overflow: visible;
   transition: all 0.2s ease;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.md}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.md}px) {
     max-width: 100%;
     border-radius: 20px;
     padding: 10px;
   }
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     border-radius: 16px;
     padding: 8px;
   }
@@ -37,8 +37,8 @@ export const StyledInput = styled(TextArea)`
   line-height: 1.5;
 
   &::placeholder {
-    color: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.palette.text.secondary};
+    color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.text.secondary};
     opacity: 0.6;
   }
 `;
@@ -66,8 +66,8 @@ export const StyledBottomBar = styled.div`
   gap: 8px;
   padding-top: 6px;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.sm}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.sm}px) {
     flex-wrap: wrap;
   }
 `;
@@ -80,14 +80,14 @@ export const StyledIconButton = styled(Button)`
   padding: 6px !important;
   height: 32px !important;
   min-width: 32px;
-  color: ${({ theme }: { theme: GlobalTheme }) => theme.palette.text.secondary};
+  color: ${({theme}: { theme: GlobalTheme }) => theme.palette.text.secondary};
   transition: all 0.2s ease;
 
   &:hover {
-    background: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.palette.background.default} !important;
-    color: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.palette.primary} !important;
+    background: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default} !important;
+    color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.primary} !important;
   }
 `;
 
@@ -98,7 +98,7 @@ export const StyledButton = styled(Button)`
   &:hover:not(:disabled) {
     transform: scale(1.05);
     box-shadow: 0 2px 8px
-      ${({ theme }: { theme: GlobalTheme }) => theme.palette.primary}40;
+      ${({theme}: { theme: GlobalTheme }) => theme.palette.primary}40;
   }
 
   &:active:not(:disabled) {

@@ -1,9 +1,9 @@
 'use client';
 
-import { IntlShape, useIntl } from 'react-intl';
-import { useAppActionsContext, useAppContext } from '../context-provider';
+import {IntlShape, useIntl} from 'react-intl';
+import {useAppActionsContext, useAppContext} from '../context-provider';
 import AppLocale from '@unpod/localization';
-import type { LocaleConfig } from '@unpod/constants/types';
+import type {LocaleConfig} from '@unpod/constants/types';
 
 export type UseLocaleResult = {
   locale: string;
@@ -25,8 +25,8 @@ export type UseLocaleResult = {
  */
 export const useLocale = (): UseLocaleResult => {
   const intl = useIntl();
-  const { locale } = useAppContext();
-  const { updateLocale } = useAppActionsContext();
+  const {locale} = useAppContext();
+  const {updateLocale} = useAppActionsContext();
   const currentAppLocale = (
     AppLocale as Record<string, { direction?: 'ltr' | 'rtl' }>
   )[locale.locale];

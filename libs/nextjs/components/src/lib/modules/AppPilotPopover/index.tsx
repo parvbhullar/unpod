@@ -1,21 +1,15 @@
-import type { ChangeEvent } from 'react';
-import { useMemo } from 'react';
+import type {ChangeEvent} from 'react';
+import {useMemo} from 'react';
 
-import { Tooltip } from 'antd';
-import { MdInfoOutline } from 'react-icons/md';
-import { BiBot } from 'react-icons/bi';
-import { useGetDataApi } from '@unpod/providers';
-import { debounce, isArray } from 'lodash';
-import {
-  StyledButton,
-  StyledInputWrapper,
-  StyledKbMenus,
-  StyledMenus,
-  StyledSearchInput,
-} from './index.styled';
-import { AppPopover } from '../../antd';
-import { useIntl } from 'react-intl';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
+import {Tooltip} from 'antd';
+import {MdInfoOutline} from 'react-icons/md';
+import {BiBot} from 'react-icons/bi';
+import {useGetDataApi} from '@unpod/providers';
+import {debounce, isArray} from 'lodash';
+import {StyledButton, StyledInputWrapper, StyledKbMenus, StyledMenus, StyledSearchInput,} from './index.styled';
+import {AppPopover} from '../../antd';
+import {useIntl} from 'react-intl';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
 
 /*export const defaultPilot = {
   slug: 'multi-ai',
@@ -27,30 +21,30 @@ const focusData = [
   {
     key: 'my_space',
     label: 'pilot.mySpace',
-    icon: <BiBot fontSize={18} />,
+    icon: <BiBot fontSize={18}/>,
     rightIcon: (
       <Tooltip title="pilot.mySpaceInfo">
-        <MdInfoOutline fontSize={18} />
+        <MdInfoOutline fontSize={18}/>
       </Tooltip>
     ),
   },
   {
     key: 'public',
     label: 'pilot.public',
-    icon: <BiBot fontSize={18} />,
+    icon: <BiBot fontSize={18}/>,
     rightIcon: (
       <Tooltip title="pilot.publicInfo">
-        <MdInfoOutline fontSize={18} />
+        <MdInfoOutline fontSize={18}/>
       </Tooltip>
     ),
   },
   {
     key: 'my_agents',
     label: 'pilot.myAgents',
-    icon: <BiBot fontSize={18} />,
+    icon: <BiBot fontSize={18}/>,
     rightIcon: (
       <Tooltip title="pilot.myAgentsInfo">
-        <MdInfoOutline fontSize={18} />
+        <MdInfoOutline fontSize={18}/>
       </Tooltip>
     ),
   },
@@ -68,19 +62,20 @@ type AppPilotPopoverProps = {
   setPilot: (pilot: PilotItem | null) => void;
   focus?: string;
   setFocus: (focus: string) => void;
-  isMySpace?: boolean;};
+  isMySpace?: boolean;
+};
 
 const AppPilotPopover = ({
-  pilot,
-  setPilot,
-  focus,
-  setFocus,
-  isMySpace,
-}: AppPilotPopoverProps) => {
-  const { formatMessage } = useIntl();
-  const [{ apiData }, { setQueryParams }] = useGetDataApi(
+                           pilot,
+                           setPilot,
+                           focus,
+                           setFocus,
+                           isMySpace,
+                         }: AppPilotPopoverProps) => {
+  const {formatMessage} = useIntl();
+  const [{apiData}, {setQueryParams}] = useGetDataApi(
     `core/pilots/org/`,
-    { data: [] },
+    {data: []},
     {},
   );
 
@@ -138,7 +133,7 @@ const AppPilotPopover = ({
         return {
           key: itemKey,
           label: item.name,
-          icon: <BiBot fontSize={18} />,
+          icon: <BiBot fontSize={18}/>,
           onClick: () => onItemClick(item),
         };
       });
@@ -147,7 +142,7 @@ const AppPilotPopover = ({
   }, [apiData, setPilot, setFocus]);
 
   const onSearch = (value: string) => {
-    setQueryParams({ search: value });
+    setQueryParams({search: value});
   };
 
   const focusItem = focusData.find((item) => item.key === focus);
@@ -164,7 +159,7 @@ const AppPilotPopover = ({
             />
             <StyledInputWrapper>
               <StyledSearchInput
-                placeholder={formatMessage({ id: 'agent.searchAgents' })}
+                placeholder={formatMessage({id: 'agent.searchAgents'})}
                 onChange={
                   debounce(
                     (event: ChangeEvent<HTMLInputElement>) =>
@@ -185,14 +180,14 @@ const AppPilotPopover = ({
       >
         {pilot ? (
           <StyledButton type="default" shape="round">
-            <BiBot fontSize={18} />
+            <BiBot fontSize={18}/>
             {pilot.name}
           </StyledButton>
         ) : (
           <StyledButton type="default" shape="round">
-            {focusItem?.icon || <BiBot fontSize={18} />}
-            {formatMessage({ id: focusItem?.label }) ||
-              formatMessage({ id: 'appSpaceCallModal.selectAgent' })}
+            {focusItem?.icon || <BiBot fontSize={18}/>}
+            {formatMessage({id: focusItem?.label}) ||
+              formatMessage({id: 'appSpaceCallModal.selectAgent'})}
           </StyledButton>
         )}
       </AppPopover>

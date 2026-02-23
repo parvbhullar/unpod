@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Avatar } from 'antd';
+import {Avatar} from 'antd';
 
 const getAvatarShape = (radius) => {
   return radius;
@@ -25,7 +25,7 @@ export const Overlay = styled.div`
 `;
 
 export const Info = styled.div`
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
   position: absolute;
   bottom: 5px;
   left: 50%;
@@ -40,7 +40,7 @@ export const Info = styled.div`
 
 export const AttributeBox = styled.div`
   position: absolute;
-  color: ${({ theme }) => theme.palette.text.primary};
+  color: ${({theme}) => theme.palette.text.primary};
 `;
 
 export const AudioIndicator = styled(Avatar)`
@@ -70,14 +70,14 @@ export const StyledMenuWrapper = styled(Avatar)`
   /*width: 40px;
   height: 40px;*/
   z-index: 101;
-  opacity: ${({ $isMouseHovered }) => ($isMouseHovered ? 1 : 0)};
+  opacity: ${({$isMouseHovered}) => ($isMouseHovered ? 1 : 0)};
   transition: opacity 0.2s ease-in;
 `;
 
 export const StyledRaiseHand = styled(AudioIndicator)`
   top: 8px;
   left: 8px;
-  background-color: ${({ theme }) => theme.palette.primary};
+  background-color: ${({theme}) => theme.palette.primary};
 `;
 
 export const StyledBRB = styled.div`

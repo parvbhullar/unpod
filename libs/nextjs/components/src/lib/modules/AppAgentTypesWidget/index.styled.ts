@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GlobalTheme } from '@unpod/constants';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledRoot = styled('div')`
   display: flex;
@@ -28,9 +28,9 @@ export const StyledItemRoot = styled('div')`
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background-color: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.palette.background.default};
-  border: 1px solid ${({ theme }: { theme: GlobalTheme }) => theme.border.color};
+  background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.default};
+  border: 1px solid ${({theme}: { theme: GlobalTheme }) => theme.border.color};
   border-radius: 16px;
   cursor: pointer;
   max-width: 100%;
@@ -38,8 +38,8 @@ export const StyledItemRoot = styled('div')`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.palette.background.component};
+    background-color: ${({theme}: { theme: GlobalTheme }) =>
+  theme.palette.background.component};
   }
 `;
 

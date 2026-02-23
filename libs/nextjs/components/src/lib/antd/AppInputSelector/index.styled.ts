@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Divider } from 'antd';
+import {Divider} from 'antd';
 
 export const StyledList = styled.ul`
   padding: 0;

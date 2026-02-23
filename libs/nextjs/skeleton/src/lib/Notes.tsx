@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SkeletonInput } from './common/SkeletonInput';
+import {SkeletonInput} from './common/SkeletonInput';
 import SkeletonAvatar from './common/SkeletonAvatar';
 
 const StyledConversationItem = styled.div`
@@ -30,7 +30,7 @@ const NotesSkeleton: React.FC = () => {
     <StyledConversationItem>
       {[...Array(20)].map((_, idx) => (
         <StyledItem key={`item-${idx + 1}`}>
-          <SkeletonAvatar size={32} />
+          <SkeletonAvatar size={32}/>
           <StyledContent>
             <div
               style={{
@@ -40,10 +40,10 @@ const NotesSkeleton: React.FC = () => {
               }}
             >
               <SkeletonInput
-                style={{ width: 140, height: 14, minWidth: 140 }}
+                style={{width: 140, height: 14, minWidth: 140}}
               />
               <SkeletonInput
-                style={{ width: '20%', height: 10, minWidth: 90 }}
+                style={{width: '20%', height: 10, minWidth: 90}}
               />
             </div>
 
@@ -71,8 +71,8 @@ const NotesSkeleton: React.FC = () => {
                   display: 'block',
                 }}
               />
-              <SkeletonAvatar size={16} />
-              <SkeletonAvatar size={6} />
+              <SkeletonAvatar size={16}/>
+              <SkeletonAvatar size={6}/>
             </div>
           </StyledContent>
         </StyledItem>
@@ -81,4 +81,4 @@ const NotesSkeleton: React.FC = () => {
   );
 };
 
-export { NotesSkeleton };
+export {NotesSkeleton};

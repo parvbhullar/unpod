@@ -1,7 +1,7 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
-import type { SegmentedProps } from 'antd';
-import { Button, Divider, Dropdown } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
+import React, {ReactNode, useEffect, useRef} from 'react';
+import type {SegmentedProps} from 'antd';
+import {Button, Divider, Dropdown} from 'antd';
+import {MoreOutlined} from '@ant-design/icons';
 import {
   StyledMobileTabsContent,
   StyledScrollArea,
@@ -9,28 +9,30 @@ import {
   StyledTabsContent,
   StyledWrapper,
 } from './index.styled';
-import { useMediaQuery } from 'react-responsive';
-import { MobileWidthQuery } from '@unpod/constants';
+import {useMediaQuery} from 'react-responsive';
+import {MobileWidthQuery} from '@unpod/constants';
 
 type SegmentedTab = {
   value: string | number;
   label: ReactNode;
-  icon?: ReactNode;};
+  icon?: ReactNode;
+};
 
 type AppSegmentedProps = {
   value?: string | number;
   onChange: (value: string | number) => void;
   tabs: SegmentedTab[];
   divider?: boolean;
-  CenterSegmented?: boolean;};
+  CenterSegmented?: boolean;
+};
 
 const AppSegmented: React.FC<AppSegmentedProps> = ({
-  value,
-  onChange,
-  tabs,
-  divider = true,
-  CenterSegmented = true,
-}) => {
+                                                     value,
+                                                     onChange,
+                                                     tabs,
+                                                     divider = true,
+                                                     CenterSegmented = true,
+                                                   }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mobileScreen = useMediaQuery(MobileWidthQuery);
 
@@ -90,11 +92,11 @@ const AppSegmented: React.FC<AppSegmentedProps> = ({
             }}
             trigger={['click']}
           >
-            <Button icon={<MoreOutlined />} type="text" />
+            <Button icon={<MoreOutlined/>} type="text"/>
           </Dropdown>
         )}
       </StyledWrapper>
-      {divider && <Divider style={{ margin: 0 }} />}
+      {divider && <Divider style={{margin: 0}}/>}
     </>
   );
 };

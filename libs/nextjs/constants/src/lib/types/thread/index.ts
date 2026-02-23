@@ -1,6 +1,6 @@
-import type { Organization } from '../organization';
-import type { Spaces } from '../space';
-import type { User } from '../user';
+import type {Organization} from '../organization';
+import type {Spaces} from '../space';
+import type {User} from '../user';
 
 export type Thread = {
   post_id?: string | number;

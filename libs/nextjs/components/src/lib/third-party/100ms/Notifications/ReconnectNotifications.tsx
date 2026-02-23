@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
-import {
-  HMSNotificationTypes,
-  useHMSNotifications,
-} from '@100mslive/react-sdk';
-import { ToastManager } from '../Toast/ToastManager';
-import { ToastConfig } from '../Toast/ToastConfig';
-import { Modal, Spin } from 'antd';
+import {useEffect, useState} from 'react';
+import {HMSNotificationTypes, useHMSNotifications,} from '@100mslive/react-sdk';
+import {ToastManager} from '../Toast/ToastManager';
+import {ToastConfig} from '../Toast/ToastConfig';
+import {Modal, Spin} from 'antd';
 
 const notificationTypes = [
   HMSNotificationTypes.RECONNECTED,
@@ -67,10 +64,10 @@ export const ReconnectNotifications = () => {
             flexDirection: 'column',
           }}
         >
-          <div style={{ display: 'inline', margin: '0.25rem' }}>
-            <Spin size="large" />
+          <div style={{display: 'inline', margin: '0.25rem'}}>
+            <Spin size="large"/>
           </div>
-          <div css={{ fontSize: 14 }}>
+          <div css={{fontSize: 14}}>
             You lost your network connection. Trying to reconnect.
           </div>
         </div>

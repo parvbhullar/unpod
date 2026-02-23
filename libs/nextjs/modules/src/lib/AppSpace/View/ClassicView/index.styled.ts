@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledThreadContainer = styled.div`
   display: flex;
   position: relative;
-  //border-radius: ${({ theme }) => theme.component.card.borderRadius};
+  //border-radius: ${({theme}) => theme.component.card.borderRadius};
   overflow: hidden;
   // height: calc(100vh - 74px);
   gap: 5px;
@@ -17,13 +17,13 @@ export const StyledThreadContainer = styled.div`
 `;
 
 export const StyledLeftPanel = styled.div`
-  border-left: 1px solid ${({ theme }) => theme.border.color};
+  border-left: 1px solid ${({theme}) => theme.border.color};
   position: relative;
   height: 100%;
 `;
 
 export const StyledRightPanel = styled(StyledLeftPanel)`
-  background-color: ${({ theme }) => theme.palette.background.default};
+  background-color: ${({theme}) => theme.palette.background.default};
   overflow: hidden;
   flex: 1;
   //background-color: transparent;

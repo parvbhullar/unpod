@@ -1,36 +1,14 @@
-import {
-  type ChangeEvent,
-  Fragment,
-  type KeyboardEvent,
-  type MouseEvent,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import {type ChangeEvent, Fragment, type KeyboardEvent, type MouseEvent, useEffect, useMemo, useState,} from 'react';
 import clsx from 'clsx';
-import {
-  Badge,
-  Button,
-  Dropdown,
-  Form,
-  Row,
-  Space,
-  Typography,
-  Upload,
-} from 'antd';
-import {
-  MdArrowForward,
-  MdClose,
-  MdDelete,
-  MdOutlineAttachment,
-} from 'react-icons/md';
-import { BsArrowReturnLeft } from 'react-icons/bs';
-import { uploadDataApi, useInfoViewActionsContext } from '@unpod/providers';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { AskAttachmentTypes } from '@unpod/constants';
-import { POST_TYPE } from '@unpod/constants/AppEnums';
+import {Badge, Button, Dropdown, Form, Row, Space, Typography, Upload,} from 'antd';
+import {MdArrowForward, MdClose, MdDelete, MdOutlineAttachment,} from 'react-icons/md';
+import {BsArrowReturnLeft} from 'react-icons/bs';
+import {uploadDataApi, useInfoViewActionsContext} from '@unpod/providers';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {AskAttachmentTypes} from '@unpod/constants';
+import {POST_TYPE} from '@unpod/constants/AppEnums';
 import AppLoader from '@unpod/components/common/AppLoader';
-import { getStringFromHtml } from '@unpod/helpers/GlobalHelper';
+import {getStringFromHtml} from '@unpod/helpers/GlobalHelper';
 import {
   StyledBottomBar,
   StyledDivider,
@@ -41,9 +19,9 @@ import {
   StyledPilotContainer,
   StyledPilotRoot,
 } from './index.styled';
-import { useIntl } from 'react-intl';
+import {useIntl} from 'react-intl';
 
-const { Item, useForm } = Form;
+const {Item, useForm} = Form;
 
 type PilotInputWindowProps = {
   currentPost: any;
@@ -53,11 +31,11 @@ type PilotInputWindowProps = {
 };
 
 const PilotInputWindow = ({
-  currentPost,
-  replyParent,
-  setReplyParent,
-  sendJsonMessage,
-}: PilotInputWindowProps) => {
+                            currentPost,
+                            replyParent,
+                            setReplyParent,
+                            sendJsonMessage,
+                          }: PilotInputWindowProps) => {
   const infoViewActionsContext = useInfoViewActionsContext();
   const [focused, setFocused] = useState(false);
   const [newQuery, setNewQuery] = useState<string | null>(null);
@@ -65,7 +43,7 @@ const PilotInputWindow = ({
   const [form] = useForm();
   const [attachments, setAttachments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   useEffect(() => {
     if (currentPost?.slug) {
@@ -164,7 +142,7 @@ const PilotInputWindow = ({
           !AskAttachmentTypes.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setAttachments((prevState) => [...prevState, file]);
@@ -185,7 +163,7 @@ const PilotInputWindow = ({
       key: item.uid,
       label: (
         <Row justify="space-between" align="middle">
-          <Typography.Text style={{ marginRight: 5 }}>
+          <Typography.Text style={{marginRight: 5}}>
             {item.name}
           </Typography.Text>
           <MdDelete
@@ -206,15 +184,15 @@ const PilotInputWindow = ({
           <StyledPilotContainer
             onFocus={onFocused}
             onMouseDown={onFocused}
-            className={clsx({ focused: focused })}
+            className={clsx({focused: focused})}
           >
             {replyParent && (
               <StyledParentContainer>
                 <StyledParent>
-                  <BsArrowReturnLeft fontSize={16} />
+                  <BsArrowReturnLeft fontSize={16}/>
                   <Typography.Paragraph type="secondary" ellipsis>
                     {formatMessage(
-                      { id: 'ask.replyingTo' },
+                      {id: 'ask.replyingTo'},
                       {
                         name: replyParent.title
                           ? replyParent.title
@@ -225,20 +203,20 @@ const PilotInputWindow = ({
 
                   <Button
                     type="text"
-                    icon={<MdClose fontSize={16} />}
+                    icon={<MdClose fontSize={16}/>}
                     size="small"
                     onClick={() => setReplyParent(null)}
                   />
                 </StyledParent>
-                <StyledDivider />
+                <StyledDivider/>
               </StyledParentContainer>
             )}
 
             <Item name="content">
               <StyledInput
-                placeholder={formatMessage({ id: 'ask.askFollowup' })}
+                placeholder={formatMessage({id: 'ask.askFollowup'})}
                 variant="borderless"
-                autoSize={{ minRows: 1, maxRows: 10 }}
+                autoSize={{minRows: 1, maxRows: 10}}
                 onPressEnter={(e: KeyboardEvent<HTMLTextAreaElement>) => {
                   if (!e.shiftKey) {
                     e.preventDefault();
@@ -280,7 +258,7 @@ const PilotInputWindow = ({
                           type={attachments?.length ? 'primary' : 'default'}
                           shape="circle"
                           size="small"
-                          icon={<MdOutlineAttachment fontSize={18} />}
+                          icon={<MdOutlineAttachment fontSize={18}/>}
                         />
                       </Badge>
                     </Dropdown>
@@ -289,7 +267,7 @@ const PilotInputWindow = ({
                       type={attachments?.length ? 'primary' : 'default'}
                       shape="circle"
                       size="small"
-                      icon={<MdOutlineAttachment fontSize={18} />}
+                      icon={<MdOutlineAttachment fontSize={18}/>}
                     />
                   )}
                 </Upload>
@@ -299,7 +277,7 @@ const PilotInputWindow = ({
                   shape="circle"
                   size="small"
                   htmlType="submit"
-                  icon={<MdArrowForward fontSize={18} />}
+                  icon={<MdArrowForward fontSize={18}/>}
                 />
               </Space>
             </StyledBottomBar>
@@ -309,10 +287,10 @@ const PilotInputWindow = ({
 
       <StyledOverlay
         onClick={onOverlayClick}
-        className={clsx({ focused: focused })}
+        className={clsx({focused: focused})}
       />
 
-      {loading && <AppLoader />}
+      {loading && <AppLoader/>}
     </Fragment>
   );
 };

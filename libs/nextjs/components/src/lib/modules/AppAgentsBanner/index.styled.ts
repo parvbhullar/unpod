@@ -1,22 +1,22 @@
 import styled from 'styled-components';
-import { GlobalTheme } from '@unpod/constants';
+import {GlobalTheme} from '@unpod/constants';
 
 export const StyledBannerContainer = styled.div`
-  width: ${({ theme }: { theme: GlobalTheme }) => theme.sizes.mainContentWidth};
+  width: ${({theme}: { theme: GlobalTheme }) => theme.sizes.mainContentWidth};
   max-width: 100%;
   margin: 16px auto 0 auto;
   text-align: center;
 
-  @media (max-width: ${({ theme }: { theme: GlobalTheme }) =>
-      theme.breakpoints.md + 75}px) {
+  @media (max-width: ${({theme}: { theme: GlobalTheme }) =>
+  theme.breakpoints.md + 75}px) {
     margin: 0 auto 16px;
   }
 `;
 
 export const StyledImageWrapper = styled.div`
   position: relative;
-  border-radius: ${({ theme }: { theme: GlobalTheme }) =>
-    theme.component.card.borderRadius};
+  border-radius: ${({theme}: { theme: GlobalTheme }) =>
+  theme.component.card.borderRadius};
   overflow: hidden;
   margin-bottom: 16px;
 

@@ -1,22 +1,23 @@
-
-import { StyledMuxPlayer } from './index.styled';
-import { useAuthContext } from '@unpod/providers';
+import {StyledMuxPlayer} from './index.styled';
+import {useAuthContext} from '@unpod/providers';
 
 type MediaInfo = {
   playback_id: string;
-  media_id?: string;};
+  media_id?: string;
+};
 
 type AppVideoPlayerProps = {
   title?: string;
   media: MediaInfo;
-  poster?: string;};
+  poster?: string;
+};
 
 const AppVideoPlayer: React.FC<AppVideoPlayerProps> = ({
-  title,
-  media,
-  poster,
-}) => {
-  const { user } = useAuthContext();
+                                                         title,
+                                                         media,
+                                                         poster,
+                                                       }) => {
+  const {user} = useAuthContext();
 
   return (
     <StyledMuxPlayer

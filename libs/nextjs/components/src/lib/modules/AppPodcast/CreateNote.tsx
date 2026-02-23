@@ -1,55 +1,35 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  postDataApi,
-  putDataApi,
-  uploadDataApi,
-  useGetDataApi,
-  useInfoViewActionsContext,
-} from '@unpod/providers';
-import { PERMISSION_TYPES } from '@unpod/constants';
-import { getFileExtension } from '@unpod/helpers/FileHelper';
-import { Dropdown, Form, Progress, Row, Space, Typography, Upload } from 'antd';
-import {
-  AppMiniWindowBody,
-  AppMiniWindowFooter,
-} from '../../common/AppMiniWindow';
+import {postDataApi, putDataApi, uploadDataApi, useGetDataApi, useInfoViewActionsContext,} from '@unpod/providers';
+import {PERMISSION_TYPES} from '@unpod/constants';
+import {getFileExtension} from '@unpod/helpers/FileHelper';
+import {Dropdown, Form, Progress, Row, Space, Typography, Upload} from 'antd';
+import {AppMiniWindowBody, AppMiniWindowFooter,} from '../../common/AppMiniWindow';
 
-import {
-  StyledButton,
-  StyledCoverWrapper,
-  StyledDelContainer,
-  StyledFormItem,
-  StyledInput,
-} from './index.styled';
-import {
-  MdClear,
-  MdFormatColorText,
-  MdOutlineImage,
-  MdOutlineWorkspaces,
-} from 'react-icons/md';
-import { useParams, useRouter } from 'next/navigation';
+import {StyledButton, StyledCoverWrapper, StyledDelContainer, StyledFormItem, StyledInput,} from './index.styled';
+import {MdClear, MdFormatColorText, MdOutlineImage, MdOutlineWorkspaces,} from 'react-icons/md';
+import {useParams, useRouter} from 'next/navigation';
 import AppImage from '../../next/AppImage';
 import AppEditor from '../../third-party/AppEditor';
 import PostPermissionPopover from '../../common/PermissionPopover/PostPermissionPopover';
-import { POST_CONTENT_TYPE, POST_TYPE } from '@unpod/constants/AppEnums';
+import {POST_CONTENT_TYPE, POST_TYPE} from '@unpod/constants/AppEnums';
 import _debounce from 'lodash/debounce';
-import { getDraftData, saveDraftData } from '@unpod/helpers/DraftHelper';
-import { getLocalizedOptions } from '@unpod/helpers/LocalizationFormatHelper';
-import { useIntl } from 'react-intl';
+import {getDraftData, saveDraftData} from '@unpod/helpers/DraftHelper';
+import {getLocalizedOptions} from '@unpod/helpers/LocalizationFormatHelper';
+import {useIntl} from 'react-intl';
 
 const acceptTypes = '.png, .jpg, .jpeg';
 
 const CreateNote = ({
-  onSaved,
-  currentSpace,
-  currentPost,
-  isEdit,
-  setCreatingPost,
-}) => {
+                      onSaved,
+                      currentSpace,
+                      currentPost,
+                      isEdit,
+                      setCreatingPost,
+                    }) => {
   const router = useRouter();
   const [form] = Form.useForm();
-  const { spaceSlug, postSlug } = useParams();
+  const {spaceSlug, postSlug} = useParams();
   const infoViewActionsContext = useInfoViewActionsContext();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = React.useState(null);
@@ -63,11 +43,11 @@ const CreateNote = ({
   const [coverUploadPercent, setCoverUploadPercent] = useState(0);
   const [userList, setUserList] = useState([]);
   const [visible, setSetVisible] = useState(false);
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
   const [dataFetched, setDataFetched] = useState(false);
   const debounceFn = useCallback(_debounce(saveDraftData, 2000), []);
 
-  const [{ apiData }] = useGetDataApi(
+  const [{apiData}] = useGetDataApi(
     'spaces/',
     {},
     {},
@@ -191,7 +171,7 @@ const CreateNote = ({
           !acceptTypes?.split('/').includes(file.type?.split('/')[0])))
     ) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.fileTypeNotAllowed' }),
+        formatMessage({id: 'validation.fileTypeNotAllowed'}),
       );
     } else {
       setCoverPreviewUrl(window.URL.createObjectURL(file));
@@ -286,7 +266,7 @@ const CreateNote = ({
   const onSubmitSuccess = (postData) => {
     if (!selectedSpace) {
       infoViewActionsContext.showError(
-        formatMessage({ id: 'validation.selectSpace' }),
+        formatMessage({id: 'validation.selectSpace'}),
       );
     } else {
       const payload = {
@@ -298,7 +278,7 @@ const CreateNote = ({
       };
 
       if (coverImage) {
-        uploadCoverImage(({ media_id }) => {
+        uploadCoverImage(({media_id}) => {
           payload.cover_image = {
             media_id: media_id,
             file_name: coverImage.name,
@@ -340,12 +320,12 @@ const CreateNote = ({
           rules={[
             {
               required: true,
-              message: formatMessage({ id: 'common.titleError' }),
+              message: formatMessage({id: 'common.titleError'}),
             },
           ]}
         >
           <StyledInput
-            placeholder={formatMessage({ id: 'form.title' })}
+            placeholder={formatMessage({id: 'form.title'})}
             variant="borderless"
             onChange={onTitleChange}
           />
@@ -367,7 +347,7 @@ const CreateNote = ({
         </Form.Item>*/}
         <AppEditor
           name="content"
-          placeholder={formatMessage({ id: 'post.content' })}
+          placeholder={formatMessage({id: 'post.content'})}
           required
           visible={visible}
           value={isEdit ? currentPost.content : content}
@@ -375,12 +355,12 @@ const CreateNote = ({
           isCoverImage={!!coverPreviewUrl}
         >
           {coverUploadPercent > 0 && coverUploadPercent < 100 ? (
-            <Form.Item label={formatMessage({ id: 'post.coverImage' })}>
-              <Progress percent={coverUploadPercent} width={70} />
+            <Form.Item label={formatMessage({id: 'post.coverImage'})}>
+              <Progress percent={coverUploadPercent} width={70}/>
             </Form.Item>
           ) : (
             !!coverPreviewUrl && (
-              <Form.Item label={formatMessage({ id: 'post.coverImage' })}>
+              <Form.Item label={formatMessage({id: 'post.coverImage'})}>
                 <StyledCoverWrapper>
                   <AppImage
                     src={coverPreviewUrl}
@@ -418,12 +398,12 @@ const CreateNote = ({
               >
                 <Typography.Link>
                   <Space>
-                    <MdOutlineWorkspaces fontSize={21} />
+                    <MdOutlineWorkspaces fontSize={21}/>
 
                     <span>
                       {selectedSpace?.label
                         ? selectedSpace.label.slice(0, 20).trim()
-                        : formatMessage({ id: 'space.space' })}
+                        : formatMessage({id: 'space.space'})}
                     </span>
                   </Space>
                 </Typography.Link>
@@ -443,7 +423,7 @@ const CreateNote = ({
               <Typography.Link>
                 <Space>
                   {currentPrivacy?.icon}
-                  <span>{formatMessage({ id: currentPrivacy?.label })}</span>
+                  <span>{formatMessage({id: currentPrivacy?.label})}</span>
                 </Space>
               </Typography.Link>
             </Dropdown>
@@ -458,7 +438,7 @@ const CreateNote = ({
                 margin-bottom: 2px;
               `}
             >
-              <MdFormatColorText fontSize={20} />
+              <MdFormatColorText fontSize={20}/>
             </Typography.Link>
 
             <Upload
@@ -470,12 +450,12 @@ const CreateNote = ({
               showUploadList={false}
             >
               <Typography.Link>
-                <MdOutlineImage fontSize={24} />
+                <MdOutlineImage fontSize={24}/>
               </Typography.Link>
             </Upload>
 
             <StyledButton type="primary" htmlType="submit">
-              {formatMessage({ id: 'common.post' })}
+              {formatMessage({id: 'common.post'})}
             </StyledButton>
           </Space>
         </Row>

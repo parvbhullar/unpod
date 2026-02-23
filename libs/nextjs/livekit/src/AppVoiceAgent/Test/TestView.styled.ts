@@ -1,5 +1,5 @@
-import styled, { keyframes } from 'styled-components';
-import { Button } from 'antd';
+import styled, {keyframes} from 'styled-components';
+import {Button} from 'antd';
 
 export const WidgetContainer = styled.div`
   display: flex;
@@ -23,7 +23,7 @@ export const TopContainer = styled.div`
 
 export const StyledAgentContainer = styled.div<{ direction: string }>`
   display: flex;
-  flex-direction: ${({ direction }) => direction};
+  flex-direction: ${({direction}) => direction};
   align-items: center;
   justify-content: center;
   margin-bottom: -20px;
