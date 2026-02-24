@@ -18,7 +18,7 @@ dependencies = [
     "psycopg2-binary>=2.9.9",
     "pymongo",
     "redis",
-    "mongomantic @ git+https://github.com/masters-india/Mongomantic.git@2.0.0",
+    "mongomantic @ git+https://github.com/parvbhullar/mongomantic.git@2.0.0",
     # HTTP / API
     "fastapi",
     "uvicorn[standard]",

@@ -37,5 +37,5 @@ pytest>=7.2.2
 pytest-asyncio>=0.21.0
 pytest-mock>=3.10.0
 
-git+https://github.com/masters-india/Mongomantic.git@2.0.0
+git+https://github.com/parvbhullar/mongomantic.git@2.0.0
 kafka-python

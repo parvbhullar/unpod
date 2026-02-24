@@ -52,7 +52,7 @@ COPY deployment/docker/voice_executors/requirements-frozen.txt ./
 # Install ALL dependencies with --no-deps to skip pip's dependency resolution
 # This mirrors the working environment which has version conflicts that work at runtime
 RUN pip install --no-deps -r requirements-frozen.txt && \
-    pip install --no-deps "mongomantic @ git+https://github.com/masters-india/Mongomantic.git@a11b1881fffc4a87d860d0cb23d552dfc3b548df"
+    pip install --no-deps "mongomantic @ git+https://github.com/parvbhullar/mongomantic.git@a11b1881fffc4a87d860d0cb23d552dfc3b548df"
 
 # ===================================
 # STAGE: Production
