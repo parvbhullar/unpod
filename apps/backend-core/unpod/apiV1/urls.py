@@ -10,6 +10,7 @@ urlpatterns = [
     path('roles/', include('unpod.roles.urls'), name="roles_v1"),
     path('notifications/', include('unpod.notification.urls'), name="notification_v1"),
     path('knowledge_base/', include('unpod.knowledge_base.urls'), name="knowledge_base_v1"),
+    path('tasks/', include('unpod.core_components.tasks.urls')),
     path('documents/', include('unpod.documents.urls'), name="documents"),
     path('metrics/', include('unpod.metrics.urls'), name="metrics"),
     path('dynamic-forms/', include('unpod.dynamic_forms.urls'), name="dynamic_forms_base"),

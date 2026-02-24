@@ -41,7 +41,7 @@ if READ_DOT_ENV_FILE:
     elif "production" in settings_module:
         env_file = MONOREPO_ROOT / ".env.production"
     elif "local" in settings_module:
-        env_file = MONOREPO_ROOT / ".env.local"
+        env_file = MONOREPO_ROOT / ".env"
     else:
         env_file = MONOREPO_ROOT / ".env"
 
