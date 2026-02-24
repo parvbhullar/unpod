@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 from libs.core.exceptions import API206Exception
 from libs.core.datetime import (
-    convert_str_to_datetime,
+    str_to_datetime,
     get_datetime_now,
 )
 from libs.core.jsondecoder import convertFromMongo, json_dumps
@@ -20,7 +20,7 @@ async def process_gmail_creation(doc_data, config, collection_id, db_manager):
     if "_id" in doc_data:
         del doc_data["_id"]
     if "date" in doc_data and isinstance(doc_data["date"], str):
-        doc_data["date"] = convert_str_to_datetime(doc_data["date"])
+        doc_data["date"] = str_to_datetime(doc_data["date"])
     try:
         result = db_manager.collection.insert_one(doc_data)
         doc_data.pop("_id", None)
@@ -109,7 +109,7 @@ async def process_doc_creation(doc_data, config, collection_id, db_manager):
         schema = processed_data.get("data", {}).get("columns", {})
         created_date = doc.metadata.get("date", None)
         if created_date:
-            created_date = convert_str_to_datetime(created_date)
+            created_date = str_to_datetime(created_date)
         else:
             created_date = current_time
         for d in data:
