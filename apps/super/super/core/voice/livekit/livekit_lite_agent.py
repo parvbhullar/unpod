@@ -251,7 +251,7 @@ class LiveKitLiteAgent(Agent):
 
             res = await build_call_result(self.user_state)
             await trigger_post_call(user_state=self.user_state, res=res)
-
+            self.user_state.extra_data["post_call_triggered"] = True
             self._logger.info(
                 f"{'='*100}\n\n[END_CALL_TOOL]  Triggering post call \n\n{'='*100}"
             )
@@ -722,6 +722,8 @@ class LiveKitLiteAgent(Agent):
 
             res = await build_call_result(self.user_state)
             await trigger_post_call(user_state=self.user_state, res=res)
+            self.user_state.extra_data["post_call_triggered"] = True
+
             self._logger.info(
                 f"{'='*100}\n\n[END_CALL_TOOL]  Triggering post call \n\n{'='*100}"
             )

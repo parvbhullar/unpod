@@ -1,33 +1,47 @@
+# ============================================================
+# Deployment Guide (uv-based)
+# ============================================================
+# Prerequisites: install uv on server
+#   curl -LsSf https://astral.sh/uv/install.sh | sh
+# ============================================================
+
+
 # QA
-Branch -- > qa-master-deployment
+Branch --> qa-master-deployment
 cd /var/apps/super-qa-prefect
 
-Update the code in Above Branch & Just take the pull
+git pull
+uv sync --frozen --no-dev
 
-workon Super12PrefectEnv
-postactivate --> /home/ubuntu/.virtualenvs/Super12PrefectEnv/bin/postactivate
-
-update env in postactivate file
-
+Env vars: stored in .env file at repo root
+  cp .env.example .env   # then fill in values
 
 
 # Prod
-Branch -- > qa-master-stable
+Branch --> qa-master-stable
 cd /var/apps/super-prefect-prod
 
-Update the code in Above Branch & Just take the pull
+git pull
+uv sync --frozen --no-dev
 
-workon Prefect12ProdEnv
-postactivate --> /home/ubuntu/.virtualenvs/Prefect12ProdEnv/bin/postactivate
-
-update env in postactivate file
-
-
+Env vars: stored in .env file at repo root
+  cp .env.example .env   # then fill in values
 
 
 # How to change the env Variable for prefect
-First add the Variable in super_services/orchestration/task/deployments/env_config.py
-Then, add the env Variable in postactivate file.
-Re-activate the workon
+1. Add the variable in super_services/orchestration/task/deployments/env_config.py
+2. Add the env variable in the .env file on the server
+3. Run: uv run python super_services/orchestration/task/deployments/task_deployments.py
 
-run the task_deployments cmd again, so that the new Variable added to deployment configuration
+
+# Running voice executor
+uv run python super_services/orchestration/executors/voice_executor_v3.py <env>
+
+# Or via systemd (uses .venv directly):
+# ExecStart=/var/apps/super-qa-prefect/.venv/bin/python \
+#     super_services/orchestration/executors/voice_executor_v3.py qa
+
+
+# Docker deployment (alternative)
+docker build -t voice-executor:<env> .
+docker run --env-file .env voice-executor:<env> start

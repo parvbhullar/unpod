@@ -1089,6 +1089,15 @@ class LiveKitServiceFactory:
             )
             language = None
 
+        # NEW: Deepgram model-based language handling
+        if cfg.provider == "deepgram":
+            if cfg.model == "flux-general":
+                language = "en"  # English only for flux-general
+                self._logger.info(f"Deepgram Inference STT: Model '{cfg.model}' -> forcing language to 'en'")
+            else:
+                language = "multi"  # Multilingual for all other models
+                self._logger.info(f"Deepgram Inference STT: Model '{cfg.model}' -> forcing language to 'multi'")
+
         # Build provider-specific extra_kwargs
         extra_kwargs = self._build_inference_stt_extra_kwargs(cfg.provider, cfg)
 
@@ -1456,10 +1465,19 @@ class LiveKitServiceFactory:
         language = cfg.language
         self.service_modes.stt_type = "plugin"
 
-        # Deepgram: default to "multi" for unsupported languages
+        # # Deepgram: default to "multi" for unsupported languages
+        # if provider == "deepgram":
+        #     if not language or language not in self.DEEPGRAM_SUPPORTED_LANGUAGES:
+        #         language = "multi"
+
+        # Deepgram: hardcoded language based on model
         if provider == "deepgram":
-            if not language or language not in self.DEEPGRAM_SUPPORTED_LANGUAGES:
-                language = "multi"
+            if model == "flux-general":
+                language = "en"  # English only for flux-general
+                self._logger.info(f"Deepgram STT: Model '{model}' -> forcing language to 'en'")
+            else:
+                language = "multi"  # Multilingual for all other models
+                self._logger.info(f"Deepgram STT: Model '{model}' -> forcing language to 'multi'")
 
         # Validate provider API key - fallback to Deepgram if missing
         is_valid, error_msg = self._validate_provider(provider)

@@ -1274,6 +1274,18 @@ class LiveKitVoiceHandler(BaseVoiceHandler, ABC):
             if not phone_number:
                 return ctx.wait_for_participant()
 
+            # Check if participant already connected
+            existing = [
+                p
+                for p in ctx.room.remote_participants.values()
+                if p.identity == identity
+            ]
+            if existing:
+                self._logger.info(
+                    f"SIP participant already in room: {existing[0].identity}"
+                )
+                return existing[0]
+
             # Create SIP participant using ctx.api
             await ctx.api.sip.create_sip_participant(
                 api.CreateSIPParticipantRequest(

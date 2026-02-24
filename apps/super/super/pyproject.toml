@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=64.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "super"
+version = "0.5.2"
+description = "The Multi-Role Super AI Framework"
+readme = {text = "The Multi-Role Super AI Framework", content-type = "text/plain"}
+authors = [
+    {name = "parvbhullar", email = "parvinder@recalll.co"},
+]
+license = {text = "MIT"}
+requires-python = ">=3.12"
+dependencies = [
+    # Core
+    "pydantic>=2.0",
+    "python-dotenv",
+    "click",
+    "pyyaml",
+    "numpy",
+    "inflection",
+    "aioredis",
+    # AI / LLM
+    "openai",
+    "anthropic",
+    "litellm",
+    "tiktoken",
+    "dspy",
+    "transformers",
+    "mem0ai",
+    "markitdown",
+    "langchain>=0.3.0",
+    "langchain-core",
+    "langchain-anthropic",
+    "langchain-openai",
+    "langgraph>=1.0.6",
+    "pydantic-ai>=0.0.12,<0.1",
+    "pydantic-ai-slim>=0.0.12,<0.1",
+    # Search / Index / Embeddings
+    "chromadb",
+    "llama-index",
+    "llama-index-llms-litellm",
+    "tavily-python",
+    "exa-py",
+    # Voice - LiveKit
+    "livekit>=1.0.23",
+    "livekit-agents>=1.3.10",
+    "livekit-agents[anthropic]~=1.3",
+    "livekit-agents[aws]~=1.3",
+    "livekit-agents[deepgram]~=1.3",
+    "livekit-agents[elevenlabs]~=1.3",
+    "livekit-agents[gladia]~=1.3",
+    "livekit-agents[google]~=1.3",
+    "livekit-agents[groq]~=1.3",
+    "livekit-agents[lmnt]~=1.3",
+    "livekit-agents[openai]~=1.3",
+    "livekit-agents[playai]~=1.3",
+    "livekit-agents[sarvam]~=1.3",
+    "livekit-agents[speechmatics]~=1.3",
+    "livekit-agents[xai]~=1.3",
+    "livekit-plugins-openai>=1.3.12",
+    "livekit-plugins-elevenlabs",
+    "livekit-plugins-noise-cancellation",
+    "livekit-plugins-silero",
+    "livekit-plugins-turn-detector",
+    # Voice - Pipecat (anthropic extra excluded: conflicts with langchain-anthropic)
+    # pipecat's anthropic provider works with the standalone anthropic SDK
+    "pipecat-ai[soundfile,aws,azure,cartesia,deepgram,elevenlabs,gladia,google,lmnt,ollama,runner,soniox]>=0.0.99",
+    "pipecat-ai-flows",
+    "pipecat-ai-whisker",
+    # Orchestration
+    "prefect",
+    # DB (used directly in super/ for some queries)
+    "psycopg2-binary>=2.9.11",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["super*"]

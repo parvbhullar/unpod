@@ -7,7 +7,7 @@ from super_services.db.services.models.task import TaskModel
 async def execute(task_id):
     task = TaskModel.get(task_id=task_id)
 
-    from .dspy_config import get_dspy_lm
+    from super.core.voice.workflows.dspy_config import get_dspy_lm
 
     lm = get_dspy_lm()
     post_call_input_data = {
@@ -122,6 +122,6 @@ async def execute(task_id):
 
 
 if __name__ == "__main__":
-    res = asyncio.run(execute("Tefe4015f78de11f082ac156368e7acc4"))
+    res = asyncio.run(execute("T68b5520f109211f1a51b593336f7c5fe"))
 
     print(f"{'='*100} \n\n post_call_result: \n\n {res} \n\n {'='*100}")

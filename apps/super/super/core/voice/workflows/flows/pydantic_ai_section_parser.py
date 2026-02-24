@@ -433,11 +433,11 @@ Extract ALL details, preserving exact phrasing, examples, and context.
 # Create the main extraction agent
 # Use gpt-4o-mini for faster parsing (128K context, 2-5x faster than gpt-4o)
 # Falls back to gpt-4o if you need more complex reasoning
-conversation_plan_agent = Agent(
-    'openai:gpt-5.2-mini',
-    output_type=ConversationPlan,
-    system_prompt=EXTRACTION_SYSTEM_PROMPT
-)
+# conversation_plan_agent = Agent(
+#     'openai:gpt-5.2-mini',
+#     output_type=ConversationPlan,
+#     system_prompt=EXTRACTION_SYSTEM_PROMPT
+# )
 
 
 # =============================================================================

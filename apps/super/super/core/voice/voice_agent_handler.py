@@ -2027,19 +2027,21 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             )
 
             try:
+                handover_identity = "human_agent"
                 await ctx.api.sip.create_sip_participant(
                     api.CreateSIPParticipantRequest(
                         sip_trunk_id=trunk_id,
                         sip_call_to=handover_number,
                         room_name=room_name,
-                        participant_identity="human_agent",
-                        participant_name="human_agent",
+                        participant_identity=handover_identity,
+                        participant_name=handover_identity,
                         krisp_enabled=True,
                     )
                 )
 
                 participant = await asyncio.wait_for(
-                    ctx.wait_for_participant(identity="human_in_loop"),
+                    ctx.wait_for_participant(identity=handover_identity),
+                    timeout=30.0,
                 )
                 try:
                     room = ctx.room
@@ -2120,9 +2122,21 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 f"Creating SIP participant: trunk={trunk_id}, phone={phone_number}, room={room_name}"
             )
             if not phone_number:
-                return ctx.wait_for_participant()
+                return await ctx.wait_for_participant()
 
             for i in range(2):
+                # Check if participant already connected (race with prior attempt)
+                existing = [
+                    p
+                    for p in ctx.room.remote_participants.values()
+                    if p.identity == identity
+                ]
+                if existing:
+                    self._logger.info(
+                        f"SIP participant already in room: {existing[0].identity}"
+                    )
+                    return existing[0]
+
                 try:
                     await ctx.api.sip.create_sip_participant(
                         api.CreateSIPParticipantRequest(
@@ -2142,15 +2156,39 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                     )
 
                     if participant:
-                        await self._instant_handover(user_state, trunk_id, ctx)
+                        try:
+                            await self._instant_handover(user_state, trunk_id, ctx)
+                        except Exception as handover_error:
+                            self._logger.error(
+                                "Instant handover failed after SIP participant "
+                                f"connected: {handover_error}"
+                            )
 
                     return participant
 
                 except Exception as e:
                     self._logger.error(
-                        f"Failed to create SIP participant retrying {i+1}"
+                        f"Failed to create SIP participant attempt {i+1}/2: "
+                        f"{type(e).__name__}: {e}"
                     )
+                    # Participant may have connected despite API error
+                    connected = [
+                        p
+                        for p in ctx.room.remote_participants.values()
+                        if p.identity == identity
+                    ]
+                    if connected:
+                        self._logger.info(
+                            f"SIP participant connected despite API error: "
+                            f"{connected[0].identity}"
+                        )
+                        return connected[0]
                     trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
+
+            self._logger.error(
+                f"SIP participant creation exhausted retries for {phone_number}"
+            )
+            return None
 
         except Exception as e:
             self._logger.error(f"Error creating SIP participant: {e}")
@@ -3103,18 +3141,7 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             self.message_callback("EOF\n", role="system", user_state=user_state)
 
             # End session if original caller disconnects (no handover) OR both have disconnected
-            should_end_session = (is_original_caller and not is_handover_active) or (
-                is_handover_active
-                and user_state.extra_data.get("_handover_disconnected", {}).get(
-                    "user", False
-                )
-                and user_state.extra_data.get("_handover_disconnected", {}).get(
-                    "handover", False
-                )
-            )
-
-            if should_end_session:
-
+            if is_original_caller:
                 async def handle_disconnect():
                     user_state.call_status = CallStatusEnum.COMPLETED
                     user_state.end_time = datetime.utcnow()

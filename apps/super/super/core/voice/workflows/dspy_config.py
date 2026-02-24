@@ -56,44 +56,125 @@ class DSPyConfig:
                     cls._instance = super().__new__(cls)
         return cls._instance
 
-    def get_lm(self, model_name='openai/gpt-4o-mini'):
+    # Maps provider prefix to the env var holding its API key.
+    PROVIDER_API_KEY_MAP = {
+        "openai": "OPENAI_API_KEY",
+        "google": "GOOGLE_API_KEY",
+        "gemini": "GOOGLE_API_KEY",
+        "groq": "GROQ_API_KEY",
+    }
+
+    # OpenAI reasoning models require temperature=1.0 and max_tokens>=16000.
+    # Model name substring matches (case-insensitive).
+    OPENAI_REASONING_MODELS = {"o1", "o3", "o4", "gpt-5"}
+
+    @classmethod
+    def _resolve_api_key(cls, model_name: str) -> str:
+        """Resolve the correct API key env var based on model provider prefix.
+
+        Supported prefixes:
+          - openai/*   -> OPENAI_API_KEY
+          - google/*   -> GOOGLE_API_KEY
+          - gemini/*   -> GOOGLE_API_KEY
+          - groq/*     -> GROQ_API_KEY
+
+        Falls back to OPENAI_API_KEY for unknown providers.
         """
-        Get or create process-local LM instance.
+        provider = model_name.split("/")[0].lower() if "/" in model_name else ""
+        env_var = cls.PROVIDER_API_KEY_MAP.get(provider, "OPENAI_API_KEY")
+        api_key = os.getenv(env_var)
+        if not api_key:
+            raise ValueError(
+                f"{env_var} environment variable is not set "
+                f"(required for model '{model_name}')"
+            )
+        return api_key
 
-        Args:
-            model_name: Name of the model to use (default: 'openai/gpt-4o-mini')
+    @classmethod
+    def _is_openai_reasoning_model(cls, model_name: str) -> bool:
+        """Check if model is an OpenAI reasoning model that needs special params."""
+        provider = model_name.split("/")[0].lower() if "/" in model_name else ""
+        if provider != "openai":
+            return False
+        model_part = model_name.split("/", 1)[1].lower() if "/" in model_name else ""
+        return any(tag in model_part for tag in cls.OPENAI_REASONING_MODELS)
 
-        Returns:
-            dspy.LM: A process-local DSPy LM instance
+    def get_lm(
+        self,
+        model_name: str = None,
+        temperature: float = None,
+    ):
+        """Get or create process-local LM instance.
 
-        Note:
-            This method creates a new LM instance for each process/thread on first call,
-            then reuses it for subsequent calls within the same process/thread.
+        Resolution order for each param:
+        1. Explicit argument
+        2. Environment variable (ANALYSIS_MODEL_NAME / ANALYSIS_LLM_TEMPERATURE)
+        3. Hardcoded default ('openai/gpt-5-mini' / 0.7)
+
+        Supported providers (via model name prefix):
+        - openai/gpt-4o, openai/gpt-4o-mini, openai/gpt-5-mini, etc.
+        - openai/o1, openai/o3, openai/o4-mini (reasoning models)
+        - google/gemini-2.5-flash, gemini/gemini-2.5-pro, etc.
+        - groq/qwen3-32b, groq/llama-3.3-70b, etc.
+
+        OpenAI reasoning models (o1, o3, o4, gpt-5) automatically get
+        temperature=1.0 and max_tokens=16000 as required by the API.
         """
-        if not hasattr(self._process_local, 'lm') or self._process_local.lm is None:
-            api_key = os.getenv("OPENAI_API_KEY")
-            if not api_key:
-                raise ValueError("OPENAI_API_KEY environment variable is not set")
-            self._process_local.lm = dspy.LM(model_name, api_key=api_key)
-        return self._process_local.lm
+        resolved_model = (
+            model_name
+            or os.getenv("ANALYSIS_MODEL_NAME")
+            or "openai/gpt-5-mini"
+        )
+
+        is_reasoning = self._is_openai_reasoning_model(resolved_model)
+
+        if is_reasoning:
+            # Reasoning models require temperature=1.0 and max_tokens>=16000
+            resolved_temp = 1.0
+            max_tokens = 16000
+        else:
+            resolved_temp = (
+                temperature
+                if temperature is not None
+                else float(os.getenv("ANALYSIS_LLM_TEMPERATURE", "0.7"))
+            )
+            max_tokens = None
+
+        cache_key = (resolved_model, resolved_temp, max_tokens)
+
+        cached_key = getattr(self._process_local, "lm_key", None)
+        cached_lm = getattr(self._process_local, "lm", None)
+
+        if cached_lm is not None and cached_key == cache_key:
+            return cached_lm
+
+        api_key = self._resolve_api_key(resolved_model)
+
+        lm_kwargs = {
+            "api_key": api_key,
+            "temperature": resolved_temp,
+        }
+        if max_tokens is not None:
+            lm_kwargs["max_tokens"] = max_tokens
+
+        lm = dspy.LM(resolved_model, **lm_kwargs)
+        self._process_local.lm = lm
+        self._process_local.lm_key = cache_key
+        return lm
 
 
-def get_dspy_lm(model_name='openai/gpt-4o-mini'):
+def get_dspy_lm(
+    model_name: str = None,
+    temperature: float = None,
+):
+    """Convenience function to get thread-safe DSPy LM instance.
+
+    Reads defaults from env vars ANALYSIS_MODEL_NAME and ANALYSIS_LLM_TEMPERATURE.
+    Falls back to 'openai/gpt-4o-mini' and 0.7.
+
+    Supports multiple providers — set the model name with the provider prefix:
+      - ANALYSIS_MODEL_NAME=openai/gpt-4o-mini  (needs OPENAI_API_KEY)
+      - ANALYSIS_MODEL_NAME=google/gemini-2.5-flash  (needs GOOGLE_API_KEY)
+      - ANALYSIS_MODEL_NAME=groq/qwen3-32b  (needs GROQ_API_KEY)
     """
-    Convenience function to get thread-safe DSPy LM instance.
-
-    This is the recommended way to get a DSPy LM instance in multi-process
-    environments like Prefect or ProcessPoolExecutor.
-
-    Args:
-        model_name: Name of the model to use (default: 'openai/gpt-4o-mini')
-
-    Returns:
-        dspy.LM: A process-local DSPy LM instance
-
-    Example:
-        >>> lm = get_dspy_lm()
-        >>> with dspy.context(lm=lm):
-        ...     result = predictor(input="...")
-    """
-    return DSPyConfig().get_lm(model_name)
+    return DSPyConfig().get_lm(model_name=model_name, temperature=temperature)

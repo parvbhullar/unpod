@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=64.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "super-services"
+version = "0.5.2"
+description = "Infrastructure services for Super Framework"
+authors = [
+    {name = "parbhullar", email = "parvinder@recalll.co"},
+]
+license = {text = "MIT"}
+requires-python = ">=3.12"
+dependencies = [
+    # Core framework (workspace dep)
+    "super",
+    # DB
+    "psycopg2-binary>=2.9.9",
+    "pymongo",
+    "redis",
+    "mongomantic @ git+https://github.com/masters-india/Mongomantic.git@2.0.0",
+    # HTTP / API
+    "fastapi",
+    "uvicorn[standard]",
+    "gunicorn>=20.1.0",
+    "boto3",
+    "beautifulsoup4",
+    # Auth / Security
+    "argon2-cffi>=21.3.0",
+    "passlib>=1.7.4",
+    "pycryptodome>=3.14.1",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart",
+    "email-validator>=2.2.0",
+    # Messaging / Orchestration
+    "kafka-python",
+    "confluent-kafka",
+    "prefect>=3.4.21",
+    "prefect-docker>=0.6.6",
+    "temporalio",
+    # Data / Utils
+    "pandas",
+    "jinja2",
+    "fuzzywuzzy",
+    "python-Levenshtein",
+    "tabulate>=0.9.0",
+    "phonenumbers",
+]
+
+[tool.uv.sources]
+super = { workspace = true }
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["super_services*"]
