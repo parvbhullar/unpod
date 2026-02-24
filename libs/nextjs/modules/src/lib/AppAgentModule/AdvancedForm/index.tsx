@@ -65,8 +65,8 @@ const AdvancedForm = ({agentData, updateAgentData}: AdvancedFormProps) => {
     formData.append('notify_via_sms', String(values.notify_via_sms));
     formData.append('enable_followup', String(values.enable_followup));
 
-    if (enable_followup && values.followup_prompt) {
-      formData.append('followup_prompt', values.followup_prompt);
+    if (enable_followup) {
+      formData.append('followup_prompt', values.followup_prompt || '');
     }
 
     formData.append('enable_handover', String(values.enable_handover));
