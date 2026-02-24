@@ -1,0 +1,21 @@
+services:
+  voice-executor:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: "${PYTHON_VERSION:-3.12}"
+    image: voice-executor:${IMAGE_TAG:-latest}
+    command: ["start"]
+    env_file: ../.env
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 8G
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"

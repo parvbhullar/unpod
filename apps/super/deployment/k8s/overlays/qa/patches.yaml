@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voice-executor
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: voice-executor
+          resources:
+            requests:
+              cpu: "2"
+              memory: 4Gi
+            limits:
+              cpu: "4"
+              memory: 8Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: voice-executor-config
+data:
+  SETTINGS_FILE: "super_services.settings.qa"
+  AGENT_NAME: "unpod-qa-general-agent-v3"

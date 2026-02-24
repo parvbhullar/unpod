@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: voice-executor-config
+data:
+  SETTINGS_FILE: "super_services.settings.qa"
+  AGENT_NAME: "unpod-qa-general-agent-v3"
+  WORKER_HANDLER: "livekit"
