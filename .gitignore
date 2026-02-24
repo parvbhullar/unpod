@@ -126,3 +126,5 @@ PLAN_TEXT_STREAMS.md
 apps/super/super/core/voice/superkik/CARDS.md
 apps/super/super/core/voice/superkik/PLAN.md
 sync-super-to-super-repo.sh
+/yarn.lock
+/package-lock.json
