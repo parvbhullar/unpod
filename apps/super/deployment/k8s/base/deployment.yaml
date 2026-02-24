@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voice-executor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voice-executor
+  template:
+    metadata:
+      labels:
+        app: voice-executor
+    spec:
+      containers:
+        - name: voice-executor
+          image: voice-executor:latest
+          command:
+            - python
+            - "-u"
+            - super_services/orchestration/executors/voice_executor_v3.py
+          args:
+            - start
+          envFrom:
+            - configMapRef:
+                name: voice-executor-config
+            - secretRef:
+                name: voice-executor-secrets
+          resources:
+            requests:
+              cpu: "2"
+              memory: 4Gi
+            limits:
+              cpu: "4"
+              memory: 8Gi
+          livenessProbe:
+            exec:
+              command:
+                - python
+                - super_services/orchestration/executors/voice_executor_v3.py
+                - health
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - python
+                - super_services/orchestration/executors/voice_executor_v3.py
+                - health
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
