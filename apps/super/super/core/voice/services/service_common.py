@@ -152,6 +152,16 @@ DEEPGRAM_TTS_VOICES: list = [
     "theia",
 ]
 
+# Inworld TTS voices available via LiveKit Inference.
+# Full list at https://platform.inworld.ai/tts-playground
+INWORLD_TTS_VOICES: list = [
+    "Ashley",
+    "Diego",
+    "Edward",
+    "Olivia",
+    "Riya",
+]
+
 INFERENCE_ELEVENLABS_VOICES: list = [
     "21m00Tcm4TlvDq8ikWAM",
     "AZnzlk1XvdvUeBnXmlld",
@@ -927,7 +937,7 @@ class ServiceCommon:
         if provider == "elevenlabs":
             return voice
         if provider == "inworld":
-            return voice
+            return self.validate_inworld_voice(voice)
         if provider in INFERENCE_TTS_DEFAULT_VOICES:
             return INFERENCE_TTS_DEFAULT_VOICES[provider]
         return voice
@@ -947,6 +957,21 @@ class ServiceCommon:
             f"Using default: {INFERENCE_TTS_DEFAULT_VOICES['deepgram']}"
         )
         return INFERENCE_TTS_DEFAULT_VOICES["deepgram"]
+
+    def validate_inworld_voice(self, voice: str) -> str:
+        """Validate Inworld TTS voice name against known voices."""
+        if not voice:
+            return INFERENCE_TTS_DEFAULT_VOICES["inworld"]
+        # Case-sensitive match against known Inworld voices
+        known_lower = {v.lower(): v for v in INWORLD_TTS_VOICES}
+        if voice.lower() in known_lower:
+            return known_lower[voice.lower()]
+        self.logger.warning(
+            f"Voice '{voice}' is not a known Inworld voice. "
+            f"Known voices: {INWORLD_TTS_VOICES}. "
+            f"Using default: {INFERENCE_TTS_DEFAULT_VOICES['inworld']}"
+        )
+        return INFERENCE_TTS_DEFAULT_VOICES["inworld"]
 
     def validate_openai_voice(
         self, voice: Optional[str], default: str = "alloy", log_warning: bool = True

@@ -1,29 +1,37 @@
 import datetime
+import asyncio
+import json
+from typing import Dict, Any
 
 from .tools.classification import (
     CallClassificationService,
     CallSummarizer,
-    CallLabelClassifier,
     ProfileSummaryExtractor,
 )
-from super.core.voice.schema import UserState
-import asyncio
+from super.core.voice.schema import UserState, CallStatusEnum
 from .base import BaseWorkflow
 from .tools.helper_functions import get_next_date
 from .tools.success_evaluator import SuccessEvaluator
 from .tools.structured_data import StructuredDataExtractor
+from .tools.call_scheduler import FollowUpAnalyzer
+from .tools.config import get_now
 from .dspy_config import get_dspy_lm
-import json
-from typing import Dict, Any
 from super_services.orchestration.task.task_service import TaskService
 from super.core.logging import logging
 from ...logging.logging import print_log
 from super.core.voice.voice_agent_evals.voice_evaluation import evaluate_voice_call
-from .tools.call_scheduler import FollowUpAnalyzer
-from super.core.voice.schema import CallStatusEnum
 
 # Setup logger
 logger = logging.get_logger(__name__)
+
+NOT_CONNECTED_STATUSES = {
+    CallStatusEnum.VOICEMAIL,
+    CallStatusEnum.BUSY,
+    CallStatusEnum.CANCELLED,
+    CallStatusEnum.NOT_CONNECTED,
+    CallStatusEnum.DROPPED,
+    CallStatusEnum.FAILED,
+}
 
 
 class PostCallWorkflow(BaseWorkflow):
@@ -50,21 +58,13 @@ class PostCallWorkflow(BaseWorkflow):
         self.lm = lm or get_dspy_lm()
 
         # Pass LM to tool instances
-        self.label_classifier = CallLabelClassifier(
-            self.transcript,
-            {
-                "follow_up": "need to call again requested by user as user shows interest in services",
-                "call_back": "user didn't pick up the call or call got cancelled midway couldn't complete call",
-            },
-            lm=self.lm,
-        )
         self.scheduled_date = get_next_date(model_config)
         self.success_evaluator = SuccessEvaluator(lm=self.lm)
         self.data_extractor = StructuredDataExtractor(lm=self.lm)
         self.success_evaluation_plan = None
         self.structured_data_plan = None
         self.summary_plan = None
-        self.follow_up_service = FollowUpAnalyzer()
+        self.follow_up_service = FollowUpAnalyzer(lm=self.lm)
 
     def process_input_date(self, data):
         result = data.get("input_data", {})
@@ -111,14 +111,20 @@ class PostCallWorkflow(BaseWorkflow):
         except Exception as e:
             print(f"[PostCallWorkflow] Error creating pipeline: {e}")
 
-    async def create_follow_up_task(self, time):
+    async def create_follow_up_task(self, time, max_calls: int = 3):
         from super.core.voice.common.services import create_scheduled_task
 
         print(f"[PostCallWorkflow] Creating follow_up task")
         try:
-            res = await create_scheduled_task(self.data.get("task_id"), time)
+            res = await create_scheduled_task(
+                self.data.get("task_id"), time, max_calls=max_calls
+            )
 
             if res:
+                if res.get("deduplicated"):
+                    print("[PostCallWorkflow] follow_up task already scheduled")
+                    return "call_already_scheduled"
+
                 from super_services.prefect_setup.deployments.utils import (
                     trigger_deployment,
                 )
@@ -146,67 +152,72 @@ class PostCallWorkflow(BaseWorkflow):
             print(f"faield to schedule call {str(e)}")
             return "failed to schedule_call"
 
-    async def follow_up(self):
-        followup = None
-
-        if self.follow_up_enabled:
-            print("processing followup")
-
-            results = self.label_classifier.classify()
-
-            if self.model_config:
-                available_slots = {
-                    "time_range": json.loads(
-                        self.model_config.get("calling_time_ranges", [])
-                    ),
-                    "days_range": json.loads(self.model_config.get("calling_days", [])),
-                }
-            else:
-                available_slots = {}
-
-            res = self.follow_up_service.forward(
-                call_transcript=self.transcript,
-                prompt=self.followup_prompt,
-                token=self.token,
-                document_id=self.document_id,
-                available_slots=available_slots,
-                task_id=self.data.get("task_id"),
-            )
-
-            # from super.core.voice.common.common import send_web_notification
-            # from super.core.voice.common.services import send_retry_sms
-
-            if (
-                self.user_state
-                and self.user_state.call_status
-                in [
-                    CallStatusEnum.VOICEMAIL,
-                    CallStatusEnum.BUSY,
-                    CallStatusEnum.CANCELLED,
-                    CallStatusEnum.NOT_CONNECTED,
-                ]
-                and res.followup_required == "true"
-            ):
-                followup_time = datetime.datetime.now() + datetime.timedelta(hours=1)
-
-                followup = await self.create_follow_up_task(followup_time)
-                await self._Send_sms(followup_time)
-
-            elif res.followup_required == "true":
-                followup = await self.create_follow_up_task(res.followup_time)
-
-                await self._Send_sms(res.followup_time)
-
+    def _get_available_slots(self) -> dict:
+        if not self.model_config:
+            return {}
+        try:
             return {
-                "required": res.followup_required,
-                "time": res.followup_time,
-                "reason": res.reason,
-                "status": followup,
+                "time_range": json.loads(
+                    self.model_config.get("calling_time_ranges", "[]")
+                ),
+                "days_range": json.loads(
+                    self.model_config.get("calling_days", "[]")
+                ),
             }
+        except (json.JSONDecodeError, TypeError):
+            return {}
 
-        return {"required": "follow_up disabled"}
+    def _is_not_connected(self) -> bool:
+        if self.user_state is None:
+            return False
+        if self.user_state.call_status in NOT_CONNECTED_STATUSES:
+            return True
+        status = str(self.user_state.call_status or "").strip()
+        normalized_not_connected = {
+            str(getattr(item, "value", item)) for item in NOT_CONNECTED_STATUSES
+        }
+        return status in normalized_not_connected or status in {"dropped", "droped"}
 
-    async def _Send_sms(self, followup_time):
+    async def follow_up(self):
+        if not self.follow_up_enabled:
+            return {"required": "follow_up disabled"}
+
+        print("processing followup")
+        followup = None
+        available_slots = self._get_available_slots()
+
+        res = self.follow_up_service.forward(
+            call_transcript=self.transcript,
+            prompt=self.followup_prompt,
+            token=self.token,
+            document_id=self.document_id,
+            available_slots=available_slots,
+            task_id=self.data.get("task_id"),
+            model_config=self.model_config,
+            assignee=self.agent,
+        )
+
+        if res.followup_required:
+            followup = await self.create_follow_up_task(
+                res.followup_time,
+                max_calls=getattr(res, "max_calls", 3),
+            )
+        elif (
+            self._is_not_connected()
+            and res.reason
+            and "max_calls" in res.reason
+        ):
+            # All retries exhausted, never connected — send SMS
+            await self._Send_sms()
+
+        return {
+            "required": res.followup_required,
+            "time": res.followup_time,
+            "reason": res.reason,
+            "status": followup,
+        }
+
+    async def _Send_sms(self):
         from super.core.voice.common.common import send_web_notification
 
         if self.model_config.get("sms_enabled", False):
@@ -235,7 +246,7 @@ class PostCallWorkflow(BaseWorkflow):
         return response
 
     async def instant_redial(self):
-        scheduled_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=2)
+        scheduled_time = get_now(self.model_config) + datetime.timedelta(minutes=2)
         task_id = self.data.get("task_id")
 
         if not self.callback_enabled:
@@ -278,10 +289,6 @@ class PostCallWorkflow(BaseWorkflow):
         )
 
         print(summary, "summary")
-
-        if summary.status in ["Abandoned", "Dropped"]:
-            await self.instant_redial()
-
         return summary.toDict()
 
     async def success_evaluation(self):
@@ -1103,6 +1110,12 @@ class PostCallWorkflow(BaseWorkflow):
         data["structured_data"] = await self.structured_data(
             data.get("success_evaluator")
         )
+
+        # Sequential: redial only if follow-up didn't schedule anything
+        if not data["follow_up"].get("status"):
+            summary_status = (data.get("summary") or {}).get("status")
+            if summary_status in ["Abandoned", "Dropped"]:
+                data["redial"] = await self.instant_redial()
 
         if self.is_in_redial:
             data["is_redial"] = True

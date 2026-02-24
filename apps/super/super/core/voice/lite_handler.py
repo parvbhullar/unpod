@@ -147,6 +147,7 @@ class LiveKitLiteAgent(Agent):
                 #     SIPParticipantInfo,
                 # )
 
+                participant = None
                 for i in range(2):
                     try:
                         await self.ctx.api.sip.create_sip_participant(
@@ -160,147 +161,163 @@ class LiveKitLiteAgent(Agent):
                             )
                         )
 
-                        # Wait for participant to connect
-                        participant = await self.ctx.wait_for_participant(
-                            identity=identity
+                        # Wait for participant to connect with a bounded timeout.
+                        participant = await asyncio.wait_for(
+                            self.ctx.wait_for_participant(identity=identity),
+                            timeout=30.0,
                         )
-
-                        # Store handover participant identity in extra_data for transcript tracking
-                        # Mark as "initiated" but not yet "active" - we'll update when call is answered
-                        if not isinstance(self.user_state.extra_data, dict):
-                            self.user_state.extra_data = {}
-                        self.user_state.extra_data["handover_initiated"] = True
-                        self.user_state.extra_data[
-                            "handover_participant_identity"
-                        ] = identity
-                        self.user_state.extra_data["handover_number"] = number
-                        # Don't set is_handed_over_call yet - wait for call to be answered
-                        self.user_state.extra_data["is_handed_over_call"] = False
-
-                        await save_execution_log(
-                            self.user_state.task_id,
-                            "handover_initiated",
-                            "completed",
-                            {"status": "handover_initiated"},
-                        )
-
                         self._logger.info(
                             f"SIP participant connected (ringing): {participant.identity}"
                         )
+                        break
+                    except asyncio.TimeoutError:
+                        self._logger.warning(
+                            f"Handover participant {identity} did not join within 30s (attempt {i+1}/2)"
+                        )
+                        trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
+                    except Exception as e:
+                        self._logger.error(
+                            f"Failed to create SIP participant retrying {i+1}: {e}"
+                        )
+                        trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
 
-                        # Wait for the SIP call to be answered (status = "active")
-                        # This ensures we don't mark handover complete while still ringing
-                        max_wait_time = 60  # 60 seconds to answer
-                        wait_interval = 0.5
-                        elapsed = 0
-                        call_answered = False
+                if not participant:
+                    return {"status": "cant transfer call"}
 
-                        while elapsed < max_wait_time:
-                            # Check if participant is still in the room
-                            if identity not in self.ctx.room.remote_participants:
-                                self._logger.warning(
-                                    f"Handover participant {identity} left before answering"
+                try:
+                    # Store handover participant identity in extra_data for transcript tracking
+                    # Mark as "initiated" but not yet "active" - we'll update when call is answered
+                    if not isinstance(self.user_state.extra_data, dict):
+                        self.user_state.extra_data = {}
+                    self.user_state.extra_data["handover_initiated"] = True
+                    self.user_state.extra_data["handover_participant_identity"] = (
+                        identity
+                    )
+                    self.user_state.extra_data["handover_number"] = number
+                    # Don't set is_handed_over_call yet - wait for call to be answered
+                    self.user_state.extra_data["is_handed_over_call"] = False
+
+                    await save_execution_log(
+                        self.user_state.task_id,
+                        "handover_initiated",
+                        "completed",
+                        {"status": "handover_initiated"},
+                    )
+
+                    # Wait for the SIP call to be answered (status = "active")
+                    # This ensures we don't mark handover complete while still ringing
+                    max_wait_time = 60  # 60 seconds to answer
+                    wait_interval = 0.5
+                    elapsed = 0
+                    call_answered = False
+
+                    while elapsed < max_wait_time:
+                        # Check if participant is still in the room
+                        if identity not in self.ctx.room.remote_participants:
+                            self._logger.warning(
+                                f"Handover participant {identity} left before answering"
+                            )
+                            break
+
+                        current_participant = self.ctx.room.remote_participants.get(
+                            identity
+                        )
+                        if current_participant:
+                            call_status = current_participant.attributes.get(
+                                "sip.callStatus", ""
+                            )
+                            if call_status == "active":
+                                call_answered = True
+                                self._logger.info(
+                                    f"Handover call answered! Status: {call_status}"
+                                )
+                                break
+                            elif call_status == "hangup":
+                                self._logger.info(
+                                    f"Handover call was hung up/rejected"
                                 )
                                 break
 
-                            current_participant = self.ctx.room.remote_participants.get(
-                                identity
-                            )
-                            if current_participant:
-                                call_status = current_participant.attributes.get(
-                                    "sip.callStatus", ""
+                        await asyncio.sleep(wait_interval)
+                        elapsed += wait_interval
+
+                    if call_answered:
+                        # Now mark the handover as fully active
+                        self.user_state.extra_data["is_handed_over_call"] = True
+                        await save_execution_log(
+                            self.user_state.task_id,
+                            "handover_active",
+                            "completed",
+                            {"status": "handover_answered"},
+                        )
+                        in_call_analyzer = InCallWorkflow(
+                            user_state=self.user_state, logger=self._logger
+                        )
+                        handover_data = (
+                            await in_call_analyzer.generate_handover_summary()
+                        )
+
+                        await send_web_notification(
+                            "completed",
+                            "handover_initiated",
+                            self.user_state,
+                            "handover call picked up by executive",
+                            payload_data=handover_data,
+                        )
+                        self._logger.info(
+                            f"Handover call is now ACTIVE - both parties connected"
+                        )
+                    else:
+                        self._logger.warning(
+                            f"Handover call was not answered within {max_wait_time}s"
+                        )
+                        self.user_state.extra_data["handover_initiated"] = False
+
+                    # Start transcription for BOTH participants (original + new)
+                    # so we capture the full conversation between them
+                    try:
+                        room = self.ctx.room
+                        self._logger.info(
+                            f"Setting up multi-participant transcription. Remote participants: {list(room.remote_participants.keys())}"
+                        )
+
+                        # Start transcription for the new SIP participant
+                        self._logger.info(
+                            f"Starting transcription for new SIP participant: {participant.identity}"
+                        )
+                        await self.handler._start_participant_transcription(
+                            participant, room
+                        )
+
+                        # Also ensure we're transcribing all existing participants
+                        for p in room.remote_participants.values():
+                            if (
+                                p.identity != room.local_participant.identity
+                                and p.identity
+                                != self.user_state.extra_data.get("identity", "")
+                            ):
+                                self._logger.info(
+                                    f"Starting transcription for existing participant: {p.identity}"
                                 )
-                                if call_status == "active":
-                                    call_answered = True
-                                    self._logger.info(
-                                        f"Handover call answered! Status: {call_status}"
-                                    )
-                                    break
-                                elif call_status == "hangup":
-                                    self._logger.info(
-                                        f"Handover call was hung up/rejected"
-                                    )
-                                    break
+                                await self.handler._start_participant_transcription(
+                                    p, room
+                                )
 
-                            await asyncio.sleep(wait_interval)
-                            elapsed += wait_interval
-
-                        if call_answered:
-                            # Now mark the handover as fully active
-                            self.user_state.extra_data["is_handed_over_call"] = True
-                            await save_execution_log(
-                                self.user_state.task_id,
-                                "handover_active",
-                                "completed",
-                                {"status": "handover_answered"},
-                            )
-                            in_call_analyzer = InCallWorkflow(
-                                user_state=self.user_state, logger=self._logger
-                            )
-                            handover_data = (
-                                await in_call_analyzer.generate_handover_summary()
-                            )
-
-                            await send_web_notification(
-                                "completed",
-                                "handover_initiated",
-                                self.user_state,
-                                "handover call picked up by executive",
-                                payload_data=handover_data,
-                            )
-                            self._logger.info(
-                                f"Handover call is now ACTIVE - both parties connected"
-                            )
-                        else:
-                            self._logger.warning(
-                                f"Handover call was not answered within {max_wait_time}s"
-                            )
-                            self.user_state.extra_data["handover_initiated"] = False
-
-                        # Start transcription for BOTH participants (original + new)
-                        # so we capture the full conversation between them
-                        try:
-                            room = self.ctx.room
-                            self._logger.info(
-                                f"Setting up multi-participant transcription. Remote participants: {list(room.remote_participants.keys())}"
-                            )
-
-                            # Start transcription for the new SIP participant
-                            self._logger.info(
-                                f"Starting transcription for new SIP participant: {participant.identity}"
-                            )
-                            await self.handler._start_participant_transcription(
-                                participant, room
-                            )
-
-                            # Also ensure we're transcribing all existing participants
-                            for p in room.remote_participants.values():
-                                if (
-                                    p.identity != room.local_participant.identity
-                                    or p.identity
-                                    != self.user_state.extra_data.get("identity", "")
-                                ):
-                                    self._logger.info(
-                                        f"Starting transcription for existing participant: {p.identity}"
-                                    )
-                                    await self.handler._start_participant_transcription(
-                                        p, room
-                                    )
-
-                            self._logger.info(
-                                f"Started multi-participant transcription after handover"
-                            )
-                        except Exception as e:
-                            import traceback
-
-                            self._logger.error(
-                                f"Failed to setup multi-participant transcription: {e}\n{traceback.format_exc()}"
-                            )
-
-                        return {"status": "participant created "}
+                        self._logger.info(
+                            f"Started multi-participant transcription after handover"
+                        )
                     except Exception as e:
-                        print(f"Failed to create SIP participant retrying {i+1}")
-                        trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
+                        import traceback
+
+                        self._logger.error(
+                            f"Failed to setup multi-participant transcription: {e}\n{traceback.format_exc()}"
+                        )
+                except Exception as e:
+                    self._logger.error(
+                        f"Handover post-connect setup failed for {identity}: {e}"
+                    )
+
+                return {"status": "participant created "}
 
         return {"status": "cant transfer call"}
 

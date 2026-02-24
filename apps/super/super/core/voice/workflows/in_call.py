@@ -65,10 +65,22 @@ class InCallWorkflow:
         try:
             current_transcript = self.user_state.transcript
             past_call_context = await self._fetch_past_call_history()
+            handover_prompt = ""
+            if (
+                self.user_state
+                and isinstance(self.user_state.model_config, dict)
+            ):
+                handover_prompt = self.user_state.model_config.get("handover_prompt", "")
+
+            if not handover_prompt:
+                from super.core.voice.prompts.guidelines import HANOVER_INSTRUCTIONS
+
+                handover_prompt = HANOVER_INSTRUCTIONS
 
             summary_result = self.summarizer.forward(
                 call_transcript=self.user_state.transcript,
                 call_datetime=self.user_state.start_time,
+                prompt=handover_prompt,
             )
 
             # Build handover summary structure

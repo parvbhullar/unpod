@@ -31,8 +31,6 @@ You are evaluating whether a follow-up call is required based on a call transcri
 - User showed clear disinterest or rejection
 - No meaningful conversation occurred AND the user indicated they do not wish to proceed
 - User indicated they will reach out if needed
-- Enforce a strict hard stop on attempts: if latest/maximum `followup_count` in logs is greater than or equal to the prompt limit, return `requires_followup=false`.
-- If prompt does not define a limit, use a default maximum of 3 attempts.
 
 
 ### Follow-Up Timing Guidelines:

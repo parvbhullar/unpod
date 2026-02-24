@@ -346,6 +346,18 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                     return await ctx.wait_for_participant()
 
                 for i in range(2):
+                    # Check if participant already connected
+                    existing = [
+                        p
+                        for p in ctx.room.remote_participants.values()
+                        if p.identity == identity
+                    ]
+                    if existing:
+                        self._logger.info(
+                            f"SIP participant already in room: {existing[0].identity}"
+                        )
+                        return existing[0]
+
                     try:
                         await ctx.api.sip.create_sip_participant(
                             api.CreateSIPParticipantRequest(
@@ -363,8 +375,21 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
 
                     except Exception as e:
                         self._logger.error(
-                            f"Failed to create SIP participant retrying {i+1}"
+                            f"Failed to create SIP participant attempt {i+1}/2: "
+                            f"{type(e).__name__}: {e}"
                         )
+                        # Participant may have connected despite API error
+                        connected = [
+                            p
+                            for p in ctx.room.remote_participants.values()
+                            if p.identity == identity
+                        ]
+                        if connected:
+                            self._logger.info(
+                                f"SIP participant connected despite API error: "
+                                f"{connected[0].identity}"
+                            )
+                            return connected[0]
                         trunk_id = os.getenv("SIP_OUTBOUND_TRUNK_ID")
 
             except Exception as e:

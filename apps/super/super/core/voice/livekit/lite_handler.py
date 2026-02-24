@@ -2947,11 +2947,14 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             # Notify plugins of call end
             await self.plugins.broadcast_event("on_call_end")
 
+            await self._ensure_post_call_triggered(reason="session_disconnect")
+
+
         except Exception as e:
             self.user_state.call_status = CallStatusEnum.FAILED
             self._logger.error(f"LiveKit session error: {e}")
             import traceback
-
+            await self._ensure_post_call_triggered(reason="session_error")
             self._logger.error(traceback.format_exc())
             raise
 
@@ -3415,6 +3418,60 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         finally:
             self._sending_idle_warning = False
 
+    async def _ensure_post_call_triggered(self, reason: str = "session_end") -> None:
+        if not self.user_state:
+            self._logger.warning(
+                "[POST_CALL] No user_state available, skipping post-call trigger"
+            )
+            return
+
+        if not isinstance(self.user_state.extra_data, dict):
+            self.user_state.extra_data = {}
+
+        # Check if post-call was already triggered
+        if self.user_state.extra_data.get("post_call_triggered"):
+            self._logger.info(
+                f"[POST_CALL] Already triggered, skipping (reason={reason})"
+            )
+            return
+
+        # Skip for SDK calls
+        if self.user_state.extra_data.get("call_type") == "sdk":
+            self._logger.info("[POST_CALL] SDK call, skipping post-call workflow")
+            return
+
+        # Mark as triggered to prevent duplicates
+        self.user_state.extra_data["post_call_triggered"] = True
+
+        # Set end time if not already set
+        if not self.user_state.end_time:
+            self.user_state.end_time = datetime.utcnow()
+
+        # Set call status if still active/unknown
+        if not self.user_state.call_status or self.user_state.call_status in (
+            CallStatusEnum.InCall,
+            None,
+        ):
+            self.user_state.call_status = CallStatusEnum.COMPLETED
+
+        self._logger.info(
+            f"[POST_CALL] Triggering post-call workflow (reason={reason}, "
+            f"status={self.user_state.call_status})"
+        )
+
+        try:
+            res = await build_call_result(self.user_state)
+            await trigger_post_call(user_state=self.user_state, res=res)
+            self._logger.info(
+                f"{'=' * 100}\n\n[POST_CALL] Successfully triggered post-call "
+                f"workflow (reason={reason})\n\n{'=' * 100}"
+            )
+        except Exception as e:
+            self._logger.error(f"[POST_CALL] Failed to trigger post-call: {e}")
+            import traceback
+            self._logger.error(traceback.format_exc())
+
+
     async def _handle_idle_disconnect(self) -> None:
         """Handle disconnect due to user inactivity - delete room to end call."""
         if self._is_shutting_down:
@@ -3432,9 +3489,10 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
             res = await build_call_result(self.user_state)
             await trigger_post_call(user_state=self.user_state, res=res)
-
+            # Mark post-call as triggered to prevent duplicates
+            self.user_state.extra_data["post_call_triggered"] = True
             self._logger.info(
-                f"{'=' * 100}\n\n[END_CALL_TOOL]  Triggering post call \n\n{'=' * 100}"
+                f"{'=' * 100}\n\n[IDLE_DISCONNECT] Triggering post call\n\n{'=' * 100}"
             )
 
         # Send goodbye message

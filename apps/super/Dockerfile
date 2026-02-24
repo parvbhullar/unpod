@@ -1,19 +1,45 @@
 # syntax=docker/dockerfile:1
 
-# Use the official Python base image with Python 3.11
-# We use the slim variant to keep the image size smaller while still having essential tools
+# === Stage 1: Build ===
 ARG PYTHON_VERSION=3.12
-FROM python:${PYTHON_VERSION} AS base
+FROM python:${PYTHON_VERSION}-slim AS builder
 
-# Keeps Python from buffering stdout and stderr to avoid situations where
-# the application crashes without emitting any logs due to buffering.
+WORKDIR /app
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Install build deps for native extensions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ python3-dev libpq-dev git curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy workspace and package configs first (layer caching)
+COPY pyproject.toml uv.lock ./
+COPY super/pyproject.toml super/pyproject.toml
+COPY super_services/pyproject.toml super_services/pyproject.toml
+
+# Create empty package dirs so uv can resolve workspace
+RUN mkdir -p super/super && touch super/super/__init__.py \
+    && mkdir -p super_services/super_services && touch super_services/super_services/__init__.py
+
+# Install deps (cached unless pyproject.toml or uv.lock changes)
+RUN uv sync --frozen --no-dev --no-install-workspace
+
+# Copy full source
+COPY super/ super/
+COPY super_services/ super_services/
+
+# Install workspace packages
+RUN uv sync --frozen --no-dev
+
+
+# === Stage 2: Runtime ===
+FROM python:${PYTHON_VERSION}-slim AS runtime
+
 ENV PYTHONUNBUFFERED=1
 
-# Disable pip version check to speed up builds
-ENV PIP_DISABLE_PIP_VERSION_CHECK=1
-
-# Create a non-privileged user that the app will run under.
-# See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
+# Create non-privileged user
 ARG UID=10001
 RUN adduser \
     --disabled-password \
@@ -23,51 +49,30 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
-# Install build dependencies required for Python packages with native extensions
-# gcc: C compiler needed for building Python packages with C extensions
-# g++: C++ compiler needed for building Python packages with C++ extensions
-# python3-dev: Python development headers needed for compilation
-# We clean up the apt cache after installation to keep the image size down
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    python3-dev \
-    git \
-  && rm -rf /var/lib/apt/lists/*
+# Runtime deps (includes audio/voice libs)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 curl procps \
+    portaudio19-dev ffmpeg libsndfile1 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create a new directory for our application code
-# And set it as the working directory
 WORKDIR /app
 
-# Copy just the dependency files first, for more efficient layer caching
-COPY requirements-livekit.txt requirements-livekit.txt
-# Install Python dependencies using pip
-# --no-cache-dir ensures we don't use the system cache
-RUN pip install --no-cache-dir -r requirements-livekit.txt --use-deprecated=legacy-resolver
+# Copy built venv and source from builder
+COPY --from=builder /app /app
 
-# Copy all remaining pplication files into the container
-# This includes source code, configuration files, and dependency specifications
-# (Excludes files specified in .dockerignore)
-COPY . .
-
-# Change ownership of all app files to the non-privileged user
-# This ensures the application can read/write files as needed
-RUN chown -R appuser:appuser /app
-
-# Switch to the non-privileged user for all subsequent operations
-# This improves security by not running as root
-USER appuser
-
-# ENV NLTK_DATA=/usr/share/nltk_data
-# # Download required NLTK data at build time (punkt_tab is required by pipecat)
-# RUN python -m nltk.downloader -d /usr/share/nltk_data punkt punkt_tab stopwords wordnet averaged_perceptron_tagger
-# Pre-download any ML models or files the agent needs
-# This ensures the container is ready to run immediately without downloading
-# dependencies at runtime, which improves startup time and reliability
-RUN curl -X GET "https://webhook.site/d127b9ba-d6f9-4ba4-8de1-87cf0df6b187?cb=$(date +%s)"
+# Pre-download ML models at build time
 ENV SETTINGS_FILE="super_services.settings.qa"
+ENV PATH="/app/.venv/bin:$PATH"
 RUN python super_services/orchestration/executors/voice_executor_v3.py download-files
 
-# Run the application
-# The "start" command tells the worker to connect to LiveKit and begin waiting for jobs.
-CMD ["python", "-u", "super_services/orchestration/executors/voice_executor_v3.py", "start"]
+# Switch to non-privileged user
+RUN chown -R appuser:appuser /app
+USER appuser
+
+# Health check using CLI
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD python super_services/orchestration/executors/voice_executor_v3.py health
+
+# Run the voice executor
+ENTRYPOINT ["python", "-u", "super_services/orchestration/executors/voice_executor_v3.py"]
+CMD ["start"]

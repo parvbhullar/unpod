@@ -22,6 +22,9 @@ class CallSummarySignature(dspy.Signature):
     call_datetime = dspy.InputField(
         desc="Datetime of call executed in format 'YYYY-MM-DD HH:MM'"
     )
+    current_date=dspy.InputField(
+        desc = "current date and time based on which agent should evaluate callback time"
+    )
     prompt = dspy.InputField(
         desc="system prompt based on which we must identify the call status"
     )
@@ -56,14 +59,15 @@ class CallSummarizer(dspy.Module):
         self.lm = lm or get_dspy_lm()
         self.generate_summary = ChainOfThought(CallSummarySignature)
 
-    def forward(self, call_transcript, call_datetime):
+    def forward(self, call_transcript, call_datetime, prompt=None, current_date=None):
         from super.core.voice.prompts.evalution_prompts.status_label import BASE_PROMPT
 
         with dspy.context(lm=self.lm):
             result = self.generate_summary(
                 call_transcript=call_transcript,
                 call_datetime=call_datetime,
-                prompt=BASE_PROMPT,
+                prompt=prompt or BASE_PROMPT,
+                current_date=current_date or datetime.utcnow(),
             )
             return dspy.Prediction(
                 status=result.status,
@@ -352,63 +356,3 @@ class ProfileSummaryExtractor(dspy.Module):
                 ),
                 "summary_text": result.summary_text,
             }
-
-
-if __name__ == "__main__":
-    import asyncio
-
-    transcript = [
-        {
-            "role": "user",
-            "content": "Hello?",
-            "user_id": "PA_Z3qPpu7ZGhWh",
-            "timestamp": "2025-10-16T05 :55:15.613+00:00",
-        },
-        {
-            "role": "assistant",
-            "content": "Hello! How can I assist you today?",
-            "user_id": None,
-            "timestamp": "2025-10-16T05:55:15.332+00:00",
-        },
-        {
-            "role": "user",
-            "content": "How can you assist me?",
-            "user_id": "PA_Z3qP pu7ZGhWh",
-            "timestamp": "2025-10-16T05:55:20.872+00:00",
-        },
-        {
-            "role": "assistant",
-            "content": "Hey there! मैं GIA from GameStop हूँ। मैं आपको शानदार games, consoles, या accessories खोजने में मदद कर सकती हूँ। क्या आपके पास बात करने  के लिए एक मिनट है, या मैं बाद में संपर्क करूँ?",
-            "user_id": None,
-            "timestamp": "2025-10-16T05:55:22.867+00:00",
-        },
-        {
-            "role": "user",
-            "content": "Sorry, I'm not interested.",
-            "user_id": "PA_Z3qPpu7ZGhWh",
-            "timestamp": "2025-10-16T05 :55:37.171+00:00",
-        },
-        {
-            "role": "user",
-            "content": "I'm not interested in your service.",
-            "user_id": "PA_Z3qPpu7ZGhWh",
-            "timestamp": "2025-10-16T05:55:39.113+00:00",
-        },
-        {
-            "role": "user",
-            "content": "Please.",
-            "user_id": "PA_Z3qPpu7ZGh Wh",
-            "timestamp": "2025-10-16T05:55:39.533+00:00",
-        },
-        {
-            "role": "assistant",
-            "content": "कोई बात नहीं, आपका समय देने के लिए धन्यवाद! आप GIA से GameStop से बात कर रहे थे। अगर कभी गेम्स की ज़रूरत पड़े, तो हम हमेशा यहाँ हैं। Take care !",
-            "user_id": None,
-            "timestamp": "2025-10-16T05:55:41.906+00:00",
-        },
-    ]
-    call_classification_service = CallClassificationService(
-        transcript, "F1O3QJM1Y7Q1AVVUYNV4VPRB", "689d8dc77ba71026cbd36ce8"
-    )
-
-    asyncio.run(call_classification_service.classify_call())

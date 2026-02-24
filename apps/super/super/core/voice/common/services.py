@@ -215,13 +215,21 @@ async def save_execution_log(
     task_id: str, step: str, status: str, output: Any, error: Optional[str] = None
 ) -> None:
     """Save execution log asynchronously."""
+    if not task_id:
+        print(f"[EXECUTION_LOG] Skipping - no task_id provided")
+        return
+
     if isinstance(output, str):
         output = {"data": output}
 
     exec_id = f"TE{uuid.uuid1().hex}"
 
-    # Get task info in thread pool
-    task = await _run_sync_db_op(TaskModel.get, task_id=task_id)
+    try:
+        # Get task info in thread pool
+        task = await _run_sync_db_op(TaskModel.get, task_id=task_id)
+    except Exception as e:
+        print(f"[EXECUTION_LOG] Task not found for task_id={task_id}: {e}")
+        return
 
     exec_log_data = {
         "task_exec_id": exec_id,
@@ -286,7 +294,7 @@ async def get_doc_id_from_number(number, token):
         return "", ""
 
 
-async def create_scheduled_task(task_id, time):
+async def create_scheduled_task(task_id, time, max_calls: int = 3):
     if not task_id:
         return
 
@@ -296,7 +304,6 @@ async def create_scheduled_task(task_id, time):
         time = datetime.fromisoformat(time)
     try:
         task = TaskModel.get(task_id=task_id)
-        task_id = f"T{uuid.uuid1().hex}"
 
         followup_count = task.output.get("followup_count")
 
@@ -306,12 +313,38 @@ async def create_scheduled_task(task_id, time):
         else:
             followup_count = 1
 
-        if followup_count > 4:
-            print("skipping task creation due to multiple followups")
+        if followup_count >= max_calls:
+            print(
+                f"skipping task creation: followup_count={followup_count} "
+                f">= max_calls={max_calls}"
+            )
             return
 
+        # Idempotency: check for existing scheduled follow-up for same task/contact scope.
+        dedup_query = {
+            "status": TaskStatusEnum.scheduled,
+            "assignee": task.assignee,
+        }
+        if getattr(task, "ref_id", None):
+            dedup_query["ref_id"] = task.ref_id
+        else:
+            dedup_query["output.referenced_task"] = task.task_id
+
+        existing = TaskModel._get_collection().find_one(dedup_query)
+        if existing:
+            print(
+                f"[DEDUP] Scheduled task already exists: {existing.get('task_id')}"
+            )
+            return {
+                "task_id": existing.get("task_id"),
+                "time": time,
+                "deduplicated": True,
+            }
+
+        new_task_id = f"T{uuid.uuid1().hex}"
+
         data = {
-            "task_id": task_id,
+            "task_id": new_task_id,
             "space_id": task.space_id,
             "user": task.user if task.user else "",
             "run_id": task.run_id,
@@ -321,20 +354,24 @@ async def create_scheduled_task(task_id, time):
             "assignee": task.assignee,
             "status": TaskStatusEnum.scheduled,
             "execution_type": "call",
-            "output": {"scheduled_time": str(time), "followup_count": followup_count,"referenced_task":task.task_id},
+            "output": {
+                "scheduled_time": str(time),
+                "followup_count": followup_count,
+                "referenced_task": task.task_id,
+            },
             "input": task.input,
             "retry_attempt": 0,
             "scheduled_timestamp": int(time.timestamp()),
         }
 
-        task = TaskModel.save_single_to_db(data)
+        TaskModel.save_single_to_db(data)
 
-        print(f"scheduled call {task}")
+        print(f"scheduled call {new_task_id}")
 
-        return {"task_id": task_id, "time": time}
+        return {"task_id": new_task_id, "time": time}
 
     except Exception as e:
-        print(f"error rescheduling call{str(e)}")
+        print(f"error rescheduling call {str(e)}")
         return
 
 
@@ -442,10 +479,13 @@ async def send_retry_sms(user_state, task_id, assignee):
     task = TaskModel.get(task_id=task_id)
     redial_count = 0
     task_input = task.input
+    task_output = task.output if isinstance(task.output, dict) else {}
 
     try:
-        if task_input.get("followup_count"):
-            redial_count += task_input.get("followup_count")
+        if task_output.get("followup_count") is not None:
+            redial_count += int(task_output.get("followup_count"))
+        elif task_input.get("followup_count") is not None:
+            redial_count += int(task_input.get("followup_count"))
 
     except Exception as e:
         print(e)
