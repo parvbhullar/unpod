@@ -12,5 +12,11 @@ WORKPOOLS = [
         "type": "docker",
         "base_job_template": f"{CURRENT_DIR}/call_pool_config.json",
         "concurrency_limit": None,
-    }
+    },
+    {
+        "name": "call-work-pool-k8s",
+        "type": "kubernetes",
+        "base_job_template": None,
+        "concurrency_limit": None,
+    },
 ]

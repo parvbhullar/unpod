@@ -1,74 +1,110 @@
+from typing import Optional
+
 from prefect import get_client
 from prefect.client.schemas.filters import FlowRunFilter
-from super_services.db.services.repository.deployment import (
-    get_deployment_config,
-    get_all_deployment_configs,
+
+from super_services.prefect_setup.deployments.create_deployments import (
+    load_local_configs,
 )
 
 
+def _get_config_from_db(name: str) -> Optional[dict]:
+    """Try fetching deployment config from MongoDB."""
+    try:
+        from super_services.db.services.repository.deployment import (
+            get_deployment_config,
+        )
+
+        return get_deployment_config(name)
+    except Exception:
+        return None
+
+
+def _get_all_configs_from_db(
+    work_pool_name: Optional[str] = None,
+) -> list[dict]:
+    """Try fetching all deployment configs from MongoDB."""
+    try:
+        from super_services.db.services.repository.deployment import (
+            get_all_deployment_configs,
+        )
+
+        return get_all_deployment_configs(work_pool_name=work_pool_name)
+    except Exception:
+        return []
+
+
+def _get_config(name: str) -> Optional[dict]:
+    """Get deployment config from MongoDB, falling back to local JSON."""
+    config = _get_config_from_db(name)
+    if config:
+        return config
+
+    # Fallback to local JSON
+    for cfg in load_local_configs():
+        if cfg.get("name") == name:
+            return cfg
+    return None
+
+
 async def trigger_deployment(deployment_name, parameters, **kwargs):
-    """
-    Trigger a deployment using configuration from MongoDB.
+    """Trigger a deployment using config from MongoDB or local JSON."""
+    config = _get_config(deployment_name)
+    if not config:
+        raise ValueError(
+            f"Deployment {deployment_name} not found in DB or local JSON"
+        )
 
-    Args:
-        deployment_name: Name of the deployment to trigger
-        parameters: Parameters to pass to the flow run
-
-    Returns:
-        None
-    """
-    # Fetch deployment config from MongoDB
-    db_deployment_config = get_deployment_config(deployment_name)
-    if not db_deployment_config:
-        raise ValueError(f"Deployment {deployment_name} not found in database")
-
-    # Extract deployment info from DB config
-    name = db_deployment_config.get("name")
-    flow_name = db_deployment_config.get("flow_name")
+    name = config.get("name")
+    flow_name = config.get("flow_name")
 
     if not flow_name:
-        raise ValueError(f"Flow name not found for deployment {deployment_name}")
+        raise ValueError(
+            f"Flow name not found for deployment {deployment_name}"
+        )
 
-    # Construct Prefect deployment name filter: {flow_name}/{deployment_name}
     deployment_name_filter = f"{flow_name}/{name}"
 
     async with get_client() as client:
-        deployment = await client.read_deployment_by_name(name=deployment_name_filter)
+        deployment = await client.read_deployment_by_name(
+            name=deployment_name_filter
+        )
         if not deployment:
-            raise ValueError(f"Deployment {deployment_name} not found in Prefect")
+            raise ValueError(
+                f"Deployment {deployment_name} not found in Prefect"
+            )
         await client.create_flow_run_from_deployment(
             deployment.id, parameters=parameters, **kwargs
         )
-        print(f"✓ Flow Run Created: {deployment_name} (flow: {flow_name})")
+        print(f"Flow Run Created: {deployment_name} (flow: {flow_name})")
 
 
-def get_available_deployments(work_pool_name=None):
-    """
-    Get all available deployment configurations from MongoDB.
+def get_available_deployments(
+    work_pool_name: Optional[str] = None,
+) -> list[dict]:
+    """Get all deployment configs from MongoDB or local JSON fallback."""
+    configs = _get_all_configs_from_db(work_pool_name=work_pool_name)
+    if configs:
+        return configs
 
-    Args:
-        work_pool_name: Optional filter by work pool name
+    # Fallback to local JSON
+    all_configs = load_local_configs()
+    if work_pool_name:
+        return [
+            c
+            for c in all_configs
+            if c.get("work_pool_name") == work_pool_name
+        ]
+    return all_configs
 
-    Returns:
-        List of deployment config dicts
-    """
-    deployments = get_all_deployment_configs(work_pool_name=work_pool_name)
-    return deployments
 
-
-def get_deployment_metadata(deployment_name):
-    """
-    Get deployment configuration metadata from MongoDB.
-
-    Args:
-        deployment_name: Name of the deployment
-
-    Returns:
-        Dict with deployment config (name, docker_image, work_pool_name, tags, concurrency)
-    """
-    config = get_deployment_config(deployment_name)
+def get_deployment_metadata(deployment_name: str) -> dict:
+    """Get deployment config from MongoDB or local JSON fallback."""
+    config = _get_config(deployment_name)
     if not config:
-        raise ValueError(f"Deployment {deployment_name} not found in database")
+        raise ValueError(
+            f"Deployment {deployment_name} not found in DB or local JSON"
+        )
     return config
 
 
@@ -84,5 +120,7 @@ async def check_flow_runs_filter(flow_run_filter=None, *args, **kwargs):
 
 async def fetch_all_concurrency_list():
     async with get_client() as client:
-        concurrency_limits = await client.read_concurrency_limits(limit=50, offset=0)
+        concurrency_limits = await client.read_concurrency_limits(
+            limit=50, offset=0
+        )
         return concurrency_limits

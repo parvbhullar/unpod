@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prefect-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prefect-worker
+  template:
+    metadata:
+      labels:
+        app: prefect-worker
+    spec:
+      serviceAccountName: prefect-worker
+      containers:
+        - name: prefect-worker
+          image: prefecthq/prefect:3-latest
+          command:
+            - prefect
+            - worker
+            - start
+            - --pool
+            - call-work-pool
+            - --type
+            - kubernetes
+            - --with-healthcheck
+          envFrom:
+            - configMapRef:
+                name: prefect-config
+            - secretRef:
+                name: prefect-secrets
+          ports:
+            - containerPort: 8080
+              name: health
+          resources:
+            requests:
+              cpu: "500m"
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10

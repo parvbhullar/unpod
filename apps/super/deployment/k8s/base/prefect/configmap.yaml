@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prefect-config
+data:
+  PREFECT_API_URL: "http://prefect-server:4200/api"
+  PREFECT_WORK_POOL: "call-work-pool-k8s"
+  PREFECT_SQLALCHEMY_POOL_SIZE: "50"
+  PREFECT_SQLALCHEMY_MAX_OVERFLOW: "100"

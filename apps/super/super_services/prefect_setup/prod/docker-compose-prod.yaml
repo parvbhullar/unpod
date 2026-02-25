@@ -1,0 +1,112 @@
+networks:
+    prefect-network-prod:   # Must match your Docker Compose network
+      name: '${PREFECT_NETWORK:-prefect-network-prod}'
+services:
+  migrate:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    command: prefect server database upgrade -y
+    container_name: prefect-migrate-prod
+    environment:
+      - PREFECT_API_DATABASE_CONNECTION_URL=${PREFECT_POSTGRES_URL}
+    networks:
+      - '${PREFECT_NETWORK:-prefect-network-prod}'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  prefect-background:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    depends_on: [migrate]
+    command: prefect server services start
+    container_name: prefect-background-prod
+    restart: unless-stopped
+    environment:
+      - PREFECT_API_DATABASE_CONNECTION_URL=${PREFECT_POSTGRES_URL}
+      - PREFECT_API_DATABASE_MIGRATE_ON_START="false"
+      - PREFECT_MESSAGING_BROKER=prefect_redis.messaging
+      - PREFECT_MESSAGING_CACHE=prefect_redis.messaging
+      - PREFECT_REDIS_MESSAGING_HOST=${PREFECT_REDIS_MESSAGING_HOST}
+      - PREFECT_REDIS_MESSAGING_PORT=${PREFECT_REDIS_MESSAGING_PORT:-6379}
+      # - PREFECT_REDIS_MESSAGING_PASSWORD=${PREFECT_REDIS_MESSAGING_PASSWORD}
+      - PREFECT_REDIS_MESSAGING_DB=${PREFECT_REDIS_MESSAGING_DB:-2}
+      - PREFECT_LOGGING_LEVEL=INFO
+      - PREFECT_API_DATABASE_MIGRATE_ON_START=false
+      - PREFECT_SQLALCHEMY_POOL_SIZE=50
+      - PREFECT_SQLALCHEMY_MAX_OVERFLOW=100
+      - PREFECT_API_DATABASE_TIMEOUT=30
+      - PREFECT_SERVER_DATABASE_SQLALCHEMY_POOL_RECYCLE=600
+    networks:
+      - '${PREFECT_NETWORK:-prefect-network-prod}'
+
+  prefect-server:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    depends_on: [migrate]
+    container_name: prefect-server-prod
+    environment:
+      # - PREFECT_UI_API_URL=${PREFECT_UI_API_URL}
+      # - PREFECT_UI_URL=${PREFECT_UI_URL}
+      - PREFECT_API_URL=${PREFECT_API_URL}
+      - PREFECT_LOGGING_LEVEL=INFO
+      - PREFECT_API_DATABASE_MIGRATE_ON_START=false
+      - PREFECT_API_DATABASE_CONNECTION_URL=${PREFECT_POSTGRES_URL}
+      - PREFECT_SQLALCHEMY_POOL_SIZE=50
+      - PREFECT_SQLALCHEMY_MAX_OVERFLOW=100
+      - PREFECT_API_DATABASE_TIMEOUT=30
+      - PREFECT_SERVER_DATABASE_SQLALCHEMY_POOL_RECYCLE=600
+      - PREFECT_MESSAGING_BROKER=prefect_redis.messaging
+      - PREFECT_MESSAGING_CACHE=prefect_redis.messaging
+      - PREFECT_REDIS_MESSAGING_HOST=${PREFECT_REDIS_MESSAGING_HOST}
+      - PREFECT_REDIS_MESSAGING_PORT=${PREFECT_REDIS_MESSAGING_PORT:-6379}
+      # - PREFECT_REDIS_MESSAGING_PASSWORD=${PREFECT_REDIS_MESSAGING_PASSWORD}
+      - PREFECT_REDIS_MESSAGING_DB=${PREFECT_REDIS_MESSAGING_DB:-2}
+      - PREFECT_SERVER_EVENTS_CAUSAL_ORDERING=prefect_redis.ordering
+      - PREFECT_SERVER_CONCURRENCY_LEASE_STORAGE=prefect_redis.lease_storage
+    command: >
+      bash -c "
+        echo 'Installing prefect-docker packages...' &&
+        pip install prefect-docker==0.6.6 &&
+        prefect server start --host 0.0.0.0 --no-services --workers 2
+      "
+    ports:
+      - "${PREFECT_SERVER_API_PORT:-4200}:4200"
+    volumes:
+      - ${PREFECT_STORAGE}:/root/.prefect
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4200/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - '${PREFECT_NETWORK:-prefect-network-prod}'
+      
+  prefect-workpool-init:
+    image: prefecthq/prefect:${PREFECT_VERSION}-python${PREFECT_PYTHON_VERSION:-3.12}
+    container_name: prefect-workpool-init-prod
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+    environment:
+      - PREFECT_API_URL=${PREFECT_API_URL}
+      - MOUNTPATH=${MOUNTPATH}
+      - DOCKER_REGISTRY_USER=${DOCKER_REGISTRY_USER}
+      - DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}
+      - DOCKER_REGISTRY_URL=${DOCKER_REGISTRY_URL}
+      # - PREFECT_NETWORK=${PREFECT_NETWORK}
+      - ENVIRONMENT=${ENVIRONMENT}
+      # - GITLAB_ACCESS_TOKEN=${GITLAB_ACCESS_TOKEN}
+      # - GITLAB_BRANCH_NAME=${GITLAB_BRANCH_NAME}
+      # - HOSTNAME=${HOSTNAME}
+      # - HOSTNAME_IP=${HOSTNAME_IP}
+    volumes:
+      - ../workpool_config:/opt/scripts/
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      bash -c "
+        pip install tabulate==0.9.0 && pip install prefect-docker==0.6.6 && pip install prefect-gitlab==0.3.1 &&
+        echo 'Setting up work pools using Python script...' &&
+        python /opt/scripts/create_workpools.py &&
+        echo 'Work pool setup complete.'
+      "
+    networks:
+      - '${PREFECT_NETWORK:-prefect-network-prod}'

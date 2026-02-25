@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - server-deployment.yaml
+  - server-service.yaml
+  - worker-deployment.yaml
+  - worker-rbac.yaml
+  - worker-hpa.yaml
+  - migrate-job.yaml
+  - configmap.yaml
+  - secret.yaml

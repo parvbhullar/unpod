@@ -60,8 +60,8 @@ cd /var/apps/super-prefect-prod
 git pull
 uv sync --frozen --no-dev
 
-docker compose -f super_services/prefect_setup/prod/docker-prefect-sever-compose.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/prod/docker-prefect-sever-compose.yaml up -d
+docker compose -f super_services/prefect_setup/prod/docker-compose-prod.yaml down --remove-orphans
+docker compose -f super_services/prefect_setup/prod/docker-compose-prod.yaml up -d
 
 docker compose -f super_services/prefect_setup/prod/docker-call-worker-compose.yaml down --remove-orphans
 docker compose -f super_services/prefect_setup/prod/docker-call-worker-compose.yaml up -d

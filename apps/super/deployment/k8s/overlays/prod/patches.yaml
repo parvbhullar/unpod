@@ -10,8 +10,8 @@ spec:
         - name: voice-executor
           resources:
             requests:
-              cpu: "4"
-              memory: 8Gi
+              cpu: "8"
+              memory: 16Gi
             limits:
               cpu: "8"
               memory: 16Gi
