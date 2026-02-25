@@ -2,15 +2,17 @@
 Description=Voice Executor V3 Service
 
 [Service]
-ExecStart=/home/ubuntu/.virtualenvs/Task10Env/bin/python3 -u super_services/orchestration/executors/voice_executor_v3.py dev
+ExecStart=uv run python3 -u super_services/orchestration/executors/voice_executor_v3.py dev
 WorkingDirectory=/var/apps/super-qa-task
 Restart=always
 StandardOutput=append:/var/log/voice_lk_executor_v3.out.log
 StandardError=append:/var/log/voice_lk_executor_v3.err.log
 Environment="SETTINGS_FILE=super_services.settings.prod"
+Environment="PATH=/home/ubuntu/.local/bin:/usr/local/bin:/usr/bin:/bin"
 
 # Memory limits
 MemoryMax=8G
 MemoryHigh=7G
+
 [Install]
 WantedBy=multi-user.target

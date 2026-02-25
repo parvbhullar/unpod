@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: prefect-migrate
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate
+          image: prefecthq/prefect:3-latest
+          command:
+            - prefect
+            - server
+            - database
+            - upgrade
+            - "-y"
+          envFrom:
+            - secretRef:
+                name: prefect-secrets

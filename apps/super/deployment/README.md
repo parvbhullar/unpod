@@ -1,8 +1,14 @@
 # Deployment Guide
 
-Production deployment for the Unpod Voice Executor via Docker or Kubernetes.
+Production deployment for the Unpod Voice Executor via Docker, Kubernetes, or systemd.
 
 For environment variables and local dev setup, see the [root README](../README.md).
+
+## Prerequisites
+
+`uv` is required for all local and systemd workflows. If it's not installed,
+both `make` and `deploy.sh` will auto-install it via the
+[official installer](https://docs.astral.sh/uv/getting-started/installation/).
 
 ## Docker
 
@@ -60,14 +66,53 @@ make k8s-prod
 kubectl apply -k deployment/k8s/overlays/prod/
 ```
 
+### Design Notes
+
+Based on the [LiveKit agent deployment reference](https://github.com/livekit-examples/agent-deployment/blob/main/kubernetes/agent-manifest.yaml):
+
+- **`terminationGracePeriodSeconds: 600`** — Gives agents 10 minutes to finish active conversations before pod shutdown. Critical for graceful scaling and rolling updates.
+- **Guaranteed QoS (requests = limits)** — Base and prod use equal requests/limits for predictable voice performance. QA uses burstable for cost savings.
+- **Base resources: 4 CPU / 8Gi** — Good for ~30 concurrent 1:1 AI conversations per pod.
+
 ### Environment Differences
+
+| Setting | Base | QA | Prod |
+|---------|------|-----|------|
+| Replicas | 1 | 1 | 2 |
+| CPU request / limit | 4 / 4 | 2 / 4 | 8 / 8 |
+| Memory request / limit | 8Gi / 8Gi | 4Gi / 8Gi | 16Gi / 16Gi |
+| QoS class | Guaranteed | Burstable | Guaranteed |
+| HPA min / max replicas | 1 / 5 | 1 / 5 | 2 / 10 |
+| Graceful shutdown | 600s | 600s | 600s |
+
+### Prefect on Kubernetes
+
+Prefect server + worker can also be deployed to K8s with horizontal scaling.
+
+```bash
+# Deploy only Prefect
+make k8s-prefect-qa
+make k8s-prefect-prod
+
+# Or deploy everything (executor + Prefect)
+make k8s-qa
+make k8s-prod
+```
+
+The K8s deployment uses the `kubernetes` work pool type (`call-work-pool-k8s`) instead
+of `docker`. Each flow run spawns a K8s Job, enabling autoscaling via HPA.
+
+#### Prefect K8s Environment Differences
 
 | Setting | QA | Prod |
 |---------|-----|------|
-| Replicas | 1 | 2 |
-| CPU request / limit | 2 / 4 | 4 / 8 |
-| Memory request / limit | 4Gi / 8Gi | 8Gi / 16Gi |
-| HPA min / max replicas | 1 / 5 | 2 / 10 |
+| Server replicas | 1 | 2 |
+| Server CPU req / limit | 1 / 2 | 2 / 4 |
+| Server memory req / limit | 2Gi / 4Gi | 4Gi / 8Gi |
+| Worker replicas | 1 | 2 |
+| Worker CPU req / limit | 500m / 1 | 1 / 2 |
+| Worker memory req / limit | 512Mi / 1Gi | 1Gi / 2Gi |
+| Worker HPA min / max | 1 / 5 | 2 / 10 |
 
 ### Manifest Structure
 
@@ -80,10 +125,80 @@ deployment/k8s/
     secret.yaml             # API keys template (fill in or use kubectl create)
     hpa.yaml                # HorizontalPodAutoscaler (CPU 70%, memory 80%)
     kustomization.yaml
+    prefect/                # Prefect K8s manifests
+      server-deployment.yaml
+      server-service.yaml
+      worker-deployment.yaml
+      worker-rbac.yaml      # ServiceAccount, Role, RoleBinding for Jobs
+      worker-hpa.yaml
+      migrate-job.yaml      # DB migration (run once)
+      configmap.yaml
+      secret.yaml
+      kustomization.yaml
   overlays/
     qa/                     # QA patches (1 replica, 4CPU/8Gi)
+      prefect-patches.yaml  # Prefect QA resource overrides
     prod/                   # Prod patches (2 replicas, 8CPU/16Gi, HPA 2-10)
+      prefect-patches.yaml  # Prefect Prod resource overrides
 ```
+
+## Systemd (Linux)
+
+Deploy the voice executor as a systemd service on a Linux box. This is the
+simplest way to run on a bare VM (Ubuntu/Debian).
+
+### Quick deploy
+
+```bash
+# Clone the repo, then from the project root:
+
+# Step 1: Install uv + deps, configure .env (prompts for API keys)
+make setup
+
+# Step 2: Deploy the systemd service
+make deploy-service
+```
+
+**`make setup`** handles everything needed before running:
+
+1. Auto-installs `uv` if missing
+2. Runs `uv sync` to install Python dependencies
+3. Interactively prompts for required API keys (LiveKit, OpenAI, Deepgram)
+   and optional ones (Anthropic, Cartesia, MongoDB, Redis)
+4. Saves all values to `.env`
+
+**`make deploy-service`** then deploys the service:
+
+1. Copies the service file to `/etc/systemd/system/`, setting
+   `WorkingDirectory` to the current repo path
+2. Reloads systemd, enables, and restarts the service
+
+### Manual steps
+
+```bash
+# Copy service file (adjusting WorkingDirectory)
+sudo sed 's|WorkingDirectory=.*|WorkingDirectory=/your/repo/path|' \
+    deployment/services/voice_lk_executor_v3.service \
+    | sudo tee /etc/systemd/system/voice_lk_executor_v3.service > /dev/null
+
+sudo systemctl daemon-reload
+sudo systemctl enable voice_lk_executor_v3
+sudo systemctl start voice_lk_executor_v3
+```
+
+### Managing the service
+
+```bash
+sudo systemctl status voice_lk_executor_v3   # Check status
+sudo systemctl restart voice_lk_executor_v3  # Restart
+sudo journalctl -u voice_lk_executor_v3 -f   # Follow logs
+```
+
+Logs are also written to:
+- `/var/log/voice_lk_executor_v3.out.log` (stdout)
+- `/var/log/voice_lk_executor_v3.err.log` (stderr)
+
+Memory limits: 8G max, 7G high watermark (configured in the service file).
 
 ## CLI Reference
 
@@ -94,7 +209,7 @@ The voice executor (`voice_executor_v3.py`) accepts these subcommands:
 | `start` | Production mode | Docker ENTRYPOINT, K8s, systemd |
 | `dev` | Dev mode with debug logging | Local development |
 | `download-files` | Pre-download ML models | Dockerfile build stage |
-| `setup` | Set up local venv + .env | First-time dev setup |
+| `setup` | Set up local venv + .env | First-time setup (`make setup`) |
 | `health` | Check MongoDB, Redis, LiveKit | K8s probes, Docker HEALTHCHECK |
 | `validate-env` | Check required env vars | deploy.sh pre-flight |
 | `test` | Run pytest | CI, local dev |
@@ -113,7 +228,7 @@ uv run python super_services/orchestration/executors/voice_executor_v3.py valida
 ./deploy.sh docker run           # Build + run container
 ./deploy.sh k8s qa               # Deploy K8s QA overlay
 ./deploy.sh k8s prod             # Deploy K8s Prod overlay
-./deploy.sh setup                # Set up local dev environment
+./deploy.sh setup                # Install deps + configure .env (interactive)
 ./deploy.sh validate             # Check required env vars
 ./deploy.sh health               # Check service connectivity
 ./deploy.sh local                # Run locally in dev mode
@@ -126,13 +241,21 @@ uv run python super_services/orchestration/executors/voice_executor_v3.py valida
 $ make help
   build           Build Docker image
   run             Build + run Docker container
-  setup           Set up local dev environment (venv + .env)
+  setup           Install deps + configure .env (interactive)
   local           Run locally in dev mode
   validate        Check required env vars
   health          Check service connectivity
-  test            Run unit tests
-  k8s-qa          Deploy to K8s QA
-  k8s-prod        Deploy to K8s Prod
+  test            Run voice agent test suite
+  deploy-service  Deploy systemd service (run make setup first)
+  prefect-up      Start Prefect server + worker (local)
+  prefect-down    Stop Prefect server + worker (local)
+  prefect-deploy  Register Prefect flow deployments
+  prefect-refresh Sync deps + rebuild task image + re-register
+  prefect-remote  Start Prefect for qa/prod (ENV=qa|prod)
+  k8s-qa          Deploy all to K8s QA (executor + Prefect)
+  k8s-prod        Deploy all to K8s Prod (executor + Prefect)
+  k8s-prefect-qa  Deploy only Prefect to K8s QA
+  k8s-prefect-prod Deploy only Prefect to K8s Prod
   help            Show this help
 ```
 

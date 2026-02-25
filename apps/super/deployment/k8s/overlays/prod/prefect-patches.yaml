@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prefect-server
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: prefect-server
+          resources:
+            requests:
+              cpu: "2"
+              memory: 4Gi
+            limits:
+              cpu: "4"
+              memory: 8Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prefect-worker
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: prefect-worker
+          resources:
+            requests:
+              cpu: "1"
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: prefect-worker
+spec:
+  minReplicas: 2
+  maxReplicas: 10

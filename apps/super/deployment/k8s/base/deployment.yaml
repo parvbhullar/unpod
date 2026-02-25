@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: voice-executor
+  labels:
+    app: voice-executor
 spec:
   replicas: 1
   selector:
@@ -12,6 +14,8 @@ spec:
       labels:
         app: voice-executor
     spec:
+      # Give the agent 10 minutes to finish ongoing conversations
+      terminationGracePeriodSeconds: 600
       containers:
         - name: voice-executor
           image: voice-executor:latest
@@ -28,8 +32,8 @@ spec:
                 name: voice-executor-secrets
           resources:
             requests:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "4"
+              memory: 8Gi
             limits:
               cpu: "4"
               memory: 8Gi

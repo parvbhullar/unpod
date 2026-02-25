@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prefect-server
+spec:
+  type: ClusterIP
+  selector:
+    app: prefect-server
+  ports:
+    - name: api
+      port: 4200
+      targetPort: 4200
+      protocol: TCP

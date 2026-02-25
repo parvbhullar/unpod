@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prefect-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prefect-server
+  template:
+    metadata:
+      labels:
+        app: prefect-server
+    spec:
+      containers:
+        - name: prefect-server
+          image: prefecthq/prefect:3-latest
+          command:
+            - prefect
+            - server
+            - start
+            - --host
+            - "0.0.0.0"
+          envFrom:
+            - configMapRef:
+                name: prefect-config
+            - secretRef:
+                name: prefect-secrets
+          ports:
+            - containerPort: 4200
+              name: api
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 4200
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 4200
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
