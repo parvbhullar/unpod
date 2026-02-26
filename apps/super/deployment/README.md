@@ -1,6 +1,6 @@
 # Deployment Guide
 
-Production deployment for the Unpod Voice Executor via Docker, Kubernetes, or systemd.
+Production deployment for the Unpod Voice Executor via Docker, Kubernetes, Cerebrium, or systemd.
 
 For environment variables and local dev setup, see the [root README](../README.md).
 
@@ -142,6 +142,54 @@ deployment/k8s/
       prefect-patches.yaml  # Prefect Prod resource overrides
 ```
 
+## Cerebrium
+
+Deploy the voice executor to [Cerebrium](https://www.cerebrium.ai/) for managed
+cloud hosting with autoscaling.
+
+### Prerequisites
+
+1. Install the Cerebrium CLI: `pip install cerebrium`
+2. Authenticate: `cerebrium login`
+3. Upload environment variables (API keys) via the
+   [Cerebrium dashboard](https://dashboard.cerebrium.ai/) secrets tab.
+   Required: `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`,
+   `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`.
+
+### Deploy
+
+```bash
+# One-click deploy
+make cerebrium-deploy
+
+# Or using deploy.sh
+./deploy.sh cerebrium
+
+# View logs
+make cerebrium-logs
+```
+
+### Configuration
+
+Config lives in `deployment/cerebrium/`:
+
+| File | Purpose |
+|------|---------|
+| `cerebrium.toml` | Project config (hardware, scaling, dependencies) |
+| `Dockerfile` | Container spec (simpler than root Dockerfile) |
+
+Default scaling: 1-5 replicas, 4 CPU, 8 GB RAM. Edit `cerebrium.toml` to adjust.
+
+### How It Works
+
+Cerebrium builds the custom Dockerfile, which:
+1. Installs dependencies from `requirements-livekit.txt`
+2. Copies `super/` and `super_services/`
+3. Pre-downloads ML models via `download-files`
+4. Runs the voice executor on port 8600
+
+Environment variables are injected automatically from Cerebrium's secrets manager.
+
 ## Systemd (Linux)
 
 Deploy the voice executor as a systemd service on a Linux box. This is the
@@ -228,6 +276,7 @@ uv run python super_services/orchestration/executors/voice_executor_v3.py valida
 ./deploy.sh docker run           # Build + run container
 ./deploy.sh k8s qa               # Deploy K8s QA overlay
 ./deploy.sh k8s prod             # Deploy K8s Prod overlay
+./deploy.sh cerebrium            # Deploy to Cerebrium cloud
 ./deploy.sh setup                # Install deps + configure .env (interactive)
 ./deploy.sh validate             # Check required env vars
 ./deploy.sh health               # Check service connectivity
@@ -256,6 +305,8 @@ $ make help
   k8s-prod        Deploy all to K8s Prod (executor + Prefect)
   k8s-prefect-qa  Deploy only Prefect to K8s QA
   k8s-prefect-prod Deploy only Prefect to K8s Prod
+  cerebrium-deploy Deploy to Cerebrium cloud
+  cerebrium-logs  View Cerebrium deployment logs
   help            Show this help
 ```
 
