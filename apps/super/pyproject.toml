@@ -8,4 +8,5 @@ dev-dependencies = [
     "pytest-mock>=3.10.0",
     "anyio",
     "ruff",
+    "modal>=1.3.4",
 ]

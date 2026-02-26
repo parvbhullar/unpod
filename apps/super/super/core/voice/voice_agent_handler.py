@@ -57,7 +57,9 @@ from super.core.voice.schema import CallStatusEnum
 from super.core.voice.workflows.pre_call import PreCallWorkFlow
 from super.core.voice.common.common import send_web_notification
 
-from super.core.voice.common.services import update_task_with_status
+from super.core.voice.common.services import (
+    update_task_with_status_async,
+)
 from super.core.voice.common.services import save_execution_log
 from super_services.db.services.schemas.task import TaskStatusEnum
 
@@ -1125,14 +1127,29 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             f"Call Status:Dialing\n", role="system", user_state=user_state
         )
 
+        self._logger.info(
+            f"[DIAG] Entering poll loop. participant={participant.identity}, "
+            f"kind={participant.kind}, attrs={dict(participant.attributes)}, "
+            f"disconnect_reason={participant.disconnect_reason}"
+        )
+
         while perf_counter() - start_time < dialing_timeout_seconds:
             elapsed = perf_counter() - start_time
             call_status = participant.attributes.get("sip.callStatus")
 
+            # Log status every 5 seconds at INFO level for diagnosis
+            if int(elapsed) % 5 == 0 and int(elapsed) > 0:
+                prev_sec = int(elapsed - 0.1)
+                if prev_sec % 5 != 0 or prev_sec == 0:
+                    self._logger.info(
+                        f"[DIAG] poll @{int(elapsed)}s: "
+                        f"sip.callStatus={call_status}, "
+                        f"disconnect_reason={participant.disconnect_reason}, "
+                        f"attrs={dict(participant.attributes)}"
+                    )
+
             if call_status == "dialing":
-                # Log progress every 5 seconds
-                if int(elapsed) % 5 == 0 and int(elapsed) > 0:
-                    self._logger.debug(f"Still dialing... {int(elapsed)}s elapsed")
+                pass
                 # Only fail if we've been dialing for the full timeout
                 # (handled by while loop condition)
 
@@ -1235,7 +1252,13 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             await asyncio.sleep(0.1)
 
         # If we exit the loop without connecting, it's a timeout
-        if participant.attributes.get("sip.callStatus") == "dialing":
+        final_status = participant.attributes.get("sip.callStatus")
+        self._logger.info(
+            f"[DIAG] Poll loop exited after {perf_counter() - start_time:.1f}s. "
+            f"final sip.callStatus={final_status}, "
+            f"disconnect_reason={participant.disconnect_reason}"
+        )
+        if final_status == "dialing":
             self._logger.info(
                 "SIP Failed - dialing timeout after %ds", dialing_timeout_seconds
             )
@@ -1246,8 +1269,11 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             )
             user_state.end_time = user_state.start_time
             user_state.call_status = CallStatusEnum.FAILED
+            self._logger.info("[DIAG] Starting execute_post_call...")
             await self.execute_post_call(user_state)
+            self._logger.info("[DIAG] execute_post_call completed")
             self.message_callback("EOF\n", role="system", user_state=user_state)
+        self._logger.info("[DIAG] Calling ctx.shutdown()")
         ctx.shutdown()
 
     async def _create_assistant(
@@ -2020,23 +2046,43 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 import random
 
                 handover_number = random.choice(handover_number)
-            handover_number = normalize_phone_number(handover_number)
 
-            print(
-                f"\n instant handover call  {handover_number} handover {room_name} \n"
+            if not handover_number:
+                self._logger.error(
+                    "Instant handover skipped: no handover_number in config"
+                )
+                return
+
+            try:
+                handover_number = normalize_phone_number(handover_number)
+            except (ValueError, Exception) as e:
+                self._logger.error(
+                    f"Instant handover skipped: invalid handover_number "
+                    f"'{handover_number}': {e}"
+                )
+                user_state.transcript.append(
+                    {
+                        "role": "system",
+                        "type": "instant_handover",
+                        "message": f"handover failed: invalid number {handover_number}",
+                    }
+                )
+                return
+
+            self._logger.info(
+                f"Instant handover call to {handover_number} in room {room_name}"
             )
 
             try:
                 handover_identity = "human_agent"
-                await ctx.api.sip.create_sip_participant(
-                    api.CreateSIPParticipantRequest(
-                        sip_trunk_id=trunk_id,
-                        sip_call_to=handover_number,
-                        room_name=room_name,
-                        participant_identity=handover_identity,
-                        participant_name=handover_identity,
-                        krisp_enabled=True,
-                    )
+                # Use ctx.add_sip_participant() which registers as a pending
+                # task in the SDK. This prevents the SDK from terminating the
+                # job process while the SIP call is being placed.
+                await ctx.add_sip_participant(
+                    call_to=handover_number,
+                    trunk_id=trunk_id,
+                    participant_identity=handover_identity,
+                    participant_name=handover_identity,
                 )
 
                 participant = await asyncio.wait_for(
@@ -2138,15 +2184,14 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                     return existing[0]
 
                 try:
-                    await ctx.api.sip.create_sip_participant(
-                        api.CreateSIPParticipantRequest(
-                            sip_trunk_id=trunk_id,
-                            sip_call_to=phone_number,
-                            room_name=room_name,
-                            participant_identity=identity,
-                            participant_name=user_state.user_name,
-                            krisp_enabled=True,
-                        )
+                    # Use ctx.add_sip_participant() which registers as a pending
+                    # task in the SDK. This prevents the SDK from terminating the
+                    # job process while the SIP call is being placed.
+                    await ctx.add_sip_participant(
+                        call_to=phone_number,
+                        trunk_id=trunk_id,
+                        participant_identity=identity,
+                        participant_name=user_state.user_name,
                     )
 
                     # Wait for participant to connect
@@ -2485,7 +2530,17 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             print(f"[TIMING] metadata: {metadata}")
 
             user_data = metadata.get("data", {})
-            update_task_with_status(user_data.get("task_id"),CallStatusEnum.InCall)
+            try:
+                await asyncio.wait_for(
+                    update_task_with_status_async(
+                        user_data.get("task_id"), CallStatusEnum.InCall
+                    ),
+                    timeout=1.0,
+                )
+            except asyncio.TimeoutError:
+                self._logger.warning(
+                    "Task status update timed out after 1s; continuing startup"
+                )
             await save_execution_log(
                 user_data.get("task_id"),
                 "call-request-received",
@@ -2975,6 +3030,26 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
         def on_participant_connected(participant: rtc.RemoteParticipant):
             self._logger.info(f"Participant connected: {participant.identity}")
 
+            # Track handover participant identity when they join after handover is initiated
+            handover_initiated = (
+                user_state
+                and isinstance(user_state.extra_data, dict)
+                and user_state.extra_data.get("handover_initiated", False)
+            )
+            phone_number = normalize_phone_number(user_state.contact_number)
+            main_user_identity = f"idt_{phone_number}"
+
+            if (
+                handover_initiated
+                and participant.identity != ctx.room.local_participant.identity
+                and participant.identity != main_user_identity
+                and participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP
+            ):
+                user_state.extra_data["handover_participant_identity"] = participant.identity
+                self._logger.info(
+                    f"[HANDOVER] Identified handover participant: {participant.identity}"
+                )
+
         events = []
         ringing = False
         calling_time = 0
@@ -3077,10 +3152,14 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
 
             # Check if this is a handover scenario
             is_handover_active = False
+            handover_initiated = False
             handover_identity = None
             if isinstance(user_state.extra_data, dict):
                 is_handover_active = user_state.extra_data.get(
                     "is_handed_over_call", False
+                )
+                handover_initiated = user_state.extra_data.get(
+                    "handover_initiated", False
                 )
                 handover_identity = user_state.extra_data.get(
                     "handover_participant_identity"
@@ -3089,46 +3168,59 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
             phone_number = normalize_phone_number(user_state.contact_number)
             is_original_caller = participant.identity == f"idt_{phone_number}"
 
-            # Handle handover scenario - end session only when BOTH user and handover participant leave
-            if is_handover_active and handover_identity:
-                # Initialize tracking dict if not exists
-                if not isinstance(
-                    user_state.extra_data.get("_handover_disconnected"), dict
-                ):
-                    user_state.extra_data["_handover_disconnected"] = {
-                        "user": False,
-                        "handover": False,
-                    }
+            # Handle handover scenario
+            if (is_handover_active or handover_initiated) and handover_identity:
+                self._logger.info(
+                    f"[HANDOVER] Participant disconnected. "
+                    f"Disconnected: {participant.identity}, Handover participant: {handover_identity}, "
+                    f"Handover initiated: {handover_initiated}, Handover active: {is_handover_active}"
+                )
 
-                disconnected = user_state.extra_data["_handover_disconnected"]
-
-                # Track who disconnected
+                # If the handover participant disconnects - end session and trigger post-call
                 if participant.identity == handover_identity:
-                    disconnected["handover"] = True
                     self._logger.info(
-                        f"Handover participant {participant.identity} disconnected"
+                        f"[HANDOVER] Handover participant {participant.identity} disconnected - ending session and triggering post-call"
                     )
-                elif is_original_caller:
-                    disconnected["user"] = True
-                    self._logger.info(
-                        f"Original user {participant.identity} disconnected during handover"
-                    )
+                    # Mark handover as completed
+                    user_state.extra_data["handover_completed"] = True
+                    user_state.extra_data["handover_initiated"] = False
 
-                # Check if BOTH have disconnected
-                if disconnected["user"] and disconnected["handover"]:
+                    async def handle_handover_end():
+                        user_state.call_status = CallStatusEnum.COMPLETED
+                        user_state.end_time = datetime.utcnow()
+                        await self.execute_post_call(user_state)
+                        print(
+                            f"{'=' * 50} \n\n handover call ended triggering post call \n\n {'=' * 50}"
+                        )
+
+                    asyncio.create_task(handle_handover_end())
+                    return
+
+                # If the original caller disconnects during handover - end session
+                if is_original_caller:
                     self._logger.info(
-                        "Both user and handover participant have disconnected, ending session"
+                        f"[HANDOVER] Original caller {participant.identity} disconnected during handover, ending session"
                     )
-                    # Continue to end session below
-                else:
-                    still_connected = (
-                        "handover participant"
-                        if not disconnected["handover"]
-                        else "user"
-                    )
+                    # Continue to end session below (will be handled by the existing logic)
+            elif (is_handover_active or handover_initiated) and not handover_identity:
+                # Handover in progress but identity not yet tracked
+                # Check if this is a SIP participant (likely the handover person)
+                if participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP and not is_original_caller:
                     self._logger.info(
-                        f"Handover mode: {still_connected} still connected, session continues"
+                        f"[HANDOVER] SIP participant {participant.identity} disconnected (likely handover person) - ending session and triggering post-call"
                     )
+                    user_state.extra_data["handover_completed"] = True
+                    user_state.extra_data["handover_initiated"] = False
+
+                    async def handle_handover_end():
+                        user_state.call_status = CallStatusEnum.COMPLETED
+                        user_state.end_time = datetime.utcnow()
+                        await self.execute_post_call(user_state)
+                        print(
+                            f"{'=' * 50} \n\n handover call ended triggering post call \n\n {'=' * 50}"
+                        )
+
+                    asyncio.create_task(handle_handover_end())
                     return
 
             # Use user_state from closure (captured at registration time), not self.user_state
@@ -3401,10 +3493,17 @@ class VoiceAgentHandler(BaseVoiceHandler, ABC):
                 self._sync_cleanup()
 
         # Register handlers for graceful shutdown signals
-        signal.signal(signal.SIGTERM, signal_handler)
-        signal.signal(signal.SIGINT, signal_handler)
+        # signal.signal() only works from the main thread
+        import threading
 
-        self._logger.info("Signal handlers registered for graceful shutdown")
+        if threading.current_thread() is threading.main_thread():
+            signal.signal(signal.SIGTERM, signal_handler)
+            signal.signal(signal.SIGINT, signal_handler)
+            self._logger.info("Signal handlers registered for graceful shutdown")
+        else:
+            self._logger.info(
+                "Skipping signal handlers (not on main thread)"
+            )
 
     async def _graceful_shutdown(self, timeout: float = 30.0) -> None:
         """

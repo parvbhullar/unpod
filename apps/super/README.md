@@ -5,7 +5,7 @@ Multi-role voice AI agents powered by LiveKit, Pipecat, LangChain, and LangGraph
 ## Prerequisites
 
 - Python 3.10+ (3.12 recommended)
-- [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
+- [uv](https://docs.astral.sh/uv/) (auto-installed by `make setup` if missing)
 - LiveKit server (cloud or self-hosted)
 - MongoDB (conversation storage)
 - PostgreSQL (agent config)
@@ -14,15 +14,18 @@ Multi-role voice AI agents powered by LiveKit, Pipecat, LangChain, and LangGraph
 ## Quick Start
 
 ```bash
-# 1. Set up local environment (installs deps, creates .env)
+# 1. Install deps + configure .env (will prompt for API keys)
 make setup
 
-# 2. Edit .env with your API keys (see Environment Variables below)
-
-# 3. Run the voice executor
+# 2. Run the voice executor
 make local          # Local dev mode
 make run            # Docker
 ```
+
+`make setup` will auto-install `uv` if missing, sync Python dependencies,
+then interactively prompt for required API keys (LiveKit, OpenAI, Deepgram)
+and optional ones (Anthropic, Cartesia, MongoDB, Redis). Values are saved
+to `.env`. Existing values are shown as defaults — press Enter to keep them.
 
 ### Manual Setup
 
@@ -44,13 +47,30 @@ uv run python super_services/orchestration/executors/superkik_executor_v1.py dev
 $ make help
   build           Build Docker image
   run             Build + run Docker container
-  setup           Set up local dev environment (venv + .env)
+  setup           Install deps + configure .env (interactive)
   local           Run locally in dev mode
   validate        Check required env vars
   health          Check service connectivity
-  test            Run unit tests
-  k8s-qa          Deploy to K8s QA
-  k8s-prod        Deploy to K8s Prod
+  test            Run voice agent test suite
+  deploy-service  Deploy systemd service (run make setup first)
+  prefect-up      Start Prefect server + worker (local)
+  prefect-down    Stop Prefect server + worker (local)
+  prefect-deploy  Register Prefect flow deployments
+  prefect-refresh Sync deps + rebuild task image + re-register
+  prefect-remote  Start Prefect for qa/prod (ENV=qa|prod)
+  k8s-qa          Deploy all to K8s QA (executor + Prefect)
+  k8s-prod        Deploy all to K8s Prod (executor + Prefect)
+  k8s-prefect-qa  Deploy only Prefect to K8s QA
+  k8s-prefect-prod Deploy only Prefect to K8s Prod
+  cerebrium-setup Setup + deploy to Cerebrium (interactive)
+  cerebrium-deploy Deploy to Cerebrium (skip login/secrets)
+  cerebrium-logs  View Cerebrium deployment logs
+  cerebrium-status Check Cerebrium deployment status
+  modal-setup     Install Modal CLI + authenticate
+  modal-deploy    Deploy voice executor to Modal
+  modal-dev       Run Modal in dev mode (live reload)
+  modal-logs      View Modal deployment logs
+  modal-stop      Stop Modal deployment
   help            Show this help
 ```
 
@@ -122,15 +142,82 @@ The agent works without these but functionality is reduced.
 
 ## Deployment
 
-See [deployment/README.md](deployment/README.md) for Docker, Kubernetes, and production deployment.
+See [deployment/README.md](deployment/README.md) for full details on all deployment methods.
+
+### Docker
 
 ```bash
 make build          # Build Docker image
 make run            # Build + run container
-make k8s-qa         # Deploy to K8s QA
-make k8s-prod       # Deploy to K8s Prod
-./deploy.sh --help  # All deployment options
+./deploy.sh docker build
+./deploy.sh docker run
 ```
+
+### Systemd (Linux VM)
+
+Deploy directly on an Ubuntu/Debian box as a systemd service:
+
+```bash
+# Step 1: Install deps + configure .env (interactive prompts for API keys)
+make setup
+
+# Step 2: Deploy the systemd service
+make deploy-service
+
+# Manage the service
+sudo systemctl status voice_lk_executor_v3
+sudo systemctl restart voice_lk_executor_v3
+sudo journalctl -u voice_lk_executor_v3 -f
+```
+
+### Kubernetes
+
+```bash
+make k8s-qa         # Deploy everything (executor + Prefect) to K8s QA
+make k8s-prod       # Deploy everything to K8s Prod
+
+# Deploy only Prefect to K8s (server + worker + HPA)
+make k8s-prefect-qa
+make k8s-prefect-prod
+```
+
+K8s Prefect uses a `kubernetes` work pool type (`call-work-pool-k8s`) which spawns
+K8s Jobs for each flow run, enabling horizontal scaling via HPA.
+
+### Cerebrium (Managed Cloud)
+
+```bash
+# Interactive: login → upload secrets → review → deploy
+make cerebrium-setup
+
+# If already set up, deploy directly
+make cerebrium-deploy
+
+# Monitor
+make cerebrium-logs
+make cerebrium-status
+```
+
+See [deployment/README.md](deployment/README.md#cerebrium) for full details.
+
+### Modal (Serverless)
+
+```bash
+# One-time: install CLI + authenticate
+make modal-setup
+
+# Deploy to production
+make modal-deploy
+
+# Dev mode with live reload
+make modal-dev
+
+# Monitor / stop
+make modal-logs
+make modal-stop
+```
+
+See [deployment/README.md](deployment/README.md#modal) for secrets setup and configuration.
 
 ## Prefect (Task Orchestration)
 
@@ -139,40 +226,24 @@ Prefect manages async workflows (post-call analysis, follow-ups, etc.). Each env
 ### Local
 
 ```bash
-# Start Prefect server + PostgreSQL
-docker compose -f super_services/prefect_setup/local/docker-compose-local-base.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/local/docker-compose-local-base.yaml up -d
-
-# Start call worker
-docker compose -f super_services/prefect_setup/local/docker-call-worker-compose.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/local/docker-call-worker-compose.yaml up -d
-
-# Create / refresh deployments
-uv run python super_services/orchestration/task/deployments/task_deployments.py
+make prefect-up       # Start Prefect server + worker
+make prefect-deploy   # Register flow deployments
+make prefect-down     # Stop everything
 ```
 
-### QA
+Prefect UI: http://localhost:4200
+
+After code or dependency changes:
 
 ```bash
-docker compose -f super_services/prefect_setup/qa/docker-compose-qa.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/qa/docker-compose-qa.yaml up -d
-
-docker compose -f super_services/prefect_setup/qa/docker-call-worker-compose.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/qa/docker-call-worker-compose.yaml up -d
-
-uv run python super_services/orchestration/task/deployments/task_deployments.py
+make prefect-refresh  # Sync deps + rebuild task image + re-register
 ```
 
-### Prod
+### QA / Prod
 
 ```bash
-docker compose -f super_services/prefect_setup/prod/docker-prefect-sever-compose.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/prod/docker-prefect-sever-compose.yaml up -d
-
-docker compose -f super_services/prefect_setup/prod/docker-call-worker-compose.yaml down --remove-orphans
-docker compose -f super_services/prefect_setup/prod/docker-call-worker-compose.yaml up -d
-
-uv run python super_services/orchestration/task/deployments/task_deployments.py
+make prefect-remote ENV=qa    # Start server + worker + register deployments
+make prefect-remote ENV=prod
 ```
 
 > To refresh deployments after code changes, re-run the `task_deployments.py` script. No restart of Prefect server or workers needed.

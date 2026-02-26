@@ -227,6 +227,8 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
         # State flags
         self._is_shutting_down = False
+        self._runtime_resources_cleaned = False
+        self._disconnect_event: Optional[asyncio.Event] = None
         self._services_initialized = False
         self._first_response_sent = asyncio.Event()
         self._kb_ready = asyncio.Event()
@@ -1117,6 +1119,12 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 await task
             except asyncio.CancelledError:
                 pass
+
+    def _signal_disconnect_event(self, source: str) -> None:
+        """Unblock execute loop when shutdown is triggered programmatically."""
+        if self._disconnect_event and not self._disconnect_event.is_set():
+            self._logger.info(f"[SHUTDOWN] Signaling disconnect event ({source})")
+            self._disconnect_event.set()
 
     def _setup_session_events(self, session: AgentSession) -> None:
         """Set up event handlers for the session."""
@@ -2575,6 +2583,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             ctx: LiveKit JobContext
         """
         try:
+            self._runtime_resources_cleaned = False
             self._logger.info(
                 f"Starting LiveKit session for {self.user_state.user_name}"
             )
@@ -2805,6 +2814,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             # Wait for the room to disconnect or session to end
             # This keeps the agent running until the call completes
             disconnect_event = asyncio.Event()
+            self._disconnect_event = disconnect_event
 
             # Track the main user identity (first non-agent, non-SIP participant)
             # This is used to determine when to end the session
@@ -2840,6 +2850,23 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     self._logger.info(
                         f"Participant connected: {participant.identity} "
                         f"(kind: {participant.kind}, main_user: {main_user_identity})"
+                    )
+
+                # Track handover participant identity when they join after handover is initiated
+                handover_initiated = (
+                    self.user_state
+                    and isinstance(self.user_state.extra_data, dict)
+                    and self.user_state.extra_data.get("handover_initiated", False)
+                )
+                if (
+                    handover_initiated
+                    and participant.identity != ctx.room.local_participant.identity
+                    and participant.identity != main_user_identity
+                    and participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP
+                ):
+                    self.user_state.extra_data["handover_participant_identity"] = participant.identity
+                    self._logger.info(
+                        f"[HANDOVER] Identified handover participant: {participant.identity}"
                     )
 
             @ctx.room.on("participant_disconnected")
@@ -2885,21 +2912,69 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                         f"Handover initiated: {handover_initiated}, Handover active: {is_handover_active}"
                     )
 
-                    # If the handover participant disconnects - IGNORE, don't end session
-                    if participant.identity == handover_participant_identity:
+                    # If handover_participant_identity is tracked
+                    if handover_participant_identity:
+                        # If the handover participant disconnects - end the handover, trigger post-call
+                        if participant.identity == handover_participant_identity:
+                            self._logger.info(
+                                f"[HANDOVER] Handover participant {participant.identity} disconnected - ending session and triggering post-call"
+                            )
+                            # Mark handover as completed
+                            self.user_state.extra_data["handover_completed"] = True
+                            self.user_state.extra_data["handover_initiated"] = False
+                            # Trigger post-call workflow since the handover person ended the call
+                            asyncio.create_task(
+                                self._ensure_post_call_triggered(reason="handover_ended")
+                            )
+                            disconnect_event.set()
+                            return
+
+                        # If the original caller (first user) disconnects - end the session
+                        if participant.identity == main_user_identity:
+                            self._logger.info(
+                                f"[HANDOVER] Original caller {participant.identity} disconnected, ending session"
+                            )
+                            disconnect_event.set()
+                            return
+
+                        # Unknown participant during handover - ignore
                         self._logger.info(
-                            f"[HANDOVER] Handover participant {participant.identity} disconnected - ignoring, session continues"
+                            f"[HANDOVER] Unknown participant {participant.identity} disconnected, session continues"
+                        )
+                        return
+                    else:
+                        # Handover initiated but identity not tracked yet
+                        # Check if this is a SIP participant (likely the handover person)
+                        if (
+                            participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP
+                            and participant.identity != main_user_identity
+                        ):
+                            self._logger.info(
+                                f"[HANDOVER] SIP participant {participant.identity} disconnected (likely handover person) - ending session and triggering post-call"
+                            )
+                            self.user_state.extra_data["handover_completed"] = True
+                            self.user_state.extra_data["handover_initiated"] = False
+                            asyncio.create_task(
+                                self._ensure_post_call_triggered(reason="handover_ended")
+                            )
+                            disconnect_event.set()
+                            return
+
+                        # Original caller disconnects - end session
+                        if participant.identity == main_user_identity:
+                            self._logger.info(
+                                f"[HANDOVER] Original caller {participant.identity} disconnected, ending session"
+                            )
+                            disconnect_event.set()
+                            return
+
+                        # Unknown participant in handover mode - log and continue
+                        self._logger.info(
+                            f"[HANDOVER] Unknown participant {participant.identity} disconnected, session continues"
                         )
                         return
 
-                    # If the original caller (first user) disconnects - end the session
-                    self._logger.info(
-                        f"[HANDOVER] Original caller {participant.identity} disconnected, ending session"
-                    )
-                    disconnect_event.set()
-                    return
-
-                # SIP participant disconnected - don't end session
+                # Non-handover scenarios: SIP participant disconnected - don't end session
                 # The main user is still connected and may want to continue
                 if participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP:
                     self._logger.info(
@@ -2941,9 +3016,6 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             # Persist quality metrics before cleanup (Gap #1 fix)
             await self._persist_session_quality_metrics(reason="session_disconnect")
 
-            # Stop idle monitor
-            await self._stop_idle_monitor()
-
             # Notify plugins of call end
             await self.plugins.broadcast_event("on_call_end")
 
@@ -2957,6 +3029,9 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
             await self._ensure_post_call_triggered(reason="session_error")
             self._logger.error(traceback.format_exc())
             raise
+        finally:
+            await self._cleanup_runtime_resources()
+            self._disconnect_event = None
 
     async def _get_index(self, query: str, kn_bases: List[str] = None) -> dict:
         """Fetch documents from knowledge base using KnowledgeBaseManager."""
@@ -3062,10 +3137,62 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
 
         return usage_data
 
+    async def _cleanup_runtime_resources(self) -> None:
+        """Release runtime resources that can keep worker processes alive."""
+        if self._runtime_resources_cleaned:
+            return
+        self._runtime_resources_cleaned = True
+
+        await self._stop_idle_monitor()
+        await self._stop_background_audio()
+
+        kb_task = self._kb_warmup_task
+        self._kb_warmup_task = None
+        if kb_task and not kb_task.done():
+            kb_task.cancel()
+            try:
+                await kb_task
+            except asyncio.CancelledError:
+                pass
+            except Exception as e:
+                self._logger.debug(f"KB warmup task cleanup warning: {e}")
+
+        participant_tasks = list(self._participant_stt_tasks.items())
+        self._participant_stt_tasks.clear()
+        for _, task in participant_tasks:
+            if task and not task.done():
+                task.cancel()
+        for participant_identity, task in participant_tasks:
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+            except Exception as e:
+                self._logger.debug(
+                    f"Participant STT task cleanup warning ({participant_identity}): {e}"
+                )
+
+        streams = list(self._participant_stt_streams.items())
+        self._participant_stt_streams.clear()
+        for participant_identity, stream in streams:
+            try:
+                if hasattr(stream, "aclose"):
+                    await stream.aclose()
+            except Exception as e:
+                self._logger.debug(
+                    f"Participant STT stream cleanup warning ({participant_identity}): {e}"
+                )
+
+        try:
+            await self.plugins.cleanup_all()
+        except Exception as e:
+            self._logger.warning(f"Plugin cleanup failed during shutdown: {e}")
+
     async def end_call(self, reason: str = "completed") -> str:
         """End the current call gracefully."""
         self._logger.info(f"Ending call: {reason}")
         self._is_shutting_down = True
+        self._signal_disconnect_event(f"end_call:{reason}")
 
         try:
             # Log quality metrics if using conversation stages
@@ -3084,17 +3211,10 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 except Exception as qe:
                     self._logger.debug(f"Could not log quality metrics: {qe}")
 
-            # Stop idle monitor
-            await self._stop_idle_monitor()
-
-            # Stop background audio if running
-            await self._stop_background_audio()
-
             # Notify plugins
             await self.plugins.broadcast_event("on_call_end")
 
-            # Clean up plugins
-            await self.plugins.cleanup_all()
+            await self._cleanup_runtime_resources()
 
             # Send end callback
             self._send_callback(
@@ -3450,6 +3570,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
         # Set call status if still active/unknown
         if not self.user_state.call_status or self.user_state.call_status in (
             CallStatusEnum.InCall,
+            CallStatusEnum.CONNECTED,
             None,
         ):
             self.user_state.call_status = CallStatusEnum.COMPLETED
@@ -3516,6 +3637,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     api.DeleteRoomRequest(room=room_name)
                 )
                 self._logger.info(f"[IDLE] Room deleted successfully: {room_name}")
+                self._signal_disconnect_event("idle_room_deleted")
             except Exception as e:
                 self._logger.error(f"[IDLE] Failed to delete room: {e}")
                 await self.end_call("idle_timeout")
@@ -3634,6 +3756,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                     api.DeleteRoomRequest(room=room_name)
                 )
                 self._logger.info(f"[GOODBYE] Room deleted successfully: {room_name}")
+                self._signal_disconnect_event("goodbye_room_deleted")
             except Exception as e:
                 self._logger.error(f"[GOODBYE] Failed to delete room: {e}")
                 # Fallback to regular end_call
@@ -3703,6 +3826,7 @@ class LiveKitLiteHandler(BaseVoiceHandler, ABC):
                 self._logger.info(
                     f"[END_CALL_TOOL] Room deleted successfully: {room_name}"
                 )
+                self._signal_disconnect_event("tool_end_call_room_deleted")
             except Exception as e:
                 self._logger.error(f"[END_CALL_TOOL] Failed to delete room: {e}")
                 await self.end_call(reason)

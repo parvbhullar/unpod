@@ -32,8 +32,10 @@ class Settings(State):
             self._state["templates"] = Jinja2Templates(
                 directory=self._state["TEMPLATE_DIR"]
             )
-        # Validate PostgreSQL connection
-        if "POSTGRES_CONFIG" in self._state:
+        # Validate PostgreSQL connection (skip during Docker build / CI)
+        if "POSTGRES_CONFIG" in self._state and not os.environ.get(
+            "SKIP_DB_CHECK"
+        ):
             conn = None
             try:
                 conn = psycopg2.connect(**self._state["POSTGRES_CONFIG"])
