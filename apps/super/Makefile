@@ -17,10 +17,12 @@ SERVICE_FILE := deployment/services/$(SERVICE_NAME).service
 PREFECT_DIR := super_services/prefect_setup
 DEPLOYMENTS := super_services/orchestration/task/deployments/task_deployments.py
 TASK_DOCKERFILE := super_services/orchestration/task/deployments/Dockerfile
+CEREBRIUM_DIR := deployment/cerebrium
 
 .PHONY: build run setup local validate health test deploy-service \
         prefect-up prefect-down prefect-deploy prefect-refresh prefect-remote \
-        k8s-qa k8s-prod k8s-prefect-qa k8s-prefect-prod
+        k8s-qa k8s-prod k8s-prefect-qa k8s-prefect-prod \
+        cerebrium-deploy cerebrium-logs
 
 ## Docker
 
@@ -105,6 +107,14 @@ k8s-prefect-qa:  ## Deploy only Prefect to K8s QA
 
 k8s-prefect-prod:  ## Deploy only Prefect to K8s Prod
 	kubectl apply -k deployment/k8s/base/prefect/
+
+## Cerebrium
+
+cerebrium-deploy:  ## Deploy to Cerebrium cloud
+	$(UV) run cerebrium deploy --config-file $(CEREBRIUM_DIR)/cerebrium.toml
+
+cerebrium-logs:  ## View Cerebrium deployment logs
+	$(UV) run cerebrium logs unpod-voice-agent
 
 ## Help
 

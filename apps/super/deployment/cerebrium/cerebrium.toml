@@ -1,0 +1,24 @@
+[cerebrium.deployment]
+name = "unpod-voice-agent"
+python_version = "3.12"
+disable_auth = false
+include = ['./*', 'super/*', 'super_services/*']
+exclude = ['.*', '__pycache__', '*.pyc', 'tests/*']
+
+[cerebrium.hardware]
+cpu = 4
+memory = 8.0
+compute = "CPU"
+
+[cerebrium.scaling]
+min_replicas = 1
+max_replicas = 5
+cooldown = 30
+replica_concurrency = 1
+
+[cerebrium.dependencies.paths]
+pip = "requirements-livekit.txt"
+
+[cerebrium.runtime.custom]
+port = 8600
+dockerfile_path = "./deployment/cerebrium/Dockerfile"
