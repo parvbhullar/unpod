@@ -149,24 +149,37 @@ cloud hosting with autoscaling.
 
 ### Prerequisites
 
-1. Install the Cerebrium CLI: `pip install cerebrium`
-2. Authenticate: `cerebrium login`
-3. Upload environment variables (API keys) via the
-   [Cerebrium dashboard](https://dashboard.cerebrium.ai/) secrets tab.
-   Required: `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`,
-   `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`.
+- Install the Cerebrium CLI: `uv add cerebrium` (already in project deps)
+- A Cerebrium account ([sign up](https://www.cerebrium.ai/))
 
-### Deploy
+### Quick Deploy (Interactive)
 
 ```bash
-# One-click deploy
+# Full interactive setup: login → upload secrets → review config → deploy
+make cerebrium-setup
+```
+
+This walks you through 4 steps:
+
+1. **Login** — Authenticates with Cerebrium CLI (`cerebrium login`)
+2. **Secrets** — Prompts for API keys (pre-fills from `.env` if available),
+   uploads them to Cerebrium's secrets manager
+3. **Review** — Shows `cerebrium.toml` config for confirmation
+4. **Deploy** — Builds and deploys the voice executor
+
+### Individual Steps
+
+```bash
+# If already logged in and secrets are set, deploy directly
 make cerebrium-deploy
 
 # Or using deploy.sh
-./deploy.sh cerebrium
+./deploy.sh cerebrium            # Full interactive setup
+./deploy.sh cerebrium deploy     # Deploy only
 
-# View logs
-make cerebrium-logs
+# Monitor
+make cerebrium-logs              # View logs
+make cerebrium-status            # Check deployment status
 ```
 
 ### Configuration
@@ -177,6 +190,7 @@ Config lives in `deployment/cerebrium/`:
 |------|---------|
 | `cerebrium.toml` | Project config (hardware, scaling, dependencies) |
 | `Dockerfile` | Container spec (simpler than root Dockerfile) |
+| `setup.py` | Interactive setup script (login, secrets, deploy) |
 
 Default scaling: 1-5 replicas, 4 CPU, 8 GB RAM. Edit `cerebrium.toml` to adjust.
 
@@ -189,6 +203,72 @@ Cerebrium builds the custom Dockerfile, which:
 4. Runs the voice executor on port 8600
 
 Environment variables are injected automatically from Cerebrium's secrets manager.
+
+## Modal
+
+Deploy the voice executor to [Modal](https://modal.com/) as a long-running
+serverless container. CPU-only — the executor delegates ML work to external
+APIs (Deepgram, OpenAI).
+
+### Prerequisites
+
+- Install the Modal CLI: `make modal-setup` (installs + authenticates)
+
+### Quick Deploy
+
+```bash
+# One-time setup: install CLI + authenticate
+make modal-setup
+
+# Deploy to production
+make modal-deploy
+
+# Dev mode with live reload
+make modal-dev
+```
+
+### Secrets
+
+Secrets can be provided two ways (both are checked, Modal dashboard takes priority):
+
+1. **Modal dashboard** (recommended for prod):
+   ```bash
+   modal secret create unpod-secrets \
+     LIVEKIT_URL=wss://... \
+     LIVEKIT_API_KEY=... \
+     LIVEKIT_API_SECRET=... \
+     OPENAI_API_KEY=... \
+     DEEPGRAM_API_KEY=...
+   ```
+
+2. **Local `.env`** (dev/testing): Variables from your local environment
+   are automatically picked up at deploy time.
+
+### Configuration
+
+Config lives in `deployment/modal/`:
+
+| File | Purpose |
+|------|---------|
+| `modal_app.py` | App definition (image, secrets, resources, lifecycle) |
+
+Default: 4 CPU, 8 GB RAM, 1 min container, 5 min scaledown.
+Edit `modal_app.py` `@app.cls()` decorator to adjust.
+
+### How It Works
+
+1. Builds a Debian image with apt deps + pip requirements
+2. Copies `super/` and `super_services/` into the image
+3. Pre-downloads ML models via `download-files` (with `SKIP_DB_CHECK`)
+4. At runtime, starts the LiveKit agent worker as a long-running process
+5. `modal.Volume` caches models across deploys for faster cold starts
+
+### Monitoring
+
+```bash
+make modal-logs    # View logs
+make modal-stop    # Stop the app
+```
 
 ## Systemd (Linux)
 
@@ -276,7 +356,12 @@ uv run python super_services/orchestration/executors/voice_executor_v3.py valida
 ./deploy.sh docker run           # Build + run container
 ./deploy.sh k8s qa               # Deploy K8s QA overlay
 ./deploy.sh k8s prod             # Deploy K8s Prod overlay
-./deploy.sh cerebrium            # Deploy to Cerebrium cloud
+./deploy.sh cerebrium            # Full interactive setup + deploy
+./deploy.sh cerebrium deploy     # Deploy only (skip login/secrets)
+./deploy.sh modal                # Deploy to Modal
+./deploy.sh modal dev            # Modal dev mode (live reload)
+./deploy.sh modal logs           # View Modal logs
+./deploy.sh modal stop           # Stop Modal deployment
 ./deploy.sh setup                # Install deps + configure .env (interactive)
 ./deploy.sh validate             # Check required env vars
 ./deploy.sh health               # Check service connectivity
@@ -305,8 +390,15 @@ $ make help
   k8s-prod        Deploy all to K8s Prod (executor + Prefect)
   k8s-prefect-qa  Deploy only Prefect to K8s QA
   k8s-prefect-prod Deploy only Prefect to K8s Prod
-  cerebrium-deploy Deploy to Cerebrium cloud
+  cerebrium-setup Setup + deploy to Cerebrium (interactive)
+  cerebrium-deploy Deploy to Cerebrium (skip login/secrets)
   cerebrium-logs  View Cerebrium deployment logs
+  cerebrium-status Check Cerebrium deployment status
+  modal-setup     Install Modal CLI + authenticate
+  modal-deploy    Deploy voice executor to Modal
+  modal-dev       Run Modal in dev mode (live reload)
+  modal-logs      View Modal deployment logs
+  modal-stop      Stop Modal deployment
   help            Show this help
 ```
 

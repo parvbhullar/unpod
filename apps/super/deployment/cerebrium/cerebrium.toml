@@ -2,8 +2,31 @@
 name = "unpod-voice-agent"
 python_version = "3.12"
 disable_auth = false
-include = ['./*', 'super/*', 'super_services/*']
-exclude = ['.*', '__pycache__', '*.pyc', 'tests/*']
+include = [
+    'super/**',
+    'super_services/**',
+    'deployment/cerebrium/**',
+    'pyproject.toml',
+    '__init__.py',
+    'requirements.txt',
+]
+exclude = [
+    '.git/**',
+    '.venv/**',
+    'venv/**',
+    '.claude/**',
+    '__pycache__/**',
+    '*.pyc',
+    'tests/**',
+    'docs/**',
+    'logs/**',
+    'scripts/**',
+    'super_os/**',
+    'superkik/**',
+    'deployment/k8s/**',
+    'deployment/services/**',
+    '*.egg-info/**',
+]
 
 [cerebrium.hardware]
 cpu = 4
@@ -17,7 +40,7 @@ cooldown = 30
 replica_concurrency = 1
 
 [cerebrium.dependencies.paths]
-pip = "requirements-livekit.txt"
+pip = "requirements.txt"
 
 [cerebrium.runtime.custom]
 port = 8600

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+ROOT_DIR="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # Keep local runs deterministic in environments with noisy global plugins.
@@ -11,12 +12,18 @@ export PYTHONPATH="$ROOT_DIR"
 
 PYTEST_BIN="pytest"
 PYTHON_BIN="python"
-if [[ -x "$ROOT_DIR/venv/bin/pytest" ]]; then
+if [[ -x "$ROOT_DIR/.venv/bin/pytest" ]]; then
+  PYTEST_BIN="$ROOT_DIR/.venv/bin/pytest"
+  PYTHON_BIN="$ROOT_DIR/.venv/bin/python"
+elif [[ -x "$ROOT_DIR/venv/bin/pytest" ]]; then
   PYTEST_BIN="$ROOT_DIR/venv/bin/pytest"
   PYTHON_BIN="$ROOT_DIR/venv/bin/python"
 else
   MAIN_WORKTREE="$(git worktree list --porcelain | awk '/^worktree / {print $2; exit}')"
-  if [[ -n "$MAIN_WORKTREE" && -x "$MAIN_WORKTREE/venv/bin/pytest" ]]; then
+  if [[ -n "$MAIN_WORKTREE" && -x "$MAIN_WORKTREE/.venv/bin/pytest" ]]; then
+    PYTEST_BIN="$MAIN_WORKTREE/.venv/bin/pytest"
+    PYTHON_BIN="$MAIN_WORKTREE/.venv/bin/python"
+  elif [[ -n "$MAIN_WORKTREE" && -x "$MAIN_WORKTREE/venv/bin/pytest" ]]; then
     PYTEST_BIN="$MAIN_WORKTREE/venv/bin/pytest"
     PYTHON_BIN="$MAIN_WORKTREE/venv/bin/python"
   fi
@@ -38,6 +45,7 @@ VOICE_AGENT_TESTS=(
   "tests/core/voice/livekit/test_lite_handler_parsing_response.py"
   "tests/core/voice/livekit/test_lite_handler_session_flow.py"
   "tests/core/voice/livekit/test_lite_handler_idle_goodbye.py"
+  "tests/core/voice/livekit/test_lite_handler_cleanup.py"
   "tests/core/voice/managers/test_knowledge_base_manager.py"
   "tests/core/voice/livekit/test_livekit_lite_agent_context.py"
   "tests/core/voice/livekit/test_livekit_lite_agent_tools.py"
@@ -49,6 +57,79 @@ VOICE_AGENT_TESTS=(
   "tests/eval/test_retrieval_eval.py"
   "tests/eval/test_conversation_flow.py"
 )
+
+EMBEDDING_OPTIONAL_TESTS=(
+  "tests/core/voice/test_chroma_fetch_k.py"
+  "tests/core/voice/test_kb_chroma_kn_base_integration.py"
+  "tests/test_kb_search_quality.py"
+  "tests/eval/test_retrieval_eval.py"
+)
+
+DB_OPTIONAL_TESTS=(
+  "tests/core/voice/common/test_pilot.py"
+  "tests/core/voice/test_voice_agent_handler_service_cache.py"
+  "tests/core/voice/test_voice_agent_handler_config_resolution.py"
+  "tests/core/voice/test_voice_agent_handler_recording_publish.py"
+  "tests/core/voice/livekit/test_lite_handler_parsing_response.py"
+  "tests/core/voice/livekit/test_lite_handler_session_flow.py"
+  "tests/core/voice/livekit/test_lite_handler_idle_goodbye.py"
+  "tests/core/voice/managers/test_knowledge_base_manager.py"
+  "tests/core/voice/livekit/test_livekit_lite_agent_context.py"
+  "tests/core/voice/livekit/test_livekit_lite_agent_tools.py"
+)
+
+NETWORK_OPTIONAL_TESTS=(
+  "tests/eval/test_conversation_flow.py"
+)
+
+filter_out_tests() {
+  local -a skip_list=("$@")
+  FILTERED_TESTS=()
+  for test_file in "${VOICE_AGENT_TESTS[@]}"; do
+    SHOULD_SKIP=0
+    for skipped in "${skip_list[@]}"; do
+      if [[ "$test_file" == "$skipped" ]]; then
+        SHOULD_SKIP=1
+        break
+      fi
+    done
+    if [[ "$SHOULD_SKIP" -eq 0 ]]; then
+      FILTERED_TESTS+=("$test_file")
+    fi
+  done
+  VOICE_AGENT_TESTS=("${FILTERED_TESTS[@]}")
+}
+
+announce_skips() {
+  local reason="$1"
+  shift
+  local -a files=("$@")
+  echo "[suite] $reason"
+  for skipped in "${files[@]}"; do
+    echo "  - $skipped"
+  done
+}
+
+if ! "$PYTHON_BIN" -c "import sentence_transformers" >/dev/null 2>&1; then
+  announce_skips \
+    "sentence_transformers not installed; skipping embedding-heavy tests:" \
+    "${EMBEDDING_OPTIONAL_TESTS[@]}"
+  filter_out_tests "${EMBEDDING_OPTIONAL_TESTS[@]}"
+fi
+
+if [[ "${VOICE_SUITE_WITH_DB:-0}" != "1" ]]; then
+  announce_skips \
+    "VOICE_SUITE_WITH_DB!=1; skipping DB-dependent tests:" \
+    "${DB_OPTIONAL_TESTS[@]}"
+  filter_out_tests "${DB_OPTIONAL_TESTS[@]}"
+fi
+
+if [[ "${VOICE_SUITE_ALLOW_NETWORK:-0}" != "1" ]]; then
+  announce_skips \
+    "VOICE_SUITE_ALLOW_NETWORK!=1; skipping network-dependent tests:" \
+    "${NETWORK_OPTIONAL_TESTS[@]}"
+  filter_out_tests "${NETWORK_OPTIONAL_TESTS[@]}"
+fi
 
 VOICE_AGENT_MODULES=(
   "super.core.voice.voice_agent_handler"

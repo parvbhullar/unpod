@@ -41,10 +41,11 @@ def test_recording_background_helper_uses_wait_for_timeout() -> None:
 def test_entrypoint_schedules_recording_helper_in_background() -> None:
     methods = _class_methods()
     entrypoint = methods["entrypoint"]
+    run_agent = methods["run_agent"]
     helper_used = False
-    for node in ast.walk(entrypoint):
+    for node in ast.walk(run_agent):
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
-            if node.func.attr == "_start_recording_background":
+            if node.func.attr == "_start_session_recording":
                 helper_used = True
                 break
     assert helper_used

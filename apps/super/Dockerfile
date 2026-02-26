@@ -60,10 +60,10 @@ WORKDIR /app
 # Copy built venv and source from builder
 COPY --from=builder /app /app
 
-# Pre-download ML models at build time
+# Pre-download ML models at build time (SKIP_DB_CHECK: no DB during build)
 ENV SETTINGS_FILE="super_services.settings.qa"
 ENV PATH="/app/.venv/bin:$PATH"
-RUN python super_services/orchestration/executors/voice_executor_v3.py download-files
+RUN SKIP_DB_CHECK=1 python super_services/orchestration/executors/voice_executor_v3.py download-files
 
 # Switch to non-privileged user
 RUN chown -R appuser:appuser /app

@@ -1,9 +1,9 @@
-import uuid
 import asyncio
+import uuid
 import requests
+import asyncio
 from typing import Optional, Dict, Any
-
-from humanfriendly.terminal import output
+from datetime import timezone
 from super_services.db.services.models.task import (
     RunModel,
     TaskModel,
@@ -16,10 +16,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 from super.core.voice.schema import TaskData
 
-
 load_dotenv()
 import os
-
 
 async def _run_sync_db_op(func, *args, **kwargs):
     """Run a synchronous DB operation in a thread pool to avoid blocking."""
@@ -301,7 +299,12 @@ async def create_scheduled_task(task_id, time, max_calls: int = 3):
     print(f"[TIMING] Creating scheduled task {task_id}")
 
     if isinstance(time, str):
-        time = datetime.fromisoformat(time)
+        dt = datetime.fromisoformat(time)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+
+        time = dt.astimezone(timezone.utc)
+
     try:
         task = TaskModel.get(task_id=task_id)
 
@@ -562,6 +565,13 @@ def update_task_with_status(task_id, status):
     except Exception as e:
         print(e)
         pass
+
+
+async def update_task_with_status_async(task_id, status):
+    """Async-safe wrapper for task status updates from coroutine contexts."""
+    if not task_id:
+        return
+    await asyncio.to_thread(update_task_with_status, task_id, status)
 
 
 async def test():

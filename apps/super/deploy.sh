@@ -31,7 +31,14 @@ Usage: ./deploy.sh <command> [args]
 Commands:
   docker [build|run]     Build and/or run with Docker
   k8s <qa|prod>          Deploy to Kubernetes via kustomize
-  cerebrium              Deploy to Cerebrium cloud
+  cerebrium [setup]      Setup + deploy to Cerebrium (interactive)
+  cerebrium deploy       Deploy to Cerebrium (skip login/secrets)
+  cerebrium logs         View Cerebrium logs
+  cerebrium status       Check Cerebrium deployment status
+  modal [deploy]         Deploy voice executor to Modal
+  modal dev              Run Modal in dev mode (live reload)
+  modal logs             View Modal logs
+  modal stop             Stop Modal deployment
   setup                  Set up local dev environment (venv + .env)
   validate               Validate required environment variables
   health                 Check service connectivity
@@ -43,7 +50,10 @@ Examples:
   ./deploy.sh docker run                # Build + run Docker container
   ./deploy.sh k8s qa                    # Deploy to K8s QA overlay
   ./deploy.sh k8s prod                  # Deploy to K8s Prod overlay
-  ./deploy.sh cerebrium                 # Deploy to Cerebrium cloud
+  ./deploy.sh cerebrium                 # Setup + deploy to Cerebrium (interactive)
+  ./deploy.sh cerebrium deploy          # Deploy only (skip login/secrets)
+  ./deploy.sh modal                     # Deploy to Modal
+  ./deploy.sh modal dev                 # Modal dev mode (live reload)
   ./deploy.sh local                     # Run locally in dev mode
 EOF
 }
@@ -81,7 +91,54 @@ case "${1:-}" in
         kubectl apply -k "$SCRIPT_DIR/deployment/k8s/overlays/$OVERLAY/"
         ;;
     cerebrium)
-        uv run cerebrium deploy --config-file "$SCRIPT_DIR/deployment/cerebrium/cerebrium.toml"
+        case "${2:-setup}" in
+            setup)
+                uv run python "$SCRIPT_DIR/deployment/cerebrium/setup.py" setup
+                ;;
+            deploy)
+                uv run python "$SCRIPT_DIR/deployment/cerebrium/setup.py" deploy
+                ;;
+            logs)
+                uv run cerebrium logs unpod-voice-agent
+                ;;
+            status)
+                uv run cerebrium status unpod-voice-agent
+                ;;
+            *)
+                echo "Unknown cerebrium subcommand: ${2}" >&2
+                echo "Available: setup, deploy, logs, status"
+                exit 1
+                ;;
+        esac
+        ;;
+    modal)
+        MODAL_SETUP="$SCRIPT_DIR/deployment/modal/setup.py"
+        MODAL_APP="$SCRIPT_DIR/deployment/modal/modal_app.py"
+        case "${2:-setup}" in
+            setup)
+                uv run python "$MODAL_SETUP" setup
+                ;;
+            deploy)
+                uv run python "$MODAL_SETUP" deploy
+                ;;
+            dev)
+                cd "$SCRIPT_DIR"
+                uv export --no-dev --all-packages --no-editable --no-hashes --format requirements.txt \
+                    | grep -v '^\./\|^super\|^$\|^#' > requirements.txt
+                modal serve "$MODAL_APP"
+                ;;
+            logs)
+                modal app logs unpod-voice-agent
+                ;;
+            stop)
+                modal app stop unpod-voice-agent
+                ;;
+            *)
+                echo "Unknown modal subcommand: ${2}" >&2
+                echo "Available: setup, deploy, dev, logs, stop"
+                exit 1
+                ;;
+        esac
         ;;
     setup)
         cd "$SCRIPT_DIR"

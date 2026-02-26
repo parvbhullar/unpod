@@ -4,7 +4,11 @@ from redis import StrictRedis
 from super_services.libs.config import settings
 from super_services.libs.storage.redis_storage import RedisStorageWrapper
 
-REDIS: StrictRedis = StrictRedis.from_url(settings.REDIS_URL)
+REDIS: StrictRedis = StrictRedis.from_url(
+    settings.REDIS_URL,
+    socket_timeout=5,
+    socket_connect_timeout=5,
+)
 
 redisStorage = RedisStorageWrapper(REDIS)
 
