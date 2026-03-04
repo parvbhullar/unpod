@@ -1,0 +1,254 @@
+/* static/css/svg_icon_picker.css */
+
+.svg-icon-picker-wrapper {
+    width: 610px;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+}
+
+/* Tabs */
+.svg-tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    background: #f8f8f8;
+}
+
+.svg-tab {
+    flex: 1;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.svg-tab:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.svg-tab.active {
+    color: #5b80b2;
+    border-bottom-color: #5b80b2;
+    background: white;
+}
+
+/* Tab Content */
+.svg-tab-content {
+    padding: 20px;
+}
+
+/* Icon Library Grid */
+.svg-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.svg-icon-btn {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    padding: 12px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.svg-icon-btn:hover {
+    border-color: #5b80b2;
+    background: #f0f5ff;
+    transform: scale(1.05);
+}
+
+.svg-icon-btn:active {
+    transform: scale(0.95);
+}
+
+.svg-icon-btn svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Custom SVG Editor */
+.svg-custom-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.svg-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.svg-editor-header label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.svg-clear-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.svg-clear-btn:hover {
+    background: #c82333;
+}
+
+.svg-code-editor {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    resize: vertical;
+    min-height: 150px;
+}
+
+.svg-code-editor:focus {
+    outline: none;
+    border-color: #5b80b2;
+    box-shadow: 0 0 0 3px rgba(91, 128, 178, 0.1);
+}
+
+/* Preview Section */
+.svg-preview-section {
+    padding: 20px;
+    background: #f8f8f8;
+    border-top: 1px solid #ddd;
+}
+
+.svg-preview-section > label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.svg-preview-box {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.svg-preview-box svg {
+    width: 100%;
+    height: 100%;
+}
+
+.svg-preview-placeholder {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+}
+
+.svg-preview-box.empty {
+    border-style: dashed;
+}
+
+/* Color Controls */
+.svg-color-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.svg-color-controls label {
+    font-size: 12px;
+    color: #666;
+    font-weight: normal;
+}
+
+.svg-color-input {
+    width: 50px;
+    height: 29px;
+    padding: 2px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+.svg-color-input:hover {
+    border-color: #999;
+}
+
+.svg-color-controls span {
+    font-family: monospace;
+    background: white;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    min-width: 75px;
+}
+
+/* Detect Color Button */
+.svg-detect-color-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.svg-detect-color-btn:hover {
+    background: #218838;
+}
+
+.svg-detect-color-btn:active {
+    background: #1e7e34;
+}
+
+/* Scrollbar styling for icon grid */
+.svg-icon-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.svg-icon-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.svg-icon-grid::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.svg-icon-grid::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
