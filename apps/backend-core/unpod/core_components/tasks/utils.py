@@ -267,7 +267,10 @@ def prepare_columns(task):
         structured_data = post_call_data.get("structured_data", None)
         if structured_data:
             try:
-                structured_data_json = json.loads(structured_data)
+                if isinstance(structured_data, dict):
+                    structured_data_json = structured_data
+                else:
+                    structured_data_json = json.loads(structured_data)
                 for key, value in structured_data_json.items():
                     if isinstance(value, dict) or isinstance(value, list):
                         value = json.dumps(value)
@@ -315,8 +318,11 @@ def _extract_structured_data_keys(collection, query):
                 .get("post_call_data", {})
                 .get("structured_data", None)
             )
-            if structured_data and isinstance(structured_data, str):
-                all_structured_keys.update(json.loads(structured_data).keys())
+            if structured_data:
+                if isinstance(structured_data, str):
+                    all_structured_keys.update(json.loads(structured_data).keys())
+                elif isinstance(structured_data, dict):
+                    all_structured_keys.update(structured_data.keys())
         except Exception as e:
             print(f"Error parsing structured_data: {e}")
             continue

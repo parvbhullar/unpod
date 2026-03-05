@@ -371,32 +371,40 @@ class PilotService:
         if knowledge_bases is None:
             return
 
-        # Validate all knowledge bases exist
-        kb_count = Space.objects.filter(
-            slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
-        ).count()
-
-        if kb_count != len(knowledge_bases):
-            raise APIException206(detail={"message": "Knowledge Bases Not Found"})
-
-        kbs = Space.objects.filter(
-            slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
-        )
-
+        total_req_kb = len(knowledge_bases)
         content_type = ContentType.objects.get_for_model(Space)
 
-        # For updates, delete existing KB links
-        if is_update:
+        if total_req_kb == 0 or (total_req_kb == 1 and knowledge_bases[0] == "--"):
             PilotLink.objects.filter(
                 pilot=pilot,
                 content_type=content_type,
                 spaces__space_type=SpaceType.knowledge_base.name,
             ).delete()
+        else:
+            # Validate all knowledge bases exist
+            kb_count = Space.objects.filter(
+                slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
+            ).count()
 
-        # Bulk create new KB links
-        PilotLink.objects.bulk_create(
-            [PilotLink(pilot=pilot, content_object=kb) for kb in kbs]
-        )
+            if kb_count != total_req_kb:
+                raise APIException206(detail={"message": "Knowledge Bases Not Found"})
+
+            kbs = Space.objects.filter(
+                slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
+            )
+
+            # For updates, delete existing KB links
+            if is_update:
+                PilotLink.objects.filter(
+                    pilot=pilot,
+                    content_type=content_type,
+                    spaces__space_type=SpaceType.knowledge_base.name,
+                ).delete()
+
+            # Bulk create new KB links
+            PilotLink.objects.bulk_create(
+                [PilotLink(pilot=pilot, content_object=kb) for kb in kbs]
+            )
 
     @staticmethod
     def process_pilot_components(pilot, components, request):

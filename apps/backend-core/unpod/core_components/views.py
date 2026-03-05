@@ -2536,6 +2536,8 @@ class KnowledgebaseEvalsViewSet(viewsets.GenericViewSet):
         for user in user_list:
             role_code = user["role__role_code"]
             user_id = user["user__id"]
+            if not user_id or not role_code:
+                continue
             createPermission(SpaceMemberRoles, role_code, user_id, space=eval_space)
         KnowledgeBaseEvals.objects.filter(id=eval_kn.id).update(
             eval_data={"space_token": eval_space.token}

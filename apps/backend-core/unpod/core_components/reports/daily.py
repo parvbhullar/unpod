@@ -86,7 +86,7 @@ def get_data_mongo(collection, today, query: dict = {}):
     )
 
 
-def get_hubwise_data_mongo(collection, today, query: dict = {}):
+def get_org_wise_data_mongo(collection, today, query: dict = {}):
     week_date = today - timezone.timedelta(days=7)
     month_date = today - timezone.timedelta(days=30)
     last_day = today - timezone.timedelta(days=1)
@@ -141,31 +141,31 @@ def get_hubwise_data_mongo(collection, today, query: dict = {}):
     }
 
 
-def merge_hub_data(organizationDictId, space_data, post_data):
+def merge_organization_data(orgDataDictId, space_data, post_data):
     merged_data = {}
-    for organization in organizationDictId:
-        merge_hub_data = []
+    for organization in orgDataDictId:
+        merge_org_data = []
         stats_keys = ["total", "today", "last_day", "weekly", "monthly"]
         for stats in stats_keys:
-            merge_hub_data.append(space_data[stats].get(organization, 0))
-            merge_hub_data.append(post_data[stats].get(organization, 0))
-        merged_data[organizationDictId[organization]["name"]] = merge_hub_data
+            merge_org_data.append(space_data[stats].get(organization, 0))
+            merge_org_data.append(post_data[stats].get(organization, 0))
+        merged_data[orgDataDictId[organization]["name"]] = merge_org_data
     return merged_data
 
 
-def hubWiseData(hubData, today=None):
+def orgWiseData(organizationList, today=None):
     if today is None:
         today = timezone.now().date().today()
-    hubDataDictId = {}
-    hubDataDictHandle = {}
-    for each in hubData:
-        hubDataDictHandle[each["domain_handle"]] = each
-        hubDataDictId[each["id"]] = each
+    orgDataDictId = {}
+    orgDataDictHandle = {}
+    for each in organizationList:
+        orgDataDictHandle[each["domain_handle"]] = each
+        orgDataDictId[each["id"]] = each
     space_data = Space.objects.all()
     post_data = ThreadPost.objects.all()
-    space_data = get_hub_group_data(space_data, today, "space_organization_id")
-    post_data = get_hub_group_data(post_data, today, "space__space_organization_id")
-    merged_data = merge_hub_data(hubDataDictId, space_data, post_data)
+    space_data = get_organization_group_data(space_data, today, "space_organization_id")
+    post_data = get_organization_group_data(post_data, today, "space__space_organization_id")
+    merged_data = merge_organization_data(orgDataDictId, space_data, post_data)
     return merged_data
 
 
@@ -210,7 +210,7 @@ def dailyActivityReport():
     body += "<br><br>"
     body += """<h3 style="text-align:center; margin-top:10px;">Last 30 Days Organization Wise Data</h3>"""
     organizationList = SpaceOrganization.objects.all().values("id", "domain_handle", "name")
-    organizationData = hubWiseData(organizationList, today)
+    organizationData = orgWiseData(organizationList, today)
     body += """
             <table width="100%" border="2" cellspacing="10" cellpadding="10" rules="ALL" style="border-collapse:collapse;color:#1f2240;background-color:#fff;padding:10px">
                 <tr>
@@ -237,7 +237,7 @@ def dailyActivityReport():
             """
     organizationWisePilotData = {}
     for organization in organizationList:
-        pilot_data = get_hubwise_data_mongo(
+        pilot_data = get_org_wise_data_mongo(
             "task_request_log", today, {"org_id": organization["id"]}
         )
         organizationWisePilotData[organization["name"]] = pilot_data

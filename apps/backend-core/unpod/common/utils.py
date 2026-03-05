@@ -1,8 +1,8 @@
 import requests
 from django.conf import settings
 
-from unpod.common.datetime import get_datetime_now
-from unpod.core_components.models import GlobalSystemConfig
+from ..common.datetime import get_datetime_now
+from ..core_components.models import GlobalSystemConfig
 
 
 def complete_message(message, **kwargs):
