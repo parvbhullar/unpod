@@ -268,9 +268,9 @@ def prepare_columns(task):
         if structured_data:
             try:
                 if isinstance(structured_data, dict):
-                    structured_data_json = structured_data
+                  structured_data_json=structured_data
                 else:
-                    structured_data_json = json.loads(structured_data)
+                  structured_data_json = json.loads(structured_data)
                 for key, value in structured_data_json.items():
                     if isinstance(value, dict) or isinstance(value, list):
                         value = json.dumps(value)

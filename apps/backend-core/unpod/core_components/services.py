@@ -371,32 +371,40 @@ class PilotService:
         if knowledge_bases is None:
             return
 
-        # Validate all knowledge bases exist
-        kb_count = Space.objects.filter(
-            slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
-        ).count()
-
-        if kb_count != len(knowledge_bases):
-            raise APIException206(detail={"message": "Knowledge Bases Not Found"})
-
-        kbs = Space.objects.filter(
-            slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
-        )
-
+        total_req_kb = len(knowledge_bases)
         content_type = ContentType.objects.get_for_model(Space)
 
-        # For updates, delete existing KB links
-        if is_update:
-            PilotLink.objects.filter(
-                pilot=pilot,
-                content_type=content_type,
-                spaces__space_type=SpaceType.knowledge_base.name,
-            ).delete()
+        if total_req_kb == 0 or (total_req_kb == 1 and knowledge_bases[0] == "--"):
+          PilotLink.objects.filter(
+            pilot=pilot,
+            content_type=content_type,
+            spaces__space_type=SpaceType.knowledge_base.name,
+          ).delete()
+        else:
+          # Validate all knowledge bases exist
+          kb_count = Space.objects.filter(
+              slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
+          ).count()
 
-        # Bulk create new KB links
-        PilotLink.objects.bulk_create(
-            [PilotLink(pilot=pilot, content_object=kb) for kb in kbs]
-        )
+          if kb_count != total_req_kb:
+              raise APIException206(detail={"message": "Knowledge Bases Not Found"})
+
+          kbs = Space.objects.filter(
+              slug__in=knowledge_bases, space_type=SpaceType.knowledge_base.name
+          )
+
+          # For updates, delete existing KB links
+          if is_update:
+              PilotLink.objects.filter(
+                  pilot=pilot,
+                  content_type=content_type,
+                  spaces__space_type=SpaceType.knowledge_base.name,
+              ).delete()
+
+          # Bulk create new KB links
+          PilotLink.objects.bulk_create(
+              [PilotLink(pilot=pilot, content_object=kb) for kb in kbs]
+          )
 
     @staticmethod
     def process_pilot_components(pilot, components, request):
@@ -488,7 +496,7 @@ class PilotService:
         """
         Process eval_kn_bases associations for pilot.
 
-        For create: Adds eval_kn_bases to new pilot
+        For create: Adds eval_kn_bases to the new pilot
         For update: Clears existing eval_kn_bases and adds new ones
 
         Args:
@@ -500,26 +508,32 @@ class PilotService:
         if eval_kn_bases is None:
             return
 
-        # Validate all knowledge bases exist
-        kb_count = Space.objects.filter(
-            slug__in=eval_kn_bases, space_type=SpaceType.knowledge_base.name
-        ).count()
+        total_req_evals = len(eval_kn_bases)
 
-        if kb_count != len(eval_kn_bases):
-            raise APIException206(detail={"message": "Knowledge Bases Not Found"})
+        if total_req_evals == 0 or (total_req_evals == 1 and eval_kn_bases[0] == "--"):
+          pilot.eval_kn_bases.clear()
+        else:
+          # Validate all knowledge bases exist
+          kb_count = Space.objects.filter(
+              slug__in=eval_kn_bases, space_type=SpaceType.knowledge_base.name
+          ).count()
 
-        valid_ids = (Space.objects.filter(slug__in=eval_kn_bases, space_type=SpaceType.knowledge_base.name)
-        .values_list(
-            "id", flat=True)
-        )
+          if kb_count != len(eval_kn_bases):
+              raise APIException206(detail={"message": "Knowledge Bases Not Found"})
 
-        if valid_ids:
-            # For updates, clear existing associations
-            if is_update:
-                pilot.eval_kn_bases.clear()
+          valid_ids = (Space.objects.filter(slug__in=eval_kn_bases, space_type=SpaceType.knowledge_base.name)
+          .values_list(
+              "id", flat=True)
+          )
 
-            # Associate numbers with pilot
-            pilot.eval_kn_bases.add(*valid_ids)
+          if valid_ids:
+              # For updates, clear existing associations
+              if is_update:
+                  pilot.eval_kn_bases.clear()
+
+              # Associate numbers with pilot
+              pilot.eval_kn_bases.add(*valid_ids)
+
 
     @staticmethod
     @transaction.atomic

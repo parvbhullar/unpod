@@ -18,7 +18,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from slugify import slugify
 
-from unpod.common.enum import (
+from ..common.enum import (
     OrganisationAccountType,
     PrivacyType,
     SpaceType,
@@ -27,19 +27,19 @@ from unpod.common.enum import (
     ModelBasicStatus,
     StatusEnum,
 )
-from unpod.common.exception import APIException401
-from unpod.common.jwt import jwt_decode_handler
-from unpod.common.mixin import (
+from ..common.exception import APIException401
+from ..common.jwt import jwt_decode_handler
+from ..common.mixin import (
     UsableRequest,
     SerializerSelectionMixin,
     CacheInvalidationMixin,
 )
-from unpod.common.mongodb import MongoDBQueryManager
-from unpod.common.pagination import UnpodCustomPagination
-from unpod.common.prefect import trigger_deployment
-from unpod.common.renderers import UnpodJSONRenderer
-from unpod.common.s3 import get_s3_presigned_url, read_s3
-from unpod.common.serializer import CommonSerializer
+from ..common.mongodb import MongoDBQueryManager
+from ..common.pagination import UnpodCustomPagination
+from ..common.prefect import trigger_deployment
+from ..common.renderers import UnpodJSONRenderer
+from ..common.s3 import get_s3_presigned_url, read_s3
+from ..common.serializer import CommonSerializer
 from unpod.core_components import utils as core_utils
 from unpod.core_components.models import (
     MediaResource,
@@ -81,7 +81,10 @@ from unpod.core_components.serializers import (
     VoiceProfilesSerializer,
     VoiceProfilesRetrieveSerializer,
     UseCasesSerializer,
-    KnowledgebaseEvalsSerializer, PilotFullSerializer, ProviderSerializer, TelephonyNumberSerializer,
+    KnowledgebaseEvalsSerializer,
+    PilotFullSerializer,
+    ProviderSerializer,
+    TelephonyNumberSerializer,
 )
 from unpod.core_components.serializers import RelevantTagSerializer
 from unpod.knowledge_base.models import KnowledgeBaseEvals
@@ -105,8 +108,6 @@ from .utils import check_for_vapi
 from ..common.uuid import generate_uuid
 from ..dynamic_forms.models import DynamicForm, DynamicFormValues
 from unpod.core_components.utils import remove_from_redis
-from unpod.common.prefect import trigger_deployment
-
 
 
 # fmt: off

@@ -19,15 +19,14 @@ ALLOWED_HOSTS = [
 
 ENV_NAME = "Prod"
 
-BASE_URL = os.environ.get("BASE_URL", "https://unpod.ai")
-
-BASE_FRONTEND_URL = os.environ.get("BASE_FRONTEND_URL", "https://unpod.ai")
+BASE_URL = os.environ.get("BASE_URL")
+BASE_FRONTEND_URL = os.environ.get("BASE_FRONTEND_URL")
 
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL", default="redis://157.245.151.185:6379/1"),
+        "LOCATION": env("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "IGNORE_EXCEPTIONS": True,
@@ -37,13 +36,13 @@ CACHES = {
 
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE", default="django.db.backends.postgresql"),
-        "NAME": env("POSTGRES_DB", default="unpod_prod"),
+        "ENGINE": env("DB_ENGINE"),
+        "NAME": env("POSTGRES_DB"),
         "USER": env("POSTGRES_USER"),
         "PASSWORD": env("POSTGRES_PASSWORD"),
         "HOST": env("POSTGRES_HOST"),
         "PORT": env("POSTGRES_PORT", default="5432"),
-        "CONN_MAX_AGE": env.int("CONN_MAX_AGE", default=60),
+        "CONN_MAX_AGE": env.int("POSTGRES_CONN_MAX_AGE", default=60),
         "CONN_HEALTH_CHECKS": True,  # Django 5.1+ - detects stale connections to prevent 504s
         "ATOMIC_REQUESTS": True,
     }
@@ -123,7 +122,7 @@ LOGGING = {
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="Unpod <info@unpod.tv")
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL")
 
 INSTALLED_APPS += ["anymail"]  # noqa F405
 
@@ -141,16 +140,16 @@ ANYMAIL = {
     }
 }
 
-EMAIL_FROM_ADDRESS = "Unpod <info@unpod.tv>"
+EMAIL_FROM_ADDRESS = env("EMAIL_FROM_ADDRESS")
 
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="unpodbackend")
-AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default="ap-south-1")
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
 
 
-INTERNAL_IPS = ["127.0.0.1", "157.245.151.185"]
+INTERNAL_IPS = ["127.0.0.1"]
 
 JWT_AUTH.update(
     {
@@ -161,9 +160,9 @@ JWT_AUTH.update(
 MUX_TOKEN_ID = env("MUX_TOKEN_ID")
 MUX_TOKEN_SECRET = env("MUX_TOKEN_SECRET")
 
-SSL_CERT_PATH = "/var/www/unpod-prod/ssl/unpod-tv-chain.pem"
+SSL_CERT_PATH = env("SSL_CERT_PATH")
 
-IMAGE_KIT_ENDPOINT = "https://ik.imagekit.io/bethere/unpod"
+IMAGE_KIT_ENDPOINT = env("IMAGE_KIT_ENDPOINT")
 
 AGORA_APP_ID = env("AGORA_APP_ID")
 AGORA_AUTH_CERTIFICATE = env("AGORA_AUTH_CERTIFICATE")
@@ -176,9 +175,7 @@ AGORA_AWS_SECRET_KEY = AWS_SECRET_ACCESS_KEY
 AGORA_AWS_VENDOR = 1
 AGORA_AWS_REGION = 14
 AGORA_AWS_BUCKET = AWS_STORAGE_BUCKET_NAME
-AGORA_AWS_RECORDING_FOLDER = env(
-    "AGORA_AWS_RECORDING_FOLDER", default="recordings"
-)  # "recording"
+AGORA_AWS_RECORDING_FOLDER = env("AGORA_AWS_RECORDING_FOLDER")
 
 
 AGORA_AUTH = {"username": AGORA_AUTH_ID, "password": AGORA_AUTH_SECRET}
@@ -188,14 +185,11 @@ AWS_SITEMAP_DIR = "production/sitemaps"
 RAZORPAY_KEY = env("RAZORPAY_KEY")
 RAZORPAY_SECERT = env("RAZORPAY_SECRET")
 
-DAILY_REPORT_EMAILS = [
-    "Anuj Singh <anuj@unpod.ai>",
-    "Parvinder Singh <parvinder@recalll.co>",
-]
+DAILY_REPORT_EMAILS = []
 
 # MONGO_DB = "messaging_service"
 # MONGO_DSN = "mongodb+srv://unpodProd:M7zdkcwBLR4ft7sG@unpod-messaging-prod.n40pumx.mongodb.net/?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true"
-MONGO_DB = env("MONGO_DB", default="messaging_service_prod")
+MONGO_DB = env("MONGO_DB")
 MONGO_DSN = env("MONGO_DSN")
 
 

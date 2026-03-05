@@ -336,7 +336,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "unpod-admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Unpod Admin""", "admin@unpod.ai")]
+ADMINS = []
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -551,7 +551,7 @@ HMS_AWS_RECORDING_FOLDER = env(
 SITEMAP_DIR = ROOT_DIR / "sitemaps"
 AWS_SITEMAP_DIR = "sitemaps"
 
-DAILY_REPORT_EMAILS = ["Unpod Admin <admin@unpod.ai>"]
+DAILY_REPORT_EMAILS = []
 
 os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
 

@@ -413,6 +413,7 @@ class PilotFullSerializer(serializers.ModelSerializer):
     template = serializers.CharField(source="template.slug", read_only=True)
     eval_kn_bases = serializers.SerializerMethodField()
     eval_knowledge_bases = serializers.SerializerMethodField()
+    pilot_eval_info = serializers.SerializerMethodField()
 
     class Meta:
         model = Pilot
@@ -481,6 +482,7 @@ class PilotFullSerializer(serializers.ModelSerializer):
             "eval_kn_bases",
             "eval_knowledge_bases",
             "components",
+            "pilot_eval_info"
         )
 
     def get_components(self, obj):
@@ -615,7 +617,25 @@ class PilotFullSerializer(serializers.ModelSerializer):
                 "description": obj.space.description
             }
         return None
-
+    
+    def get_pilot_eval_info(self, obj):
+        from unpod.knowledge_base.models import KnowledgeBaseEvals
+        eval_info = KnowledgeBaseEvals.objects.filter(linked_handle=obj.handle, eval_type="pilot").first()
+        eval_data = {}
+        if eval_info:
+            eval_data = {
+                "eval_name": eval_info.eval_name,
+                "eval_type": eval_info.eval_type,
+                "linked_handle": eval_info.linked_handle,
+                "gen_status": eval_info.gen_status,
+            }
+            if eval_info.eval_data:
+                eval_data["eval_token"] = eval_info.eval_data.get("space_token")
+        if eval_data.get("eval_token"):
+            eval_slug = Space.objects.filter(token=eval_data["eval_token"], space_type="knowledge_base").values("slug").first()
+            if eval_slug:
+                eval_data["eval_slug"] = eval_slug["slug"]
+        return eval_data
 
 class PilotExportSerializer(PilotFullSerializer):
     blocks = serializers.SerializerMethodField()

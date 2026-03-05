@@ -1,16 +1,11 @@
-import time
-
-import jwt
-
-from unpod.common.enum import RoleCodes, SpaceType
-from unpod.common.storage_backends import imagekitBackend
-from unpod.core_components.models import PilotLink, Provider
+from ..common.enum import RoleCodes, SpaceType
+from ..common.storage_backends import imagekitBackend
 from django.conf import settings
 import requests
 import copy
 from django.http import QueryDict
 from .unpod_assistant.vapi_test import VapiAssistant
-from unpod.core_components.models import Model, VoiceProfiles
+from .models import Model, PilotLink, Provider, VoiceProfiles
 import json
 
 
@@ -72,7 +67,7 @@ def push_agent_vespa(data):
 
 
 def get_kb_list(obj):
-    from unpod.space.models import Space
+    from ..space.models import Space
 
     kn_list = list(
         Space.objects.filter(
@@ -116,6 +111,7 @@ def check_for_vapi(data, llm_slug=None, pilot=None):
     if not telephony and pilot is not None:
         telephony = pilot.telephony_config
 
+    model = "gpt-4o-mini"  # default model
     if data.get("chat_model"):
         chat_model_data = json.loads(data.get("chat_model"))
         # Try 'codename' first (new format), fallback to 'slug' (old format)
@@ -244,6 +240,4 @@ def check_for_vapi(data, llm_slug=None, pilot=None):
         "success": True,
         "data": qd,
     }
-
-
 

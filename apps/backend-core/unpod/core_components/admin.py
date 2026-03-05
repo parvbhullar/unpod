@@ -4,8 +4,9 @@ from django.contrib import admin
 from django.db import transaction
 from django.utils.safestring import mark_safe
 from import_export.admin import ImportExportActionModelAdmin
-from unpod.common.mixin import UnpodCustomModelAdmin
-from unpod.core_components.models import (
+from ..common.mixin import UnpodCustomModelAdmin
+from ..common.services.livekit import get_livekit_trunks
+from .models import (
     EventsTriggerManager,
     ModelType,
     MediaResource,
@@ -30,7 +31,6 @@ from unpod.core_components.models import (
     TelephonyNumber,
 )
 from .resources import VoiceProfilesResource
-from ..common.services.livekit import get_livekit_trunks
 from ..common.utils import api_request
 from .forms import (
     ImportPilotForm,
@@ -67,7 +67,7 @@ class ProviderAdmin(ImportExportActionModelAdmin, UnpodCustomModelAdmin):
 
 
 @admin.register(TelephonyNumber)
-class TelephonyNumberAdmin(UnpodCustomModelAdmin):
+class TelephonyNumberAdmin(ImportExportActionModelAdmin, UnpodCustomModelAdmin):
     list_display = (
         "id",
         "number",

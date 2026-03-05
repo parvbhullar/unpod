@@ -83,11 +83,11 @@ def generate_checksum(method: str, url: str, data: Any, timestamp: str, secret: 
         # Debug logging
         import logging
         logger = logging.getLogger(__name__)
-        logger.warning(f"CHECKSUM_CALC method={normalized_method} url={url} data_len={len(serialized_data) if serialized_data else 0}")
+        # logger.warning(f"CHECKSUM_CALC method={normalized_method} url={url} data_len={len(serialized_data) if serialized_data else 0}")
         # Log first 200 bytes as hex for exact comparison
         if serialized_data:
             hex_preview = serialized_data[:200].encode('utf-8').hex()
-            logger.warning(f"CHECKSUM_DATA_HEX (first 200 chars): {hex_preview}")
+            # logger.warning(f"CHECKSUM_DATA_HEX (first 200 chars): {hex_preview}")
 
         # Generate HMAC-SHA256 with secret as key
         hmac_obj = hmac.new(

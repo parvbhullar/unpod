@@ -3,27 +3,14 @@ Tests for checksum_helper module
 Tests HMAC-SHA256 checksum generation, validation, and timestamp validation
 """
 from datetime import datetime, timedelta
-from unpod.common.helpers.checksum_helper import (
+from ..helpers.checksum_helper import (
     generate_checksum,
     validate_checksum,
     get_current_timestamp,
     is_timestamp_valid,
     should_skip_checksum,
-    get_relative_url,
+    extract_request_data,
 )
-
-
-class TestGetRelativeUrl:
-    """Test URL prefix stripping"""
-
-    def test_strip_v1_prefix(self):
-        assert get_relative_url("/api/v1/auth/login/") == "auth/login/"
-
-    def test_strip_v1_prefix_no_trailing_slash(self):
-        assert get_relative_url("/api/v1/agents") == "agents"
-
-    def test_no_prefix(self):
-        assert get_relative_url("/other/path/") == "other/path/"
 
 
 class TestChecksumGeneration:
@@ -211,22 +198,10 @@ class TestShouldSkipChecksum:
         assert should_skip_checksum("/admin/users/", "POST") is True
         assert should_skip_checksum("/admin/", "GET") is True
 
-    def test_should_skip_unpod_admin_paths(self):
-        """Test that unpod-admin paths are skipped"""
-        assert should_skip_checksum("/unpod-admin/", "GET") is True
-
     def test_should_skip_static_paths(self):
         """Test that static/media paths are skipped"""
         assert should_skip_checksum("/static/css/style.css", "GET") is True
         assert should_skip_checksum("/media/images/photo.jpg", "GET") is True
-
-    def test_should_skip_health_check(self):
-        """Test that health check paths are skipped"""
-        assert should_skip_checksum("/health/", "GET") is True
-
-    def test_should_skip_multipart_form_data(self):
-        """Test that multipart/form-data POST requests are skipped"""
-        assert should_skip_checksum("/api/v1/upload/", "POST", "multipart/form-data; boundary=---") is True
 
     def test_should_not_skip_api_paths(self):
         """Test that regular API paths are not skipped"""

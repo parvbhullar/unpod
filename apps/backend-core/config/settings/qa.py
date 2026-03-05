@@ -23,9 +23,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 ENV_NAME = "QA"
 
-BASE_URL = os.environ.get("BASE_URL", "https://qa.unpod.tv")
+BASE_URL = os.environ.get("BASE_URL")
 
-BASE_FRONTEND_URL = os.environ.get("BASE_FRONTEND_URL", "https://qa2.unpod.tv")
+BASE_FRONTEND_URL = os.environ.get("BASE_FRONTEND_URL")
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ BASE_FRONTEND_URL = os.environ.get("BASE_FRONTEND_URL", "https://qa2.unpod.tv")
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL", default="redis://157.245.151.185:6379/1"),
+        "LOCATION": env("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "IGNORE_EXCEPTIONS": True,
@@ -44,7 +44,7 @@ CACHES = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("POSTGRES_DB", default="unpod_qa"),
+        "NAME": env("POSTGRES_DB"),
         "USER": env("POSTGRES_USER"),
         "PASSWORD": env("POSTGRES_PASSWORD"),
         "HOST": env("POSTGRES_HOST"),
@@ -63,7 +63,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 # EMAIL
-DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="Unpod <info@unpod.tv")
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL")
 
 INSTALLED_APPS += ["anymail"]  # noqa F405
 
@@ -81,13 +81,13 @@ ANYMAIL = {
     }
 }
 
-EMAIL_FROM_ADDRESS = "Unpod <info@unpod.tv>"
+EMAIL_FROM_ADDRESS = env("EMAIL_FROM_ADDRESS")
 
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="unpodbackend")
-AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default="ap-south-1")
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
@@ -121,9 +121,9 @@ JWT_AUTH.update(
 MUX_TOKEN_ID = env("MUX_TOKEN_ID")
 MUX_TOKEN_SECRET = env("MUX_TOKEN_SECRET")
 
-SSL_CERT_PATH = "/var/www/unpod-qa1/ssl/unpod-tv-chain.pem"
+SSL_CERT_PATH = env("SSL_CERT_PATH")
 
-IMAGE_KIT_ENDPOINT = "https://ik.imagekit.io/bethere/unpod"
+IMAGE_KIT_ENDPOINT = env("IMAGE_KIT_ENDPOINT")
 
 AGORA_APP_ID = env("AGORA_APP_ID")
 AGORA_AUTH_CERTIFICATE = env("AGORA_AUTH_CERTIFICATE")
@@ -136,9 +136,7 @@ AGORA_AWS_SECRET_KEY = AWS_SECRET_ACCESS_KEY
 AGORA_AWS_VENDOR = 1
 AGORA_AWS_REGION = 14
 AGORA_AWS_BUCKET = AWS_STORAGE_BUCKET_NAME
-AGORA_AWS_RECORDING_FOLDER = env(
-    "AGORA_AWS_RECORDING_FOLDER", default="recordings"
-)  # "recording"
+AGORA_AWS_RECORDING_FOLDER = env("AGORA_AWS_RECORDING_FOLDER")
 
 
 HMS_S3_BUCKET = AWS_STORAGE_BUCKET_NAME
@@ -152,12 +150,9 @@ AGORA_AUTH = {"username": AGORA_AUTH_ID, "password": AGORA_AUTH_SECRET}
 RAZORPAY_KEY = env("RAZORPAY_KEY")
 RAZORPAY_SECERT = env("RAZORPAY_SECRET")
 
-DAILY_REPORT_EMAILS = [
-    "Anuj Singh <anuj@unpod.ai>",
-    "Parvinder Singh <parvinder@recalll.co>",
-]
+DAILY_REPORT_EMAILS = []
 
-MONGO_DB = env("MONGO_DB", default="messaging_service")
+MONGO_DB = env("MONGO_DB")
 MONGO_DSN = env("MONGO_DSN")
 
 DEEPGRAM_API_KEY = env("DEEPGRAM_API_KEY")

@@ -42,14 +42,10 @@ class Command(BaseCommand):
 
             if created:
                 created_count += 1
-                self.stdout.write(
-                    self.style.SUCCESS(f"✓ Created schedule: {name}")
-                )
+                self.stdout.write(self.style.SUCCESS(f"✓ Created schedule: {name}"))
             else:
                 updated_count += 1
-                self.stdout.write(
-                    self.style.SUCCESS(f"✓ Updated schedule: {name}")
-                )
+                self.stdout.write(self.style.SUCCESS(f"✓ Updated schedule: {name}"))
 
         self.stdout.write(
             self.style.SUCCESS(
